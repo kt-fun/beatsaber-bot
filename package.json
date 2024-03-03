@@ -1,0 +1,40 @@
+{
+  "name": "koishi-plugin-beatsaber",
+  "description": "",
+  "version": "0.0.5",
+  "main": "src/index.ts",
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "beatsaber",
+    "koishi",
+    "plugin"
+  ],
+  "koishi": {
+    "service": {
+      "required": [
+        "database",
+        "puppeteer"
+      ]
+    },
+    "locales": [
+      "en",
+      "zh"
+    ],
+    "description": {
+      "en": "a BeatSaver Bot plugin",
+      "zh": "一个 BeatSaver Bot 插件1"
+    }
+  },
+  "devDependencies": {
+    "koishi-plugin-puppeteer": "^3.8.2"
+  },
+  "peerDependencies": {
+    "koishi": "^4.17.1",
+    "koishi-plugin-puppeteer": "^3.8.2",
+    "vue": "^3.4.21"
+  }
+}

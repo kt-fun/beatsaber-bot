@@ -1,0 +1,70 @@
+import {Context, h} from "koishi";
+import {Config} from "./config";
+import {WSEvent} from "./types";
+import {render} from "./img-render";
+
+export function pluginWebSocket(ctx: Context, config:Config) {
+  const ws = ctx.http.ws(config.beatSaverWSURL ?? "wss://ws.beatsaver.com/maps")
+  ws.on("message", async (event)=>{
+    const data = JSON.parse(event.toString()) as WSEvent
+    console.log("received", data.type)
+    if(
+      data.type == "MAP_UPDATE"
+    ) {
+      const bsmap = data.msg
+      if(!bsmap.versions.some(it=>it.state == "Published")) {
+        return
+      }
+      if(bsmap.declaredAi != "None") {
+        return
+      }
+      const userId = bsmap.uploader.id
+      const users = await ctx.database.get('BSaverSubScribe', {
+        bsUserId: userId.toString(),
+      })
+
+      for (let idx = 0; idx < users.length; idx++) {
+        const item = users[idx]
+        const bot = ctx.bots[`${item.platform}:${item.selfId}`]
+        if(!bot) {
+          continue
+        }
+        let channel = false
+        if(item.channelId) {
+          channel = true
+        }
+        let html = render(bsmap)
+        console.log("send", bot.selfId, item.uid)
+        const userId = item.uid?.split(":")
+        const uid = userId[userId.length - 1]
+        const channelId = item.channelId
+        console.log("send", bot.selfId, item.uid, uid)
+
+        const text = bot.session().text('ws.subscribe.update',
+  {
+            username:item.username,
+            mapperName: bsmap.uploader.name
+        })
+        if(channel) {
+          await bot.sendMessage(channelId, text)
+          const image= await ctx.puppeteer.render(await html)
+          await bot.sendMessage(channelId, image)
+            .then(r => console.log("res:",r))
+            .catch((e)=>console.log(e))
+          await bot.sendMessage(channelId, h.audio(bsmap.versions[0].previewURL))
+            .then(r => console.log("res:",r))
+            .catch((e)=>console.log(e))
+        }else {
+          await bot.sendPrivateMessage(uid, text)
+          const image= await ctx.puppeteer.render(await html)
+          await bot.sendPrivateMessage(uid, image)
+            .then(r => console.log("res:",r))
+            .catch((e)=>console.log(e))
+          await bot.sendPrivateMessage(uid, h.audio(bsmap.versions[0].previewURL))
+            .then(r => console.log("res:",r))
+            .catch((e)=>console.log(e))
+        }
+      }
+    }
+  })
+}

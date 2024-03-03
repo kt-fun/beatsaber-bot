@@ -1,0 +1,27 @@
+ws:
+  subscribe:
+    update: Hello {username}，你关注的谱师「{mapperName}」更新啦！✨
+commands:
+  bsbot:
+    key-search:
+      success: 为你奉上关于「{key}」的{length}首谱面 🎉
+      not-found: Ops，关于「{key}」什么都没找到
+      too-long-key: 关键词长度不应该超过 15 哦，因为这样容易什么都找不到，较长的部分已经帮你截掉啦，正在搜索中「{key}」
+    id-search:
+      error-map-id: 「{input}」似乎不是一个 mapId，正确的 mapId 是这样的哦(3877a)
+      not-found: Ops! 似乎没有找到 id 为「{input}」的谱面
+    latest:
+      info: 为你奉上最新的 3 首谱面 🎉
+    subscribe:
+      channel:
+        error: 在群聊中，只允许管理员进行订阅谱师操作哦
+      error-unhandled: 以下 Id 未处理
+      reason:
+        too-many-id: 太多用户 Id 啦，一次最多只能处理 5 条哦
+        invalid-id: 用户 Id，应当为数字啊，比如(58338)
+        req-failed: 请求失败
+      success: 成功订阅
+      notify: 当这些谱师更新时会通知你哦
+_config:
+  beatSaverHost: BeatSaverOrigin，例如:https://api.beatsaver.com
+  beatSaverWSHost: BeatSaverWebSocketOrigin，用于实时监听谱面更新，例如wss://ws.beatsaver.com/maps
