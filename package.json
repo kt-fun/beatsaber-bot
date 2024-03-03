@@ -1,8 +1,9 @@
 {
-  "name": "koishi-plugin-beatsaber",
-  "description": "",
-  "version": "0.0.5",
-  "main": "src/index.ts",
+  "name": "koishi-plugin-beatsaber-bot",
+  "description": "一个 用于 BeatSaber 的 koishi Bot 插件",
+  "version": "0.0.6",
+  "main": "lib/index.js",
+  "typings": "lib/index.ts",
   "files": [
     "lib",
     "dist"
@@ -25,8 +26,8 @@
       "zh"
     ],
     "description": {
-      "en": "a BeatSaver Bot plugin",
-      "zh": "一个 BeatSaver Bot 插件1"
+      "en": "a koishi bot plugin for BeatSaber",
+      "zh": "一个 BeatSaber Bot 插件"
     }
   },
   "devDependencies": {

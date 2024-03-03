@@ -8,6 +8,9 @@ commands:
   bsbot:
     message:
       network-error: ☹️似乎发生了网络错误，请稍后重试吧
+    who:
+      need-at: 谁？plz 重新执行指令并@ ta
+      not-bind: 你要查询的ta，还没有绑定哦
     me:
       not-found: Ops，似乎还没有绑定到 ScoreSaber 或 BeatLeader
     bind:

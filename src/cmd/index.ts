@@ -8,6 +8,7 @@ export * from './subscribe'
 export * from './latest'
 export * from './rank'
 export * from './me'
+export * from './whois'
 export default class Cmd {
   private config;
   private ctx;

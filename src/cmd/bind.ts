@@ -16,7 +16,6 @@ export function BindCmd(ctx:Context,cfg:Config) {
     .alias('bbbind')
     .action(async ({ session, options }, input) => {
       let scoreSaberUser = await handlerError(session,async ()=> await scClient.getScoreUserById(input))
-      console.log('hello')
       if(scoreSaberUser === undefined) {
         return
       }

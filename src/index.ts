@@ -1,6 +1,6 @@
 import {Context, h} from 'koishi'
 import {Config} from "./config";
-import Cmd, {BindCmd, KeySearchCmd, IdSearchCmd, SubscribeCmd, LatestCmd, RankCmd,MeCmd} from "./cmd";
+import Cmd, {BindCmd, KeySearchCmd, IdSearchCmd, SubscribeCmd, LatestCmd, RankCmd, MeCmd, WhoisCmd} from "./cmd";
 import {} from 'koishi-plugin-puppeteer'
 import {pluginWebSocket} from "./ws";
 
@@ -93,4 +93,5 @@ function pluginCmd(ctx: Context, config: Config) {
     .apply(BindCmd)
     .apply(RankCmd)
     .apply(MeCmd)
+    .apply(WhoisCmd)
 }
