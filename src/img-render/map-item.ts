@@ -2,9 +2,16 @@
 import { createSSRApp } from 'vue'
 import { renderToString  as rts} from 'vue/server-renderer'
 import {BSMap} from "../types";
+import {Context} from "koishi";
+
+export const render = async (bsmap:BSMap,ctx:Context) => {
+  const html = await renderHtml(bsmap)
+  return await ctx.puppeteer.render(html)
+}
 
 
-export const render = async (bsmap:BSMap) => {
+
+export const renderHtml = async (bsmap:BSMap) => {
   console.log("rendering")
   const app = createSSRApp({
       components: {
@@ -15,7 +22,6 @@ export const render = async (bsmap:BSMap) => {
       }),
       template: `
         <div class="flex items-center justify-center w-full h-full">
-
           <div :id="bsMap.id" class="border rounded-md  w-[300px] shadow-md bg-slate-100">
             <img :src="bsMap.versions[0].coverURL"
                  class="rounded  w-[300px]"

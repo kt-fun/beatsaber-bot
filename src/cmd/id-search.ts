@@ -2,6 +2,7 @@ import {Context, h} from "koishi";
 import {Config} from "../config";
 import {render} from "../img-render";
 import {bsRequest} from "../utils/bsRequest";
+import {screenShot} from "../utils/renderImg";
 
 export function IdSearchCmd(ctx:Context,cfg:Config) {
   const bsClient = bsRequest(ctx,cfg)
@@ -33,8 +34,7 @@ export function IdSearchCmd(ctx:Context,cfg:Config) {
           )
         )
       }else {
-        const html = await render(res)
-        const image = await ctx.puppeteer.render(html)
+        const image = await render(res,ctx)
         session.send(image)
         session.send(h.audio(res.versions[0].previewURL))
       }

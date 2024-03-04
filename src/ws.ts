@@ -2,6 +2,7 @@ import {Context, h} from "koishi";
 import {Config} from "./config";
 import {WSEvent} from "./types";
 import {render} from "./img-render";
+import {screenShot} from "./utils/renderImg";
 
 export function pluginWebSocket(ctx: Context, config:Config) {
   const ws = ctx.http.ws(config.beatSaverWSURL ?? "wss://ws.beatsaver.com/maps")
@@ -52,7 +53,7 @@ export function pluginWebSocket(ctx: Context, config:Config) {
         if(item.channelId) {
           channel = true
         }
-        let html = render(bsmap)
+        let image = render(bsmap,ctx)
         console.log("send", bot.selfId, item.uid)
         const userId = item.uid?.split(":")
         const uid = userId[userId.length - 1]
@@ -64,10 +65,15 @@ export function pluginWebSocket(ctx: Context, config:Config) {
             username:item.username,
             mapperName: bsmap.uploader.name
         })
+
+
+        // const image= await ctx.puppeteer.render(await html)
+        // const url = `${config.rankRenderURL}/render/map/${item.id}`
+        // const buffer = await screenShot(ctx,url,'#render-result',()=>{},1000)
+        // const image = h.image(buffer,'image/png')
         if(channel) {
           await bot.sendMessage(channelId, text)
-          const image= await ctx.puppeteer.render(await html)
-          await bot.sendMessage(channelId, image)
+          await bot.sendMessage(channelId, await image)
             .then(r => console.log("res:",r))
             .catch((e)=>console.log(e))
           await bot.sendMessage(channelId, h.audio(bsmap.versions[0].previewURL))
@@ -75,8 +81,7 @@ export function pluginWebSocket(ctx: Context, config:Config) {
             .catch((e)=>console.log(e))
         }else {
           await bot.sendPrivateMessage(uid, text)
-          const image= await ctx.puppeteer.render(await html)
-          await bot.sendPrivateMessage(uid, image)
+          await bot.sendPrivateMessage(uid, await image)
             .then(r => console.log("res:",r))
             .catch((e)=>console.log(e))
           await bot.sendPrivateMessage(uid, h.audio(bsmap.versions[0].previewURL))

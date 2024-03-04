@@ -12,6 +12,7 @@ export function WhoisCmd(ctx:Context,cfg:Config) {
     .command('bsbot.who')
     .userFields(['bindId'])
     .alias('bbwho')
+    .option('p', '<platform:string>')
     .action(async ({ session, options }, input) => {
       let reg = /<at id="([0-9a-zA-z]+)"\/>/
       if(!reg.test(input)){
@@ -45,6 +46,13 @@ export function WhoisCmd(ctx:Context,cfg:Config) {
         ))
         return
       }
-      renderRank(session, user[0].bindId,ctx,cfg)
+      let rankOps = {
+        platform: 'beat-leader',
+        background: 'default'
+      }
+      if(options.p=='ss') {
+        rankOps.platform = 'score-saber'
+      }
+      renderRank(session, user[0].bindId,ctx,cfg,rankOps as any)
     })
 }

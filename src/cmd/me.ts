@@ -12,12 +12,20 @@ export function MeCmd(ctx:Context,cfg:Config) {
     .command('bsbot.me')
     .userFields(['bindId'])
     .alias('bbme')
+    .option('p', '<platform:string>')
     .action(async ({ session, options }, input) => {
       const bindId = session.user.bindId
       if (!bindId) {
         session.send(session.text('commands.bsbot.me.not-found'))
         return
       }
-      await renderRank(session,bindId,ctx,cfg)
+      let rankOps = {
+        platform: 'beat-leader',
+        background: 'default'
+      }
+      if(options.p=='ss') {
+        rankOps.platform = 'score-saber'
+      }
+      await renderRank(session,bindId,ctx,cfg,rankOps as any)
     })
 }
