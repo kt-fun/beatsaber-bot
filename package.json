@@ -9,11 +9,21 @@
     "dist"
   ],
   "license": "MIT",
+  "author": {
+    "name" : "ktKongTong",
+    "email" : "kt@ktlab.io"
+  },
+  "repository": "https://github.com/ktKongTong/koishi-beats-bot",
+  "homepage": "https://koishi-beats-bot.vercel.app/",
   "keywords": [
     "beatsaber",
     "koishi",
-    "plugin"
+    "koishi-plugin"
   ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
   "koishi": {
     "service": {
       "required": [
