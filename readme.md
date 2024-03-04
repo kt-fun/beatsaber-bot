@@ -9,8 +9,8 @@ see [koishi-beats-bot](https://koishi-beats-bot.vercel.app) for detail
 
 ### TODO
 
--[ ] more filter condition
--[ ] mapper relate query
--[ ] more feature
+- [ ] more filter condition
+- [ ] mapper relate query
+- [ ] more feature
 
 
