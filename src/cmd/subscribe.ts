@@ -8,7 +8,7 @@ export function SubscribeCmd(ctx:Context,cfg:Config) {
   const bsClient = bsRequest(ctx,cfg)
   const subcmd = ctx
     .command('bsbot.subscribe <userIds:text>')
-    .alias('bbtsub')
+    .alias('bbsub')
     .option('query', '- <query>')
     .option('page', '-p <page>')
     .action(async ({ session, options }, input) => {
@@ -40,6 +40,26 @@ export const subscribe = async (ctx:Context,bsClient,{ session, options }, input
   }
 
   let userIds = input.split(",")
+  if(userIds.includes('all')){
+    const  res = await ctx.database.upsert("BSaverSubScribe", [{
+      "uid": session.userId,
+      'username': session.username,
+      'channelId': channelSub ? session.event.channel.id:null,
+      "bsUserId": "all",
+      "bsUsername": "all",
+      "bsUserDesc": "",
+      "time": new Date(),
+      "platform": session.platform,
+      "selfId": session.bot.selfId
+    }])
+    session.send(
+      h('message',
+        h('quote', {id:session.messageId}),
+        session.text('commands.bsbot.subscribe.all.success'),
+      )
+    )
+    return
+  }
   const failedUserIds: {
     reason: string,
     userIds: string[],
@@ -91,7 +111,7 @@ export const subscribe = async (ctx:Context,bsClient,{ session, options }, input
       "selfId": session.bot.selfId
     }))
   await ctx.database.upsert("BSaverSubScribe", dbData)
-  if (failedUserIds.length > 0)
+  if (failedUserIds.length > 0) {
     session.send(
       h(
         'message',
@@ -103,6 +123,7 @@ export const subscribe = async (ctx:Context,bsClient,{ session, options }, input
         )
       )
     )
+  }
   if (dbData.length > 0) {
     session.send(
       h('message',

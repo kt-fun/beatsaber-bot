@@ -31,6 +31,8 @@ commands:
     latest:
       info: 为你奉上最新的 3 首谱面 🎉
     subscribe:
+      all:
+        success: 成功订阅所有谱师，当有非 AI 谱面更新时，会主动推送
       channel:
         error: 在群聊中，只允许管理员进行订阅谱师操作哦
       error-unhandled: 以下 Id 未处理
@@ -40,87 +42,9 @@ commands:
         req-failed: 请求失败
       success: 成功订阅
       notify: 当这些谱师更新时会通知你哦
-    shortcuts:
-      imagine: 画画|约稿
-      enhance: 增强
-    options:
-      enhance: 图片增强模式
-      model: 设定生成模型
-      resolution: 设定图片尺寸
-      override: 禁用默认标签
-      sampler: 设置采样器
-      seed: 设置随机种子
-      steps: 设置迭代步数
-      scale: 设置对输入的服从度
-      strength: 图片修改幅度
-      noise: 图片噪声强度
-      hiresFix: 启用高分辨率修复
-      undesired: 排除标签
-      noTranslator: 禁用自动翻译
-      iterations: 设置绘制次数
-      batch: 设置绘制批次大小
-      smea: 启用 SMEA
-      smeaDyn: 启用 DYN
-      scheduler: 设置调度器
-      decrisper: 启用动态阈值
-
-    messages:
-      exceed-max-iteration: 超过最大绘制次数。
-      expect-prompt: 请输入标签。
-      expect-image: 请输入图片。
-      too-many-images: 过多的图片。
-      invalid-content: 输入中含有无效内容。
-      latin-only: 只接受英文输入。
-      too-many-words: 输入的单词数量过多。
-      forbidden-word: 输入含有违禁词。
-      concurrent-jobs: |-
-        <random>
-          <>等会再约稿吧，我已经忙不过来了……</>
-          <>是数位板没电了，才…才不是我不想画呢！</>
-          <>那你得先教我画画（理直气壮</>
-        </random>
-      waiting: |-
-        <random>
-          <>少女绘画中……</>
-          <>在画了在画了</>
-          <>你就在此地不要走动，等我给你画一幅</>
-        </random>
-      pending: 在画了在画了，不过前面还有 {0} 个稿……
-      invalid-size: 增强功能仅适用于被生成的图片。普通的 img2img 请直接使用「约稿」而不是「增强」。
-      invalid-resolution: 非法的图片尺寸。宽高必须都为 64 的倍数。
-      custom-resolution-unsupported: 不支持自定义图片尺寸。
-      file-too-large: 文件体积过大。
-      unsupported-file-type: 不支持的文件格式。
-      download-error: 图片解析失败。
-      unknown-error: 发生未知错误。
-      response-error: 发生未知错误 ({0})。
-      empty-response: 服务器返回了空白图片，请稍后重试。
-      request-failed: 请求失败 ({0})，请稍后重试。
-      request-timeout: 请求超时。
-      invalid-password: 邮箱或密码错误。
-      invalid-token: 令牌无效或已过期，请联系管理员。
-      unauthorized: 令牌未授权，可能需要续费，请联系管理员。
-
-  novelai.upscale:
-    description: AI 放大图片
-
-    shortcuts:
-      upscale: 放大
-
-    options:
-      scale: 设置放大倍数
-      resolution: 设定放大尺寸
-      crop: 是否裁剪以适应尺寸
-      upscaler: 设置放大模型
-      upscaler2: 设置放大模型 2
-      upscaler2visibility: 设置放大模型 2 的可见度
-      upscaleFirst: 先放大再执行面部修复
-
-    messages:
-      expect-image: 请输入图片。
-      download-error: 图片解析失败。
-      unknown-error: 发生未知错误。
-
+    unsubscribe:
+      cancel-all: 已成功取消所有更新订阅
+      cancel: 已取消对谱师「{id}」的更新订阅
 _config:
   beatSaverHost: BeatSaverOrigin，例如:https://api.beatsaver.com
   beatSaverWSHost: BeatSaverWebSocketOrigin，用于实时监听谱面更新，例如wss://ws.beatsaver.com/maps

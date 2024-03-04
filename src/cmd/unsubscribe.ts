@@ -1,11 +1,35 @@
 import {Context} from "koishi";
 import {Config} from "../config";
 import {bsRequest} from "../utils/bsRequest";
+import {subscribe} from "./subscribe";
 
-export function SubscribeCmd(ctx:Context,cfg:Config) {
+export function UnSubscribeCmd(ctx:Context,cfg:Config) {
   const bsClient = bsRequest(ctx,cfg)
   const subcmd = ctx
     .command('bsbot.unsubscribe <userIds:text>')
-    .alias('bbtsub')
+    .alias('bbunsub')
+    .action(async ({ session, options }, input) => {
+
+      if(input == "all") {
+        await ctx.database.remove("BSaverSubScribe",{
+          uid: session.userId,
+          username: session.username,
+          channelId: session.event.channel.id,
+          platform: session.platform
+        })
+        session.send(session.text("commands.bsbot.unsubscribe.cancel-all"))
+      }else {
+        await ctx.database.remove("BSaverSubScribe",{
+          uid: session.userId,
+          username: session.username,
+          channelId: session.event.channel.id,
+          platform: session.platform,
+          bsUserId: input,
+        })
+        session.send(session.text("commands.bsbot.unsubscribe.cancel",{id:input}))
+      }
+
+
+    })
 
 }

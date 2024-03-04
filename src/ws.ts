@@ -16,15 +16,34 @@ export function pluginWebSocket(ctx: Context, config:Config) {
         return
       }
       if(bsmap.declaredAi != "None") {
+        console.log(bsmap.declaredAi)
         return
       }
       const userId = bsmap.uploader.id
+      const allUser = await ctx.database.get('BSaverSubScribe', {
+        bsUserId: "all",
+      })
+      const allUsersIdAndChannelId = allUser.map(item=>({
+        cid:item.channelId,
+        uid:item.uid
+      }))
+
       const users = await ctx.database.get('BSaverSubScribe', {
         bsUserId: userId.toString(),
       })
+      const filteredUsers= users.filter(it=>
+        allUser.some(item=>
+          it.channelId == item.channelId
+          && it.uid == item.uid
+          && it.platform == item.platform
+        )
+      )
+      let needSend = allUser.concat(filteredUsers)
 
-      for (let idx = 0; idx < users.length; idx++) {
-        const item = users[idx]
+      // allUser.filter()
+
+      for (let idx = 0; idx < needSend.length; idx++) {
+        const item = needSend[idx]
         const bot = ctx.bots[`${item.platform}:${item.selfId}`]
         if(!bot) {
           continue

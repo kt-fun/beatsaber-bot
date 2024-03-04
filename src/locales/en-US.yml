@@ -1,8 +1,26 @@
+common:
+  hello: 你好，我是 bsbot
+  ping: pong
 ws:
   subscribe:
     update: Hello {username}，你关注的谱师「{mapperName}」更新啦！✨
 commands:
   bsbot:
+    message:
+      network-error: ☹️似乎发生了网络错误，请稍后重试吧
+    who:
+      need-at: 谁？plz 重新执行指令并@ ta
+      not-bind: 你要查询的ta，还没有绑定哦
+    me:
+      not-found: Ops，似乎还没有绑定到 ScoreSaber 或 BeatLeader
+    bind:
+      network-error: ☹️似乎发生了网络错误，请稍后重试吧
+      exist: 另外，你已经绑定了「{id}」，继续绑定丢失当前绑定哦
+      cancel: 已取消
+      timeout: 已超时取消
+      not-found: Ops，没有找到 id 为「{id}」的 {platform} 用户
+      ack-prompt: 确定要绑定「{user}」吗，30 秒内回复「y」或「yes」以确认，超时或回复其他内容取消操作
+      success:  🎉，成功绑定「{user}」啦
     key-search:
       success: 为你奉上关于「{key}」的{length}首谱面 🎉
       not-found: Ops，关于「{key}」什么都没找到
@@ -13,6 +31,8 @@ commands:
     latest:
       info: 为你奉上最新的 3 首谱面 🎉
     subscribe:
+      all:
+        success: 成功订阅所有谱师，当有非 AI 谱面更新时，会主动推送
       channel:
         error: 在群聊中，只允许管理员进行订阅谱师操作哦
       error-unhandled: 以下 Id 未处理
@@ -22,6 +42,7 @@ commands:
         req-failed: 请求失败
       success: 成功订阅
       notify: 当这些谱师更新时会通知你哦
+
 _config:
   beatSaverHost: BeatSaverOrigin，例如:https://api.beatsaver.com
   beatSaverWSHost: BeatSaverWebSocketOrigin，用于实时监听谱面更新，例如wss://ws.beatsaver.com/maps
