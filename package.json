@@ -31,11 +31,17 @@
     }
   },
   "devDependencies": {
-    "koishi-plugin-puppeteer": "^3.8.2"
+    "koishi-plugin-puppeteer": "^3.8.2",
+    "vitepress": "^1.0.0-rc.44"
   },
   "peerDependencies": {
     "koishi": "^4.17.1",
     "koishi-plugin-puppeteer": "^3.8.2",
     "vue": "^3.4.21"
+  },
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   }
 }

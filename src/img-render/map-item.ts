@@ -28,9 +28,9 @@ export const renderHtml = async (bsmap:BSMap) => {
             />
             <div class="p-4">
               <div class="text-ellipsis  line-clamp-1">
-<span class="text-ellipsis  line-clamp-1 text-xl font-weight bg-gradient-to-r bg-clip-text text-transparent from-red-500 to-blue-500">
-{{bsMap.name}}
-</span>
+                <span class="text-ellipsis  line-clamp-1 text-xl font-weight bg-gradient-to-r bg-clip-text text-transparent from-red-500 to-blue-500">
+                {{bsMap.name}}
+                </span>
               </div>
 
               <div class="author flex space-x-4 items-center ">
