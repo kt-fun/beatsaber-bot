@@ -10,15 +10,17 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: '示例', link: '/example' },
+      { text: '图片渲染示例', link: '/render-example' },
       { text: '谱面指令', link: '/map' },
-      { text: 'rank指令', link: '/rank' }
+      { text: 'rank指令', link: '/rank' },
     ],
 
     sidebar: [
-
       { text: '示例', link: '/example' },
+      { text: '图片渲染示例', link: '/render-example' },
       { text: '谱面指令', link: '/map' },
-      { text: 'rank指令', link: '/rank' }
+      { text: 'rank指令', link: '/rank' },
+      { text: '部署', link: '/deploy' },
     ],
 
     socialLinks: [
