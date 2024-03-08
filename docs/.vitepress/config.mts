@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "koishi-plugin-beatsaber-bot",
-  description: "a koishi bot plugin for bot",
+  description: "a koishi bot plugin for beatsaber",
   cleanUrls: true,
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
