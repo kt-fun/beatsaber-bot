@@ -13,6 +13,7 @@ export const bsRequest =(ctx:Context,cfg:Config)=> {
     try {
       return await block()
     }catch (e) {
+      console.log(e)
       return null
     }
   }
@@ -35,7 +36,6 @@ export const bsRequest =(ctx:Context,cfg:Config)=> {
     })
   const searchMapByKeyword = async (key:string)=>
     wrapperErr(async ()=>{
-      throw Error("new work")
       const res = (await http.get(url(`/search/text/0?q=${key}`))) as BSMapLatestResponse
       return res.docs as BSMap[]
     })

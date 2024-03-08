@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-beatsaber-bot",
   "description": "一个 用于 BeatSaber 的 koishi Bot 插件",
-  "version": "0.0.9-dev.01",
+  "version": "0.0.9-dev.02",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -49,7 +49,7 @@
   },
   "peerDependencies": {
     "koishi": "^4.17.1",
-    "koishi-plugin-puppeteer": "^3.8.2",
+    "koishi-plugin-puppeteer": "^3.7.3",
     "vue": "^3.4.21",
     "dayjs": "^1.11.3",
     "lucide-vue-next": "^0.350.0",

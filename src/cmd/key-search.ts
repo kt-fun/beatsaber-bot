@@ -24,7 +24,7 @@ export function KeySearchCmd(ctx:Context,cfg:Config) {
         )
       }
       const res = await bsClient.searchMapByKeyword(key)
-      if(res.length == 0) {
+      if(res == null || res.length == 0) {
         session.send(
           h('message',{},
             h('quote', {
