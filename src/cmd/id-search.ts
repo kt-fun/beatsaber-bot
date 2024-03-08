@@ -1,16 +1,15 @@
 import {Context, h} from "koishi";
 import {Config} from "../config";
-import {render} from "../img-render";
+import {renderMap} from "../img-render";
 import {bsRequest} from "../utils/bsRequest";
-import {screenShot} from "../utils/renderImg";
 
 export function IdSearchCmd(ctx:Context,cfg:Config) {
   const bsClient = bsRequest(ctx,cfg)
-  const serachIdsubcmd = ctx
+  const searchIdCmd = ctx
     .command('bsbot.id [mapId:text]')
     .alias('bbid')
     .alias('!bsr')
-    .shortcut(/(^[0-9a-eA-E]{3,5}$)/, { args: ['$1'] })
+    .shortcut(/(^[0-9a-fA-F]{3,5}$)/, { args: ['$1'] })
     .action(async ({ session, options }, input) => {
       console.log("render id",input)
       if (!input || input && input.length < 1) {
@@ -24,7 +23,6 @@ export function IdSearchCmd(ctx:Context,cfg:Config) {
         ))
         return
       }
-      console.log("render")
       const res = await bsClient.searchMapById(input)
       if(res == null) {
         session.send(
@@ -34,7 +32,7 @@ export function IdSearchCmd(ctx:Context,cfg:Config) {
           )
         )
       }else {
-        const image = await render(res,ctx)
+        const image = await renderMap(res,ctx)
         session.send(image)
         session.send(h.audio(res.versions[0].previewURL))
       }

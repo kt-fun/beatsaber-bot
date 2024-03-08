@@ -1,8 +1,7 @@
 import {Config} from "../config";
 import {Context, h, Session} from "koishi";
 import {bsRequest} from "../utils/bsRequest";
-import {render} from "../img-render";
-import {screenShot} from "../utils/renderImg";
+import {renderMap} from "../img-render";
 
 export function KeySearchCmd(ctx:Context,cfg:Config) {
 
@@ -43,10 +42,7 @@ export function KeySearchCmd(ctx:Context,cfg:Config) {
         session.send(h('message', h('quote', {id: session.messageId}), text))
         for (let i=0;i<toBeSend.length;i++) {
           const item =toBeSend[i]
-          // const url = `${cfg.rankRenderURL}/render/map/${item.id}`
-          // const buffer = await screenShot(ctx,url,'#render-result',()=>{},1000)
-          // const image = h.image(buffer,'image/png')
-          let image = await render(item,ctx)
+          let image = await renderMap(item,ctx)
           await session.send(image)
           await session.send(h.audio(item.versions[0].previewURL))
         }

@@ -15,7 +15,9 @@
     "types": [
       "node",
       "yml-register/types"
-    ]
+    ],
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false
   },
   "include": [
     "src"

@@ -1,7 +1,7 @@
 import {Context, h} from "koishi";
 import {Config} from "./config";
 import {WSEvent} from "./types";
-import {render} from "./img-render";
+import { renderMap} from "./img-render";
 import {screenShot} from "./utils/renderImg";
 
 export function pluginWebSocket(ctx: Context, config:Config) {
@@ -53,7 +53,7 @@ export function pluginWebSocket(ctx: Context, config:Config) {
         if(item.channelId) {
           channel = true
         }
-        let image = render(bsmap,ctx)
+        let image = renderMap(bsmap,ctx)
         console.log("send", bot.selfId, item.uid)
         const userId = item.uid?.split(":")
         const uid = userId[userId.length - 1]

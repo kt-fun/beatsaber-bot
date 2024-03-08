@@ -72,6 +72,7 @@ export interface BSMap{
     }[]
   }[],
   updatedAt: string,
+  lastPublishedAt: string,
   createdAt: string,
   tags: string[],
 }

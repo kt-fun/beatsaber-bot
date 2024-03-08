@@ -10,6 +10,7 @@ export * from './latest'
 export * from './rank'
 export * from './me'
 export * from './whois'
+export * from './cmp'
 export default class Cmd {
   private config;
   private ctx;

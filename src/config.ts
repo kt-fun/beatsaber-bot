@@ -14,7 +14,8 @@ export const Config =Schema.object({
   rankRenderURL: Schema.string().default('https://bs-rank-render.vercel.app'),
   rawMatchMapIdLength: Schema.number().default(3),
   renderMode: Schema.string().default('local')
-}).i18n({
+})
+  .i18n({
   'zh-CN': require('./locales/zh-CN')._config,
   'en-US': require('./locales/en-US')._config,
 })

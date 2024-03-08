@@ -1,8 +1,6 @@
 import {Context, h, Session} from "koishi";
 import {Config} from "../config";
 import {bsRequest} from "../utils/bsRequest";
-import {SubScribeMsg} from "../msg-render/SubScribeMsg";
-import {channel} from "node:diagnostics_channel";
 
 export function SubscribeCmd(ctx:Context,cfg:Config) {
   const bsClient = bsRequest(ctx,cfg)
@@ -128,10 +126,9 @@ export const subscribe = async (ctx:Context,bsClient,{ session, options }, input
     session.send(
       h('message',
         h('quote', {id:session.messageId}),
-        h(SubScribeMsg, {
-          session: session,
-          userInfos: dbData
-        })
+        session.text('commands.bsbot.subscribe.success'),
+        dbData.map(item => h('p', item.bsUserId+":"+item.bsUsername)),
+        session.text('commands.bsbot.subscribe.notify')
       )
     )
   }
