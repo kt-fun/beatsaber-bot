@@ -1,6 +1,6 @@
 import {Context, h, Session} from "koishi";
 import {Config} from "../config";
-import {screenShot} from "../utils/renderImg";
+import {screenshot} from "../utils/renderImg";
 
 export function RankCmd(ctx:Context,cfg:Config) {
   // const bsClient = bsRequest(ctx,cfg)
@@ -32,7 +32,7 @@ export const renderRank = async (session:Session, uid:string,ctx:Context,cfg:Con
   background: 'default'
 }) => {
   const url = `${cfg.rankRenderURL}/render/${renderOps.platform}/${uid}`
-  const buffer = await screenShot(ctx,url,'#render-result',()=>{session.send("开始渲染啦，请耐心等待5s")})
+  const buffer = await screenshot(ctx,url,'#render-result',()=>{session.send("开始渲染啦，请耐心等待5s")})
   const image= h.image(buffer, 'image/png')
   session.send(image)
 }

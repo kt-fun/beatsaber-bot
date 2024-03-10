@@ -2,7 +2,6 @@ import {Context, h} from "koishi";
 import {Config} from "./config";
 import {WSEvent} from "./types";
 import { renderMap} from "./img-render";
-import {screenShot} from "./utils/renderImg";
 
 export function pluginWebSocket(ctx: Context, config:Config) {
   const ws = ctx.http.ws(config.beatSaverWSURL ?? "wss://ws.beatsaver.com/maps")

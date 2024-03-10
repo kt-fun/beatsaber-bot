@@ -1,11 +1,11 @@
 import {Context, h} from "koishi";
 
-export const screenShot = async (ctx:Context,url: string,selector:string, onLoad?:()=>any,waitTime:number = 5000) => {
+export const screenshot = async (ctx:Context, url: string, selector:string, onLoad?:()=>any, waitTime:number = 5000) => {
   console.log("start render")
   const page = await ctx.puppeteer.page()
   await page.setViewport({
-    width: 960,
-    height: 680 ,
+    width: 1024,
+    height: 720 ,
     deviceScaleFactor: 2,
   })
   await page.goto(url);
