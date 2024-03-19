@@ -11,6 +11,7 @@ export * from './rank'
 export * from './me'
 export * from './whois'
 export * from './cmp'
+export * from './score'
 export default class Cmd {
   private config;
   private ctx;
