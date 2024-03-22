@@ -1,21 +1,15 @@
-import {Context, h, SessionError} from "koishi";
+import {Context, h} from "koishi";
 import {Config} from "../config";
-import {bsRequest} from "../utils/bsRequest";
-import {scRequest} from "../utils/scRequest";
-import handlerError from "../utils/handlerError";
+import {APIService} from "../service";
+import handlerError from "../utils/error";
 
-export function BindCmd(ctx:Context,cfg:Config) {
-//   me
-//   verify
-
-  const bsClient = bsRequest(ctx,cfg)
-  const scClient = scRequest(ctx,cfg)
+export function BindCmd(ctx:Context,cfg:Config,api:APIService) {
   const bindSubCmd = ctx
     .command('bsbot.bind <id:text>')
     .userFields(['bindId'])
     .alias('bbbind')
     .action(async ({ session, options }, input) => {
-      let scoreSaberUser = await handlerError(session,async ()=> await scClient.getScoreUserById(input))
+      let scoreSaberUser = await handlerError(session,async ()=> await api.ScoreSaber.getScoreUserById(input))
       if(scoreSaberUser === undefined) {
         return
       }

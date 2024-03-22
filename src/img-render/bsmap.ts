@@ -1,7 +1,7 @@
 import {BSMap} from "../types";
 import {Context} from "koishi";
-import beatmap from "./components/map";
-import {renderHTML} from "./index";
+import beatmap from "./components/beatmap/map";
+import {renderHTML} from "./html";
 
 export const renderMap = async (bsmap:BSMap,ctx:Context) => {
   const rootCmp = {

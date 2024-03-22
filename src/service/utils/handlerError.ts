@@ -1,4 +1,4 @@
-import {h, SessionError} from "koishi";
+import {} from "koishi";
 
 enum ReqResultStatus {
   Success,
@@ -33,22 +33,12 @@ class NetReqResult<T> {
 
 }
 
-export default async function handlerError<T>(session,block:()=>T) {
-  let times = 3
-  let result = null
-  while (times > 0) {
-    try {
-      result = await block()
-      return result satisfies T
-    }catch (e) {
-      if(times-- > 1) continue
-      const text = session.text('commands.bsbot.bind.network-error')
-      session.send(h('message',
-        h('quote', {id: session.messageId}),
-        text
-      ))
-      return undefined
-    }
+export const wrapperErr = async<T>(block:()=>T) => {
+  try {
+    return await block()
+  }catch (e) {
+    console.log(e)
+    return null
   }
-  return result
 }
+

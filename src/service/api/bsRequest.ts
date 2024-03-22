@@ -1,21 +1,20 @@
 import {Context} from "koishi";
-import {Config} from "../config";
-import {BSErrorResponse, BSMap, BSMapLatestResponse, BSUserResponse} from "../types";
+import {Config} from "../../config";
+import {BSMap, BSMapLatestResponse, BSUserResponse} from "../../types";
+import {wrapperErr} from "../utils/handlerError";
+
+//
+// interface BeatSaverClient {
+//   getBSMapperById: (userId:string) => Promise<BSUserResponse>
+//
+//
+// }
 
 export const bsRequest =(ctx:Context,cfg:Config)=> {
   const http = ctx.http
   let host = cfg.beatSaverHost ?? "https://api.beatsaver.com"
   if(host.endsWith("/")) {
     host = host.substring(0,host.length-1)
-  }
-
-  const wrapperErr = async<T>(block:()=>T) => {
-    try {
-      return await block()
-    }catch (e) {
-      console.log(e)
-      return null
-    }
   }
 
   const url = (path:string)=> {

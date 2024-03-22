@@ -1,11 +1,9 @@
 import {Config} from "../config";
 import {Context, h, Session} from "koishi";
-import {bsRequest} from "../utils/bsRequest";
 import {renderMap} from "../img-render";
+import {APIService} from "../service";
 
-export function KeySearchCmd(ctx:Context,cfg:Config) {
-
-  const bsClient = bsRequest(ctx,cfg)
+export function KeySearchCmd(ctx:Context,cfg:Config,api:APIService) {
   const serachsubcmd = ctx
     .command('bsbot.search <key:text>')
     .alias('bbsearch')
@@ -23,7 +21,7 @@ export function KeySearchCmd(ctx:Context,cfg:Config) {
           )
         )
       }
-      const res = await bsClient.searchMapByKeyword(key)
+      const res = await api.BeatSaver.searchMapByKeyword(key)
       if(res == null || res.length == 0) {
         session.send(
           h('message',{},

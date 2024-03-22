@@ -1,13 +1,10 @@
 import {Context, h} from "koishi";
 import {Config} from "../config";
-import {bsRequest} from "../utils/bsRequest";
-import {scRequest} from "../utils/scRequest";
-import {renderRank} from "./rank";
+import {RenderOpts, renderRank} from "../img-render";
+import {APIService} from "../service";
 
-export function WhoisCmd(ctx:Context,cfg:Config) {
+export function WhoisCmd(ctx:Context,cfg:Config,api:APIService) {
 
-  const bsClient = bsRequest(ctx,cfg)
-  const scClient = scRequest(ctx,cfg)
   const rankSubCmd = ctx
     .command('bsbot.who')
     .userFields(['bindId'])
@@ -34,7 +31,6 @@ export function WhoisCmd(ctx:Context,cfg:Config) {
         ))
         return
       }
-
       const aid = res[0].aid
       const user =await ctx.database.get('user', {
         id: aid
@@ -47,12 +43,13 @@ export function WhoisCmd(ctx:Context,cfg:Config) {
         return
       }
       let rankOps = {
-        platform: 'beat-leader',
+        puppeteer:ctx.puppeteer,
+        renderBaseURL: cfg.rankRenderURL,
+        onStartRender() {session.send("开始渲染啦，请耐心等待5s")},
+        platform:  options.p=='ss'? 'score-saber' : 'beat-leader',
         background: 'default'
-      }
-      if(options.p=='ss') {
-        rankOps.platform = 'score-saber'
-      }
-      renderRank(session, user[0].bindId,ctx,cfg,rankOps as any)
+      } satisfies RenderOpts
+      const img = await renderRank(user[0].bindId, rankOps)
+      session.send(img)
     })
 }

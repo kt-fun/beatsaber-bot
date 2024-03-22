@@ -1,8 +1,7 @@
-import {Context, h} from "koishi";
+import Puppeteer from "koishi-plugin-puppeteer";
 
-export const screenshot = async (ctx:Context, url: string, selector:string, onLoad?:()=>any, waitTime:number = 5000) => {
-  console.log("start render")
-  const page = await ctx.puppeteer.page()
+export const screenshot = async (puppeteer:Puppeteer, url: string, selector:string, onLoad?:()=>any, waitTime:number = 5000) => {
+  const page = await puppeteer.page()
   await page.setViewport({
     width: 1024,
     height: 720 ,
@@ -16,7 +15,6 @@ export const screenshot = async (ctx:Context, url: string, selector:string, onLo
     }, waitTime)
   })
   const elm = await page.waitForSelector(selector, {timeout: 5000})
-  console.log("start screenshot")
   const buffer = await elm.screenshot({})
   // = await page.screenshot({})
   await page.close()

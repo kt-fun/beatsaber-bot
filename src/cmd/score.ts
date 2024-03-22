@@ -1,36 +1,25 @@
-import {Context, h, Session} from "koishi";
+import {Context} from "koishi";
 import {Config} from "../config";
-import {screenshot} from "../utils/renderImg";
+import {RenderOpts, renderScore} from "../img-render";
+import {APIService} from "../service";
 
-export function ScoreCmd(ctx:Context,cfg:Config) {
+export function ScoreCmd(ctx:Context,cfg:Config,api:APIService) {
   const scoreCmd = ctx
     .command('bsbot.score')
     .alias('bbscore')
     .option('p', '<platform:string>')
     .action(async ({ session, options }, input) => {
-      let rankOps = {
-        platform: 'beat-leader',
+      let renderOpts = {
+        renderBaseURL: cfg.rankRenderURL,
+        platform: options.p=='ss'?'score-saber':'beat-leader',
+        onStartRender() {
+          session.send("开始渲染啦，请耐心等待 5s")
+        },
+        puppeteer:ctx.puppeteer,
         background: 'default'
-      }
-      if(options.p=='ss') {
-        rankOps.platform = 'score-saber'
-      }
-      // todo need to ensure score exist
-      await renderScore(session,input,ctx,cfg,rankOps as any)
+      } satisfies RenderOpts
+       const img = await renderScore(input,renderOpts)
+      session.send(img)
     })
 
-}
-interface renderOps {
-  platform: 'score-saber' | 'beat-leader',
-  background: string
-}
-
-export const renderScore = async (session:Session, scoreId:string,ctx:Context,cfg:Config,renderOps:renderOps = {
-  platform: 'beat-leader',
-  background: 'default'
-}) => {
-  const url = `${cfg.rankRenderURL}/render/${renderOps.platform}/score/${scoreId}`
-  const buffer = await screenshot(ctx,url,'#render-result',()=>{session.send("开始渲染啦，请耐心等待5s")})
-  const image= h.image(buffer, 'image/png')
-  session.send(image)
 }

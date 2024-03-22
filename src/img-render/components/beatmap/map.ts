@@ -1,9 +1,9 @@
 import {defineComponent, PropType} from "vue";
-import {BSMap} from "../../types";
+import {BSMap} from "../../../types";
 import Icon from "./icon";
-import {formatDuration, formatTime, formatNumber, getTag} from "../utils";
+import {formatDuration, formatTime, formatNumber, getTag} from "../../utils";
 import CharacteristicIcon from "./charactersIcon";
-import Progress from "./progress";
+import Progress from "../progress";
 export default defineComponent({
   methods: {getTag, formatTime, formatDuration, formatNumber},
   components: {

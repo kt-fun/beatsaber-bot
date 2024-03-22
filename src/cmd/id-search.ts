@@ -1,10 +1,9 @@
 import {Context, h} from "koishi";
 import {Config} from "../config";
 import {renderMap} from "../img-render";
-import {bsRequest} from "../utils/bsRequest";
+import {APIService} from "../service";
 
-export function IdSearchCmd(ctx:Context,cfg:Config) {
-  const bsClient = bsRequest(ctx,cfg)
+export function IdSearchCmd(ctx:Context,cfg:Config,api:APIService) {
   const searchIdCmd = ctx
     .command('bsbot.id [mapId:text]')
     .alias('bbid')
@@ -23,7 +22,7 @@ export function IdSearchCmd(ctx:Context,cfg:Config) {
         ))
         return
       }
-      const res = await bsClient.searchMapById(input)
+      const res = await api.BeatSaver.searchMapById(input)
       if(res == null) {
         session.send(
           h('message',

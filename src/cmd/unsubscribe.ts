@@ -1,15 +1,12 @@
 import {Context} from "koishi";
 import {Config} from "../config";
-import {bsRequest} from "../utils/bsRequest";
-import {subscribe} from "./subscribe";
+import {APIService} from "../service";
 
-export function UnSubscribeCmd(ctx:Context,cfg:Config) {
-  const bsClient = bsRequest(ctx,cfg)
-  const subcmd = ctx
+export function UnSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
+  ctx
     .command('bsbot.unsubscribe <userIds:text>')
     .alias('bbunsub')
     .action(async ({ session, options }, input) => {
-
       if(input == "all") {
         await ctx.database.remove("BSaverSubScribe",{
           uid: session.userId,
@@ -28,8 +25,6 @@ export function UnSubscribeCmd(ctx:Context,cfg:Config) {
         })
         session.send(session.text("commands.bsbot.unsubscribe.cancel",{id:input}))
       }
-
-
     })
 
 }

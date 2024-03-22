@@ -1,9 +1,8 @@
 import {Context, h} from "koishi";
 import {Config} from "../config";
-import {bsRequest} from "../utils/bsRequest";
+import {APIService} from "../service";
 
-export function CmpCmd(ctx:Context,cfg:Config) {
-  const bsClient = bsRequest(ctx,cfg)
+export function CmpCmd(ctx:Context,cfg:Config,api:APIService) {
   const cmpcmd = ctx
     .command('bsbot.cmp')
     .alias('bbcmp')

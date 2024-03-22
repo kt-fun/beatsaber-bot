@@ -1,19 +1,19 @@
 import {Context, h} from "koishi";
 import {Config} from "../config";
-import {bsRequest} from "../utils/bsRequest";
 import { renderMap} from "../img-render";
+import {APIService} from "../service";
 
-export function LatestCmd(ctx:Context,cfg:Config) {
-  const bsClient = bsRequest(ctx,cfg)
+export function LatestCmd(ctx:Context,cfg:Config,api:APIService) {
   const latestCmd = ctx
     .command('bsbot.new')
     .alias('bbnew')
     .action(async ({ session, options }, input) => {
       console.log("action new")
-      const res = await bsClient.getLatestMaps(3)
+      const res = await api.BeatSaver.getLatestMaps(3)
 
       const text = session.text('commands.bsbot.latest.info')
       session.send(h('message', h('quote', {id: session.messageId}), text))
+      // todo
       for (let i=0;i<res.length;i++) {
         const item =res[i]
         let image = await renderMap(item,ctx)

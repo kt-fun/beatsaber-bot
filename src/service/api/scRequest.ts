@@ -1,22 +1,12 @@
 import {Context} from "koishi";
-import {Config} from "../config";
-import {BSUserResponse} from "../types";
-import {ScoreSaberUser} from "../types/scoresaber";
+import {Config} from "../../config";
+import {ScoreSaberUser} from "../../types/scoresaber";
 
 export const scRequest =(ctx:Context,cfg:Config)=> {
   const http = ctx.http
   let host = "https://scoresaber.com"
   if(host.endsWith("/")) {
     host = host.substring(0,host.length-1)
-  }
-
-  const wrapperErr = <T>(block:()=>T) => {
-    try {
-      const res =  block()
-      return res
-    }catch (e) {
-      return null
-    }
   }
 
   const url = (path:string)=> {

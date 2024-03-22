@@ -1,9 +1,8 @@
 import {Context, h, Session} from "koishi";
 import {Config} from "../config";
-import {bsRequest} from "../utils/bsRequest";
+import {APIService} from "../service";
 
-export function SubscribeCmd(ctx:Context,cfg:Config) {
-  const bsClient = bsRequest(ctx,cfg)
+export function SubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
   const subcmd = ctx
     .command('bsbot.subscribe <userIds:text>')
     .alias('bbsub')
@@ -14,11 +13,11 @@ export function SubscribeCmd(ctx:Context,cfg:Config) {
 
       }
       session.userId
-        await subscribe(ctx,bsClient,{session,options},input)
+        await subscribe(ctx,api,{session,options},input)
     })
 }
 
-const querySubscribe = async (ctx:Context,bsClient, session:Session, options , input) => {
+const querySubscribe = async (ctx:Context, session:Session, options , input) => {
   const res = await ctx.database.get('BSaverSubScribe', {
     uid: session.userId,
     platform: session.platform,
@@ -26,7 +25,7 @@ const querySubscribe = async (ctx:Context,bsClient, session:Session, options , i
   })
 }
 
-export const subscribe = async (ctx:Context,bsClient,{ session, options }, input) => {
+export const subscribe = async (ctx:Context,api,{ session, options }, input) => {
   let channelSub = false
   if(session.event?.channel && session.event?.subtype != 'private'){
     const member = session.event.member
@@ -79,7 +78,7 @@ export const subscribe = async (ctx:Context,bsClient,{ session, options }, input
     })
   }
   const filteredUserIds = matchedUserIds.slice(0,5)
-  const resp = await Promise.all(filteredUserIds.map(it=> bsClient.getBSMapperById(it)))
+  const resp = await Promise.all(filteredUserIds.map((it:string)=> api.BeatSaver.getBSMapperById(it)))
   const result = resp
     .map((value, index)=>{
       return {
