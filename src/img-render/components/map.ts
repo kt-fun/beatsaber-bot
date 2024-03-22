@@ -27,17 +27,16 @@ export default defineComponent({
   },
   template: `
       <div :id="bsmap.id" class="flex flex-col bg-slate-100 justify-center items-center">
-            <div class="h-auto w-[300px] rounded-lg"
+            <div class="h-auto w-[300px] rounded-none"
                  :style="{
                     backgroundImage: 'url(\\'https://www.loliapi.com/acg/pe/\\')',
                     backgroundSize: 'cover',
                  }"
             >
               <div class="bg-blend-darken bg-black/[.8]  text-white h-full rounded-lg">
-                <img :src="bsmap.versions[0].coverURL" class="rounded-lg  w-[300px]"/>
-                <div class="flex items-center justify-center w-full h-full flex-col">
-
-                  <div class="p-4">
+                <img :src="bsmap.versions[0].coverURL" class="rounded-none  w-[300px]"/>
+                <div class="flex items-center justify-center h-full flex-col">
+                  <div class="p-4 m">
                     <div class="text-ellipsis  line-clamp-2">
                       <span class="text-ellipsis  line-clamp-2 text-xl font-weight bg-gradient-to-r bg-clip-text text-transparent from-red-500 to-blue-500">
                       {{ bsmap.name }}
@@ -64,10 +63,10 @@ export default defineComponent({
                           {{bsmap.id}}
                         </span>
                       </div>
-                      <div class="flex space-x-2 text-xs">
-                            <Icon  name="Calendar" :size="12" class="w-3 h-3"/>
-                            <span>{{formatTime(bsmap.lastPublishedAt)}}</span>
-                          </div>
+                      <div class="flex space-x-2 text-xs items-center justify-between">
+                        <Icon  name="Calendar" :size="12" class="w-3 h-3"/>
+                        <span>{{formatTime(bsmap.lastPublishedAt)}}</span>
+                      </div>
                     </div>
                     <div class="tags flex flex-wrap justify-start">
                       <span
@@ -79,7 +78,7 @@ export default defineComponent({
                       </span>
                     </div>
                     <div class="flex space-x-2">
-                      <div class="percentage w-42 py-2 flex text-xs items-center space-x-4">
+                      <div class="percentage w-42 py-2 flex text-xs items-center space-x-2">
                         <Progress :value="bsmap.stats.score * 100"/>
                         <span>{{ (bsmap.stats.score * 100).toFixed(1) }}%</span>
                       </div>
@@ -102,11 +101,10 @@ export default defineComponent({
                     </div>
 
                     <span class="font-bold">描述</span>
-                    <p class="text-xs">
+                    <p class="break-words w-[280px]">
                       {{bsmap.description}}
                     </p>
                   </div>
-
                 </div>
               </div>
             </div>
