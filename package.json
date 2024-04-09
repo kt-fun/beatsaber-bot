@@ -1,8 +1,8 @@
 {
   "name": "koishi-plugin-beatsaber-bot",
   "description": "一个 用于 BeatSaber 的 koishi Bot 插件",
-  "version": "0.0.10-dev.patch1",
-  "main": "lib/index.js",
+  "version": "0.0.10-dev.patch2",
+  "main": "src/index.ts",
   "typings": "lib/index.d.ts",
   "files": [
     "lib",
@@ -41,19 +41,19 @@
     }
   },
   "devDependencies": {
-    "koishi-plugin-puppeteer": "^3.8.2",
-    "vitepress": "^1.0.0-rc.44",
     "dayjs": "^1.11.3",
+    "koishi-plugin-puppeteer": "^3.8.2",
     "lucide-vue-next": "^0.350.0",
-    "radix-vue": "^1.5.1"
+    "radix-vue": "^1.5.1",
+    "vitepress": "^1.0.0-rc.44"
   },
   "peerDependencies": {
+    "dayjs": "^1.11.3",
     "koishi": "^4.17.1",
     "koishi-plugin-puppeteer": "^3.7.3",
-    "vue": "^3.4.21",
-    "dayjs": "^1.11.3",
     "lucide-vue-next": "^0.350.0",
-    "radix-vue": "^1.5.1"
+    "radix-vue": "^1.5.1",
+    "vue": "^3.4.21"
   },
   "scripts": {
     "docs:dev": "vitepress dev docs",

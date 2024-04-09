@@ -4,6 +4,7 @@ export const BeatSaverService = (
   bsClient:BeatSaverClient,
 )=>{
   return {
-    ...bsClient
+    ...bsClient,
+    // beatsaver:
   }
 }

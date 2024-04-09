@@ -2,7 +2,6 @@ import {Context} from "koishi";
 import {Config} from "../config";
 import {BeatLeaderService} from "./beatleader";
 import {blRequest, bsRequest, scRequest} from "./api";
-import {c} from "vite/dist/node/types.d-AKzkD8vd";
 import {BeatSaverService} from "./beatsaver";
 import {ScoreSaberService} from "./scoresaber";
 
