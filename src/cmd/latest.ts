@@ -19,7 +19,6 @@ export function LatestCmd(ctx:Context,cfg:Config,api:APIService) {
         let image = await renderMap(item,ctx)
         await session.send(image)
         await session.send(h.audio(item.versions[0].previewURL))
-        cfg.imgRenderMode
       }
 
     })
