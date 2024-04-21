@@ -60,16 +60,10 @@ export function pluginWebSocket(ctx: Context, config:Config) {
         console.log("send", bot.selfId, item.uid, uid)
 
         const text = bot.session().text('ws.subscribe.update',
-  {
+          {
             username:item.username,
             mapperName: bsmap.uploader.name
         })
-
-
-        // const image= await ctx.puppeteer.render(await html)
-        // const url = `${config.rankRenderURL}/render/map/${item.id}`
-        // const buffer = await screenShot(ctx,url,'#render-result',()=>{},1000)
-        // const image = h.image(buffer,'image/png')
         if(channel) {
           await bot.sendMessage(channelId, text)
           await bot.sendMessage(channelId, await image)

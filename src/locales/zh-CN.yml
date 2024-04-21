@@ -22,6 +22,10 @@ commands:
       not-found: Ops，没有找到 id 为「{id}」的 {platform} 用户
       ack-prompt: 确定要绑定「{user}」吗，30 秒内回复「y」或「yes」以确认，超时或回复其他内容取消操作
       success:  🎉，成功绑定「{user}」啦
+    score:
+      not-a-score-id: 似乎不是一个 score ID
+      not-bind: 你还没有绑定哦，使用 bind 指令进行绑定吧
+      who-not-bind: 你要查询的ta，还没有绑定哦
     key-search:
       success: 为你奉上关于「{key}」的{length}首谱面 🎉
       not-found: Ops，关于「{key}」什么都没找到

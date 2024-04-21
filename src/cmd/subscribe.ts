@@ -44,7 +44,6 @@ export const subscribe = async (ctx:Context,api,{ session, options }, input) => 
       'channelId': channelSub ? session.event.channel.id:null,
       "bsUserId": "all",
       "bsUsername": "all",
-      "bsUserDesc": "",
       "time": new Date(),
       "platform": session.platform,
       "selfId": session.bot.selfId

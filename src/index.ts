@@ -42,7 +42,6 @@ interface BSaverSubScribe {
   bsUserId: string,
   time: Date,
   bsUsername:string,
-  bsUserDesc: string,
 }
 
 function pluginInit(ctx: Context, config:Config) {
@@ -58,7 +57,6 @@ function pluginInit(ctx: Context, config:Config) {
     platform: 'string',
     bsUserId: 'string',
     bsUsername: 'string',
-    bsUserDesc: 'string',
     time: 'timestamp',
   },{
     autoInc: true
@@ -73,6 +71,9 @@ export function apply(ctx: Context, config: Config) {
   pluginInit(ctx, config)
   pluginWebSocket(ctx,config)
   pluginCmd(ctx, config)
+  ctx.on('reaction-added', async (session) => {
+    console.log('recv')
+  })
   ctx.on('friend-request',async (session)=> {
     console.log("friend-request")
     await session.bot.handleFriendRequest(session.messageId,true)
@@ -80,7 +81,6 @@ export function apply(ctx: Context, config: Config) {
     console.log("finished")
   })
   ctx.on('guild-request',async (param:any)=> {
-
     console.log(param)
   })
 
@@ -93,8 +93,7 @@ function pluginCmd(ctx: Context, config: Config) {
   ctx.command('bsbot <prompts:text>')
   .alias('bbt')
   .action(async ({ session, options }, input) => {
-    console.log("action")
-    session.send(input)
+    const id = await session.send(input)
   })
   cmd
     .apply(SubscribeCmd)
