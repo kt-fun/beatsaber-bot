@@ -5,7 +5,7 @@ export interface Config {
   beatSaverWSURL: string,
   rankRenderURL: string,
   minRawMatchMapIdLength: number,
-  imgRenderMode: 'local'| 'screenshot'
+  renderMode: 'local'| 'screenshot'
 }
 
 export const Config =Schema.object({

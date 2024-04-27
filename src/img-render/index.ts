@@ -13,5 +13,6 @@ export interface RenderOpts {
   renderBaseURL: string,
   platform: 'score-saber' | 'beat-leader',
   onStartRender?: () => void,
-  background: string
+  background: string,
+  waitTimeout?: number,
 }

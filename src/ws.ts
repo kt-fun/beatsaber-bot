@@ -52,7 +52,7 @@ export function pluginWebSocket(ctx: Context, config:Config) {
         if(item.channelId) {
           channel = true
         }
-        let image = renderMap(bsmap,ctx)
+        let image = renderMap(bsmap,ctx,config)
         console.log("send", bot.selfId, item.uid)
         const userId = item.uid?.split(":")
         const uid = userId[userId.length - 1]

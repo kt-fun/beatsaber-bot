@@ -1,6 +1,6 @@
 import {Context, h} from "koishi";
 import {Config} from "../config";
-import {renderMap} from "../img-render";
+import {renderMap, renderRemoteMap} from "../img-render";
 import {APIService} from "../service";
 
 export function IdSearchCmd(ctx:Context,cfg:Config,api:APIService) {
@@ -16,7 +16,7 @@ export function IdSearchCmd(ctx:Context,cfg:Config,api:APIService) {
       }
       const reg = /[a-f0-9]{1,6}/
       if(!reg.test(input)) {
-        session.send(h('message',
+        session.sendQueued(h('message',
           h('quote', {id: session.messageId}),
           session.text('commands.bsbot.id-search.error-map-id',{input})
         ))
@@ -24,16 +24,16 @@ export function IdSearchCmd(ctx:Context,cfg:Config,api:APIService) {
       }
       const res = await api.BeatSaver.searchMapById(input)
       if(res == null) {
-        session.send(
+        session.sendQueued(
           h('message',
             h('quote', {id: session.messageId}),
             session.text('commands.bsbot.id-search.not-found',{input})
           )
         )
       }else {
-        const image = await renderMap(res,ctx)
-        session.send(image)
-        session.send(h.audio(res.versions[0].previewURL))
+        const image = await renderMap(res,ctx,cfg)
+        session.sendQueued(image)
+        session.sendQueued(h.audio(res.versions[0].previewURL))
       }
     })
 

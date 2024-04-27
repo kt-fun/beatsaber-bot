@@ -1,9 +1,28 @@
 import {BSMap} from "../types";
-import {Context} from "koishi";
+import {Context, h} from "koishi";
 import beatmap from "./components/beatmap/map";
 import {renderHTML} from "./html";
+import {screenshotRemoteMap} from "./renderImg";
+import {RenderOpts} from "./index";
 
-export const renderMap = async (bsmap:BSMap,ctx:Context) => {
+
+export const renderMap = async (bsmap: BSMap, ctx, cfg) => {
+  if(cfg.renderMode === 'screenshot') {
+    const image = await renderRemoteMap(bsmap.id, {
+      puppeteer: ctx.puppeteer,
+      renderBaseURL: cfg.rankRenderURL,
+      platform:'score-saber',
+      onStartRender:() => {
+        console.log("start render id",bsmap.id)
+      },
+      background:'default'
+    })
+    return image
+  }
+  return await renderLocalMap(bsmap, ctx)
+}
+
+export const renderLocalMap = async (bsmap:BSMap,ctx:Context) => {
   const rootCmp = {
     components: {
       beatmap
@@ -15,4 +34,11 @@ export const renderMap = async (bsmap:BSMap,ctx:Context) => {
   }
   const html = await renderHTML(rootCmp)
   return ctx.puppeteer.render(html)
+}
+
+
+export const renderRemoteMap = async (mapId:string,opts:RenderOpts) => {
+  const buffer = await screenshotRemoteMap(opts.puppeteer,`${opts.renderBaseURL}/render/map/${mapId}`, '#render-result', opts.onStartRender,opts.waitTimeout ?? 2000)
+  const image = h.image(buffer, 'image/png')
+  return image
 }

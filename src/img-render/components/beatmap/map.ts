@@ -9,7 +9,7 @@ export default defineComponent({
   components: {
     CharacteristicIcon,
     Icon,
-    Progress
+    Progress,
   },
   props: {
     bsmap: {
@@ -20,8 +20,12 @@ export default defineComponent({
   setup(props, ctx) {
 
     const bg = "https://www.loliapi.com/acg/pe/"
+    const bsURL = `https://beatsaver.com/maps/${props.bsmap.id}`
+    const previewURL = `https://beatsaver.com/maps/${props.bsmap.id}`
     return {
       bsmap: props.bsmap,
+      bsURL,
+      previewURL,
       bg
     }
   },

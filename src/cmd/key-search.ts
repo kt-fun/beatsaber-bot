@@ -12,7 +12,7 @@ export function KeySearchCmd(ctx:Context,cfg:Config,api:APIService) {
       let key = input
       if(input.length > 15) {
         key = input.slice(0,15)
-        session.send(
+        session.sendQueued(
           h('message',{},
             h('quote', {
               id: session.messageId
@@ -23,7 +23,7 @@ export function KeySearchCmd(ctx:Context,cfg:Config,api:APIService) {
       }
       const res = await api.BeatSaver.searchMapByKeyword(key)
       if(res == null || res.length == 0) {
-        session.send(
+        session.sendQueued(
           h('message',{},
             h('quote', {
               id: session.messageId
@@ -37,12 +37,12 @@ export function KeySearchCmd(ctx:Context,cfg:Config,api:APIService) {
         toBeSend = res.slice(0,3)
       }
       const text = session.text('commands.bsbot.key-search.success', {key: key, length: toBeSend.length})
-        session.send(h('message', h('quote', {id: session.messageId}), text))
+        session.sendQueued(h('message', h('quote', {id: session.messageId}), text))
         for (let i=0;i<toBeSend.length;i++) {
           const item =toBeSend[i]
-          let image = await renderMap(item,ctx)
-          await session.send(image)
-          await session.send(h.audio(item.versions[0].previewURL))
+          let image = await renderMap(item,ctx,cfg)
+          session.sendQueued(image)
+          session.sendQueued(h.audio(item.versions[0].previewURL))
         }
 
     })
