@@ -15,7 +15,8 @@ export const renderMap = async (bsmap: BSMap, ctx, cfg) => {
       onStartRender:() => {
         console.log("start render id",bsmap.id)
       },
-      background:'default'
+      background:'default',
+      waitTimeout: cfg.waitTimeout,
     })
     return image
   }
@@ -38,7 +39,7 @@ export const renderLocalMap = async (bsmap:BSMap,ctx:Context) => {
 
 
 export const renderRemoteMap = async (mapId:string,opts:RenderOpts) => {
-  const buffer = await screenshotRemoteMap(opts.puppeteer,`${opts.renderBaseURL}/render/map/${mapId}`, '#render-result', opts.onStartRender,opts.waitTimeout ?? 2000)
+  const buffer = await screenshotRemoteMap(opts.puppeteer,`${opts.renderBaseURL}/render/map/${mapId}`, '#render-result', opts.onStartRender,opts.waitTimeout)
   const image = h.image(buffer, 'image/png')
   return image
 }
