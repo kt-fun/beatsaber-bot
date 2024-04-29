@@ -13,11 +13,14 @@ export function LatestCmd(ctx:Context,cfg:Config,api:APIService) {
 
       const text = session.text('commands.bsbot.latest.info')
       session.sendQueued(h('message', h('quote', {id: session.messageId}), text))
-      for (let i=0;i<res.length;i++) {
-        const item =res[i]
-        let image = await renderMap(item,ctx,cfg)
-        await session.sendQueued(image)
-        await session.sendQueued(h.audio(item.versions[0].previewURL))
+      const msgs = res.map(item=>  ({
+        audio:h.audio(item.versions[0].previewURL),
+        image: renderMap(item,ctx,cfg)
+      }))
+      for (let i=0;i<msgs.length;i++) {
+        const item =msgs[i]
+        const [msgId,] = await session.sendQueued(await item.image)
+        await session.sendQueued(item.audio)
       }
 
     })

@@ -29,7 +29,7 @@ export const screenshotRemoteMap = async (puppeteer:Puppeteer, url: string, sele
     height: 1080,
     deviceScaleFactor: 2,
   })
-  await page.goto(url);
+  await page.goto(url, {timeout: 0, waitUntil:'domcontentloaded'});
   onLoad?.()
   await new Promise<void>((resolve, reject) => {
     setTimeout(() => {
