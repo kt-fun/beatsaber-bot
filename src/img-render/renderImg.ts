@@ -3,8 +3,8 @@ import Puppeteer from "koishi-plugin-puppeteer";
 export const screenshot = async (puppeteer:Puppeteer, url: string, selector:string, onLoad?:()=>any, waitTime:number = 5000) => {
   const page = await puppeteer.page()
   await page.setViewport({
-    width: 1024,
-    height: 720 ,
+    width: 1920,
+    height: 1080,
     deviceScaleFactor: 2,
   })
   await page.goto(url);
@@ -25,7 +25,7 @@ export const screenshot = async (puppeteer:Puppeteer, url: string, selector:stri
 export const screenshotRemoteMap = async (puppeteer:Puppeteer, url: string, selector:string, onLoad?:()=>any, waitTime:number = 5000) => {
   const page = await puppeteer.page()
   await page.setViewport({
-    width: 300,
+    width: 1920,
     height: 1080,
     deviceScaleFactor: 2,
   })

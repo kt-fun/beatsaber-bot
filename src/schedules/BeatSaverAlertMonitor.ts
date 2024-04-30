@@ -57,22 +57,29 @@ const AlertMonitor = (ctx:Context,config:Config,api:APIService) => async ()=> {
 export default AlertMonitor
 
 const handleOauthNotify = async (item:{sub:BeatSaverNotifySub,account: BeatSaverOAuthAccount},ctx:Context,config:Config,api:APIService) => {
+  const logger = ctx.logger('bs-bot.AlertMonitor.Handler');
+
   const bot = ctx.bots[`${item.sub.platform}:${item.sub.selfId}`]
   if(!bot) {
+    logger.info('no bot found, skip')
     return
   }
   let alerts:Alert[]|null = await api.BeatSaver.getUnreadAlertsByPage(item.account.accessToken,0)
   let dbAccount = item.account
   if(!alerts) {
+    logger.info('accessToken invalid, try to refresh')
     const token = await api.AIOSaber.refreshOAuthToken(item.account.refreshToken)
     let now = new Date()
     if(!token) {
+      logger.info('failed to refresh, invalid this account')
       dbAccount.valid = 'invalid'
       dbAccount.lastModifiedAt = now
       await ctx.database.upsert('BeatSaverOAuthAccount',[dbAccount])
       bot.sendMessage(item.sub.channelId, '似乎 BeatSaver 通知的 token 已经失效了，通过bbbindbs 重新绑定吧')
       return
     }
+
+    logger.info('refresh successfully')
     dbAccount.accessToken = token.access_token
     dbAccount.refreshToken = token.refresh_token
     dbAccount.lastRefreshAt = now
@@ -85,6 +92,7 @@ const handleOauthNotify = async (item:{sub:BeatSaverNotifySub,account: BeatSaver
   try {
     for (const it of todo) {
       const msg = await buildMessage(it, api,ctx,config)
+      logger.info(`send alert id:${it.id}, type:${it.type}`)
       bot.sendMessage(item.sub.channelId, msg)
       res.lastNotifiedId = it.id
     }
@@ -108,26 +116,31 @@ async function buildMessage (alert:Alert,api:APIService,ctx,cfg) {
     const res = await api.BeatSaver.searchMapById(mapId)
     const image = await renderMap(res,ctx,cfg)
     msg = [`你关注的 ${username} 发布了新谱面`,
-      h('message', [image])]
+      h('message', [image]),h('audio',{src: res.versions[0].previewURL})
+    ]
   }else if(alert.type === "MapCurated") {
     const [full, username, mapId] =  curatedRegex.exec(alert.body)
     const res = await api.BeatSaver.searchMapById(mapId)
     const image = await renderMap(res,ctx,cfg)
     msg = [`你关注的 ${username} Curate 了新谱面`,
-    h('message', [image])]
+      h('message', [image]),h('audio',{src: res.versions[0].previewURL})
+
+    ]
   }else if(alert.type === "Curation") {
     const [full, username, mapId] =  selfMapCuratedRegex.exec(alert.body)
     const res = await api.BeatSaver.searchMapById(mapId)
     const image = await renderMap(res,ctx,cfg)
     msg = [`🎉，@${username} 刚刚 Curate 了你新谱面 ${mapId}`,
-      h('message', [image])]
+      h('message', [image]),h('audio',{src: res.versions[0].previewURL})
+    ]
   }
   else if(alert.type === "Uncuration") {
     const [full, username, mapId, name, reason] =  selfMapUncuratedRegex.exec(alert.body)
     const res = await api.BeatSaver.searchMapById(mapId)
     const image = await renderMap(res,ctx,cfg)
     msg = [`@${username} 刚刚 Uncurate 了你的谱面 ${mapId}，原因：${reason}`,
-      h('message', [image])]
+      h('message', [image]),h('audio',{src: res.versions[0].previewURL})
+    ]
   }
   else if(alert.type === "Deletion") {
     const [full,mapId, reason] =  selfMapDeletionRegex.exec(alert.body)
@@ -141,7 +154,9 @@ async function buildMessage (alert:Alert,api:APIService,ctx,cfg) {
     const [full, username,mapId, mapName, review] =  reviewRegex.exec(alert.body)
     const res = await api.BeatSaver.searchMapById(mapId)
     const image = await renderMap(res,ctx,cfg)
-    msg = [`@${username} 刚刚在你的谱面${mapName}(${mapId})中发表了评论：${review}`, h('message', [image])]
+    msg = [`@${username} 刚刚在你的谱面${mapName}(${mapId})中发表了评论：${review}`,
+      h('message', [image]),h('audio',{src: res.versions[0].previewURL})
+    ]
   }
   else if(alert.type === "ReviewDeletion") {
     const [full, mapId,reason] =  selfReviewDeletionRegex.exec(alert.body)
