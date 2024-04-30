@@ -2,7 +2,6 @@ import {$, Context, h} from "koishi";
 import {Config} from "../config";
 import {BeatSaverNotifySub, BeatSaverOAuthAccount} from "../index";
 import {APIService} from "../service";
-import {i} from "vite/dist/node/types.d-aGj9QkWt";
 import {renderMap} from "../img-render";
 interface Alert {
   id: number,
@@ -100,6 +99,9 @@ const handleOauthNotify = async (item:{sub:BeatSaverNotifySub,account: BeatSaver
 const releasedRegex = /^(@\w+)\sjust\sreleased+\s#([a-f0-9]{1,5})/
 const curatedRegex = /^(@\w+)\sjust\scurated+\s#([a-f0-9]{1,5})/
 const followRegex = /^(@\w+)\s.+/
+const selfMapCuratedRegex = /^(@\w+)\sjust\scurated+\s#([a-f0-9]{1,5})/
+const selfMapUncuratedRegex = /^(@\w+)\sjust\suncrated\syour\smap\s#([a-f0-9]{1,5}):\s\*\*(.+)\*\*.+Reason:\s\*"(.+)"\*/
+const selfMapDeletionRegex = /^Your map #([a-f0-9]{1,5}):.+Reason:\s\*"(.+)"\*$/
 async function buildMessage (alert:Alert,api:APIService,ctx,cfg) {
   let msg = []
   if(alert.type === "MapRelease") {
@@ -112,11 +114,42 @@ async function buildMessage (alert:Alert,api:APIService,ctx,cfg) {
     const [full, username, mapId] =  curatedRegex.exec(alert.body)
     const res = await api.BeatSaver.searchMapById(mapId)
     const image = await renderMap(res,ctx,cfg)
-    msg = [`你关注的 ${username} 验证了新谱面`,
+    msg = [`你关注的 ${username} Curate 了新谱面`,
     h('message', [image])]
-  }else if(alert.type === "Follow") {
+  }else if(alert.type === "Curation") {
+    const [full, username, mapId] =  selfMapCuratedRegex.exec(alert.body)
+    const res = await api.BeatSaver.searchMapById(mapId)
+    const image = await renderMap(res,ctx,cfg)
+    msg = [`🎉，@${username} 刚刚 Curate 了你新谱面 ${mapId}`,
+      h('message', [image])]
+  }
+  else if(alert.type === "Uncuration") {
+    const [full, username, mapId, name, reason] =  selfMapUncuratedRegex.exec(alert.body)
+    const res = await api.BeatSaver.searchMapById(mapId)
+    const image = await renderMap(res,ctx,cfg)
+    msg = [`@${username} 刚刚 Uncurate 了你的谱面 ${mapId}，原因：${reason}`,
+      h('message', [image])]
+  }
+  else if(alert.type === "Deletion") {
+    const [full,mapId, reason] =  selfMapDeletionRegex.exec(alert.body)
+    msg = [`你的谱面 ${mapId} 被移除了，原因：${reason}`]
+  }
+  else if(alert.type === "Follow") {
     const [full, username] =  followRegex.exec(alert.body)
     msg = [`@${username} 刚刚关注你啦, https://beatsaver.com/profile/username/${username}`]
   }
+  else if(alert.type === "Review") {
+    const [full, username,mapId, mapName, review] =  reviewRegex.exec(alert.body)
+    const res = await api.BeatSaver.searchMapById(mapId)
+    const image = await renderMap(res,ctx,cfg)
+    msg = [`@${username} 刚刚在你的谱面${mapName}(${mapId})中发表了评论：${review}`, h('message', [image])]
+  }
+  else if(alert.type === "ReviewDeletion") {
+    const [full, mapId,reason] =  selfReviewDeletionRegex.exec(alert.body)
+    msg = [`你在谱面 ${mapId} 中的评论被移除了，原因：${reason}`]
+  }
   return h('message', msg)
 }
+
+const reviewRegex = /^(@\w+)\sjust\sreviewed\syour\smap\s#([a-f0-9]{1,5}):\s\*\*(.+)\*\*\..+\*"(.+)"\*/
+const selfReviewDeletionRegex = /^A\smoderator\sdeleted\syour\sreview\son\s#([a-f0-9]{1,5}).+Reason:\s\*"(.+)"\*$/
