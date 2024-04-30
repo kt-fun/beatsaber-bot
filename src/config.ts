@@ -15,7 +15,7 @@ export interface Config {
 export const Config =Schema.object({
   beatSaverHost: Schema.string().default('https://api.beatsaver.com'),
   beatSaverWSHost: Schema.string().default('wss://ws.beatsaver.com/maps'),
-  rankRenderURL: Schema.string().default('https://bs-rank-render.ktlab.io'),
+  rankRenderURL: Schema.string().default('https://aiobs.ktlab.io'),
   rawMatchMapIdLength: Schema.number().default(3),
   renderMode: Schema.string().default('local'),
   defaultWaitTimeout: Schema.number().default(3000),

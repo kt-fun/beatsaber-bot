@@ -48,10 +48,9 @@ const AlertMonitor = (ctx:Context,config:Config,api:APIService) => async ()=> {
     sub: item.BeatSaverNotifySub,
     account:item.BeatSaverOAuthAccount
   }))
+  logger.info(`handle ${subscribe.length} account's notification`)
   for (const item of subscribes) {
-
-  await handleOauthNotify(item, ctx,config, api)
-  //
+    await handleOauthNotify(item, ctx,config, api)
   }
 }
 
@@ -96,9 +95,9 @@ const handleOauthNotify = async (item:{sub:BeatSaverNotifySub,account: BeatSaver
   }
 }
 // @Joetastic just released #3c19b
-const releasedRegex = /^(@\w+)\sjust\sreleased+\s#([a-f0-9]{1,5})/
-const curatedRegex = /^(@\w+)\sjust\scurated+\s#([a-f0-9]{1,5})/
-const followRegex = /^(@\w+)\s.+/
+const releasedRegex = /^@(\w+)\sjust\sreleased+\s#([a-f0-9]{1,5})/
+const curatedRegex = /^@(\w+)\sjust\scurated+\s#([a-f0-9]{1,5})/
+const followRegex = /^@(\w+)\s.+/
 const selfMapCuratedRegex = /^(@\w+)\sjust\scurated+\s#([a-f0-9]{1,5})/
 const selfMapUncuratedRegex = /^(@\w+)\sjust\suncrated\syour\smap\s#([a-f0-9]{1,5}):\s\*\*(.+)\*\*.+Reason:\s\*"(.+)"\*/
 const selfMapDeletionRegex = /^Your map #([a-f0-9]{1,5}):.+Reason:\s\*"(.+)"\*$/
