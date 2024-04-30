@@ -40,13 +40,11 @@ export function BindCmd(ctx:Context,cfg:Config,api:APIService) {
       const res = await ctx.database.set("user", session.user["id"],{
         bindId: scoreSaberUser.id
       })
-
       session.send(
         h('message',
           h('quote', {id: session.messageId}),
           session.text('commands.bsbot.bind.success',{user: `${scoreSaberUser.name}(${scoreSaberUser.id})`})
         )
       )
-
     })
 }

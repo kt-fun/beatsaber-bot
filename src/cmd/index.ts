@@ -13,6 +13,7 @@ export * from './me'
 export * from './whois'
 export * from './cmp'
 export * from './score'
+export * from './bind-beatsaver'
 export default class Cmd {
   private readonly config: Config;
   private readonly ctx: Context;

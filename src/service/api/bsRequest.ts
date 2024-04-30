@@ -43,11 +43,35 @@ export const bsRequest =(ctx:Context,cfg:Config)=> {
     wrapperErr(async ()=>{
       return (await http.get(url(`/maps/id/${id}`))) as BSMap
     })
+  const getAlertsStats = async (accessToken:string):Promise<any|null> =>
+    wrapperErr(async ()=>{
+      return (await http.get(url(`/alerts/stats`), {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })) as any
+    })
+  const getAlertsByPage = async (accessToken:string, type: 'unread'|'read',page: number):Promise<any|null> =>
+    wrapperErr(async ()=>{
+
+      const headers = {
+        Authorization: `Bearer ${accessToken}`
+      }
+
+      return (await http.get(url(`/alerts/${type}/${page}`), {
+        headers
+      })) as any
+    })
+
+  const getReadAlertsByPage = async (accessToken:string, page:number):Promise<any|null> => getAlertsByPage(accessToken, 'read',page)
+  const getUnreadAlertsByPage = async (accessToken:string, page:number):Promise<any|null> => getAlertsByPage(accessToken, 'unread',page)
+
   // zod kind valid
   return {
     getBSMapperById,
     getLatestMaps,
     searchMapByKeyword,
-    searchMapById
+    searchMapById,
+    getUnreadAlertsByPage,
   }
 }

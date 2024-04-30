@@ -11,10 +11,11 @@ import Cmd, {
   WhoisCmd,
   UnSubscribeCmd,
   CmpCmd,
-  ScoreCmd
+  ScoreCmd, BindBSCmd
 } from "./cmd";
 import {} from 'koishi-plugin-puppeteer'
 import {pluginWebSocket} from "./ws";
+import schedules from "./schedules";
 
 export * from './config'
 
@@ -26,12 +27,33 @@ export const inject = ['database','puppeteer']
 declare module 'koishi' {
   interface Tables {
     BSaverSubScribe: BSaverSubScribe,
+    BeatSaverOAuthAccount: BeatSaverOAuthAccount,
+    BeatSaverNotifySub:BeatSaverNotifySub
   }
   interface User {
     bindId: string
   }
 }
+export interface BeatSaverNotifySub {
+  id: number,
+  platform: string,
+  selfId: string,
+  channelId: string|null,
+  oauthAccountId: number,
+  lastNotifiedAt: Date,
+  lastNotifiedId: number
+}
+export interface BeatSaverOAuthAccount {
+  id: number,
+  uid: string,
+  accessToken: string,
+  refreshToken: string,
+  scope: string,
+  lastModifiedAt: Date,
+  lastRefreshAt: Date,
+  valid: string,
 
+}
 interface BSaverSubScribe {
   id: number,
   platform: string,
@@ -48,7 +70,6 @@ function pluginInit(ctx: Context, config:Config) {
   const zhLocal = require('./locales/zh-CN')
   ctx.i18n.define('zh-CN', zhLocal)
   ctx.model.extend('BSaverSubScribe', {
-    // 各字段的类型声明
     id: 'unsigned',
     uid: 'string',
     username: 'string',
@@ -61,8 +82,31 @@ function pluginInit(ctx: Context, config:Config) {
   },{
     autoInc: true
   })
+  ctx.model.extend('BeatSaverNotifySub', {
+    id: 'unsigned',
+    channelId: 'string',
+    selfId: 'string',
+    platform: 'string',
+    lastNotifiedId: 'unsigned',
+    lastNotifiedAt: 'timestamp',
+    oauthAccountId: 'unsigned',
+  },{
+    autoInc: true
+  })
+  ctx.model.extend('BeatSaverOAuthAccount', {
+    id: 'unsigned',
+    uid: 'string',
+    accessToken: 'string',
+    refreshToken: 'string',
+    scope: 'string',
+    lastModifiedAt: 'timestamp',
+    lastRefreshAt: 'timestamp',
+    valid: 'string'
+  },{
+    autoInc: true
+  })
   ctx.model.extend('user', {
-    bindId: "string"
+    bindId: "string",
   })
 }
 
@@ -105,6 +149,9 @@ function pluginCmd(ctx: Context, config: Config) {
     .apply(MeCmd)
     .apply(WhoisCmd)
     .apply(UnSubscribeCmd)
+    .apply(BindBSCmd)
     .apply(CmpCmd)
     .apply(ScoreCmd)
+
+  schedules(ctx,config)
 }
