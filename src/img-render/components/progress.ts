@@ -1,28 +1,17 @@
-import {computed, defineComponent} from "vue";
-import { ProgressIndicator, ProgressRoot } from 'radix-vue'
+import {defineComponent} from "vue";
 export default defineComponent({
-  components: {
-    ProgressIndicator,
-    ProgressRoot
-  },
   props: {
     value: Number
   },
   setup(props, ctx) {
-      const style = computed(()=>{
-        return `transform:translateX(-`+(100-props.value)+`%)`
-      })
       return {
-        style,
         value: props.value
       }
   },
   template:`
-  <ProgressRoot v-model="value" class="relative overflow-hidden rounded-full min-w-24 w-36 max-w-48 h-2 bg-gray-100">
-    <ProgressIndicator
-      className=" h-2 rounded-full bg-gradient-to-r from-red-500 to-blue-500"
-      :style="style"
-    />
-  </ProgressRoot>
+    <progress
+      class="[&::-webkit-progress-bar]:rounded-lg h-2 [&::-webkit-progress-bar]:h-2 [&::-webkit-progress-value]:from-blue-300 [&::-webkit-progress-value]:to-red-300 [&::-webkit-progress-value]:rounded-lg [&::-webkit-progress-value]:bg-gradient-to-r  [&::-webkit-progress-bar]:bg-gray-100"
+      max="100"
+      :value="value"/>
 `
 })

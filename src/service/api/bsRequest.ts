@@ -2,13 +2,15 @@ import {Context} from "koishi";
 import {Config} from "../../config";
 import {BSMap, BSMapLatestResponse, BSUserResponse} from "../../types";
 import {wrapperErr} from "../utils/handlerError";
+import {BeatsaverAlert, BeatsaverAlertStats} from "../../types/beatsaver";
 
-//
-// interface BeatSaverClient {
-//   getBSMapperById: (userId:string) => Promise<BSUserResponse>
-//
-//
-// }
+
+export interface OAuthTokenResponse {
+  "access_token": string,
+  "token_type": string,
+  expires_in: number,
+  refresh_token: string,
+}
 
 export const bsRequest =(ctx:Context,cfg:Config)=> {
   const http = ctx.http
@@ -23,51 +25,45 @@ export const bsRequest =(ctx:Context,cfg:Config)=> {
     }
     return host+path
   }
-  const getBSMapperById = async (userId:string):Promise<BSUserResponse> =>
-    wrapperErr(async ()=>{
-      return  (await http.get(url(`/users/id/${userId}`))) as BSUserResponse
-    })
 
-  const getLatestMaps = async (pageSize:number=5):Promise<BSMap[]> =>
-    wrapperErr(async ()=>{
-      const res = (await http.get(url(`/maps/latest?sort=FIRST_PUBLISHED&pageSize=${pageSize}`))) as BSMapLatestResponse
-      return res.docs
-    })
+  const getBSMapperById = async (userId:string) =>
+    http.get<BSUserResponse>(url(`/users/id/${userId}`))
+
+  const getLatestMaps = async (pageSize:number=5) =>
+    http.get<BSMapLatestResponse>(url(`/maps/latest?sort=FIRST_PUBLISHED&pageSize=${pageSize}`)).then(res=>res.docs)
+
   const searchMapByKeyword = async (key:string)=>
-    wrapperErr(async ()=>{
-      const res = (await http.get(url(`/search/text/0?q=${key}`))) as BSMapLatestResponse
-      return res.docs as BSMap[]
-    })
+    http.get<BSMapLatestResponse>(url(`/search/text/0?q=${key}`)).then(res=>res.docs)
 
-  const searchMapById = async (id:string):Promise<BSMap|null> =>
-    wrapperErr(async ()=>{
-      return (await http.get(url(`/maps/id/${id}`))) as BSMap
-    })
-  const getAlertsStats = async (accessToken:string):Promise<any|null> =>
-    wrapperErr(async ()=>{
-      return (await http.get(url(`/alerts/stats`), {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      })) as any
-    })
-  const getAlertsByPage = async (accessToken:string, type: 'unread'|'read',page: number):Promise<any|null> =>
-    wrapperErr(async ()=>{
+  const searchMapById = async (id:string) => http.get<BSMap>(url(`/maps/id/${id}`))
 
-      const headers = {
-        Authorization: `Bearer ${accessToken}`
-      }
 
-      return (await http.get(url(`/alerts/${type}/${page}`), {
-        headers
-      })) as any
-    })
+  const getAlertsStats = async (accessToken:string) =>
+    http.get<BeatsaverAlertStats>(url(`/alerts/stats`), {headers: {Authorization: `Bearer ${accessToken}`}})
 
-  const getReadAlertsByPage = async (accessToken:string, page:number):Promise<any|null> => getAlertsByPage(accessToken, 'read',page)
-  const getUnreadAlertsByPage = async (accessToken:string, page:number):Promise<any|null> => getAlertsByPage(accessToken, 'unread',page)
+  const getAlertsByPage = async (accessToken:string, type: 'unread'|'read',page: number) =>
+    http.get<BeatsaverAlert[]>(url(`/alerts/${type}/${page}`), {headers:{Authorization: `Bearer ${accessToken}`}})
 
-  // zod kind valid
+  const getUnreadAlertsByPage = (accessToken:string, page:number) => getAlertsByPage(accessToken, 'unread',page)
+
+  const getReadAlertsByPage = (accessToken:string, page:number) => getAlertsByPage(accessToken, 'read',page)
+
+  const refreshOAuthToken = async (refreshToken:string) => {
+    const form = new FormData()
+    form.append("client_id", cfg.bsOauthClientId)
+    form.append("client_secret", cfg.bsOauthClientSecret)
+    form.append("grant_type", "refresh_token")
+    form.append("refresh_token", refreshToken)
+    return fetch("https://beatsaver.com/api/oauth2/token", {
+      method: "POST",
+      body: form,
+    }).then(res => res.json() as Promise<OAuthTokenResponse>)
+  }
+
+
+
   return {
+    refreshOAuthToken,
     getBSMapperById,
     getLatestMaps,
     searchMapByKeyword,

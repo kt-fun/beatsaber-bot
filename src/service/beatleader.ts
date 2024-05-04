@@ -1,5 +1,7 @@
 import {BeatLeaderClient, BeatSaverClient} from "./api";
 import {sortScore} from "./utils/sortScore";
+import {NetReqResult} from "./utils/handlerError";
+import {Leaderboard} from "../types/beatleader";
 
 
 interface MapDiffOption {
@@ -13,13 +15,11 @@ export const BeatLeaderService = (
 )=>{
 
   return {
-
-    getScoreByPlayerIdAndMapId: async (playerId: string, mapId: string, option?: MapDiffOption) => {
+    getScoreByPlayerIdAndMapId: async (playerId: string, mapId: string, option?: MapDiffOption):Promise<NetReqResult<Leaderboard>> => {
       const map = await bsClient.searchMapById(mapId)
       if(!map) {
-        return null
+        return NetReqResult.failed('error.not.found')
       }
-
       const hash = map.versions[0].hash
       let reqs = map.versions[0].diffs.map(it=>({
         diff:it.difficulty,
@@ -40,10 +40,10 @@ export const BeatLeaderService = (
       const scores = res.filter(item => item != null)
       // todo sort score
       if(scores.length < 1) {
-        return  null
+        return  NetReqResult.failed('error.not-found')
       }
       scores.sort(sortScore)
-      return scores[0]
+      return NetReqResult.success(scores[0])
     }
 
   }

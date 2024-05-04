@@ -18,8 +18,8 @@ export const blRequest =(ctx:Context, cfg:Config)=> {
     return host+path
   }
   const getPlayerScore = async (req:BeatLeaderPlayerScoreRequest):Promise<Leaderboard> =>
-    wrapperErr(async ()=>{
-      return  (await http.get(url(`/score/${req.leaderboardContext}/${req.playerID}/${req.hash}/${req.diff}/${req.mode}`))) as Leaderboard
+    wrapperErr(async () => {
+      return http.get<Leaderboard>(url(`/score/${req.leaderboardContext}/${req.playerID}/${req.hash}/${req.diff}/${req.mode}`))
     })
 
   return {

@@ -1,29 +1,21 @@
-import {Context, h} from "koishi";
+import {Context, h, Logger} from "koishi";
 import {Config} from "../config";
 import {APIService} from "../service";
-import handlerError from "../utils/error";
 
-interface TokenInfo {
-  access_token: string;
-  refresh_token: string;
-  expires_in: number;
-  token_type: string;
-}
-
-export function BindBSCmd(ctx:Context,cfg:Config,api:APIService) {
+export function BindBSCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
   const bindBSCmd = ctx
-    .command('bsbot.bindbs <key:text>')
+    .command('bsbot.bindbs <key:string>')
     .alias('bbbindbs')
     .action(async ({ session, options }, input) => {
-      let tokenInfo = await handlerError(session,async ()=> await api.AIOSaber.getBSOAuthToken(input))
-      if(!tokenInfo) {
-        session.send(h('message',
+      let tokenInfo = await api.withRetry(() => api.AIOSaber.getBSOAuthToken(input),3)
+      if(!tokenInfo.isSuccess()) {
+        session.sendQueued(h('message',
           h('quote', {id: session.messageId}),
           "什么都没找到"
         ))
         return
       }
-      let token = tokenInfo as TokenInfo
+      let token = tokenInfo.data
       let now = new Date()
       const account = {
         uid: session.uid,
@@ -38,17 +30,23 @@ export function BindBSCmd(ctx:Context,cfg:Config,api:APIService) {
       const res = await ctx.database.get('BeatSaverOAuthAccount', {
         uid: session.uid
       })
-      const alerts = await api.BeatSaver.getUnreadAlertsByPage(res[0].accessToken, 0)
-      const lastId = alerts.length > 0 ? alerts[0].id : 0
-      const sub = {
-        channelId: session.channelId,
-        selfId: session.selfId,
-        platform: session.platform,
-        lastNotifiedId: lastId,
-        lastNotifiedAt: now,
-        oauthAccountId: res[0].id,
-      }
-      await ctx.database.upsert('BeatSaverNotifySub', [sub])
-      session.send("bind successfully")
+      session.sendQueued(session.text('commands.bsbot.bind-bs.success'))
+
+      // const alerts = await api.withRetry(() => api.BeatSaver.getUnreadAlertsByPage(res[0].accessToken, 0),3)
+      // if(!alerts.isSuccess()) {
+      //   //   retry
+      //  return
+      // }
+      // const lastId = alerts.data.length > 0 ? alerts.data[0].id : 0
+      // const sub = {
+      //   channelId: session.channelId,
+      //   selfId: session.selfId,
+      //   platform: session.platform,
+      //   lastNotifiedId: lastId,
+      //   lastNotifiedAt: now,
+      //   oauthAccountId: res[0].id,
+      // }
+      // await ctx.database.upsert('BeatSaverNotifySub', [sub])
+
     })
 }

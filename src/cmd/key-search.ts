@@ -1,49 +1,54 @@
 import {Config} from "../config";
-import {Context, h, Session} from "koishi";
+import {Context, h, Logger, Session} from "koishi";
 import {renderMap} from "../img-render";
 import {APIService} from "../service";
 
-export function KeySearchCmd(ctx:Context,cfg:Config,api:APIService) {
+interface QueryOption {
+  mapper?: string;
+  q?: string;
+  sortOrder: string;
+  automapper?: boolean;
+  chroma?: boolean;
+  verified?: boolean;
+  maxNps?: string;
+  minNps?: string;
+  from?: string;
+  to?: string;
+  tags?: string;
+}
+
+export function KeySearchCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
   const serachsubcmd = ctx
     .command('bsbot.search <key:text>')
+    .alias('bbsou')
     .alias('bbsearch')
+    .alias('bbmap')
+    // .option('-n','<data:string>')
     .action(async ({ session, options }, input) => {
-
       let key = input
       if(input.length > 15) {
         key = input.slice(0,15)
-        session.sendQueued(
-          h('message',{},
-            h('quote', {
-              id: session.messageId
-            }),
-            session.text('commands.bsbot.key-search.too-long-key',{key})
-          )
-        )
+        sendQuoteMsg(session,session.text('commands.bsbot.search.too-long-key',{key}))
       }
       const res = await api.BeatSaver.searchMapByKeyword(key)
-      if(res == null || res.length == 0) {
-        session.sendQueued(
-          h('message',{},
-            h('quote', {
-              id: session.messageId
-            }),
-            session.text('commands.bsbot.key-search.not-found',{key:key})
-          )
-        )
+      if(!res.isSuccess()) {
+        sendQuoteMsg(session, session.text('commands.bsbot.search.not-found',{key:key}))
+        return
       }
-      let toBeSend = res
-      if(res.length > 3) {
-        toBeSend = res.slice(0,3)
-      }
-      const text = session.text('commands.bsbot.key-search.success', {key: key, length: toBeSend.length})
-        session.sendQueued(h('message', h('quote', {id: session.messageId}), text))
-        for (let i=0;i<toBeSend.length;i++) {
-          const item =toBeSend[i]
-          let image = await renderMap(item,ctx,cfg)
-          session.sendQueued(image)
-          session.sendQueued(h.audio(item.versions[0].previewURL))
-        }
+      const toBeSend = res.data.slice(0,3).map(it=> ({
+        img: renderMap(it,ctx,cfg),
+        bsmap:it
+      }))
+      const text = session.text('commands.bsbot.search.success', {key: key, length: toBeSend.length})
+      session.sendQueued(h('message', h('quote', {id: session.messageId}), text))
 
+      for (const item of toBeSend) {
+        session.sendQueued(await item.img)
+        session.sendQueued(h.audio(item.bsmap.versions[0].previewURL))
+      }
     })
+}
+
+function sendQuoteMsg(session:Session, ...content:h.Fragment[]) {
+  session.sendQueued(h('message',{}, h('quote', {id: session.messageId}), ...content))
 }

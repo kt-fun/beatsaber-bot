@@ -1,5 +1,4 @@
 import {Context, h} from "koishi";
-import {Config} from "../config";
 import {screenshot} from "./renderImg";
 import {RenderOpts} from "./index";
 

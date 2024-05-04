@@ -1,6 +1,8 @@
 common:
   hello: 你好，我是 bsbot
   ping: pong
+  render:
+    wait: 开始渲染啦，请耐心等待 {sec} s
 ws:
   subscribe:
     update: Hello {username}，你关注的谱师「{mapperName}」更新啦！✨
@@ -8,13 +10,69 @@ commands:
   bsbot:
     message:
       network-error: ☹️似乎发生了网络错误，请稍后重试吧
+    cmp:
+      description: compare 指令 (WIP)
     who:
+      description: 用于查询所@用户对应的 BeatLeader/ScoreSaber 面板
+      usage: |-
+        输入 bbwho 并@某人，如果他/她/它绑定了ScoreSaber Id（也就是 steam 的用户 Id），会查询该用户在对应平台的top 24 首 rank 谱面打分，并生成渲染图。
+      examples: |-
+        示例
+        bbwho @someone
+        bsbot.who @someone
+        bsbot.who -p ss @someone
+      options:
+        p: 查询的平台，ss 代表 scoresaber，默认为 beatleader
       need-at: 谁？plz 重新执行指令并@ ta
       not-bind: 你要查询的ta，还没有绑定哦
+    rank:
+      description: 用于查询指定 scoreSaberID 对应用户的 BeatLeader/ScoreSaber 面板
+      usage: |-
+        输入 bbrank + scoreSaberId（也就是steamId）查询该用户在对应平台的top 24 首 rank 谱面打分，并生成渲染图。
+      examples: |-
+        示例
+        bbrank 2169974796454690
+        bsbot.rank 2169974796454690
+        bsbot.rank -p ss 2169974796454690
+      options:
+        p: 查询的平台，ss 代表 scoresaber，默认为 beatleader
     me:
+      description: 用于查询自己绑定用户对应的 BeatLeader/ScoreSaber 面板
+      usage: |-
+        输入 bbme，如果已经绑定了ScoreSaber Id（也就是 steam 的用户 Id），会查询该用户在对应平台的top 24 首 rank 谱面打分，并生成渲染图。
+      examples: |-
+        示例
+        bsbot.me
+        bbme
+        bbme -p ss
+      options:
+        p: 查询的平台，ss 代表 scoresaber，默认为 beatleader
       not-found: Ops，似乎还没有绑定到 ScoreSaber 或 BeatLeader
       score-not-found: 😯，没有找到 「{user}」的谱面 id 为「{id}」打分数据
+    bindbs:
+      description: 绑定 beatsaver 账号（需验证）
+      usage: |-
+        访问 https://aiobs.ktlab.io/oauth/beatsaver，按照提示进行授权，会得到一串字符串。
+        输入 bbbindbs，后接字符串，即可绑定
+      examples: |-
+        示例
+        bsbot.bindbs 74245D73A3E0
+        bbbindbs 74245D73A3E0
+      network-error: ☹️似乎发生了网络错误，请稍后重试吧
+      exist: 另外，你已经绑定了「{id}」，继续绑定丢失当前绑定哦
+      cancel: 已取消
+      timeout: 已超时取消
+      not-found: Ops，没有找到 id 为「{id}」的 {platform} 用户
+      ack-prompt: 确定要绑定「{user}」吗，30 秒内回复「y」或「yes」以确认，超时或回复其他内容取消操作
+      success: 🎉，成功绑定「{user}」啦
     bind:
+      description: 绑定自己的 ScoreSaberId（也就是 steam 的用户 Id，仅公开信息，无需验证）
+      usage: |-
+        输入 bbbind，后接 userId，按照提示即可绑定
+      examples: |-
+        示例
+        bsbot.bind 76561198339986544
+        bbbind 76561198339986544
       network-error: ☹️似乎发生了网络错误，请稍后重试吧
       exist: 另外，你已经绑定了「{id}」，继续绑定丢失当前绑定哦
       cancel: 已取消
@@ -23,19 +81,61 @@ commands:
       ack-prompt: 确定要绑定「{user}」吗，30 秒内回复「y」或「yes」以确认，超时或回复其他内容取消操作
       success:  🎉，成功绑定「{user}」啦
     score:
+      description: 查询用户在Beatleader 上的某次打分成绩，并生成渲染图。
+      usage: |-
+        1. bbscore 加上 beatleader 的 scoreId，即可生成渲染图。
+        2. bbscore 加上 Beatsaver 的 mapId，即可查询自己绑定的Bealeader账号关于该谱面的最高打分，并生成渲染图
+        3. bbscore 加上 Beatsaver 的 mapId 并@某人，即可查询该用户绑定的Bealeader账号关于该谱面的最高打分，并生成渲染图
+      examples: |-
+        示例
+        bsbot.score 13887221
+        bbscore 33b62
+        bbscore 33b62@someone
       not-a-score-id: 似乎不是一个 score ID
       not-bind: 你还没有绑定哦，使用 bind 指令进行绑定吧
       who-not-bind: 你要查询的ta，还没有绑定哦
-    key-search:
+    search:
+      description: 按关键词进行谱面搜索
+      usage: |-
+        通过关键字进行谱面搜索，会发送将最相关的 3 个谱面。
+      examples: |-
+        示例
+        bsbot.search megalovania
+        bbsou megalovania
+        bbsearch megalovania
       success: 为你奉上关于「{key}」的{length}首谱面 🎉
       not-found: Ops，关于「{key}」什么都没找到
       too-long-key: 关键词长度不应该超过 15 哦，因为这样容易什么都找不到，较长的部分已经帮你截掉啦，正在搜索中「{key}」
-    id-search:
+    id:
+      description: 按谱面id查找谱面。
+      usage: |-
+        根据谱面ID查找谱面。
+      examples: |-
+        示例
+        bsbot.id 36677
+        bbid 36677
+        !bsr 36677
+        36677
       error-map-id: 「{input}」似乎不是一个 mapId，正确的 mapId 是这样的哦(3877a)
       not-found: Ops! 似乎没有找到 id 为「{input}」的谱面
     latest:
+      description: 查找最新的三首谱面。
+      usage: |-
+        获取最新的三首谱面。
+      examples: |-
+        示例
+        bsbot.latest
+        bsbot.new
+        bbnew
       info: 为你奉上最新的 3 首谱面 🎉
     subscribe:
+      description: 订阅 BeatSaber 相关的事件，并主动推送。(WIP)
+      usage: |-
+        通过 bbsub 订阅 BeatSaber 相关的事件，当特定事件发生时会进行主动推送。
+      examples: |-
+        示例
+        bsbot.subscribe
+        bbsub
       all:
         success: 成功订阅所有谱师，当有非 AI 谱面更新时，会主动推送
       channel:
@@ -48,8 +148,16 @@ commands:
       success: 成功订阅
       notify: 当这些谱师更新时会通知你哦
     unsubscribe:
+      description: 取消订阅 BeatSaber 相关的事件。(WIP)
+      usage: |-
+        取消通过 bbsub 订阅的 BeatSaber 相关的事件，当特定事件发生时不会进行主动推送。
+      examples: |-
+        示例
+        bsbot.unsubscribe
+        bbunsub
       cancel-all: 已成功取消所有更新订阅
       cancel: 已取消对谱师「{id}」的更新订阅
+
 _config:
   beatSaverHost: BeatSaverOrigin，例如:https://api.beatsaver.com
   beatSaverWSHost: BeatSaverWebSocketOrigin，用于实时监听谱面更新，例如wss://ws.beatsaver.com/maps

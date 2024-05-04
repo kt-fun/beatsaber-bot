@@ -1,17 +1,13 @@
 import {BeatSaverClient, ScoreSaberClient} from "./api";
 import {sortScore} from "./utils/sortScore";
+import {wrapperErr} from "./utils/handlerError";
 
 export const ScoreSaberService = (
   bsClient: BeatSaverClient,
   scClient:ScoreSaberClient,
 )=>{
-
   return {
-    ... scClient,
-    getImgByScoreId: () => {
-
-    },
-
+    getScoreUserById: (id:string)=> wrapperErr(()=> scClient.getScoreUserById(id)),
     getScoreByPlayerIdAndMapId: async (playerId: string, mapId: string) => {
       const map = await bsClient.searchMapById(mapId)
       if(!map) {

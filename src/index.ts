@@ -4,17 +4,17 @@ import Cmd, {
   BindCmd,
   KeySearchCmd,
   IdSearchCmd,
-  SubscribeCmd,
+  // SubscribeCmd,
   LatestCmd,
   MeCmd,
   RankCmd,
   WhoisCmd,
-  UnSubscribeCmd,
+  // UnSubscribeCmd,
   CmpCmd,
   ScoreCmd, BindBSCmd
 } from "./cmd";
 import {} from 'koishi-plugin-puppeteer'
-import {pluginWebSocket} from "./ws";
+// import {pluginWebSocket} from "./ws";
 import schedules from "./schedules";
 
 export * from './config'
@@ -26,17 +26,19 @@ export const inject = ['database','puppeteer']
 
 declare module 'koishi' {
   interface Tables {
-    BSaverSubScribe: BSaverSubScribe,
+    // BeatSaverSubScribe: BeatSaverSubScribe,
     BeatSaverOAuthAccount: BeatSaverOAuthAccount,
-    BeatSaverNotifySub:BeatSaverNotifySub
+    BeatSaverNotifySub:BeatSaverNotifySub,
+    BeatSaverMapMessage:BeatSaverMapMessage,
   }
   interface User {
-    bindId: string
+    bindSteamId: string
   }
 }
 export interface BeatSaverNotifySub {
   id: number,
   platform: string,
+  // botId
   selfId: string,
   channelId: string|null,
   oauthAccountId: number,
@@ -52,36 +54,42 @@ export interface BeatSaverOAuthAccount {
   lastModifiedAt: Date,
   lastRefreshAt: Date,
   valid: string,
-
 }
-interface BSaverSubScribe {
+// interface BeatSaverSubScribe {
+//   id: number,
+//   platform: string,
+//   selfId: string,
+//   channelId: string|null,
+//   uid: string,
+//   username: string,
+//   bsUserId: string,
+//   time: Date,
+//   bsUsername:string,
+// }
+interface BeatSaverMapMessage {
   id: number,
   platform: string,
-  selfId: string,
-  channelId: string|null,
-  uid: string,
-  username: string,
-  bsUserId: string,
-  time: Date,
-  bsUsername:string,
+  mapId: string,
+  messageId: number,
 }
-
 function pluginInit(ctx: Context, config:Config) {
   const zhLocal = require('./locales/zh-CN')
   ctx.i18n.define('zh-CN', zhLocal)
-  ctx.model.extend('BSaverSubScribe', {
-    id: 'unsigned',
-    uid: 'string',
-    username: 'string',
-    channelId: 'string',
-    selfId: 'string',
-    platform: 'string',
-    bsUserId: 'string',
-    bsUsername: 'string',
-    time: 'timestamp',
-  },{
-    autoInc: true
-  })
+
+  // ctx.model.extend('BeatSaverSubScribe', {
+  //   id: 'unsigned',
+  //   uid: 'string',
+  //   username: 'string',
+  //   channelId: 'string',
+  //   selfId: 'string',
+  //   platform: 'string',
+  //   bsUserId: 'string',
+  //   bsUsername: 'string',
+  //   time: 'timestamp',
+  // },{
+  //   autoInc: true
+  // })
+
   ctx.model.extend('BeatSaverNotifySub', {
     id: 'unsigned',
     channelId: 'string',
@@ -93,6 +101,7 @@ function pluginInit(ctx: Context, config:Config) {
   },{
     autoInc: true
   })
+
   ctx.model.extend('BeatSaverOAuthAccount', {
     id: 'unsigned',
     uid: 'string',
@@ -105,16 +114,17 @@ function pluginInit(ctx: Context, config:Config) {
   },{
     autoInc: true
   })
+
   ctx.model.extend('user', {
-    bindId: "string",
+    bindSteamId: "string",
   })
 }
 
 
 export function apply(ctx: Context, config: Config) {
   pluginInit(ctx, config)
-  pluginWebSocket(ctx,config)
   pluginCmd(ctx, config)
+  // pluginWebSocket(ctx,config)
   ctx.on('reaction-added', async (session) => {
     console.log('recv')
   })
@@ -134,13 +144,12 @@ export function apply(ctx: Context, config: Config) {
 
 function pluginCmd(ctx: Context, config: Config) {
   const cmd = new Cmd(ctx,config)
-  ctx.command('bsbot <prompts:text>')
-  .alias('bbt')
+  ctx.command('bsbot <prompt:string>')
+  .alias('bb')
   .action(async ({ session, options }, input) => {
     const id = await session.send(input)
   })
   cmd
-    .apply(SubscribeCmd)
     .apply(KeySearchCmd)
     .apply(IdSearchCmd)
     .apply(LatestCmd)
@@ -148,10 +157,10 @@ function pluginCmd(ctx: Context, config: Config) {
     .apply(RankCmd)
     .apply(MeCmd)
     .apply(WhoisCmd)
-    .apply(UnSubscribeCmd)
     .apply(BindBSCmd)
     .apply(CmpCmd)
     .apply(ScoreCmd)
-
+    // .apply(SubscribeCmd)
+    // .apply(UnSubscribeCmd)
   schedules(ctx,config)
 }

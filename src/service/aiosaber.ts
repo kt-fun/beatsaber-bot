@@ -1,4 +1,5 @@
 import {AIOSaberClient} from "./api";
+import {wrapperErr} from "./utils/handlerError";
 
 
 const AIOSaberService = (
@@ -6,7 +7,7 @@ const AIOSaberService = (
 )=>{
 
   return {
-    ...aioClient
+    getBSOAuthToken: (key:string)=> wrapperErr(()=>aioClient.getBSOAuthToken(key))
   }
 }
 

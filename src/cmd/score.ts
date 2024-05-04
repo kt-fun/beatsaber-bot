@@ -1,19 +1,18 @@
-import {Context, h} from "koishi";
+import {Context, h, Logger} from "koishi";
 import {Config} from "../config";
 import {RenderOpts, renderRank, renderScore} from "../img-render";
 import {APIService} from "../service";
 import {convertDiff} from "../utils/converter";
 
-export function ScoreCmd(ctx:Context,cfg:Config,api:APIService) {
+export function ScoreCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
   const scoreCmd = ctx
     .command('bsbot.score')
     .alias('bbscore')
-    .userFields(['bindId'])
+    .userFields(['bindSteamId'])
     .option('p', '<platform:string>')
     .option('d', '<diffculty:string>')
     .option('m', '<mode:string>')
     .action(async ({ session, options }, input) => {
-      // use input
 
       let reg = /^([0-9a-fA-F]{3,5})(<at id="([0-9a-zA-z_]+)"\/>)?$/
       let renderOpts = {
@@ -39,7 +38,7 @@ export function ScoreCmd(ctx:Context,cfg:Config,api:APIService) {
 
       let bindId
       if(!uid) {
-        bindId = session.user.bindId
+        bindId = session.user.bindSteamId
         if(!bindId) {
           session.send(h('message',
             h('quote',{id:session.messageId}),
@@ -56,14 +55,14 @@ export function ScoreCmd(ctx:Context,cfg:Config,api:APIService) {
         const user =await ctx.database.get('user', {
           id: aid
         })
-        if(user.length == 0|| !user[0].bindId) {
-          session.send(h('message',
+        if(user.length == 0|| !user[0].bindSteamId) {
+          session.sendQueued(h('message',
             h('quote',{id:session.messageId}),
             session.text('commands.bsbot.score.who-not-bind')
           ))
           return
         }
-        bindId = user[0].bindId
+        bindId = user[0].bindSteamId
       }
 
       let diffOption
@@ -74,11 +73,11 @@ export function ScoreCmd(ctx:Context,cfg:Config,api:APIService) {
         }
       }
       const score = await api.BeatLeader.getScoreByPlayerIdAndMapId(bindId, mapId, diffOption)
-      if (!score) {
+      if (!score.isSuccess()) {
         return session.text('commands.bsbot.score.score-not-found',{user: bindId, id: mapId})
       }
-      const img = await renderScore(score.id.toString(), renderOpts)
-      session.send(img)
+      const img = await renderScore(score.data.id.toString(), renderOpts)
+      session.sendQueued(img)
 
     })
 
