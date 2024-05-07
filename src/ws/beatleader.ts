@@ -16,7 +16,9 @@ export function BeatLeaderWS(ctx: Context, cfg:Config, logger:Logger) {
       const ok = BeatLeaderReportChain(data,
         // RankOnly,
         // HighPP,
-        // HighStar, TopScore,StandardMode
+        // HighStar,
+        // TopScore,
+        StandardMode
       )
       if(!ok) {
         return
@@ -28,6 +30,7 @@ export function BeatLeaderWS(ctx: Context, cfg:Config, logger:Logger) {
           $.eq(row.user.id,row.BSSubscribeMember.memberUid),
           $.eq(row.BSSubscribeMember.subscribeId, row.BSBotSubscribe.id),
           $.eq(row.user.bindSteamId, playerId),
+          $.eq(row.BSBotSubscribe.type, 'beatleader'),
         )).execute()
 
       const subscribes = subscribe.map(item=> ({
@@ -47,9 +50,13 @@ export function BeatLeaderWS(ctx: Context, cfg:Config, logger:Logger) {
           const bot = ctx.bots[`${item.sub.platform}:${item.sub.selfId}`]
           if(!bot) continue
           const img = await renderScore(data.id.toString(), renderOpts)
+          const res = await ctx.database.get('binding', {
+            platform: item.sub.platform,
+            aid: item.member.memberUid
+          })
           bot.sendMessage(item.sub.channelId, h('message', [
             "恭喜",
-            h('at', {id: item.user.id,}),
+            h('at', {id: res[0].pid,}),
             `刚刚在谱面「${data.leaderboard.song.name}」中打出了 ${(data.accuracy * 100).toFixed(2)}% 的好成绩`
           ]))
           bot.sendMessage(item.sub.channelId, h('message', [img]))

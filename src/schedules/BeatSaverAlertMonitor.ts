@@ -90,7 +90,7 @@ const handleOauthNotify = async (item:{sub,account: BeatSaverOAuthAccount},ctx:C
         }
       }catch(err) {
         logger.error(err)
-        logger.error(it)
+        logger.error("some error happen during send msg",it)
       }
 
     }
@@ -101,12 +101,19 @@ const handleOauthNotify = async (item:{sub,account: BeatSaverOAuthAccount},ctx:C
   }
 }
 // @Joetastic just released #3c19b
-const releasedRegex = /^@(\w+)\sjust\sreleased+\s#([a-f0-9]{1,5})/
-const curatedRegex = /^@(\w+)\sjust\scurated+\s#([a-f0-9]{1,5})/
-const followRegex = /^@(\w+)\s.+/
-const selfMapCuratedRegex = /^(@\w+)\sjust\scurated+\s#([a-f0-9]{1,5})/
-const selfMapUncuratedRegex = /^(@\w+)\sjust\suncrated\syour\smap\s#([a-f0-9]{1,5}):\s\*\*(.+)\*\*.+Reason:\s\*"(.+)"\*/
+// check beatsaver source code of alert
+// https://github.com/beatmaps-io/beatsaver-main/blob/4049a4f6fe0649597ff58a37cceb7cca0725d54e/src/jvmMain/kotlin/io/beatmaps/api/maps.kt#L225
+
+const releasedRegex = /^@([\w._]+)\sjust\sreleased+\s#([a-f0-9]{1,5})/
+const curatedRegex = /^@([\w._]+)\sjust\scurated+\s#([a-f0-9]{1,5})/
+const reviewRegex = /^(@\w._+)\sjust\sreviewed\syour\smap\s#([a-f0-9]{1,5}):\s\*\*(.+)\*\*\..+\*"(.+)"\*/
+const selfReviewDeletionRegex = /^A\smoderator\sdeleted\syour\sreview\son\s#([a-f0-9]{1,5}).+Reason:\s\*"(.+)"\*$/
+
+const followRegex = /^@([\w._]+)\s.+/
+const selfMapCuratedRegex = /^(@\w._+)\sjust\scurated+\s#([a-f0-9]{1,5})/
+const selfMapUncuratedRegex = /^(@\w._+)\sjust\suncrated\syour\smap\s#([a-f0-9]{1,5}):\s\*\*(.+)\*\*.+Reason:\s\*"(.+)"\*/
 const selfMapDeletionRegex = /^Your map #([a-f0-9]{1,5}):.+Reason:\s\*"(.+)"\*$/
+
 async function buildMessage (alert:Alert,api:APIService,ctx,cfg,logger:Logger) {
   let msg = []
   if(alert.type === "MapRelease") {
@@ -174,5 +181,3 @@ async function buildMessage (alert:Alert,api:APIService,ctx,cfg,logger:Logger) {
   return h('message', msg)
 }
 
-const reviewRegex = /^(@\w+)\sjust\sreviewed\syour\smap\s#([a-f0-9]{1,5}):\s\*\*(.+)\*\*\..+\*"(.+)"\*/
-const selfReviewDeletionRegex = /^A\smoderator\sdeleted\syour\sreview\son\s#([a-f0-9]{1,5}).+Reason:\s\*"(.+)"\*$/
