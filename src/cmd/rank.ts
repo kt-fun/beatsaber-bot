@@ -11,7 +11,7 @@ export function RankCmd(ctx: Context, cfg: Config,api:APIService,logger:Logger) 
     .action(async ({session, options}, input) => {
       let rankOps = {
         puppeteer:ctx.puppeteer,
-        renderBaseURL: cfg.rankRenderURL,
+        renderBaseURL: cfg.remoteRenderURL,
         onStartRender() {session.send("开始渲染啦，请耐心等待5s")},
         platform:  options.p=='ss'? 'score-saber' : 'beat-leader',
         background: 'default'

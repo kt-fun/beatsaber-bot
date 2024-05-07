@@ -44,7 +44,7 @@ export function WhoisCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
       }
       let rankOps = {
         puppeteer:ctx.puppeteer,
-        renderBaseURL: cfg.rankRenderURL,
+        renderBaseURL: cfg.remoteRenderURL,
         waitTimeout: 5000,
         onStartRender() {session.send(session.text('common.render.wait', {sec:5}))},
         platform:  options.p=='ss'? 'score-saber' : 'beat-leader',

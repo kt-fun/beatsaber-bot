@@ -22,7 +22,7 @@ export function MeCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
 
       let renderOpts = {
         puppeteer:ctx.puppeteer,
-        renderBaseURL: cfg.rankRenderURL,
+        renderBaseURL: cfg.remoteRenderURL,
         onStartRender() {session.send("开始渲染啦，请耐心等待5s")},
         platform:  options.p=='ss'? 'score-saber' : 'beat-leader',
         background: 'default'
