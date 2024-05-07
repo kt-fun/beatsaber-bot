@@ -12,6 +12,7 @@ export function BeatLeaderWS(ctx: Context, cfg:Config, logger:Logger) {
     try {
       const data = JSON.parse(message.toString()) as BeatLeaderWSEvent
       const playerId = data.player.id
+
       const ok = BeatLeaderReportChain(data,
         // RankOnly,
         // HighPP,
@@ -22,6 +23,7 @@ export function BeatLeaderWS(ctx: Context, cfg:Config, logger:Logger) {
       if(!ok) {
         return
       }
+      logger.info('Received beatleader message',data.id, data.player.id);
       const selection = ctx.database.join(['BSSubscribeMember','user', 'BSBotSubscribe'])
 
       const subscribe = await selection.where(row=>
@@ -65,9 +67,11 @@ export function BeatLeaderWS(ctx: Context, cfg:Config, logger:Logger) {
       logger.info('err',err)
     }
   })
+
   ws.on('close', (code, reason)=> {
     logger.info("BeatleaderWS closed");
   })
+
   return ws
 }
 

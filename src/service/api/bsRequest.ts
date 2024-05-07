@@ -60,6 +60,11 @@ export const bsRequest =(ctx:Context,cfg:Config)=> {
     }).then(res => res.json() as Promise<OAuthTokenResponse>)
   }
 
+  //
+  const getSelfInfo = async (accessToken:string) => {
+    return ctx.http.get<BSUserResponse>(url(`/users/me?access_token=${accessToken}`))
+  }
+
 
 
   return {
@@ -69,5 +74,6 @@ export const bsRequest =(ctx:Context,cfg:Config)=> {
     searchMapByKeyword,
     searchMapById,
     getUnreadAlertsByPage,
+    getSelfInfo
   }
 }

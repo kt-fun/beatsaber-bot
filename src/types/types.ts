@@ -14,6 +14,7 @@ export interface BSUserResponse{
   curator: boolean
   description: string
 }
+
 export interface BSMapLatestResponse {
   docs: BSMap[]
 }

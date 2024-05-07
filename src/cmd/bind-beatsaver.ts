@@ -12,18 +12,42 @@ export function BindBSCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
       if(!tokenInfo.isSuccess()) {
         session.sendQueued(h('message',
           h('quote', {id: session.messageId}),
-          "什么都没找到"
+          session.text("commands.bsbot.bindbs.not-found")
         ))
         return
       }
       let token = tokenInfo.data
+      let self = await api.BeatSaver.getSelfInfo(token.access_token)
+      if(!self.isSuccess()) {
+        const refreshToken = await api.BeatSaver.refreshOAuthToken(token.refresh_token)
+        if(!refreshToken.isSuccess()) {
+
+          session.sendQueued(h('message',[
+            h('quote', {id: session.messageId}),
+            session.text('commands.bsbot.bindbs.invalid-token')
+          ]))
+          return
+        }
+        token = refreshToken.data
+
+        self = await api.withRetry(()=>api.BeatSaver.getSelfInfo(token.refresh_token), 3)
+        if(!self.isSuccess()) {
+          session.sendQueued(h('message',[
+            h('quote', {id: session.messageId}),
+            session.text('commands.bsbot.bindbs.unknown-error')
+          ]))
+          return
+        }
+      }
       let now = new Date()
 
       const res =await ctx.database.get('BeatSaverOAuthAccount', {
         uid: session.user.id,
       })
+
       let account:any = {
         uid: session.user.id,
+        bsUserId: self.data.id,
         accessToken: token.access_token,
         refreshToken: token.refresh_token,
         scope:"identity,alerts",
@@ -36,6 +60,9 @@ export function BindBSCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
       }
       // query uid token
       await ctx.database.upsert('BeatSaverOAuthAccount', [account])
-      session.sendQueued(session.text('commands.bsbot.bind-bs.success'))
+      session.sendQueued(h('message', [
+        h('quote', {id: session.messageId}),
+        session.text('commands.bsbot.bindbs.success', {name: self.data.name, id: self.data.id})
+      ]))
     })
 }
