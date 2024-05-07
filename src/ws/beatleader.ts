@@ -23,7 +23,7 @@ export function BeatLeaderWS(ctx: Context, cfg:Config, logger:Logger) {
       if(!ok) {
         return
       }
-      logger.info('Received beatleader message',data.id, data.player.id);
+      // logger.info('Received beatleader message',data.id, data.player.id);
       const selection = ctx.database.join(['BSSubscribeMember','user', 'BSBotSubscribe'])
 
       const subscribe = await selection.where(row=>

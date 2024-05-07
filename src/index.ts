@@ -141,21 +141,31 @@ export function apply(ctx: Context, config: Config) {
 }
 
 
-
+async function sendTmpHit(ctx,session) {
+  const buf = await screenshotTmp(ctx.puppeteer, 'https://aiobs.ktlab.io/tmp/lb/hitcnt', '#render-result', ()=> {
+    session.send(h('message', [
+      "开始渲染砍击榜了，请耐心等待 10s"
+    ]))
+  },8000)
+  const hitmsg = h.image(buf, 'image/png')
+  session.sendQueued(hitmsg)
+}
+async function sendTmpScore(ctx,session) {
+  const buf = await screenshotTmp(ctx.puppeteer, 'https://aiobs.ktlab.io/tmp/lb/score', '#render-result', ()=> {
+    session.send(h('message', [
+      "开始渲染打分榜了，请耐心等待 10s"
+    ]))
+  },8000)
+  const scoremsg = h.image(buf, 'image/png')
+  session.sendQueued(scoremsg)
+}
 function pluginCmd(ctx: Context, config: Config) {
   const cmd = new Cmd(ctx,config)
 
   ctx.command('bsbot.tmplb')
     .alias('bblb')
     .action(async ({session}) => {
-      const [hitbuf, scorebuf] = await Promise.all([
-        screenshotTmp(ctx.puppeteer, 'https://aiobs.ktlab.io/tmp/lb/hitcnt', '#render-result'),
-        screenshotTmp(ctx.puppeteer, 'https://aiobs.ktlab.io/tmp/lb/score', '#render-result')
-      ])
-      const hitmsg = h.image(hitbuf, 'image/png')
-      const scoremsg = h.image(scorebuf, 'image/png')
-      session.sendQueued(hitmsg)
-      session.sendQueued(scoremsg)
+      await Promise.all([sendTmpHit(ctx,session), sendTmpScore(ctx,session)])
     })
   ctx.command('bsbot <prompt:string>')
   .alias('bb')

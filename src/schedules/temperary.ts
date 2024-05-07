@@ -21,8 +21,8 @@ export const ScoreMonitor = (ctx:Context,config:Config,api:APIService,logger:Log
       return
     }
     const [hitbuf, scorebuf] = await Promise.all([
-      screenshotTmp(ctx.puppeteer, 'https://aiobs.ktlab.io/tmp/lb/hitcnt', '#render-result'),
-      screenshotTmp(ctx.puppeteer, 'https://aiobs.ktlab.io/tmp/lb/score', '#render-result')
+      screenshotTmp(ctx.puppeteer, 'https://aiobs.ktlab.io/tmp/lb/hitcnt', '#render-result',()=>{}, 8000),
+      screenshotTmp(ctx.puppeteer, 'https://aiobs.ktlab.io/tmp/lb/score', '#render-result',()=>{}, 8000)
     ])
     const hitmsg = h.image(hitbuf, 'image/png')
     const scoremsg = h.image(scorebuf, 'image/png')
