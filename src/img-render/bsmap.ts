@@ -11,7 +11,7 @@ export const renderMap = async (bsmap: BSMap, ctx, cfg) => {
     for (let i = 0; i < 3; i++) {
       const image = await renderRemoteMap(bsmap.id, {
         puppeteer: ctx.puppeteer,
-        renderBaseURL: cfg.rankRenderURL,
+        renderBaseURL: cfg.remoteRenderURL,
         platform:'score-saber',
         onStartRender:() => {
           console.log("start render id",bsmap.id)

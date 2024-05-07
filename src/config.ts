@@ -3,7 +3,7 @@ import { Schema } from 'koishi'
 export interface Config {
   beatSaverHost: string,
   beatSaverWSURL: string,
-  rankRenderURL: string,
+  remoteRenderURL: string,
   minRawMatchMapIdLength: number,
   defaultWaitTimeout: number,
   renderMode: 'local'| 'screenshot',

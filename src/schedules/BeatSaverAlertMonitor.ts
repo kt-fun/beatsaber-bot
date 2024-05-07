@@ -1,6 +1,6 @@
 import {$, Context, h, Logger} from "koishi";
 import {Config} from "../config";
-import {BeatSaverNotifySub, BeatSaverOAuthAccount} from "../index";
+import { BeatSaverOAuthAccount} from "../index";
 import {APIService} from "../service";
 import {renderMap} from "../img-render";
 interface Alert {
@@ -14,22 +14,36 @@ interface Alert {
 
 const AlertMonitor = (ctx:Context,config:Config,api:APIService,logger:Logger) => async ()=> {
   logger.info('trigger alertMonitor')
-  const selection = ctx.database.join(['BeatSaverOAuthAccount','BeatSaverNotifySub'])
+  const selection = ctx.database.join(['BeatSaverOAuthAccount','BSBotSubscribe'])
   const subscribe = await selection.where(row=>
-    $.and($.eq(row.BeatSaverOAuthAccount.id,row.BeatSaverNotifySub.oauthAccountId),$.eq(row.BeatSaverOAuthAccount.valid,'ok'))).execute()
+    $.and(
+      $.eq(row.BSBotSubscribe.type,"alert"),
+      $.eq(row.BeatSaverOAuthAccount.id,row.BSBotSubscribe.data?.oauthAccountId),
+      $.eq(row.BeatSaverOAuthAccount.valid,'ok')
+    )
+  ).execute()
   const subscribes = subscribe.map(item=> ({
-    sub: item.BeatSaverNotifySub,
+    sub: item.BSBotSubscribe,
     account:item.BeatSaverOAuthAccount
   }))
+
+  // const selection = ctx.database.join(['BeatSaverOAuthAccount','BeatSaverNotifySub'])
+  // const subscribe = await selection.where(row=>
+  //   $.and($.eq(row.BeatSaverOAuthAccount.id,row.BeatSaverNotifySub.oauthAccountId),$.eq(row.BeatSaverOAuthAccount.valid,'ok'))).execute()
+  // const subscribes = subscribe.map(item=> ({
+  //   sub: item.BeatSaverNotifySub,
+  //   account:item.BeatSaverOAuthAccount
+  // }))
   logger.info(`handle ${subscribe.length} account's notification`)
   for (const item of subscribes) {
     await handleOauthNotify(item, ctx,config, api,logger)
   }
+  logger.info(`handle notification over`)
 }
 
 export default AlertMonitor
 
-const handleOauthNotify = async (item:{sub:BeatSaverNotifySub,account: BeatSaverOAuthAccount},ctx:Context,config:Config,api:APIService,logger:Logger) => {
+const handleOauthNotify = async (item:{sub,account: BeatSaverOAuthAccount},ctx:Context,config:Config,api:APIService,logger:Logger) => {
   const bot = ctx.bots[`${item.sub.platform}:${item.sub.selfId}`]
   if(!bot) {
     logger.info('no bot found, skip')
@@ -42,7 +56,7 @@ const handleOauthNotify = async (item:{sub:BeatSaverNotifySub,account: BeatSaver
     const token = await api.BeatSaver.refreshOAuthToken(item.account.refreshToken)
     let now = new Date()
     if(!token.isSuccess()) {
-      logger.info('failed to refresh, invalid this account')
+      logger.info(`failed to refresh, invalid this account,${JSON.stringify(dbAccount)}`)
       dbAccount.valid = 'invalid'
       dbAccount.lastModifiedAt = now
       await ctx.database.upsert('BeatSaverOAuthAccount',[dbAccount])
@@ -58,19 +72,32 @@ const handleOauthNotify = async (item:{sub:BeatSaverNotifySub,account: BeatSaver
     await ctx.database.upsert('BeatSaverOAuthAccount', [dbAccount])
     alerts = await api.BeatSaver.getUnreadAlertsByPage(dbAccount.accessToken,0)
   }
-  const todo = alerts.data.filter(it=> item.sub.lastNotifiedId < it.id).sort((a,b)=> a.id - b.id)
+  const todo = alerts.data
+
+    .filter(it=> item.sub?.data?.lastNotifiedId < it.id).sort((a,b)=> a.id - b.id)
   let res = Object.assign({}, item.sub)
   try {
     for (const it of todo) {
-      const msg = await buildMessage(it, api,ctx,config, logger)
-      logger.info(`send alert id:${it.id}, type:${it.type}`)
-      bot.sendMessage(item.sub.channelId, msg)
-      res.lastNotifiedId = it.id
+      try {
+        const msg = await buildMessage(it, api,ctx,config, logger)
+        logger.info(`send alert id:${it.id}, type:${it.type}`)
+        bot.sendMessage(item.sub.channelId, msg)
+        res.data.lastNotifiedId = it.id
+        res.data = {
+          ...res.data,
+          lastNotifiedId: it.id,
+          lastNotifiedAt: new Date()
+        }
+      }catch(err) {
+        logger.error(err)
+        logger.error(it)
+      }
+
     }
   }catch (e) {
-    console.log(e)
+    logger.error(e)
   }finally {
-    ctx.database.upsert('BeatSaverNotifySub', [res])
+    ctx.database.upsert('BSBotSubscribe', [res])
   }
 }
 // @Joetastic just released #3c19b

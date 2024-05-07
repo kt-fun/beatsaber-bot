@@ -2,18 +2,17 @@ import {Context, Logger} from "koishi";
 import {Config} from "../config";
 import {APIService} from "../service";
 
-export * from './bind-steam'
 export * from './key-search'
 export * from './id-search'
-// export * from './subscribe'
-// export * from './unsubscribe'
 export * from './latest'
 export * from './rank'
 export * from './me'
 export * from './whois'
 export * from './cmp'
 export * from './score'
+export * from './bind-steam'
 export * from './bind-beatsaver'
+export * from './subscribe/index'
 export default class Cmd {
   private readonly config: Config;
   private readonly ctx: Context;

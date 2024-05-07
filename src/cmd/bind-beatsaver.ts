@@ -6,6 +6,7 @@ export function BindBSCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
   const bindBSCmd = ctx
     .command('bsbot.bindbs <key:string>')
     .alias('bbbindbs')
+    .userFields(['id'])
     .action(async ({ session, options }, input) => {
       let tokenInfo = await api.withRetry(() => api.AIOSaber.getBSOAuthToken(input),3)
       if(!tokenInfo.isSuccess()) {
@@ -17,8 +18,12 @@ export function BindBSCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
       }
       let token = tokenInfo.data
       let now = new Date()
-      const account = {
-        uid: session.uid,
+
+      const res =await ctx.database.get('BeatSaverOAuthAccount', {
+        uid: session.user.id,
+      })
+      let account:any = {
+        uid: session.user.id,
         accessToken: token.access_token,
         refreshToken: token.refresh_token,
         scope:"identity,alerts",
@@ -26,27 +31,11 @@ export function BindBSCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
         lastRefreshAt: now,
         valid: 'ok'
       }
+      if(res.length > 0) {
+        account.id = res[0].id
+      }
+      // query uid token
       await ctx.database.upsert('BeatSaverOAuthAccount', [account])
-      const res = await ctx.database.get('BeatSaverOAuthAccount', {
-        uid: session.uid
-      })
       session.sendQueued(session.text('commands.bsbot.bind-bs.success'))
-
-      // const alerts = await api.withRetry(() => api.BeatSaver.getUnreadAlertsByPage(res[0].accessToken, 0),3)
-      // if(!alerts.isSuccess()) {
-      //   //   retry
-      //  return
-      // }
-      // const lastId = alerts.data.length > 0 ? alerts.data[0].id : 0
-      // const sub = {
-      //   channelId: session.channelId,
-      //   selfId: session.selfId,
-      //   platform: session.platform,
-      //   lastNotifiedId: lastId,
-      //   lastNotifiedAt: now,
-      //   oauthAccountId: res[0].id,
-      // }
-      // await ctx.database.upsert('BeatSaverNotifySub', [sub])
-
     })
 }

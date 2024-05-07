@@ -28,6 +28,7 @@ export interface BSMap{
     name: string,
     avatar: string,
     type: string,
+    [key:string]: any,
   },
   metadata: {
     bpm:number,
@@ -36,13 +37,15 @@ export interface BSMap{
     songSubName: string,
     songAuthorName: string,
     levelAuthorName: string,
+    [key:string]: any,
   },
   stats: {
     plays: number,
     downloads: number,
     upvotes: number,
     downvotes: number,
-    score: number
+    score: number,
+    [key:string]: any,
   },
   automapper: boolean,
   versions: {
@@ -52,6 +55,7 @@ export interface BSMap{
     downloadURL: string,
     coverURL: string,
     previewURL: string,
+    [key:string]: any,
     diffs: {
       notes: number,
       bombs: number,
@@ -61,24 +65,28 @@ export interface BSMap{
       length: number,
       characteristic: string,
       difficulty: string,
-      events: string,
+      events: number,
+
       chroma: boolean,
       me: boolean,
       ne: boolean,
       cinema: boolean,
       seconds: number,
-      maxScore: string,
+      maxScore: number,
       paritySummary: any,
+      [key:string]: any,
     }[]
   }[],
   updatedAt: string,
+
+  [key:string]: any,
   lastPublishedAt: string,
   createdAt: string,
   tags: string[],
 }
 
 
-export interface WSEvent {
+export interface BeatSaverWSEvent {
   type: "MAP_UPDATE" | "MAP_DELETE",
   msg: BSMap
 }

@@ -29,11 +29,11 @@ export const screenshotRemoteMap = async (puppeteer:Puppeteer, url: string, sele
     height: 1080,
     deviceScaleFactor: 2,
   })
-  await page.goto(url, {timeout: 0, waitUntil:'domcontentloaded'});
-  onLoad?.()
-  await new Promise<void>((resolve, reject) => {setTimeout(() => {resolve()}, waitTime)})
-  const elm = await page.waitForSelector(selector, {timeout: waitTime})
-  const buffer = await elm.screenshot({})
-  await page.close()
-  return buffer
+    await page.goto(url, {timeout: 0, waitUntil:'domcontentloaded'});
+    onLoad?.()
+    await new Promise<void>((resolve, reject) => {setTimeout(() => {resolve()}, waitTime)})
+    const elm = await page.waitForSelector(selector, {timeout: waitTime})
+    const buffer = await elm.screenshot({})
+    await page.close()
+    return buffer
 }

@@ -136,17 +136,60 @@ commands:
         示例
         bsbot.subscribe
         bbsub
-      all:
-        success: 成功订阅所有谱师，当有非 AI 谱面更新时，会主动推送
-      channel:
-        error: 在群聊中，只允许管理员进行订阅谱师操作哦
-      error-unhandled: 以下 Id 未处理
-      reason:
-        too-many-id: 太多用户 Id 啦，一次最多只能处理 5 条哦
-        invalid-id: 用户 Id，应当为数字啊，比如(58338)
-        req-failed: 请求失败
-      success: 成功订阅
-      notify: 当这些谱师更新时会通知你哦
+      alert:
+        no-bind-bs-id: 你还未绑定 beatsaver，快使用 bbbindbs 进行绑定吧
+        not-success: 订阅失败，可能是因为凭证已经过期
+        invalid-token: 似乎token 已经失效了，快使用 bbbindbs 重新进行绑定吧
+      beatleader:
+        exist: 当前群聊/频道已订阅 BeatLeader 打分更新事件
+        success: 成功订阅 BeatLeader 打分更新事件，当参与群员出现满足条件的打分事件时，会主动推送
+      beatsaver:
+        exist: 当前群聊/频道已订阅 BeatSaver 谱面更新事件
+        success: 成功订阅 BeatSaver 谱面更新事件，当参与群员发布新谱面时，会主动推送
+      info:
+        none: 当前群聊/频道没有任何 BeatSaber 事件订阅。
+        header: 当前群聊/频道 BeatSaber 订阅如下：
+        body-item: 订阅类型「{type}」, 共 {cnt} 名参与成员
+        body-item-include-you: (包括你哦)
+      join:
+        description: 加入本群聊订阅的 BeatSaber 相关的事件
+        usage: |-
+          通过 bbsub 订阅 BeatSaber 相关的事件，当特定事件发生时会进行主动推送。
+        examples: |-
+          示例
+          bsbot.subscribe
+          bbsub
+        success:
+          beatleader: 成功加入本群Beatleader订阅组，当你打出高分时，会在本群推送
+          beatsaver: 成功加入本群订阅组，当你发布新谱面时，会在本群推送
+        nosub:
+          beatleader: 当前群组/频道未启用 beatleader 打分订阅
+          beatsaver: 当前群组/频道未启用 beatsaver 谱师订阅
+      leave:
+        description: 加入本群聊订阅的 BeatSaber 相关的事件
+        usage: |-
+          通过 bbsub 订阅 BeatSaber 相关的事件，当特定事件发生时会进行主动推送。
+        examples: |-
+          示例
+          bsbot.subscribe
+          bbsub
+        not-exist:
+          beatleader: 你还未加入当前群组/频道的 beatleader 打分订阅，无需离开
+          beatsaver:
+        success:
+          beatleader: 成功离开本群「beatleader」订阅组，当你打出高分时，不会再在本群推送了
+          beatsaver: 成功加入本群订阅组，当你发布新谱面时，会在本群推送
+#      all:
+#        success: 成功订阅所有谱师，当有非 AI 谱面更新时，会主动推送
+#      channel:
+#        error: 在群聊中，只允许管理员进行订阅谱师操作哦
+#      error-unhandled: 以下 Id 未处理
+#      reason:
+#        too-many-id: 太多用户 Id 啦，一次最多只能处理 5 条哦
+#        invalid-id: 用户 Id，应当为数字啊，比如(58338)
+#        req-failed: 请求失败
+#      success: 成功订阅
+#      notify: 当这些谱师更新时会通知你哦
     unsubscribe:
       description: 取消订阅 BeatSaber 相关的事件。(WIP)
       usage: |-
@@ -155,6 +198,12 @@ commands:
         示例
         bsbot.unsubscribe
         bbunsub
+      nosub:
+        beatleader: 当前群组/频道未启用 beatleader 打分订阅
+        beatsaver: 当前群组/频道未启用 beatsaver 谱师订阅
+      success:
+        beatleader: 成功禁用 beatleader 打分订阅
+        beatsaver: 成功禁用 beatsaver 谱师订阅
       cancel-all: 已成功取消所有更新订阅
       cancel: 已取消对谱师「{id}」的更新订阅
 

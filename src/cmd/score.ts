@@ -17,7 +17,7 @@ export function ScoreCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
       let reg = /^([0-9a-fA-F]{3,5})(<at id="([0-9a-zA-z_]+)"\/>)?$/
       let renderOpts = {
         puppeteer:ctx.puppeteer,
-        renderBaseURL: cfg.rankRenderURL,
+        renderBaseURL: cfg.remoteRenderURL,
         onStartRender() {session.send("开始渲染啦，请耐心等待5s")},
         platform:  options.p=='ss'? 'score-saber' : 'beat-leader',
         background: 'default'

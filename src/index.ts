@@ -4,18 +4,19 @@ import Cmd, {
   BindCmd,
   KeySearchCmd,
   IdSearchCmd,
-  // SubscribeCmd,
+  SubscribeCmd,
   LatestCmd,
   MeCmd,
   RankCmd,
   WhoisCmd,
-  // UnSubscribeCmd,
+  UnSubscribeCmd,
   CmpCmd,
-  ScoreCmd, BindBSCmd
+  ScoreCmd, BindBSCmd, JoinSubscribeCmd, LeaveSubscribeCmd
 } from "./cmd";
 import {} from 'koishi-plugin-puppeteer'
 // import {pluginWebSocket} from "./ws";
 import schedules from "./schedules";
+import {pluginWS} from "./ws";
 
 export * from './config'
 
@@ -26,28 +27,19 @@ export const inject = ['database','puppeteer']
 
 declare module 'koishi' {
   interface Tables {
-    // BeatSaverSubScribe: BeatSaverSubScribe,
+    BSBotSubscribe: BSBotSubscribe,
+    BSSubscribeMember: BSSubscribeMember,
     BeatSaverOAuthAccount: BeatSaverOAuthAccount,
-    BeatSaverNotifySub:BeatSaverNotifySub,
     BeatSaverMapMessage:BeatSaverMapMessage,
   }
   interface User {
     bindSteamId: string
   }
 }
-export interface BeatSaverNotifySub {
-  id: number,
-  platform: string,
-  // botId
-  selfId: string,
-  channelId: string|null,
-  oauthAccountId: number,
-  lastNotifiedAt: Date,
-  lastNotifiedId: number
-}
 export interface BeatSaverOAuthAccount {
   id: number,
-  uid: string,
+  bsUserId: number,
+  uid: number,
   accessToken: string,
   refreshToken: string,
   scope: string,
@@ -55,17 +47,27 @@ export interface BeatSaverOAuthAccount {
   lastRefreshAt: Date,
   valid: string,
 }
-// interface BeatSaverSubScribe {
-//   id: number,
-//   platform: string,
-//   selfId: string,
-//   channelId: string|null,
-//   uid: string,
-//   username: string,
-//   bsUserId: string,
-//   time: Date,
-//   bsUsername:string,
-// }
+interface BSBotSubscribe {
+  id: number,
+  platform: string,
+  selfId: string,
+  channelId: string|null,
+  enable: boolean,
+  uid: string,
+  time: Date,
+  type: string,
+  data: {
+    [key: string]: any
+  }
+}
+
+interface BSSubscribeMember {
+  id: number,
+  subscribeId: number,
+  memberUid: number,
+  joinedAt: Date,
+}
+
 interface BeatSaverMapMessage {
   id: number,
   platform: string,
@@ -76,35 +78,22 @@ function pluginInit(ctx: Context, config:Config) {
   const zhLocal = require('./locales/zh-CN')
   ctx.i18n.define('zh-CN', zhLocal)
 
-  // ctx.model.extend('BeatSaverSubScribe', {
-  //   id: 'unsigned',
-  //   uid: 'string',
-  //   username: 'string',
-  //   channelId: 'string',
-  //   selfId: 'string',
-  //   platform: 'string',
-  //   bsUserId: 'string',
-  //   bsUsername: 'string',
-  //   time: 'timestamp',
-  // },{
-  //   autoInc: true
-  // })
-
-  ctx.model.extend('BeatSaverNotifySub', {
+  ctx.model.extend('BSBotSubscribe', {
     id: 'unsigned',
+    uid: 'string',
     channelId: 'string',
     selfId: 'string',
     platform: 'string',
-    lastNotifiedId: 'unsigned',
-    lastNotifiedAt: 'timestamp',
-    oauthAccountId: 'unsigned',
-  },{
-    autoInc: true
-  })
+    enable: 'boolean',
+    type: 'string',
+    data: 'json'
+  },{ autoInc: true })
 
   ctx.model.extend('BeatSaverOAuthAccount', {
     id: 'unsigned',
-    uid: 'string',
+    // koishi uid
+    uid: 'unsigned',
+    bsUserId: 'unsigned',
     accessToken: 'string',
     refreshToken: 'string',
     scope: 'string',
@@ -115,9 +104,19 @@ function pluginInit(ctx: Context, config:Config) {
     autoInc: true
   })
 
+  ctx.model.extend('BSSubscribeMember', {
+    id: 'unsigned',
+    subscribeId: 'unsigned',
+    memberUid: 'unsigned',
+    joinedAt: 'date',
+  },{
+    autoInc: true
+  })
+
   ctx.model.extend('user', {
     bindSteamId: "string",
   })
+
 }
 
 
@@ -160,7 +159,10 @@ function pluginCmd(ctx: Context, config: Config) {
     .apply(BindBSCmd)
     .apply(CmpCmd)
     .apply(ScoreCmd)
-    // .apply(SubscribeCmd)
-    // .apply(UnSubscribeCmd)
+    .apply(SubscribeCmd)
+    .apply(UnSubscribeCmd)
+    .apply(JoinSubscribeCmd)
+    .apply(LeaveSubscribeCmd)
   schedules(ctx,config)
+  pluginWS(ctx, config)
 }
