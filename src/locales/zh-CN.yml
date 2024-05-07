@@ -8,6 +8,14 @@ ws:
     update: Hello {username}，你关注的谱师「{mapperName}」更新啦！✨
 commands:
   bsbot:
+    help:
+      description: 查看帮助 (WIP)
+      usage: |-
+        bbhelp 查看使用方法
+      examples: |-
+        示例
+        bbhelp
+        bsbot.help
     message:
       network-error: ☹️似乎发生了网络错误，请稍后重试吧
     cmp:

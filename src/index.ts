@@ -11,7 +11,7 @@ import Cmd, {
   WhoisCmd,
   UnSubscribeCmd,
   CmpCmd,
-  ScoreCmd, BindBSCmd, JoinSubscribeCmd, LeaveSubscribeCmd
+  ScoreCmd, BindBSCmd, JoinSubscribeCmd, LeaveSubscribeCmd, HelpCmd
 } from "./cmd";
 import {} from 'koishi-plugin-puppeteer'
 // import {pluginWebSocket} from "./ws";
@@ -157,6 +157,7 @@ function pluginCmd(ctx: Context, config: Config) {
     .apply(MeCmd)
     .apply(WhoisCmd)
     .apply(BindBSCmd)
+    .apply(HelpCmd)
     .apply(CmpCmd)
     .apply(ScoreCmd)
     .apply(SubscribeCmd)
