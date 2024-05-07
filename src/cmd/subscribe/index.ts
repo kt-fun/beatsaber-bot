@@ -1,10 +1,8 @@
 import {$, Context, h, Logger} from "koishi";
 import { Config } from "../../config";
 import { APIService } from "../../service";
-import { newmap } from "./newmap";
 export * from './newmap'
 import {alert} from './alert'
-import {scoresaber} from "./scoresaber";
 import {beatleader} from "./beatleader";
 import {beatsaver} from "./beatsaver";
 export {LeaveSubscribeCmd} from "./subleave";
@@ -40,6 +38,7 @@ export function SubscribeCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger
       const rows = await jointable.where(row=>
         $.and(
           $.eq(row.BSBotSubscribe.id,row.BSSubscribeMember.subscribeId),
+          $.eq(row.BSBotSubscribe.channelId,session.channelId),
         ))
         .groupBy(['BSBotSubscribe.id'], {
           subscribe : row=> row.BSBotSubscribe,
@@ -56,7 +55,6 @@ export function SubscribeCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger
       }
       let text = session.text('commands.bsbot.subscribe.info.header')
       for (const row of rows) {
-        session.text("")
         text += session.text('commands.bsbot.subscribe.info.body-item',{
           type: row.subscribe.type,
           cnt: row.members
@@ -64,7 +62,7 @@ export function SubscribeCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger
         if(row.me) {
           text+=session.text('commands.bsbot.subscribe.info.body-item-include-you')
         }
-        text += '\n'
+        text += '\n\n'
       }
       session.sendQueued(h('message', [h('quote', {id: session.messageId}), text]))
     })

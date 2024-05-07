@@ -1,7 +1,6 @@
 import {$, Context, h, Logger} from "koishi";
 import {Config} from "../config";
 import {BeatLeaderWSEvent} from "../types/ws/beatleader";
-import {beatleaderScoreEvent} from "../mock/beatleader-score-event";
 import {RenderOpts, renderScore} from "../img-render";
 
 export function BeatLeaderWS(ctx: Context, cfg:Config, logger:Logger) {
@@ -27,6 +26,7 @@ export function BeatLeaderWS(ctx: Context, cfg:Config, logger:Logger) {
 
       const subscribe = await selection.where(row=>
         $.and(
+          $.eq(row.BSBotSubscribe.enable, true),
           $.eq(row.user.id,row.BSSubscribeMember.memberUid),
           $.eq(row.BSSubscribeMember.subscribeId, row.BSBotSubscribe.id),
           $.eq(row.user.bindSteamId, playerId),

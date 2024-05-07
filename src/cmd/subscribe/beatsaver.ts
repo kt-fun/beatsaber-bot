@@ -30,6 +30,7 @@ export const beatsaver = async (ctx:Context, api:APIService, { session, options 
   const sub = {
     channelId: session.channelId,
     selfId: session.selfId,
+    enable: true,
     platform: session.platform,
     uid: session.uid,
     type: 'beatsaver',

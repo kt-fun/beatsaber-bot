@@ -1,7 +1,6 @@
 import {$, Context, h, Logger} from "koishi";
 import {Config} from "../config";
 import {BeatSaverWSEvent} from "../types";
-import {MockBeatsaverWsEvent} from "../mock/beatsaver-ws-event";
 import {renderMap} from "../img-render";
 
 export function BeatSaverWS(ctx: Context, config:Config,logger:Logger) {
@@ -12,19 +11,20 @@ export function BeatSaverWS(ctx: Context, config:Config,logger:Logger) {
   ws.on("message", async (event)=>{
     // const data = MockBeatsaverWsEvent
     const data = JSON.parse(event.toString()) as BeatSaverWSEvent
-    logger.info("Beatsaver message received", data.type)
+    logger.info("Beatsaver message received", data.type, data?.msg?.id)
     if(data.type == "MAP_UPDATE") {
       const bsmap = data.msg
       if(!bsmap.versions.some(it=>it.state == "Published")) {
         return
       }
-      if(bsmap.declaredAi != "None") {
-        return
-      }
+      // if(bsmap.declaredAi != "None") {
+      //   return
+      // }
       const userId = bsmap.uploader.id
       const selection = ctx.database.join(['BSBotSubscribe','BeatSaverOAuthAccount','BSSubscribeMember', 'user'])
       const subscribe = await selection.where(row=>
         $.and(
+          $.eq(row.BSBotSubscribe.enable, true),
           $.eq(row.BSBotSubscribe.id,row.BSSubscribeMember.subscribeId),
           $.eq(row.BSBotSubscribe.type,"beatsaver"),
           $.eq(row.user.id,row.BSSubscribeMember.memberUid),
