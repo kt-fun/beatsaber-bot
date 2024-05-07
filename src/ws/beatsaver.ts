@@ -11,7 +11,7 @@ export function BeatSaverWS(ctx: Context, config:Config,logger:Logger) {
   ws.on("message", async (event)=>{
     // const data = MockBeatsaverWsEvent
     const data = JSON.parse(event.toString()) as BeatSaverWSEvent
-    logger.info("Beatsaver message received", data.type, data?.msg?.id)
+    // logger.debug("Beatsaver message received", data.type, data?.msg?.id)
     if(data.type == "MAP_UPDATE") {
       const bsmap = data.msg
       if(!bsmap.versions.some(it=>it.state == "Published")) {

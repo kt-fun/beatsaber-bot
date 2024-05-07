@@ -2,16 +2,17 @@ import {Context, h, Logger} from "koishi";
 import {APIService} from "../../service";
 
 export const alert = async (ctx:Context, api:APIService, { session, options }, input, logger:Logger) => {
+
   const res = await ctx.database.get('BeatSaverOAuthAccount', {
-    uid: session.uid
+    uid: session.user.id
   })
   if(res.length < 1) {
-    session.sendQueued('message', [
+    session.sendQueued(h('message', [
       h('quote',
         {messageId:session.messageId},
         session.text('commands.bsbot.subscribe.alert.no-bind-bs-id')
       )
-    ])
+    ]))
     return
   }
   let dbAccount = res[0]
