@@ -14,7 +14,8 @@ export function UnSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
           channelId: session.channelId,
         })
         if(res.length < 1) {
-          session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+          session.sendQueued(h('message', [
+            h('quote', {id: session.messageId}),
             session.text('commands.bsbot.unsubscribe.nosub.beatleader')
           ]))
           return
@@ -22,7 +23,8 @@ export function UnSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
         const sub = res[0]
         let data = {...sub, enable: false}
         await ctx.database.upsert('BSBotSubscribe', [data])
-        session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+        session.sendQueued(h('message', [
+          h('quote', {id: session.messageId}),
           session.text('commands.bsbot.unsubscribe.success.beatleader')
         ]))
       }
@@ -34,7 +36,8 @@ export function UnSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
         })
 
         if(res.length < 1) {
-          session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+          session.sendQueued(h('message', [
+            h('quote', {id: session.messageId}),
             session.text('commands.bsbot.unsubscribe.nosub.beatsaver')
           ]))
           return
@@ -43,7 +46,8 @@ export function UnSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
         let data = {...sub, enable: false}
         await ctx.database.upsert('BSBotSubscribe', [data])
 
-        session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+        session.sendQueued(h('message', [
+          h('quote', {id: session.messageId}),
           session.text('commands.bsbot.unsubscribe.success.beatsaver')
         ]))
       }
@@ -56,7 +60,8 @@ export function UnSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
         })
 
         if(res.length < 1) {
-          session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+          session.sendQueued(h('message', [
+            h('quote', {id: session.messageId}),
             session.text('commands.bsbot.unsubscribe.nosub.alert')
           ]))
           return
@@ -66,7 +71,8 @@ export function UnSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
           id: res[0].id,
           type:'alert',
         })
-        session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+        session.sendQueued(h('message', [
+          h('quote', {id: session.messageId}),
           session.text('commands.bsbot.unsubscribe.success.alert')
         ]))
       }

@@ -22,7 +22,8 @@ export function LeaveSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
       if(options.type === "beatleader") {
         const ok = subs.some(it=> it.BSBotSubscribe.type == "beatleader")
         if(!ok) {
-          session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+          session.sendQueued(h('message', [
+            h('quote', {id: session.messageId}),
             session.text('commands.bsbot.subscribe.leave.not-exist.beatleader')
           ]))
           return
@@ -33,14 +34,16 @@ export function LeaveSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
           memberUid: session.user.id,
         })
 
-        session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+        session.sendQueued(h('message', [
+          h('quote', {id: session.messageId}),
           session.text('commands.bsbot.subscribe.leave.success.beatleader')
         ]))
       } else if(options.type === "beatsaver") {
         const ok = subs.some(it=> it.BSBotSubscribe.type == "beatsaver")
         if(!ok) {
 
-          session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+          session.sendQueued(h('message', [
+            h('quote', {id: session.messageId}),
             session.text('commands.bsbot.subscribe.leave.not-exist.beatsaver')
           ]))
           return
@@ -51,7 +54,8 @@ export function LeaveSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
           memberUid: session.user.id,
         })
 
-        session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+        session.sendQueued(h('message', [
+          h('quote', {id: session.messageId}),
           session.text('commands.bsbot.subscribe.leave.success.beatsaver')
         ]))
       }

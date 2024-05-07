@@ -18,7 +18,8 @@ export function JoinSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
             channelId: session.channelId,
           })
           if(res.length < 1) {
-            session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+            session.sendQueued(h('message', [
+              h('quote', {id: session.messageId}),
               session.text('commands.bsbot.subscribe.join.nosub.beatleader')
             ]))
             return
@@ -29,7 +30,8 @@ export function JoinSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
             joinedAt: new Date()
           }
           ctx.database.upsert('BSSubscribeMember', [data])
-          session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+          session.sendQueued(h('message', [
+            h('quote', {id: session.messageId}),
             session.text('commands.bsbot.subscribe.join.success.beatleader')
           ]))
         }
@@ -39,7 +41,8 @@ export function JoinSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
             channelId: session.channelId,
           })
           if(res.length < 1) {
-            session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+            session.sendQueued(h('message', [
+              h('quote', {id: session.messageId}),
               session.text('commands.bsbot.subscribe.join.nosub.beatsaver')
             ]))
             return
@@ -50,7 +53,8 @@ export function JoinSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
             joinedAt: new Date()
           }
           ctx.database.upsert('BSSubscribeMember', [data])
-          session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+          session.sendQueued(h('message', [
+            h('quote', {id: session.messageId}),
             session.text('commands.bsbot.subscribe.join.success.beatsaver')
           ]))
         }

@@ -15,20 +15,16 @@ export const beatleader = async (ctx:Context, api:APIService, { session, options
     const sub = beatLeaderSubScribe[0]
     if(sub.enable) {
       session.sendQueued(h('message', [
-        h('quote',
-          {messageId:session.messageId},
-          session.text('commands.bsbot.subscribe.beatleader.exist')
-        )
+        h('quote', {id:session.messageId}),
+        session.text('commands.bsbot.subscribe.beatleader.exist')
       ]))
       return
     }
     let data = {...sub, enable: true}
     await ctx.database.upsert('BSBotSubscribe', [data])
     session.sendQueued(h('message', [
-      h('quote',
-        {messageId:session.messageId},
-        session.text('commands.bsbot.subscribe.beatleader.success')
-      )
+      h('quote', {id:session.messageId}),
+      session.text('commands.bsbot.subscribe.beatleader.success')
     ]))
     return
   }
@@ -43,9 +39,7 @@ export const beatleader = async (ctx:Context, api:APIService, { session, options
   }
   await ctx.database.upsert('BSBotSubscribe', [sub])
   session.sendQueued(h('message', [
-    h('quote',
-      {messageId:session.messageId},
-      session.text('commands.bsbot.subscribe.beatleader.success')
-    )
+    h('quote', {id:session.messageId}),
+    session.text('commands.bsbot.subscribe.beatleader.success')
   ]))
 }

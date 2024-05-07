@@ -12,14 +12,16 @@ export const scoresaber = async (ctx:Context, api:APIService, { session, options
   if(scoresaberSubScribe.length > 0) {
     const sub = scoresaberSubScribe[0]
     if(sub.enable) {
-      session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+      session.sendQueued(h('message', [
+        h('quote', {id: session.messageId}),
         session.text('commands.bsbot.subscribe.scoresaber.exist')
       ]))
       return
     }
     let data = {...sub, enable: true}
     await ctx.database.upsert('BSBotSubscribe', [data])
-    session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+    session.sendQueued(h('message', [
+      h('quote', {id: session.messageId}),
       session.text('commands.bsbot.subscribe.scoresaber.success')
     ]))
     return
@@ -36,7 +38,8 @@ export const scoresaber = async (ctx:Context, api:APIService, { session, options
   await ctx.database.upsert('BSBotSubscribe', [sub])
 
 
-  session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+  session.sendQueued(h('message', [
+    h('quote', {id: session.messageId}),
     session.text('commands.bsbot.subscribe.scoresaber.success')
   ]))
 }
