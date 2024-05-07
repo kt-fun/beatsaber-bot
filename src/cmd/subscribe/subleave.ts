@@ -1,4 +1,4 @@
-import {$, Command, Context} from "koishi";
+import {$, Command, Context, h} from "koishi";
 import {Config} from "../../config";
 import {APIService} from "../../service";
 export function LeaveSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
@@ -22,7 +22,9 @@ export function LeaveSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
       if(options.type === "beatleader") {
         const ok = subs.some(it=> it.BSBotSubscribe.type == "beatleader")
         if(!ok) {
-          session.sendQueued('commands.bsbot.subscribe.leave.not-exist.beatleader')
+          session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+            session.text('commands.bsbot.subscribe.leave.not-exist.beatleader')
+          ]))
           return
         }
         const res = subs.find(it=> it.BSBotSubscribe.type == "beatleader")
@@ -30,11 +32,17 @@ export function LeaveSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
           subscribeId: res.BSBotSubscribe.id,
           memberUid: session.user.id,
         })
-        session.sendQueued('commands.bsbot.subscribe.leave.success.beatleader')
+
+        session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+          session.text('commands.bsbot.subscribe.leave.success.beatleader')
+        ]))
       } else if(options.type === "beatsaver") {
         const ok = subs.some(it=> it.BSBotSubscribe.type == "beatsaver")
         if(!ok) {
-          session.sendQueued('commands.bsbot.subscribe.leave.not-exist.beatsaver')
+
+          session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+            session.text('commands.bsbot.subscribe.leave.not-exist.beatsaver')
+          ]))
           return
         }
         const res = subs.find(it=> it.BSBotSubscribe.type == "beatsaver")
@@ -42,7 +50,10 @@ export function LeaveSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
           subscribeId: res.BSBotSubscribe.id,
           memberUid: session.user.id,
         })
-        session.sendQueued('commands.bsbot.subscribe.leave.success.beatsaver')
+
+        session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+          session.text('commands.bsbot.subscribe.leave.success.beatsaver')
+        ]))
       }
     })
 }

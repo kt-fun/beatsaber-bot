@@ -1,4 +1,4 @@
-import {Context} from "koishi";
+import {Context, h} from "koishi";
 import {Config} from "../../config";
 import {APIService} from "../../service";
 
@@ -14,13 +14,17 @@ export function UnSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
           channelId: session.channelId,
         })
         if(res.length < 1) {
-          session.sendQueued('commands.bsbot.unsubscribe.nosub.beatleader')
+          session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+            session.text('commands.bsbot.unsubscribe.nosub.beatleader')
+          ]))
           return
         }
         const sub = res[0]
         let data = {...sub, enable: false}
         await ctx.database.upsert('BSBotSubscribe', [data])
-        session.sendQueued('commands.bsbot.unsubscribe.success.beatleader')
+        session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+          session.text('commands.bsbot.unsubscribe.success.beatleader')
+        ]))
       }
 
       else if(options.type === "beatsaver") {
@@ -30,13 +34,18 @@ export function UnSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
         })
 
         if(res.length < 1) {
-          session.sendQueued('commands.bsbot.unsubscribe.nosub.beatsaver')
+          session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+            session.text('commands.bsbot.unsubscribe.nosub.beatsaver')
+          ]))
           return
         }
         const sub = res[0]
         let data = {...sub, enable: false}
         await ctx.database.upsert('BSBotSubscribe', [data])
-        session.sendQueued('commands.bsbot.unsubscribe.success.beatsaver')
+
+        session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+          session.text('commands.bsbot.unsubscribe.success.beatsaver')
+        ]))
       }
 
 
@@ -47,7 +56,9 @@ export function UnSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
         })
 
         if(res.length < 1) {
-          session.sendQueued('commands.bsbot.unsubscribe.nosub.alert')
+          session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+            session.text('commands.bsbot.unsubscribe.nosub.alert')
+          ]))
           return
         }
         await ctx.database.remove('BSBotSubscribe', {
@@ -55,7 +66,9 @@ export function UnSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
           id: res[0].id,
           type:'alert',
         })
-        session.sendQueued('commands.bsbot.unsubscribe.success.alert')
+        session.sendQueued(h('message', [h('quote', {id: session.messageId}),
+          session.text('commands.bsbot.unsubscribe.success.alert')
+        ]))
       }
 
       // if(input == "all") {

@@ -6,7 +6,7 @@ export const alert = async (ctx:Context, api:APIService, { session, options }, i
     uid: session.uid
   })
   if(res.length < 1) {
-    session.send('message', [
+    session.sendQueued('message', [
       h('quote',
         {messageId:session.messageId},
         session.text('commands.bsbot.subscribe.alert.no-bind-bs-id')
@@ -25,7 +25,12 @@ export const alert = async (ctx:Context, api:APIService, { session, options }, i
       dbAccount.valid = 'invalid'
       dbAccount.lastModifiedAt = now
       await ctx.database.upsert('BeatSaverOAuthAccount',[dbAccount])
-      session.send("cmmands.bsbot.subscribe.alert.invalid-token")
+      session.sendQueued(h('message', [
+        h('quote',
+          {messageId:session.messageId},
+          session.text("cmmands.bsbot.subscribe.alert.invalid-token")
+        )
+      ]))
       return
     }
 
@@ -38,7 +43,12 @@ export const alert = async (ctx:Context, api:APIService, { session, options }, i
     alerts = await api.BeatSaver.getUnreadAlertsByPage(dbAccount.accessToken,0)
   }
   if(!alerts.isSuccess()) {
-    session.send('commands.bsbot.subscribe.alert.not-success')
+    session.sendQueued(h('message', [
+      h('quote',
+        {messageId:session.messageId},
+        session.text("commands.bsbot.subscribe.alert.not-success")
+      )
+    ]))
     return
   }
   const lastId = alerts.data.length > 0 ? alerts.data[0].id : 0
@@ -57,5 +67,10 @@ export const alert = async (ctx:Context, api:APIService, { session, options }, i
     }
   }
   await ctx.database.upsert('BSBotSubscribe', [sub])
-  session.send('commands.bsbot.subscribe.alert.bind-success')
+  session.sendQueued(h('message', [
+    h('quote',
+      {messageId:session.messageId},
+      session.text("commands.bsbot.subscribe.alert.success")
+    )
+  ]))
 }

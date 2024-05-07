@@ -48,7 +48,12 @@ export function SubscribeCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger
         })
         .execute()
       if(rows.length < 1) {
-        session.sendQueued('commands.bsbot.subscribe.info.none')
+        session.sendQueued(h('message', [
+          h('quote',
+            {messageId:session.messageId},
+            session.text('commands.bsbot.subscribe.info.none')
+          )
+        ]))
         return
       }
       let text = session.text('commands.bsbot.subscribe.info.header')

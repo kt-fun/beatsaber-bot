@@ -139,6 +139,7 @@ commands:
       alert:
         no-bind-bs-id: 你还未绑定 beatsaver，快使用 bbbindbs 进行绑定吧
         not-success: 订阅失败，可能是因为凭证已经过期
+        success: 成功订阅BeatSaver通知，当新通知出现时，会主动推送给你。
         invalid-token: 似乎token 已经失效了，快使用 bbbindbs 重新进行绑定吧
       beatleader:
         exist: 当前群聊/频道已订阅 BeatLeader 打分更新事件
@@ -171,8 +172,11 @@ commands:
           通过 bbsub 订阅 BeatSaber 相关的事件，当特定事件发生时会进行主动推送。
         examples: |-
           示例
-          bsbot.subscribe
+          bsbot.subscribe 查看当前会话的订阅信息
           bbsub
+          bbsub --type beatsaver 为当前会话订阅 beatsaver 新谱面事件，当特定新谱面出现，会主动推送
+          bbsub --type beatleader 为当前会话订阅 beatleader 打分事件，当满足要求的打分事件出现，会主动推送
+          bbsub --type alert 订阅个人 BeatSaver 通知，当 beatsaver 新通知出现，会主动推送
         not-exist:
           beatleader: 你还未加入当前群组/频道的 beatleader 打分订阅，无需离开
           beatsaver:

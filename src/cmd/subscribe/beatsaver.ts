@@ -1,4 +1,4 @@
-import {Context} from "koishi";
+import {Context, h} from "koishi";
 import {APIService} from "../../service";
 
 export const beatsaver = async (ctx:Context, api:APIService, { session, options }, input) => {
@@ -13,12 +13,22 @@ export const beatsaver = async (ctx:Context, api:APIService, { session, options 
   if(beatsaverSubScribe.length > 0) {
     const sub = beatsaverSubScribe[0]
     if(sub.enable) {
-      session.sendQueued('commands.bsbot.subscribe.beatsaver.exist')
+      session.sendQueued(h('message', [
+        h('quote',
+          {messageId:session.messageId},
+          session.text('commands.bsbot.subscribe.beatsaver.exist')
+        )
+      ]))
       return
     }
     let data = {...sub, enable: true}
     await ctx.database.upsert('BSBotSubscribe', [data])
-    session.send('commands.bsbot.subscribe.beatsaver.success')
+    session.sendQueued(h('message', [
+      h('quote',
+        {messageId:session.messageId},
+        session.text('commands.bsbot.subscribe.beatsaver.success')
+      )
+    ]))
     return
   }
   const sub = {
@@ -30,5 +40,10 @@ export const beatsaver = async (ctx:Context, api:APIService, { session, options 
     data: {}
   }
   await ctx.database.upsert('BSBotSubscribe', [sub])
-  session.send('commands.bsbot.subscribe.beatsaver.success')
+  session.sendQueued(h('message', [
+    h('quote',
+      {messageId:session.messageId},
+      session.text('commands.bsbot.subscribe.beatsaver.success')
+    )
+  ]))
 }
