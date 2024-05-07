@@ -9,6 +9,14 @@ export function WhoisCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
     .command('bsbot.who')
     .userFields(['bindSteamId'])
     .alias('bbwho')
+    .alias('bbwhoss', {options: {p: "ss"}})
+    .alias('bbwhobl', {options: {p: "bl"}})
+    .alias('sswho', {options: {p: "ss"}})
+    .alias('blwho', {options: {p: "bl"}})
+    .alias('!whos', {options: {p: "ss"}})
+    .alias('!whob', {options: {p: "bl"}})
+    .alias('iwhos', {options: {p: "ss"}})
+    .alias('iwhob', {options: {p: "bl"}})
     .option('p', '<platform:string>')
     .action(async ({ session, options }, input) => {
       let reg = /<at id="([0-9a-zA-z]+)"\/>/

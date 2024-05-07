@@ -10,6 +10,18 @@ export function MeCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
     .command('bsbot.me [mapId:string]')
     .userFields(['bindSteamId'])
     .alias('bbme')
+    .alias('bbmess', {options: {p: "ss"}})
+    .alias('bbmebl', {options: {p: "bl"}})
+    .alias('ssme', {options: {p: "ss"}})
+    .alias('blme', {options: {p: "bl"}})
+    .alias('!ws', {options: {p: "ss"}})
+    .alias('!wb', {options: {p: "bl"}})
+    .alias('iws', {options: {p: "ss"}})
+    .alias('iwb', {options: {p: "bl"}})
+    .alias('!wss', {options: {p: "ss"}})
+    .alias('!wbl', {options: {p: "bl"}})
+    .alias('iwss', {options: {p: "ss"}})
+    .alias('iwbl', {options: {p: "bl"}})
     .option('p', '[platform:string]')
     .option('d', '[diffculty:string]')
     .option('m', '[mode:string]')
@@ -27,7 +39,9 @@ export function MeCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
         platform:  options.p=='ss'? 'score-saber' : 'beat-leader',
         background: 'default'
       } as RenderOpts
+      const regex = /.+bl.+/
       if(input && input !== "") {
+
         let diffOption
         if(options.d || options.m) {
           diffOption = {
