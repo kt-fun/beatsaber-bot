@@ -54,10 +54,14 @@ export const bsRequest =(ctx:Context,cfg:Config)=> {
     form.append("client_secret", cfg.bsOauthClientSecret)
     form.append("grant_type", "refresh_token")
     form.append("refresh_token", refreshToken)
-    return fetch("https://beatsaver.com/api/oauth2/token", {
+    const res = await fetch("https://beatsaver.com/api/oauth2/token", {
       method: "POST",
       body: form,
     }).then(res => res.json() as Promise<OAuthTokenResponse>)
+    if(!res.access_token) {
+      throw new Error("refreshToken failed")
+    }
+    return res
   }
 
   //

@@ -17,6 +17,7 @@ import {} from 'koishi-plugin-puppeteer'
 // import {pluginWebSocket} from "./ws";
 import schedules from "./schedules";
 import {pluginWS} from "./ws";
+import {screenshotTmp} from "./img-render/rendertmp";
 
 export * from './config'
 
@@ -143,10 +144,23 @@ export function apply(ctx: Context, config: Config) {
 
 function pluginCmd(ctx: Context, config: Config) {
   const cmd = new Cmd(ctx,config)
+
+  ctx.command('bsbot.tmplb')
+    .alias('bblb')
+    .action(async ({session}) => {
+      const [hitbuf, scorebuf] = await Promise.all([
+        screenshotTmp(ctx.puppeteer, 'https://aiobs.ktlab.io/tmp/lb/hitcnt', '#render-result'),
+        screenshotTmp(ctx.puppeteer, 'https://aiobs.ktlab.io/tmp/lb/score', '#render-result')
+      ])
+      const hitmsg = h.image(hitbuf, 'image/png')
+      const scoremsg = h.image(scorebuf, 'image/png')
+      session.sendQueued(hitmsg)
+      session.sendQueued(scoremsg)
+    })
   ctx.command('bsbot <prompt:string>')
   .alias('bb')
   .action(async ({ session, options }, input) => {
-    const id = await session.send(input)
+    session.send(input)
   })
   cmd
     .apply(KeySearchCmd)
