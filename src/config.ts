@@ -11,6 +11,8 @@ export interface Config {
   bsOauthClientId: string,
   bsOauthClientSecret: string,
   tempTriggerInterval: number,
+  tempTriggerTimeRangeHourStart: number,
+  tempTriggerTimeRangeHourEnd: number
 }
 
 export const Config =Schema.object({
@@ -24,6 +26,8 @@ export const Config =Schema.object({
   bsOauthClientId: Schema.string().default('bs-oauth-client-id'),
   bsOauthClientSecret: Schema.string().default('bs-oauth-client-secret'),
   tempTriggerInterval: Schema.number().default(60 * 60 * 1000),
+  tempTriggerTimeRangeHourStart: Schema.number().default(16),
+  tempTriggerTimeRangeHourEnd: Schema.number().default(24),
 })
   .i18n({
   'zh-CN': require('./locales/zh-CN')._config,

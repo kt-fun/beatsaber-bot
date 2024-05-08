@@ -9,7 +9,7 @@ dayjs.extend(isBetween)
 export const ScoreMonitor = (ctx:Context,config:Config,api:APIService,logger:Logger) => {
   ctx.setInterval(async ()=> {
     const hour = dayjs().get('h')
-    if(hour < 16) {
+    if(hour < config.tempTriggerTimeRangeHourStart || hour > config.tempTriggerTimeRangeHourEnd) {
       logger.info('trigger lb score report, reject')
       return
     }
