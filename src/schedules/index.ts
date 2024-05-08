@@ -2,7 +2,7 @@ import {Context} from "koishi";
 import {Config} from "../config";
 import beatSaverAlertMonitor from "./BeatSaverAlertMonitor";
 import {APIService} from "../service";
-import {ScoreMonitor} from "./temperary";
+import {ScoreMonitor} from "./temp";
 
 export default function schedules(ctx:Context,config:Config) {
   const api = new APIService(ctx,config)

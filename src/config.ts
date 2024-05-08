@@ -10,6 +10,7 @@ export interface Config {
   notifyMonitorTriggerInterval:number,
   bsOauthClientId: string,
   bsOauthClientSecret: string,
+  tempTriggerInterval: number,
 }
 
 export const Config =Schema.object({
@@ -22,6 +23,7 @@ export const Config =Schema.object({
   notifyMonitorTriggerInterval: Schema.number().default(900000),
   bsOauthClientId: Schema.string().default('bs-oauth-client-id'),
   bsOauthClientSecret: Schema.string().default('bs-oauth-client-secret'),
+  tempTriggerInterval: Schema.number().default(60 * 60 * 1000),
 })
   .i18n({
   'zh-CN': require('./locales/zh-CN')._config,
