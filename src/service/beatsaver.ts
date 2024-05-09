@@ -6,7 +6,7 @@ export const BeatSaverService = (
 )=>{
   return {
     getUnreadAlertsByPage: (ak:string,page:number)=> wrapperErr(()=>bsClient.getUnreadAlertsByPage(ak,page)),
-    getSelfInfo: (ak:string) => wrapperErr(()=>bsClient.getSelfInfo(ak)),
+    getTokenInfo: (ak:string) => wrapperErr(()=>bsClient.getTokenInfo(ak)),
     searchMapById: (key:string) => wrapperErr(()=> bsClient.searchMapById(key)),
     searchMapByKeyword: (key:string) => wrapperErr(()=> bsClient.searchMapByKeyword(key)),
     getLatestMaps: (pageSize: number)=> wrapperErr(()=> bsClient.getLatestMaps(pageSize)),

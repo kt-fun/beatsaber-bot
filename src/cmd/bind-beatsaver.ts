@@ -17,7 +17,7 @@ export function BindBSCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
         return
       }
       let token = tokenInfo.data
-      let self = await api.BeatSaver.getSelfInfo(token.access_token)
+      let self = await api.BeatSaver.getTokenInfo(token.access_token)
       if(!self.isSuccess()) {
         const refreshToken = await api.BeatSaver.refreshOAuthToken(token.refresh_token)
         if(!refreshToken.isSuccess()) {
@@ -30,7 +30,7 @@ export function BindBSCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
         }
         token = refreshToken.data
 
-        self = await api.withRetry(()=>api.BeatSaver.getSelfInfo(token.refresh_token), 3)
+        self = await api.withRetry(()=>api.BeatSaver.getTokenInfo(token.access_token), 3)
         if(!self.isSuccess()) {
           session.sendQueued(h('message',[
             h('quote', {id: session.messageId}),

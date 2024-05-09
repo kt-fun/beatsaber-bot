@@ -11,6 +11,11 @@ export interface OAuthTokenResponse {
   expires_in: number,
   refresh_token: string,
 }
+export interface OAuthTokenInfoResponse {
+  "scope": string[],
+  id: string,
+  name: string
+}
 
 export const bsRequest =(ctx:Context,cfg:Config)=> {
   const http = ctx.http
@@ -65,8 +70,12 @@ export const bsRequest =(ctx:Context,cfg:Config)=> {
   }
 
   //
-  const getSelfInfo = async (accessToken:string) => {
-    return ctx.http.get<BSUserResponse>(url(`/users/me?access_token=${accessToken}`))
+  const getTokenInfo = async (accessToken:string) => {
+    return ctx.http.get<OAuthTokenInfoResponse>(url(`/oauth2/identity`), {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
   }
 
 
@@ -78,6 +87,6 @@ export const bsRequest =(ctx:Context,cfg:Config)=> {
     searchMapByKeyword,
     searchMapById,
     getUnreadAlertsByPage,
-    getSelfInfo
+    getTokenInfo
   }
 }

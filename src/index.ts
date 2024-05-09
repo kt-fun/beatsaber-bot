@@ -15,7 +15,6 @@ import Cmd, {
 } from "./cmd";
 import {} from 'koishi-plugin-puppeteer'
 import {} from 'koishi-plugin-cron'
-// import {pluginWebSocket} from "./ws";
 import schedules from "./schedules";
 import {pluginWS} from "./ws";
 import {screenshotTmp} from "./img-render/rendertmp";
