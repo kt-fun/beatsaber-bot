@@ -70,7 +70,7 @@ commands:
       network-error: ☹️似乎发生了网络错误，请稍后重试吧
       unknown-error: ☹️不知道发生了什么，暂时无法绑定，请稍后重试吧
       invalid-token: 无效 token，请确认给出的 code 有效。
-      success: 成功绑定 BeatSaver 用户 {name}(${id})
+      success: 成功绑定 BeatSaver 用户 {name}({id})
     bind:
       description: 绑定自己的 ScoreSaberId（也就是 steam 的用户 Id，仅公开信息，无需验证）
       usage: |-
@@ -161,7 +161,7 @@ commands:
       join:
         description: 加入本群聊订阅的 BeatSaber 相关的事件
         usage: |-
-          通过 bbsub 订阅 BeatSaber 相关的事件，当特定事件发生时会进行主动推送。
+
         examples: |-
           示例
           bsbot.subscribe
@@ -173,9 +173,9 @@ commands:
           beatleader: 当前群组/频道未启用 beatleader 打分订阅
           beatsaver: 当前群组/频道未启用 beatsaver 谱师订阅
       leave:
-        description: 加入本群聊订阅的 BeatSaber 相关的事件
+        description: 离开本群 BeatSaber 相关事件订阅组
         usage: |-
-          通过 bbsub 订阅 BeatSaber 相关的事件，当特定事件发生时会进行主动推送。
+
         examples: |-
           示例
           bsbot.subscribe 查看当前会话的订阅信息
@@ -188,7 +188,7 @@ commands:
           beatsaver:
         success:
           beatleader: 成功离开本群「beatleader」订阅组，当你打出高分时，不会再在本群推送了
-          beatsaver: 成功加入本群订阅组，当你发布新谱面时，会在本群推送
+          beatsaver: 成功离开本群「beatsaver」订阅组，当你发布新谱面时，不会再在本群推送了
 #      all:
 #        success: 成功订阅所有谱师，当有非 AI 谱面更新时，会主动推送
 #      channel:
