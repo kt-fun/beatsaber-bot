@@ -14,6 +14,7 @@ import Cmd, {
   ScoreCmd, BindBSCmd, JoinSubscribeCmd, LeaveSubscribeCmd, HelpCmd
 } from "./cmd";
 import {} from 'koishi-plugin-puppeteer'
+import {} from 'koishi-plugin-cron'
 // import {pluginWebSocket} from "./ws";
 import schedules from "./schedules";
 import {pluginWS} from "./ws";
@@ -24,7 +25,7 @@ export * from './config'
 
 export const name = 'bs-bot'
 
-export const inject = ['database','puppeteer']
+export const inject = ['database','puppeteer','cron']
 
 declare module 'koishi' {
   interface Tables {

@@ -7,5 +7,5 @@ import {ScoreMonitor} from "./temp";
 export default function schedules(ctx:Context,config:Config) {
   const api = new APIService(ctx,config)
   ScoreMonitor(ctx,config,api,ctx.logger('bsbot.schedules.beatsaver.scoreMonitor'))
-  ctx.setInterval(beatSaverAlertMonitor(ctx,config,api,ctx.logger('bsbot.schedules.beatsaver.alertMonitor')), config.notifyMonitorTriggerInterval)
+  ctx.cron(config.bsNotifyMonitorCron,beatSaverAlertMonitor(ctx,config,api,ctx.logger('bsbot.schedules.beatsaver.alertMonitor')))
 }

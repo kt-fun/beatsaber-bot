@@ -8,7 +8,7 @@ export const renderRank = async (
   renderOpts: RenderOpts
 ) => {
   const url = `${renderOpts.renderBaseURL}/render/${renderOpts.platform}/${uid}`
-  const buffer = await screenshot(renderOpts.puppeteer, url, '#render-result', renderOpts.onStartRender)
+  const buffer = await screenshot(renderOpts.puppeteer, url, '#render-result', renderOpts.onStartRender, renderOpts.waitTimeout)
   const image = h.image(buffer, 'image/png')
   return image
 }

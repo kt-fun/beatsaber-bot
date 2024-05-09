@@ -35,9 +35,10 @@ export function MeCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
       let renderOpts = {
         puppeteer:ctx.puppeteer,
         renderBaseURL: cfg.remoteRenderURL,
-        onStartRender() {session.send("开始渲染啦，请耐心等待5s")},
+        onStartRender() {session.send(`开始渲染啦，请耐心等待 ${(cfg.rankWaitTimeout/1000).toFixed(0) } s`)},
         platform:  options.p=='ss'? 'score-saber' : 'beat-leader',
-        background: 'default'
+        background: 'default',
+        waitTimeout: cfg.rankWaitTimeout,
       } as RenderOpts
       const regex = /.+bl.+/
       if(input && input !== "") {

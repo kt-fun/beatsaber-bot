@@ -53,10 +53,10 @@ export function WhoisCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
       let rankOps = {
         puppeteer:ctx.puppeteer,
         renderBaseURL: cfg.remoteRenderURL,
-        waitTimeout: 5000,
-        onStartRender() {session.send(session.text('common.render.wait', {sec:5}))},
+        waitTimeout: cfg.rankWaitTimeout,
+        onStartRender() {session.send(session.text('common.render.wait', {sec:cfg.rankWaitTimeout/1000}))},
         platform:  options.p=='ss'? 'score-saber' : 'beat-leader',
-        background: 'default'
+        background: 'default',
       } satisfies RenderOpts
       const img = await renderRank(user[0].bindSteamId, rankOps)
       session.sendQueued(img)

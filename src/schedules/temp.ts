@@ -7,13 +7,9 @@ import isBetween from 'dayjs/plugin/isBetween'
 dayjs.extend(isBetween)
 
 export const ScoreMonitor = (ctx:Context,config:Config,api:APIService,logger:Logger) => {
-  ctx.setInterval(async ()=> {
-    const hour = dayjs().get('h')
-    if(hour < config.tempTriggerTimeRangeHourStart || hour > config.tempTriggerTimeRangeHourEnd) {
-      logger.info('trigger lb score report, reject')
-      return
-    }
-    logger.info('trigger lb score report, accept')
+
+  ctx.cron(config.tempCron,async ()=> {
+    logger.info('trigger lb score report, accept', dayjs().format('YYYY-MM-DD HH:mm:ss'))
     const res =await ctx.database.get('BSBotSubscribe', {
       type:"lb-rank"
     })
@@ -34,5 +30,5 @@ export const ScoreMonitor = (ctx:Context,config:Config,api:APIService,logger:Log
       await bot.sendMessage(group.channelId, hitmsg)
       await bot.sendMessage(group.channelId, scoremsg)
     }
-  }, config.tempTriggerInterval)
+  })
 }

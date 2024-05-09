@@ -6,13 +6,12 @@ export interface Config {
   remoteRenderURL: string,
   minRawMatchMapIdLength: number,
   defaultWaitTimeout: number,
+  rankWaitTimeout: number,
   renderMode: 'local'| 'screenshot',
-  notifyMonitorTriggerInterval:number,
   bsOauthClientId: string,
   bsOauthClientSecret: string,
-  tempTriggerInterval: number,
-  tempTriggerTimeRangeHourStart: number,
-  tempTriggerTimeRangeHourEnd: number
+  bsNotifyMonitorCron:string,
+  tempCron: string,
 }
 
 export const Config =Schema.object({
@@ -22,12 +21,11 @@ export const Config =Schema.object({
   minRawMatchMapIdLength: Schema.number().default(3),
   renderMode: Schema.string().default('screenshot'),
   defaultWaitTimeout: Schema.number().default(3000),
-  notifyMonitorTriggerInterval: Schema.number().default(900000),
+  rankWaitTimeout: Schema.number().default(8000),
+  bsNotifyMonitorCron: Schema.string().default("*/15 * * * *"),
   bsOauthClientId: Schema.string().default('bs-oauth-client-id'),
   bsOauthClientSecret: Schema.string().default('bs-oauth-client-secret'),
-  tempTriggerInterval: Schema.number().default(60 * 60 * 1000),
-  tempTriggerTimeRangeHourStart: Schema.number().default(16),
-  tempTriggerTimeRangeHourEnd: Schema.number().default(24),
+  tempCron: Schema.string().default("0 0 * * *"),
 })
   .i18n({
   'zh-CN': require('./locales/zh-CN')._config,

@@ -4,9 +4,10 @@ import beatmap from "./components/beatmap/map";
 import {renderHTML} from "./html";
 import {screenshotRemoteMap} from "./renderImg";
 import {RenderOpts} from "./index";
+import {Config} from "../config";
 
 
-export const renderMap = async (bsmap: BSMap, ctx, cfg) => {
+export const renderMap = async (bsmap: BSMap, ctx: Context, cfg:Config) => {
   if(cfg.renderMode === 'screenshot') {
     for (let i = 0; i < 3; i++) {
       const image = await renderRemoteMap(bsmap.id, {
@@ -17,7 +18,7 @@ export const renderMap = async (bsmap: BSMap, ctx, cfg) => {
           console.log("start render id",bsmap.id)
         },
         background:'default',
-        waitTimeout: cfg.waitTimeout,
+        waitTimeout: cfg.defaultWaitTimeout,
       })
       if(image) {
         return image

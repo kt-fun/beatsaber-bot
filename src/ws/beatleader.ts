@@ -47,6 +47,7 @@ export function BeatLeaderWS(ctx: Context, cfg:Config, logger:Logger) {
         onStartRender() {},
         platform: 'beat-leader',
         background: 'default',
+        waitTimeout: cfg.rankWaitTimeout,
       } satisfies RenderOpts
       for (const item of subscribes) {
           const bot = ctx.bots[`${item.sub.platform}:${item.sub.selfId}`]

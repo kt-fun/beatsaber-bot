@@ -1,6 +1,6 @@
 import {Context, h, Logger} from "koishi";
 import {Config} from "../config";
-import {RenderOpts, renderRank, renderScore} from "../img-render";
+import {RenderOpts, renderScore} from "../img-render";
 import {APIService} from "../service";
 import {convertDiff} from "../utils/converter";
 
@@ -18,9 +18,10 @@ export function ScoreCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
       let renderOpts = {
         puppeteer:ctx.puppeteer,
         renderBaseURL: cfg.remoteRenderURL,
-        onStartRender() {session.send("开始渲染啦，请耐心等待5s")},
+        onStartRender() {session.send(`开始渲染啦，请耐心等待 ${(cfg.rankWaitTimeout/1000).toFixed(0)} s`)},
         platform:  options.p=='ss'? 'score-saber' : 'beat-leader',
-        background: 'default'
+        background: 'default',
+        waitTimeout: cfg.rankWaitTimeout,
       } satisfies RenderOpts
       if(!reg.test(input)){
         if(/^[0-9]+$/.test(input)) {

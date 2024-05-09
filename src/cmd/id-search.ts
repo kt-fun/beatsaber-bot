@@ -13,7 +13,7 @@ export function IdSearchCmd(ctx:Context,cfg:Config,api:APIService, logger:Logger
       if (!input || input && input.length < 1) {
         return
       }
-      const reg = /^\s+[a-fA-F0-9]{1,6}\s+$/
+      const reg = /^[a-fA-F0-9]{1,6}$/
       if(!reg.test(input)) {
         session.sendQueued(h('message',
           h('quote', {id: session.messageId}),

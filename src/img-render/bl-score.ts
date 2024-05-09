@@ -8,6 +8,6 @@ export const renderScore = async (
   renderOpts: RenderOpts
 ) => {
   const url = `${renderOpts.renderBaseURL}/render/${renderOpts.platform}/score/${scoreId}`
-  const buffer = await screenshot(renderOpts.puppeteer,url,'#render-result',renderOpts.onStartRender)
+  const buffer = await screenshot(renderOpts.puppeteer,url,'#render-result',renderOpts.onStartRender,renderOpts.waitTimeout)
   return h.image(buffer, 'image/png')
 }
