@@ -2,6 +2,7 @@ import {$, Context, h, Logger} from "koishi";
 import {Config} from "../config";
 import {BeatSaverWSEvent} from "../types";
 import {renderMap} from "../img-render";
+import {MockBeatsaverWsEvent} from "../mock/beatsaver-ws-event";
 
 export function BeatSaverWS(ctx: Context, config:Config,logger:Logger) {
   const ws = ctx.http.ws(config.beatSaverWSURL ?? "wss://ws.beatsaver.com/maps")
@@ -27,6 +28,7 @@ export function BeatSaverWS(ctx: Context, config:Config,logger:Logger) {
           $.eq(row.BSBotSubscribe.enable, true),
           $.eq(row.BSBotSubscribe.id,row.BSSubscribeMember.subscribeId),
           $.eq(row.BSBotSubscribe.type,"beatsaver"),
+          $.eq(row.user.id,row.BeatSaverOAuthAccount.uid),
           $.eq(row.user.id,row.BSSubscribeMember.memberUid),
           $.eq(row.BeatSaverOAuthAccount.bsUserId, userId)
         )
