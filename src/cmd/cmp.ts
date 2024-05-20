@@ -12,4 +12,8 @@ export function CmpCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
       // 3. me
       session.send("still working on")
     })
+  return {
+    key: 'cmp',
+    cmd: cmpcmd
+  }
 }

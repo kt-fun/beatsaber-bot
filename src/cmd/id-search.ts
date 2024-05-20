@@ -15,24 +15,21 @@ export function IdSearchCmd(ctx:Context,cfg:Config,api:APIService, logger:Logger
       }
       const reg = /^[a-fA-F0-9]{1,6}$/
       if(!reg.test(input)) {
-        session.sendQueued(h('message',
-          h('quote', {id: session.messageId}),
-          session.text('commands.bsbot.id.error-map-id',{input})
-        ))
+        session.sendQuote(session.text('commands.bsbot.id.error-map-id',{input}))
         return
       }
       const res = await api.BeatSaver.searchMapById(input)
       if(!res.isSuccess()) {
-        session.sendQueued(
-          h('message',
-            h('quote', {id: session.messageId}),
-            session.text('commands.bsbot.id.not-found',{input})
-          )
-        )
+        session.sendQuote(session.text('commands.bsbot.id.not-found',{input}))
       }else {
         const image = await renderMap(res.data,ctx,cfg)
         await session.sendQueued(image)
         session.sendQueued(h.audio(res.data.versions[0].previewURL))
       }
     })
+
+    return {
+      key: 'id-search',
+      cmd: searchIdCmd
+    }
 }

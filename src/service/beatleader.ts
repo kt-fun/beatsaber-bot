@@ -1,6 +1,6 @@
 import {BeatLeaderClient, BeatSaverClient} from "./api";
 import {sortScore} from "./utils/sortScore";
-import {NetReqResult} from "./utils/handlerError";
+import {NetReqResult, wrapperErr} from "./utils/handlerError";
 import {Leaderboard} from "../types/beatleader";
 
 
@@ -44,7 +44,8 @@ export const BeatLeaderService = (
       }
       scores.sort(sortScore)
       return NetReqResult.success(scores[0])
-    }
-
+    },
+    getTokenInfo: (ak: string) => wrapperErr(()=> blClient.getTokenInfo(ak)),
+    refreshOAuthToken: (rk: string) => wrapperErr(()=> blClient.refreshOAuthToken(rk))
   }
 }

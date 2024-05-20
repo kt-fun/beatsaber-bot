@@ -18,7 +18,7 @@ export function LatestCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
         return
       }
       const text = session.text('commands.bsbot.latest.info')
-      session.sendQueued(h('message', h('quote', {id: session.messageId}), text))
+      session.sendQuote(text)
       const msgs = res.data.map(item=>  ({
         audio:h.audio(item.versions[0].previewURL),
         image: renderMap(item,ctx,cfg)
@@ -29,5 +29,8 @@ export function LatestCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
       }
 
     })
-
+  return {
+    key: 'latest',
+    cmd: latestCmd
+  }
 }

@@ -7,6 +7,7 @@ export interface AioOauthTokenResponse {
     "token_type": string,
     expires_in: number,
     refresh_token: string,
+    scope?: string
 }
 export const aioRequest =(ctx:Context, cfg:Config)=> {
   const http = ctx.http
@@ -21,7 +22,9 @@ export const aioRequest =(ctx:Context, cfg:Config)=> {
     return host+path
   }
   const getBSOAuthToken = async (key:string) => http.get<AioOauthTokenResponse>(url(`/api/oauth/beatsaver/token/${key}`))
+  const getBLOAuthToken = async (key:string) => http.get<AioOauthTokenResponse>(url(`/api/oauth/beatleader/token/${key}`))
   return {
     getBSOAuthToken,
+    getBLOAuthToken
   }
 }

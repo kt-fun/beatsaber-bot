@@ -7,7 +7,8 @@ const AIOSaberService = (
 )=>{
 
   return {
-    getBSOAuthToken: (key:string)=> wrapperErr(()=>aioClient.getBSOAuthToken(key))
+    getBSOAuthToken: (key:string)=> wrapperErr(()=>aioClient.getBSOAuthToken(key)),
+    getBLOAuthToken: (key:string)=> wrapperErr(()=>aioClient.getBLOAuthToken(key)),
   }
 }
 

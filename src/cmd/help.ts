@@ -3,7 +3,7 @@ import {Config} from "../config";
 import {APIService} from "../service";
 
 export function HelpCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
-  const cmpcmd = ctx
+  const helpCmd = ctx
     .command('bsbot.help')
     .alias('bbhelp')
     .alias('!help')
@@ -15,4 +15,9 @@ export function HelpCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
         src: 'https://tmp-r2.ktlab.io/bsbot.sub.v0.1.0.png'
       }))
     })
+
+  return {
+    key: 'help',
+    cmd: helpCmd
+  }
 }

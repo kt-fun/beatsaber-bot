@@ -1,7 +1,6 @@
 import {$, Context, h, Logger} from "koishi";
 import { Config } from "../../config";
 import { APIService } from "../../service";
-export * from './newmap'
 import {alert} from './alert'
 import {beatleader} from "./beatleader";
 import {beatsaver} from "./beatsaver";
@@ -18,7 +17,7 @@ export function SubscribeCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger
     .option('type', '<type:string>')
     .action(async ({ session, options }, input) => {
       // check admin permission
-      if(options.type === "alert") {
+      if(options.type === "beatsaver-alert") {
         return alert(ctx, api, { session, options }, input, logger)
       }
 
@@ -26,13 +25,11 @@ export function SubscribeCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger
         return beatsaver(ctx, api, { session, options }, input)
       }
 
-      // if(options.type === "scoresaber") {
-      //   return scoresaber(ctx, api, { session, options }, input)
-      // }
-
       if(options.type === "beatleader") {
         return beatleader(ctx, api, { session, options }, input)
       }
+
+
       const uid = session.user.id
       const jointable = ctx.database.join(['BSBotSubscribe','BSSubscribeMember'])
       const rows = await jointable.where(row=>
@@ -47,10 +44,7 @@ export function SubscribeCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger
         })
         .execute()
       if(rows.length < 1) {
-        session.sendQueued(h('message', [
-          h('quote', {id:session.messageId}),
-          session.text('commands.bsbot.subscribe.info.none')
-        ]))
+        session.sendQuote(session.text('commands.bsbot.subscribe.info.none'))
         return
       }
       let text = session.text('commands.bsbot.subscribe.info.header')
@@ -60,10 +54,14 @@ export function SubscribeCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger
           cnt: row.members
         })
         if(row.me) {
-          text+=session.text('commands.bsbot.subscribe.info.body-item-include-you')
+          text += session.text('commands.bsbot.subscribe.info.body-item-include-you')
         }
         text += '\n\n'
       }
       session.sendQueued(h('message', [h('quote', {id: session.messageId}), text]))
     })
+  return {
+    key: 'subscribe',
+    cmd: subcmd
+  }
 }

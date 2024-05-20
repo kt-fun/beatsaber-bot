@@ -11,10 +11,11 @@ import Cmd, {
   WhoisCmd,
   UnSubscribeCmd,
   CmpCmd,
-  ScoreCmd, BindBSCmd, JoinSubscribeCmd, LeaveSubscribeCmd, HelpCmd
+  ScoreCmd, JoinSubscribeCmd, LeaveSubscribeCmd, HelpCmd
 } from "./cmd";
 import {} from 'koishi-plugin-puppeteer'
 import {} from 'koishi-plugin-cron'
+import {} from './utils/extendedMethod'
 import schedules from "./schedules";
 import {pluginWS} from "./ws";
 import {screenshotTmp} from "./img-render/rendertmp";
@@ -30,24 +31,31 @@ declare module 'koishi' {
   interface Tables {
     BSBotSubscribe: BSBotSubscribe,
     BSSubscribeMember: BSSubscribeMember,
-    BeatSaverOAuthAccount: BeatSaverOAuthAccount,
+    BSRelateOAuthAccount: BSRelateOAuthAccount
     BeatSaverMapMessage:BeatSaverMapMessage,
   }
   interface User {
     bindSteamId: string
   }
 }
-export interface BeatSaverOAuthAccount {
+
+
+export interface BSRelateOAuthAccount {
   id: number,
-  bsUserId: number,
   uid: number,
+  platform: string,
+  platformUid: string,
+  platformScope: string,
+  platformUname: string,
+  otherPlatformInfo: any,
   accessToken: string,
   refreshToken: string,
-  scope: string,
   lastModifiedAt: Date,
   lastRefreshAt: Date,
   valid: string,
+  type: string,
 }
+
 interface BSBotSubscribe {
   id: number,
   platform: string,
@@ -66,6 +74,7 @@ interface BSSubscribeMember {
   id: number,
   subscribeId: number,
   memberUid: number,
+  subscribeData: any,
   joinedAt: Date,
 }
 
@@ -90,16 +99,19 @@ function pluginInit(ctx: Context, config:Config) {
     data: 'json'
   },{ autoInc: true })
 
-  ctx.model.extend('BeatSaverOAuthAccount', {
+  ctx.model.extend('BSRelateOAuthAccount', {
     id: 'unsigned',
-    // koishi uid
     uid: 'unsigned',
-    bsUserId: 'unsigned',
+    platform: 'string',
+    platformUid: 'string',
+    platformScope: 'string',
+    platformUname: 'string',
+    otherPlatformInfo: 'json',
     accessToken: 'string',
     refreshToken: 'string',
-    scope: 'string',
     lastModifiedAt: 'timestamp',
     lastRefreshAt: 'timestamp',
+    type: 'string',
     valid: 'string'
   },{
     autoInc: true
@@ -109,15 +121,11 @@ function pluginInit(ctx: Context, config:Config) {
     id: 'unsigned',
     subscribeId: 'unsigned',
     memberUid: 'unsigned',
+    subscribeData: 'json',
     joinedAt: 'date',
   },{
     autoInc: true
   })
-
-  ctx.model.extend('user', {
-    bindSteamId: "string",
-  })
-
 }
 
 
@@ -143,7 +151,7 @@ export function apply(ctx: Context, config: Config) {
 
 async function sendTmpHit(ctx,session) {
   const buf = await screenshotTmp(ctx.puppeteer, 'https://aiobs.ktlab.io/tmp/lb/hitcnt', '#render-result', ()=> {
-    session.send(h('message', [
+    session.sendQueued(h('message', [
       "开始渲染砍击榜了，请耐心等待 10s"
     ]))
   },8000)
@@ -152,7 +160,7 @@ async function sendTmpHit(ctx,session) {
 }
 async function sendTmpScore(ctx,session) {
   const buf = await screenshotTmp(ctx.puppeteer, 'https://aiobs.ktlab.io/tmp/lb/score', '#render-result', ()=> {
-    session.send(h('message', [
+    session.sendQueued(h('message', [
       "开始渲染打分榜了，请耐心等待 10s"
     ]))
   },8000)
@@ -180,7 +188,6 @@ function pluginCmd(ctx: Context, config: Config) {
     .apply(RankCmd)
     .apply(MeCmd)
     .apply(WhoisCmd)
-    .apply(BindBSCmd)
     .apply(HelpCmd)
     .apply(CmpCmd)
     .apply(ScoreCmd)

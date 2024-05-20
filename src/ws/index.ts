@@ -12,7 +12,7 @@ class WS {
   constructor(ws) {
     this.ws = ws;
     this.closed = false;
-    this.ws.on('close', ()=> {
+    this.ws.addEventListener('close', (evt)=> {
       this.closed = true;
       this.closedTime = Date.now();
     })
@@ -33,7 +33,7 @@ export function pluginWS(ctx:Context, cfg:Config) {
     bsws: new WS(BeatLeaderWS(ctx,cfg,bslogger)),
     blws: new WS(BeatSaverWS(ctx,cfg,bllogger))
   }
-  
+
   ctx.setInterval(()=> {
     if(ws.blws.closed) {
       ws.blws.reopen(BeatLeaderWS(ctx,cfg,bslogger))

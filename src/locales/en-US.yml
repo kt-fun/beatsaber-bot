@@ -14,13 +14,25 @@ commands:
     me:
       not-found: Ops，似乎还没有绑定到 ScoreSaber 或 BeatLeader
     bind:
-      network-error: ☹️似乎发生了网络错误，请稍后重试吧
-      exist: 另外，你已经绑定了「{id}」，继续绑定丢失当前绑定哦
-      cancel: 已取消
-      timeout: 已超时取消
-      not-found: Ops，没有找到 id 为「{id}」的 {platform} 用户
-      ack-prompt: 确定要绑定「{user}」吗，30 秒内回复「y」或「yes」以确认，超时或回复其他内容取消操作
-      success:  🎉，成功绑定「{user}」啦
+      description: 绑定自己的 ScoreSaberId（也就是 steam 的用户 Id，仅公开信息，无需验证）
+      usage: |-
+        输入 bbbind，后接 userId，按照提示即可绑定
+      examples: |-
+        示例
+        bsbot.bind 76561198339986544
+        bbbind 76561198339986544
+      bs:
+        not-found: ☹️什么没有找到，这个 code 真的有效吗？
+        network-error: ☹️似乎发生了网络错误，请稍后重试吧
+        unknown-error: ☹️不知道发生了什么，暂时无法绑定，请稍后重试吧
+        invalid-token: 无效 token，请确认给出的 code 有效。
+        success: 成功绑定 BeatSaver 用户 {name}({id})
+      bl:
+        not-found: ☹️什么没有找到，这个 code 真的有效吗？
+        network-error: ☹️似乎发生了网络错误，请稍后重试吧
+        unknown-error: ☹️不知道发生了什么，暂时无法绑定，请稍后重试吧
+        invalid-token: 无效 token，请确认给出的 code 有效。
+        success: 成功绑定 BeatLeader 用户 {name}({id})
     key-search:
       success: 为你奉上关于「{key}」的{length}首谱面 🎉
       not-found: Ops，关于「{key}」什么都没找到

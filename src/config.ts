@@ -1,4 +1,5 @@
 import { Schema } from 'koishi'
+import {BLScoreFilter} from "./types/beatleader-condition";
 
 export interface Config {
   beatSaverHost: string,
@@ -10,8 +11,12 @@ export interface Config {
   renderMode: 'local'| 'screenshot',
   bsOauthClientId: string,
   bsOauthClientSecret: string,
+  blOauthClientId: string,
+  blOauthClientSecret: string,
   bsNotifyMonitorCron:string,
+  tokenRefreshCron: string,
   tempCron: string,
+  BLScoreFilters: BLScoreFilter[]
 }
 
 export const Config =Schema.object({
@@ -23,9 +28,16 @@ export const Config =Schema.object({
   defaultWaitTimeout: Schema.number().default(3000),
   rankWaitTimeout: Schema.number().default(8000),
   bsNotifyMonitorCron: Schema.string().default("*/15 * * * *"),
+  tokenRefreshCron: Schema.string().default("0 20 * * *"),
   bsOauthClientId: Schema.string().default('bs-oauth-client-id'),
   bsOauthClientSecret: Schema.string().default('bs-oauth-client-secret'),
+  blOauthClientId: Schema.string().default('bl-oauth-client-id'),
+  blOauthClientSecret: Schema.string().default('bl-oauth-client-secret'),
   tempCron: Schema.string().default("0 0 * * *"),
+  BLScoreFilters: Schema.array(Schema.object({
+    filterName: Schema.string(),
+    filterParams: Schema.array(Schema.any())
+  })).default([])
 })
   .i18n({
   'zh-CN': require('./locales/zh-CN')._config,

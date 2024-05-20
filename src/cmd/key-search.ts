@@ -18,7 +18,7 @@ interface QueryOption {
 }
 
 export function KeySearchCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
-  const serachsubcmd = ctx
+  const serachCmd = ctx
     .command('bsbot.search <key:text>')
     .alias('bbsou')
     .alias('bbsearch')
@@ -28,11 +28,11 @@ export function KeySearchCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger
       let key = input
       if(input.length > 15) {
         key = input.slice(0,15)
-        sendQuoteMsg(session,session.text('commands.bsbot.search.too-long-key',{key}))
+        session.sendQuote(session.text('commands.bsbot.search.too-long-key',{key}))
       }
       const res = await api.BeatSaver.searchMapByKeyword(key)
       if(!res.isSuccess()) {
-        sendQuoteMsg(session, session.text('commands.bsbot.search.not-found',{key:key}))
+        session.sendQuote(session.text('commands.bsbot.search.not-found',{key}))
         return
       }
       const toBeSend = res.data.slice(0,3).map(it=> ({
@@ -40,15 +40,16 @@ export function KeySearchCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger
         bsmap:it
       }))
       const text = session.text('commands.bsbot.search.success', {key: key, length: toBeSend.length})
-      session.sendQueued(h('message', h('quote', {id: session.messageId}), text))
+      session.sendQuote(text)
 
       for (const item of toBeSend) {
         session.sendQueued(await item.img)
         session.sendQueued(h.audio(item.bsmap.versions[0].previewURL))
       }
     })
-}
 
-function sendQuoteMsg(session:Session, ...content:h.Fragment[]) {
-  session.sendQueued(h('message',{}, h('quote', {id: session.messageId}), ...content))
+  return {
+    key: 'search',
+    cmd: serachCmd
+  }
 }

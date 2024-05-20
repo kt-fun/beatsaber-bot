@@ -5,8 +5,8 @@ import {renderMap} from "../img-render";
 import {MockBeatsaverWsEvent} from "../mock/beatsaver-ws-event";
 
 export function BeatSaverWS(ctx: Context, config:Config,logger:Logger) {
-  const ws = ctx.http.ws(config.beatSaverWSURL ?? "wss://ws.beatsaver.com/maps")
-  ws.on('open', (code, reason)=> {
+  const ws = ctx.http.ws(config.beatSaverWSURL ?? "wss://ws.beatsaver.com/maps") as any
+  ws.on('open', (evt)=> {
     logger.info("BeatsaverWS opened");
   })
   ws.on("message", async (event)=>{
@@ -22,25 +22,25 @@ export function BeatSaverWS(ctx: Context, config:Config,logger:Logger) {
       //   return
       // }
       const userId = bsmap.uploader.id
-      const selection = ctx.database.join(['BSBotSubscribe','BeatSaverOAuthAccount','BSSubscribeMember', 'user'])
+      const selection = ctx.database.join(['BSBotSubscribe','BSRelateOAuthAccount','BSSubscribeMember', 'user'])
       const subscribe = await selection.where(row=>
         $.and(
           $.eq(row.BSBotSubscribe.enable, true),
           $.eq(row.BSBotSubscribe.id,row.BSSubscribeMember.subscribeId),
           $.eq(row.BSBotSubscribe.type,"beatsaver"),
-          $.eq(row.user.id,row.BeatSaverOAuthAccount.uid),
+          $.eq(row.BSRelateOAuthAccount.platform,'beatsaver'),
+          $.eq(row.user.id,row.BSRelateOAuthAccount.uid),
           $.eq(row.user.id,row.BSSubscribeMember.memberUid),
-          $.eq(row.BeatSaverOAuthAccount.bsUserId, userId)
+          $.eq(row.BSRelateOAuthAccount.platformUid, userId.toString())
         )
       ).execute()
 
       const subscription = subscribe.map(item=> ({
-        account:item.BeatSaverOAuthAccount,
+        account:item.BSRelateOAuthAccount,
         subscribe:item.BSBotSubscribe,
         member: item.BSSubscribeMember,
         user: item.user
       }))
-
       for (const item of subscription) {
         logger.info('send msg to', item.subscribe)
         const bot = ctx.bots[`${item.subscribe.platform}:${item.subscribe.selfId}`]
@@ -58,71 +58,14 @@ export function BeatSaverWS(ctx: Context, config:Config,logger:Logger) {
         }else {
           texts = [`谱师「${bsmap.uploader.name}」刚刚发布了新谱面，「${bsmap.name}」`]
         }
-
         let image = renderMap(bsmap,ctx,config)
         await bot.sendMessage(item.subscribe.channelId, h('message', texts))
         await bot.sendMessage(item.subscribe.channelId, await image)
         await bot.sendMessage(item.subscribe.channelId, h.audio(bsmap.versions[0].previewURL))
       }
-
-      // const users = await ctx.database.get('BSSubscribeMember', {
-      //   bsUserId: userId.toString(),
-      // })
-      // const filteredUsers= users.filter(it=>
-      //   allUser.some(item=>
-      //     it.channelId == item.channelId
-      //     && it.uid == item.uid
-      //     && it.platform == item.platform
-      //   )
-      // )
-      // let needSend = allUser.concat(filteredUsers)
-
-      // allUser.filter()
-
-      // for (let idx = 0; idx < needSend.length; idx++) {
-      //   const item = needSend[idx]
-      //   const bot = ctx.bots[`${item.platform}:${item.selfId}`]
-      //   if(!bot) {
-      //     continue
-      //   }
-      //   let channel = false
-      //   if(item.channelId) {
-      //     channel = true
-      //   }
-      //   let image = renderMap(bsmap,ctx,config)
-      //   console.log("send", bot.selfId, item.uid)
-      //   const userId = item.uid?.split(":")
-      //   const uid = userId[userId.length - 1]
-      //   const channelId = item.channelId
-      //   console.log("send", bot.selfId, item.uid, uid)
-      //
-      //   const text = bot.session().text('ws.subscribe.update',
-      //     {
-      //       username:item.username,
-      //       mapperName: bsmap.uploader.name
-      //   })
-      //   if(channel) {
-      //     await bot.sendMessage(channelId, text)
-      //     await bot.sendMessage(channelId, await image)
-      //       .then(r => console.log("res:",r))
-      //       .catch((e)=>console.log(e))
-      //     await bot.sendMessage(channelId, h.audio(bsmap.versions[0].previewURL))
-      //       .then(r => console.log("res:",r))
-      //       .catch((e)=>console.log(e))
-      //   }else {
-      //     await bot.sendPrivateMessage(uid, text)
-      //     await bot.sendPrivateMessage(uid, await image)
-      //       .then(r => console.log("res:",r))
-      //       .catch((e)=>console.log(e))
-      //     await bot.sendPrivateMessage(uid, h.audio(bsmap.versions[0].previewURL))
-      //       .then(r => console.log("res:",r))
-      //       .catch((e)=>console.log(e))
-      //   }
-      // }
     }
   })
-
-  ws.on('close', (code, reason)=> {
+  ws.addEventListener('close', (evt)=> {
     logger.info("BeatsaverWS closed");
   })
   return ws

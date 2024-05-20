@@ -1,8 +1,8 @@
 import {$, Context, h, Logger} from "koishi";
 import {Config} from "../config";
-import { BeatSaverOAuthAccount} from "../index";
 import {APIService} from "../service";
 import {renderMap} from "../img-render";
+import {BSRelateOAuthAccount} from "../index";
 interface Alert {
   id: number,
   head: string,
@@ -14,17 +14,19 @@ interface Alert {
 
 const AlertMonitor = (ctx:Context,config:Config,api:APIService,logger:Logger) => async ()=> {
   logger.info('trigger alertMonitor')
-  const selection = ctx.database.join(['BeatSaverOAuthAccount','BSBotSubscribe'])
+  const selection = ctx.database.join(['BSRelateOAuthAccount','BSBotSubscribe'])
   const subscribe = await selection.where(row=>
     $.and(
       $.eq(row.BSBotSubscribe.type,"alert"),
-      $.eq(row.BeatSaverOAuthAccount.id,row.BSBotSubscribe.data?.oauthAccountId),
-      $.eq(row.BeatSaverOAuthAccount.valid,'ok')
+      $.eq(row.BSRelateOAuthAccount.id,row.BSBotSubscribe.data?.oauthAccountId),
+      $.eq(row.BSRelateOAuthAccount.platform,'betsaver'),
+      $.eq(row.BSRelateOAuthAccount.type,'oauth'),
+      $.eq(row.BSRelateOAuthAccount.valid,'ok')
     )
   ).execute()
   const subscribes = subscribe.map(item=> ({
     sub: item.BSBotSubscribe,
-    account:item.BeatSaverOAuthAccount
+    account:item.BSRelateOAuthAccount
   }))
 
   // const selection = ctx.database.join(['BeatSaverOAuthAccount','BeatSaverNotifySub'])
@@ -43,7 +45,7 @@ const AlertMonitor = (ctx:Context,config:Config,api:APIService,logger:Logger) =>
 
 export default AlertMonitor
 
-const handleOauthNotify = async (item:{sub,account: BeatSaverOAuthAccount},ctx:Context,config:Config,api:APIService,logger:Logger) => {
+const handleOauthNotify = async (item:{sub,account: BSRelateOAuthAccount},ctx:Context,config:Config,api:APIService,logger:Logger) => {
   const bot = ctx.bots[`${item.sub.platform}:${item.sub.selfId}`]
   if(!bot) {
     logger.info('no bot found, skip')
@@ -59,7 +61,7 @@ const handleOauthNotify = async (item:{sub,account: BeatSaverOAuthAccount},ctx:C
       logger.info(`failed to refresh, invalid this account,${JSON.stringify(dbAccount)}`)
       dbAccount.valid = 'invalid'
       dbAccount.lastModifiedAt = now
-      await ctx.database.upsert('BeatSaverOAuthAccount',[dbAccount])
+      await ctx.database.upsert('BSRelateOAuthAccount',[dbAccount])
       bot.sendMessage(item.sub.channelId, '似乎 BeatSaver 通知的 token 已经失效了，通过bbbindbs 重新绑定吧')
       return
     }
@@ -69,7 +71,7 @@ const handleOauthNotify = async (item:{sub,account: BeatSaverOAuthAccount},ctx:C
     dbAccount.refreshToken = token.data.refresh_token
     dbAccount.lastRefreshAt = now
     dbAccount.lastModifiedAt = now
-    await ctx.database.upsert('BeatSaverOAuthAccount', [dbAccount])
+    await ctx.database.upsert('BSRelateOAuthAccount', [dbAccount])
     alerts = await api.BeatSaver.getUnreadAlertsByPage(dbAccount.accessToken,0)
   }
   const todo = alerts.data

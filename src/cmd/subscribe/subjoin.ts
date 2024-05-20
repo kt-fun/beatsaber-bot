@@ -2,11 +2,7 @@ import {Context, h} from "koishi";
 import {Config} from "../../config";
 import {APIService} from "../../service";
 export function JoinSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
-  // beatleader
-  // beatSaver
-  // beatsaver
-
-  const subcmd = ctx
+  const joinCmd = ctx
     .command('bsbot.subscribe.join')
     .alias('bbjoin')
     .userFields(['id'])
@@ -18,10 +14,7 @@ export function JoinSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
             channelId: session.channelId,
           })
           if(res.length < 1) {
-            session.sendQueued(h('message', [
-              h('quote', {id: session.messageId}),
-              session.text('commands.bsbot.subscribe.join.nosub.beatleader')
-            ]))
+            session.sendQuote(session.text('commands.bsbot.subscribe.join.nosub.beatleader'))
             return
           }
           const data = {
@@ -30,10 +23,7 @@ export function JoinSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
             joinedAt: new Date()
           }
           ctx.database.upsert('BSSubscribeMember', [data])
-          session.sendQueued(h('message', [
-            h('quote', {id: session.messageId}),
-            session.text('commands.bsbot.subscribe.join.success.beatleader')
-          ]))
+          session.sendQuote(session.text('commands.bsbot.subscribe.join.success.beatleader'))
         }
         else if(options.type === "beatsaver") {
           const res = await ctx.database.get('BSBotSubscribe', {
@@ -41,10 +31,7 @@ export function JoinSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
             channelId: session.channelId,
           })
           if(res.length < 1) {
-            session.sendQueued(h('message', [
-              h('quote', {id: session.messageId}),
-              session.text('commands.bsbot.subscribe.join.nosub.beatsaver')
-            ]))
+            session.sendQuote(session.text('commands.bsbot.subscribe.join.nosub.beatsaver'))
             return
           }
           const data = {
@@ -53,13 +40,14 @@ export function JoinSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
             joinedAt: new Date()
           }
           ctx.database.upsert('BSSubscribeMember', [data])
-          session.sendQueued(h('message', [
-            h('quote', {id: session.messageId}),
-            session.text('commands.bsbot.subscribe.join.success.beatsaver')
-          ]))
+          session.sendQuote(session.text('commands.bsbot.subscribe.join.success.beatsaver'))
         }
 
 
 
     })
+  return {
+    key: 'subscribe.join',
+    cmd: joinCmd
+  }
 }

@@ -3,12 +3,13 @@ import {Config} from "../config";
 import {RenderOpts, renderScore} from "../img-render";
 import {APIService} from "../service";
 import {convertDiff} from "../utils/converter";
+import {getUserBSAccountInfo} from "../utils/db";
 
 export function ScoreCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
   const scoreCmd = ctx
     .command('bsbot.score')
     .alias('bbscore')
-    .userFields(['bindSteamId'])
+    .userFields(['id'])
     .option('p', '<platform:string>')
     .option('d', '<diffculty:string>')
     .option('m', '<mode:string>')
@@ -28,23 +29,18 @@ export function ScoreCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
           const img = await renderScore(input,renderOpts)
           session.send(img)
         }else {
-          const res = await session.send(h('message',
-            h('quote',{id:session.messageId}),
-            session.text('commands.bsbot.score.not-a-score-id')
-          ))
+          const res = await session.sendQuote(session.text('commands.bsbot.score.not-a-score-id'))
         }
         return
       }
       const [full,mapId, at, uid, ,...rest] = reg.exec(input)
-
-      let bindId
+      let accountId
       if(!uid) {
-        bindId = session.user.bindSteamId
-        if(!bindId) {
-          session.send(h('message',
-            h('quote',{id:session.messageId}),
-            session.text('commands.bsbot.score.not-bind')
-          ))
+        const {blAccount} = await getUserBSAccountInfo(ctx, session.user.id)
+        if (blAccount) {
+          accountId = blAccount.platformUid
+        } else {
+          session.sendQuote(session.text('commands.bsbot.score.not-bind'))
           return
         }
       }else {
@@ -52,18 +48,14 @@ export function ScoreCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
           platform: session.platform,
           pid: uid
         })
-        const aid = res[0]?.aid
-        const user =await ctx.database.get('user', {
-          id: aid
-        })
-        if(user.length == 0|| !user[0].bindSteamId) {
-          session.sendQueued(h('message',
-            h('quote',{id:session.messageId}),
-            session.text('commands.bsbot.score.who-not-bind')
-          ))
+        const userId = res[0]?.aid
+        if(userId) {
+          const {blAccount} = await getUserBSAccountInfo(ctx, userId)
+          if (blAccount) {accountId = blAccount.platformUid}
+        }else {
+          session.sendQuote(session.text('commands.bsbot.score.who-not-bind'))
           return
         }
-        bindId = user[0].bindSteamId
       }
 
       let diffOption
@@ -73,13 +65,15 @@ export function ScoreCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
           mode: options.m
         }
       }
-      const score = await api.BeatLeader.getScoreByPlayerIdAndMapId(bindId, mapId, diffOption)
+      const score = await api.BeatLeader.getScoreByPlayerIdAndMapId(accountId, mapId, diffOption)
       if (!score.isSuccess()) {
-        return session.text('commands.bsbot.score.score-not-found',{user: bindId, id: mapId})
+        session.sendQuote(session.text('commands.bsbot.score.score-not-found',{user: accountId, id: mapId}))
       }
       const img = await renderScore(score.data.id.toString(), renderOpts)
       session.sendQueued(img)
-
     })
-
+  return {
+    key: 'score',
+    cmd: scoreCmd
+  }
 }

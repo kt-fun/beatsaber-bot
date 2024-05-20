@@ -3,8 +3,11 @@ import {APIService} from "../../service";
 
 export const alert = async (ctx:Context, api:APIService, { session, options }, input, logger:Logger) => {
 
-  const res = await ctx.database.get('BeatSaverOAuthAccount', {
-    uid: session.user.id
+  const res = await ctx.database.get('BSRelateOAuthAccount', {
+    uid: session.user.id,
+    platform: 'beatsaver',
+    type: 'oauth',
+    valid: 'ok'
   })
   if(res.length < 1) {
     session.sendQueued(h('message', [
@@ -25,11 +28,8 @@ export const alert = async (ctx:Context, api:APIService, { session, options }, i
       logger.info(`failed to refresh, invalid this account,${JSON.stringify(dbAccount)}`)
       dbAccount.valid = 'invalid'
       dbAccount.lastModifiedAt = now
-      await ctx.database.upsert('BeatSaverOAuthAccount',[dbAccount])
-      session.sendQueued(h('message', [
-        h('quote', {id:session.messageId}),
-        session.text("cmmands.bsbot.subscribe.alert.invalid-token")
-      ]))
+      await ctx.database.upsert('BSRelateOAuthAccount',[dbAccount])
+      session.sendQuote(session.text('commands.bsbot.subscribe.alert.invalid-token'))
       return
     }
 
@@ -38,14 +38,11 @@ export const alert = async (ctx:Context, api:APIService, { session, options }, i
     dbAccount.refreshToken = token.data.refresh_token
     dbAccount.lastRefreshAt = now
     dbAccount.lastModifiedAt = now
-    await ctx.database.upsert('BeatSaverOAuthAccount', [dbAccount])
+    await ctx.database.upsert('BSRelateOAuthAccount', [dbAccount])
     alerts = await api.BeatSaver.getUnreadAlertsByPage(dbAccount.accessToken,0)
   }
   if(!alerts.isSuccess()) {
-    session.sendQueued(h('message', [
-      h('quote', {id:session.messageId}),
-      session.text("commands.bsbot.subscribe.alert.not-success")
-    ]))
+    session.sendQuote(session.text('commands.bsbot.subscribe.alert.not-success'))
     return
   }
   const lastId = alerts.data.length > 0 ? alerts.data[0].id : 0
@@ -64,8 +61,5 @@ export const alert = async (ctx:Context, api:APIService, { session, options }, i
     }
   }
   await ctx.database.upsert('BSBotSubscribe', [sub])
-  session.sendQueued(h('message', [
-    h('quote', {id:session.messageId}),
-    session.text("commands.bsbot.subscribe.alert.success")
-  ]))
+  session.sendQuote(session.text('commands.bsbot.subscribe.alert.success'))
 }

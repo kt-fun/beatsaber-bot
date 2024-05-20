@@ -20,7 +20,9 @@ export function RankCmd(ctx: Context, cfg: Config,api:APIService,logger:Logger) 
       let rankOps = {
         puppeteer:ctx.puppeteer,
         renderBaseURL: cfg.remoteRenderURL,
-        onStartRender() {session.send(`开始渲染啦，请耐心等待 ${(cfg.rankWaitTimeout/1000).toFixed(0)} s`)},
+        onStartRender() {
+          session.send(session.text('common.render.wait', {sec: cfg.rankWaitTimeout / 1000}))
+        },
         platform:  options.p=='ss'? 'score-saber' : 'beat-leader',
         background: 'default',
         waitTimeout: cfg.rankWaitTimeout
@@ -28,5 +30,8 @@ export function RankCmd(ctx: Context, cfg: Config,api:APIService,logger:Logger) 
       const img = await renderRank(input, rankOps)
       session.sendQueued(img)
     })
-
+    return {
+      key: 'rank',
+      cmd: rankCmd
+    }
 }

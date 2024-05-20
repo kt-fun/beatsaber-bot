@@ -10,9 +10,10 @@ export interface OAuthTokenResponse {
   "token_type": string,
   expires_in: number,
   refresh_token: string,
+  scope?: string,
 }
 export interface OAuthTokenInfoResponse {
-  "scope": string[],
+  scope?: string[],
   id: string,
   name: string
 }

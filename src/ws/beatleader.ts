@@ -2,44 +2,47 @@ import {$, Context, h, Logger} from "koishi";
 import {Config} from "../config";
 import {BeatLeaderWSEvent} from "../types/ws/beatleader";
 import {RenderOpts, renderScore} from "../img-render";
+import {BeatLeaderFilter} from "./bl-filter";
+import {BLScoreFilter} from "../types/beatleader-condition";
 
 export function BeatLeaderWS(ctx: Context, cfg:Config, logger:Logger) {
-  const ws = ctx.http.ws("wss://sockets.api.beatleader.xyz/scores")
-  ws.on('open', (code, reason)=> {
+  const ws = ctx.http.ws("wss://sockets.api.beatleader.xyz/scores") as any
+  ws.on('open', (event)=> {
     logger.info("BeatleaderWS opened");
   })
-  ws.on('message',async (message,isBinary)=> {
+  ws.on('message',async (message, isBinary)=> {
     try {
       const data = JSON.parse(message.toString()) as BeatLeaderWSEvent
       const playerId = data.player.id
-
-      const ok = BeatLeaderReportChain(data,
-        // RankOnly,
-        // HighPP,
-        // HighStar,
-        // TopScore,
-        StandardMode
-      )
+      const ok = BeatLeaderFilter(data, ...cfg.BLScoreFilters)
       if(!ok) {
         return
       }
       // logger.info('Received beatleader message',data.id, data.player.id);
-      const selection = ctx.database.join(['BSSubscribeMember','user', 'BSBotSubscribe'])
-
+      const selection = ctx.database.join(['BSSubscribeMember','BSRelateOAuthAccount','user', 'BSBotSubscribe'])
       const subscribe = await selection.where(row=>
         $.and(
           $.eq(row.BSBotSubscribe.enable, true),
+          $.eq(row.user.id,row.BSRelateOAuthAccount.uid),
           $.eq(row.user.id,row.BSSubscribeMember.memberUid),
           $.eq(row.BSSubscribeMember.subscribeId, row.BSBotSubscribe.id),
-          $.eq(row.user.bindSteamId, playerId),
+          $.eq(row.BSRelateOAuthAccount.platformUid, playerId),
           $.eq(row.BSBotSubscribe.type, 'beatleader'),
+          $.eq(row.BSRelateOAuthAccount.platform, 'beatleader'),
         )).execute()
+
 
       const subscribes = subscribe.map(item=> ({
         sub: item.BSBotSubscribe,
         member: item.BSSubscribeMember,
-        user:item.user
+        user:item.user,
+        account: item.BSRelateOAuthAccount
       }))
+      // .filter(item=> {
+      //   const channelFilters = item.sub.data as BLScoreFilter[]
+      //   const memberFilters = item.member.subscribeData
+      //   return BeatLeaderFilter(data, ...channelFilters, ...memberFilters)
+      // })
 
       let renderOpts = {
         puppeteer:ctx.puppeteer,
@@ -69,43 +72,10 @@ export function BeatLeaderWS(ctx: Context, cfg:Config, logger:Logger) {
     }
   })
 
-  ws.on('close', (code, reason)=> {
+  ws.on('close', (evt)=> {
     logger.info("BeatleaderWS closed");
   })
 
   return ws
 }
 
-
-
-const filterMap = {
-  'rank-only': RankOnly
-}
-
-function RankOnly(event:BeatLeaderWSEvent) {
-  return event.pp != 0
-}
-
-function HugeImprove(event:BeatLeaderWSEvent) {
-  return event.rankVoting != null
-}
-function HighStar(event:BeatLeaderWSEvent) {
-  return event.leaderboard.difficulty.stars >= 9
-}
-function StandardMode (event:BeatLeaderWSEvent) {
-  return event.leaderboard.difficulty.modeName === "Standard"
-}
-function HighPP(event:BeatLeaderWSEvent) {
-  return event.pp > 300
-}
-function TopScore(event:BeatLeaderWSEvent) {
-  return event.rank != 0  && event.rank <= 30
-}
-
-function BeatLeaderReportChain(event:BeatLeaderWSEvent,...fc:((event:BeatLeaderWSEvent)=>boolean)[]) {
-  for(const item of fc) {
-    const res = item(event)
-    if(!res) return false
-  }
-  return true
-}
