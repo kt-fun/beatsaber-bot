@@ -15,6 +15,12 @@ export interface BSUserResponse{
   description: string
 }
 
+export interface HashResponse {
+  [hash: string] : BSMap
+}
+
+export type HashReqResponse = BSMap | HashResponse;
+
 export interface BSMapLatestResponse {
   docs: BSMap[]
 }

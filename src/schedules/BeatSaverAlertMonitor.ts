@@ -1,8 +1,9 @@
 import {$, Context, h, Logger} from "koishi";
 import {Config} from "../config";
 import {APIService} from "../service";
-import {renderMap} from "../img-render";
+import {renderMap, RenderOption} from "../img-render";
 import {BSRelateOAuthAccount} from "../index";
+
 interface Alert {
   id: number,
   head: string,
@@ -10,7 +11,6 @@ interface Alert {
   type: string,
   time: string
 }
-
 
 const AlertMonitor = (ctx:Context,config:Config,api:APIService,logger:Logger) => async ()=> {
   logger.info('trigger alertMonitor')
@@ -51,11 +51,11 @@ const handleOauthNotify = async (item:{sub,account: BSRelateOAuthAccount},ctx:Co
     logger.info('no bot found, skip')
     return
   }
-  let alerts = await api.BeatSaver.getUnreadAlertsByPage(item.account.accessToken,0)
+  let alerts = await api.BeatSaver.wrapperResult().getUnreadAlertsByPage(item.account.accessToken,0)
   let dbAccount = item.account
   if(!alerts.isSuccess()) {
     logger.info('accessToken invalid, try to refresh')
-    const token = await api.BeatSaver.refreshOAuthToken(item.account.refreshToken)
+    const token = await api.BeatSaver.wrapperResult().refreshOAuthToken(item.account.refreshToken)
     let now = new Date()
     if(!token.isSuccess()) {
       logger.info(`failed to refresh, invalid this account,${JSON.stringify(dbAccount)}`)
@@ -72,7 +72,7 @@ const handleOauthNotify = async (item:{sub,account: BSRelateOAuthAccount},ctx:Co
     dbAccount.lastRefreshAt = now
     dbAccount.lastModifiedAt = now
     await ctx.database.upsert('BSRelateOAuthAccount', [dbAccount])
-    alerts = await api.BeatSaver.getUnreadAlertsByPage(dbAccount.accessToken,0)
+    alerts = await api.BeatSaver.wrapperResult().getUnreadAlertsByPage(dbAccount.accessToken,0)
   }
   const todo = alerts.data
 
@@ -116,16 +116,20 @@ const selfMapCuratedRegex = /^(@\w._+)\sjust\scurated+\s#([a-f0-9]{1,5})/
 const selfMapUncuratedRegex = /^(@\w._+)\sjust\suncrated\syour\smap\s#([a-f0-9]{1,5}):\s\*\*(.+)\*\*.+Reason:\s\*"(.+)"\*/
 const selfMapDeletionRegex = /^Your map #([a-f0-9]{1,5}):.+Reason:\s\*"(.+)"\*$/
 
-async function buildMessage (alert:Alert,api:APIService,ctx,cfg,logger:Logger) {
+async function buildMessage (alert:Alert,api:APIService,ctx:Context,cfg:Config,logger:Logger) {
   let msg = []
+  let renderOpts:RenderOption = {
+    type: 'local',
+    puppeteer: ctx.puppeteer,
+  }
   if(alert.type === "MapRelease") {
     const [full, username, mapId] =  releasedRegex.exec(alert.body)
-    const res = await api.withRetry(()=> api.BeatSaver.searchMapById(mapId))
+    const res = await api.BeatSaver.wrapperResult().searchMapById(mapId)
     if(!res.isSuccess()) {
       logger.info(`failed to retrieve release map ${mapId},body: ${alert.body}`)
       msg = [`你关注的「${username}」发布了新谱面，但似乎因为某些原因找不到了，谱面ID：「${mapId}」`]
     }else {
-      const image = await renderMap(res.data,ctx,cfg)
+      const image = await renderMap(res.data,renderOpts)
       msg = [
         `你关注的「${username}」发布了新谱面`,
         h('message', [image]),
@@ -134,28 +138,28 @@ async function buildMessage (alert:Alert,api:APIService,ctx,cfg,logger:Logger) {
     }
   }else if(alert.type === "MapCurated") {
     const [full, username, mapId] =  curatedRegex.exec(alert.body)
-    const res = await api.BeatSaver.searchMapById(mapId)
+    const res = await api.BeatSaver.wrapperResult().searchMapById(mapId)
     if(!res.isSuccess()) {
       logger.info(`failed to retrieve release map ${mapId},body: ${alert.body}`)
       msg = [`你关注的「${username}」Curate 了新谱面，但似乎因为某些原因找不到了，谱面ID：「${mapId}」`]
     }else {
-      const image = await renderMap(res.data,ctx,cfg)
+      const image = await renderMap(res.data,renderOpts)
       msg = [`你关注的「${username}」Curate 了新谱面`,
         h('message', [image]),h('audio',{src: res.data.versions[0].previewURL})
       ]
     }
   }else if(alert.type === "Curation") {
     const [full, username, mapId] =  selfMapCuratedRegex.exec(alert.body)
-    const res = await api.BeatSaver.searchMapById(mapId)
-    const image = await renderMap(res.data,ctx,cfg)
+    const res = await api.BeatSaver.wrapperResult().searchMapById(mapId)
+    const image = await renderMap(res.data,renderOpts)
     msg = [`🎉，「${username}」刚刚 Curate 了你的谱面 ${mapId}`,
       h('message', [image]),h('audio',{src: res.data.versions[0].previewURL})
     ]
   }
   else if(alert.type === "Uncuration") {
     const [full, username, mapId, name, reason] =  selfMapUncuratedRegex.exec(alert.body)
-    const res = await api.BeatSaver.searchMapById(mapId)
-    const image = await renderMap(res.data,ctx,cfg)
+    const res = await api.BeatSaver.wrapperResult().searchMapById(mapId)
+    const image = await renderMap(res.data,renderOpts)
     msg = [`😯，「${username}」 刚刚 Uncurate 了你的谱面 ${mapId}，原因：${reason}`,
       h('message', [image]),h('audio',{src: res.data.versions[0].previewURL})
     ]
@@ -170,8 +174,8 @@ async function buildMessage (alert:Alert,api:APIService,ctx,cfg,logger:Logger) {
   }
   else if(alert.type === "Review") {
     const [full, username,mapId, mapName, review] =  reviewRegex.exec(alert.body)
-    const res = await api.BeatSaver.searchMapById(mapId)
-    const image = await renderMap(res.data,ctx,cfg)
+    const res = await api.BeatSaver.wrapperResult().searchMapById(mapId)
+    const image = await renderMap(res.data,renderOpts)
     msg = [`「${username}」 刚刚在你的谱面${mapName}(${mapId})中发表了评论：${review}`,
       h('message', [image]),h('audio',{src: res.data.versions[0].previewURL})
     ]

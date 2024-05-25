@@ -1,8 +1,10 @@
 import {Context, Logger} from "koishi";
 import {Config} from "../config";
-import {RenderOpts, renderRank} from "../img-render";
+import {RenderOption, renderRank} from "../img-render";
 import {APIService} from "../service";
-import {getUserBSAccountInfo} from "../utils/db";
+import {getUserBSAccountInfo} from "../service/db/db";
+import '../utils/extendedMethod'
+import {Platform} from "../types/platform";
 
 export function WhoisCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
   const whois = ctx
@@ -18,7 +20,7 @@ export function WhoisCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
     .alias('iwhob', {options: {p: "bl"}})
     .option('p', '<platform:string>')
     .action(async ({session, options}, input) => {
-      let rankPlatform = options.p == 'ss' ? 'score-saber' as const : 'beat-leader' as const
+      let rankPlatform = options.p == 'ss' ? Platform.SS : Platform.BL
       let reg = /<at id="([0-9a-zA-z]+)"\/>/
       if (!reg.test(input)) {
         session.sendQuote(session.text('commands.bsbot.who.need-at'))
@@ -33,25 +35,24 @@ export function WhoisCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
       const userId = res[0].aid
       const {blAccount, ssAccount} = await getUserBSAccountInfo(ctx, userId)
       let accountId
-      if (rankPlatform == 'beat-leader' && blAccount) {
+      if (rankPlatform == Platform.BL && blAccount) {
         accountId = blAccount.platformUid
-      } else if (rankPlatform == 'score-saber' && ssAccount) {
+      } else if (rankPlatform == Platform.SS && ssAccount) {
         accountId = ssAccount.platformUid
       } else {
         session.sendQuote(session.text('commands.bsbot.who.not-bind'))
         return
       }
-      let rankOps = {
+      let rankOps:RenderOption = {
+        type: 'remote',
         puppeteer: ctx.puppeteer,
         renderBaseURL: cfg.remoteRenderURL,
         waitTimeout: cfg.rankWaitTimeout,
         onStartRender() {
           session.send(session.text('common.render.wait', {sec: cfg.rankWaitTimeout / 1000}))
-        },
-        platform: rankPlatform,
-        background: 'default',
-      } satisfies RenderOpts
-      const img = await renderRank(accountId, rankOps)
+        }
+      }
+      const img = await renderRank(accountId, rankPlatform, api, rankOps)
       session.sendQueued(img)
     })
   return {

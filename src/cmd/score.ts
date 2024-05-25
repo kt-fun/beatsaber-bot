@@ -1,10 +1,11 @@
 import {Context, h, Logger} from "koishi";
 import {Config} from "../config";
-import {RenderOpts, renderScore} from "../img-render";
+import {RenderOption, renderScore} from "../img-render";
 import {APIService} from "../service";
 import {convertDiff} from "../utils/converter";
-import {getUserBSAccountInfo} from "../utils/db";
-
+import {getUserBSAccountInfo} from "../service/db/db";
+import '../utils/extendedMethod'
+import {Platform} from "../types/platform";
 export function ScoreCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
   const scoreCmd = ctx
     .command('bsbot.score')
@@ -14,20 +15,19 @@ export function ScoreCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
     .option('d', '<diffculty:string>')
     .option('m', '<mode:string>')
     .action(async ({ session, options }, input) => {
-
+      let platform = options.p=='ss'? Platform.SS : Platform.BL
       let reg = /^([0-9a-fA-F]{3,5})(<at id="([0-9a-zA-z_]+)"\/>)?$/
-      let renderOpts = {
+      let renderOpts:RenderOption = {
+        type: 'local',
         puppeteer:ctx.puppeteer,
-        renderBaseURL: cfg.remoteRenderURL,
+        // renderBaseURL: cfg.remoteRenderURL,
         onStartRender() {session.send(`开始渲染啦，请耐心等待 ${(cfg.rankWaitTimeout/1000).toFixed(0)} s`)},
-        platform:  options.p=='ss'? 'score-saber' : 'beat-leader',
-        background: 'default',
         waitTimeout: cfg.rankWaitTimeout,
-      } satisfies RenderOpts
+      }
       if(!reg.test(input)){
         if(/^[0-9]+$/.test(input)) {
-          const img = await renderScore(input,renderOpts)
-          session.send(img)
+          const img = await renderScore(input,platform,api,renderOpts)
+          session.sendQueued(img)
         }else {
           const res = await session.sendQuote(session.text('commands.bsbot.score.not-a-score-id'))
         }
@@ -65,11 +65,11 @@ export function ScoreCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
           mode: options.m
         }
       }
-      const score = await api.BeatLeader.getScoreByPlayerIdAndMapId(accountId, mapId, diffOption)
+      const score = await api.BeatLeader.wrapperResult().getScoreByPlayerIdAndMapId(accountId, mapId, diffOption)
       if (!score.isSuccess()) {
         session.sendQuote(session.text('commands.bsbot.score.score-not-found',{user: accountId, id: mapId}))
       }
-      const img = await renderScore(score.data.id.toString(), renderOpts)
+      const img = await renderScore(score.data.id.toString(),platform, api, renderOpts)
       session.sendQueued(img)
     })
   return {

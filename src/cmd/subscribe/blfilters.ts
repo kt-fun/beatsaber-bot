@@ -1,9 +1,6 @@
 import {$, Context, h, Logger} from "koishi";
 import {Config} from "../../config";
 import {APIService} from "../../service";
-import {alert} from "./alert";
-import {beatsaver} from "./beatsaver";
-import {beatleader} from "./beatleader";
 import {BLScoreFilter} from "../../types/beatleader-condition";
 
 

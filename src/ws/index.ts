@@ -3,6 +3,7 @@ import {Config} from "../config";
 import {BeatLeaderWS} from "./beatleader";
 import {ScoreSaberWS} from "./scoresaber";
 import {BeatSaverWS} from "./beatsaver";
+import {APIService} from "../service";
 
 class WS {
   closed: boolean;
@@ -29,14 +30,15 @@ export function pluginWS(ctx:Context, cfg:Config) {
   const logger = ctx.logger('beatsaber-bot.ws')
   const bllogger = logger.extend('BeatSaverWS')
   const bslogger = logger.extend('BeatSaverWS')
+  const  api = APIService.create(ctx,cfg)
   const ws = {
-    bsws: new WS(BeatLeaderWS(ctx,cfg,bslogger)),
+    bsws: new WS(BeatLeaderWS(ctx,cfg,api,bslogger)),
     blws: new WS(BeatSaverWS(ctx,cfg,bllogger))
   }
 
   ctx.setInterval(()=> {
     if(ws.blws.closed) {
-      ws.blws.reopen(BeatLeaderWS(ctx,cfg,bslogger))
+      ws.blws.reopen(BeatLeaderWS(ctx, cfg, api, bslogger))
     }
     if(ws.bsws.closed) {
       ws.bsws.reopen(BeatSaverWS(ctx,cfg,bslogger))

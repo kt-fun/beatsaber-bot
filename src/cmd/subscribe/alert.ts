@@ -19,10 +19,13 @@ export const alert = async (ctx:Context, api:APIService, { session, options }, i
     return
   }
   let dbAccount = res[0]
-  let alerts = await api.withRetry(() => api.BeatSaver.getUnreadAlertsByPage(dbAccount.accessToken, 0),2)
+  let alerts = await api.BeatSaver
+    .withRetry(3)
+    .wrapperResult()
+    .getUnreadAlertsByPage(dbAccount.accessToken, 0)
   if(!alerts.isSuccess()) {
     logger.info('accessToken invalid, try to refresh')
-    const token = await api.BeatSaver.refreshOAuthToken(dbAccount.refreshToken)
+    const token = await api.BeatSaver.wrapperResult().refreshOAuthToken(dbAccount.refreshToken)
     let now = new Date()
     if(!token.isSuccess()) {
       logger.info(`failed to refresh, invalid this account,${JSON.stringify(dbAccount)}`)
@@ -39,7 +42,7 @@ export const alert = async (ctx:Context, api:APIService, { session, options }, i
     dbAccount.lastRefreshAt = now
     dbAccount.lastModifiedAt = now
     await ctx.database.upsert('BSRelateOAuthAccount', [dbAccount])
-    alerts = await api.BeatSaver.getUnreadAlertsByPage(dbAccount.accessToken,0)
+    alerts = await api.BeatSaver.wrapperResult().getUnreadAlertsByPage(dbAccount.accessToken,0)
   }
   if(!alerts.isSuccess()) {
     session.sendQuote(session.text('commands.bsbot.subscribe.alert.not-success'))

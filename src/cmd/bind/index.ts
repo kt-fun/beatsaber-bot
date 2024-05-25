@@ -1,6 +1,6 @@
 import {Context, Logger} from "koishi";
 import {Config} from "../../config";
-import {APIService} from "../../service";
+import {APIService} from "../../service/api";
 import {handleScoreSaberBind} from "./bind-scoresaber";
 import {handleBeatSaverBind} from "./bind-beatsaver";
 import {handleBeatLeaderBind} from "./bind-beatleader";
@@ -16,6 +16,9 @@ export function BindCmd(ctx:Context,cfg:Config,api:APIService, logger:Logger) {
     .alias('bbbind')
     .option('p', '<platform:string>')
     .action(async ({ session, options }, input) => {
+      if(!options.p) {
+        options.p = 'ss'
+      }
       let platform : Platform = Platform.SS
       switch (options.p) {
         case 'bs':

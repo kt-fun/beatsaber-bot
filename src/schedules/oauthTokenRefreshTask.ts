@@ -13,7 +13,7 @@ const tokenRefreshTask = (ctx:Context,config:Config,api:APIService,logger:Logger
     logger.info(`try to refresh ${account.platform} ${account.platformUid}'s token`)
     let now = new Date()
     if(account.platform === 'beatleader') {
-      const token = await api.BeatLeader.refreshOAuthToken(account.refreshToken)
+      const token = await api.BeatLeader.wrapperResult().refreshOAuthToken(account.refreshToken)
       if(!token.isSuccess()) {
         logger.info(`failed to refresh ${account.platform} token, invalid this account, ${JSON.stringify(account)}`)
         account.valid = 'invalid'
@@ -26,7 +26,7 @@ const tokenRefreshTask = (ctx:Context,config:Config,api:APIService,logger:Logger
       account.accessToken = token.data.access_token
       account.refreshToken = token.data.refresh_token
     } else if(account.platform === 'beatsaver') {
-      const token = await api.BeatSaver.refreshOAuthToken(account.refreshToken)
+      const token = await api.BeatSaver.wrapperResult().refreshOAuthToken(account.refreshToken)
       if(!token.isSuccess()) {
         logger.info(`failed to refresh ${account.platform} token, invalid this account, ${JSON.stringify(account)}`)
         account.valid = 'invalid'

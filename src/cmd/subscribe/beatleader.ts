@@ -1,4 +1,4 @@
-import {Context, h, Query,Session} from "koishi";
+import {Context} from "koishi";
 import {APIService} from "../../service";
 
 export const beatleader = async (ctx:Context, api:APIService, { session, options }, input) => {

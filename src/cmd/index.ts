@@ -22,7 +22,7 @@ export default class Cmd {
   constructor(ctx:Context,config:Config) {
     this.config = config
     this.ctx = ctx
-    this.service = new APIService(ctx,config)
+    this.service = APIService.create(ctx,config)
     this.logger = this.ctx.logger('beatsaber-bot.cmds')
   }
   apply(fc:(ctx:Context,cfg:Config, apiService:APIService, logger:Logger)=>{

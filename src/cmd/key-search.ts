@@ -1,6 +1,6 @@
 import {Config} from "../config";
-import {Context, h, Logger, Session} from "koishi";
-import {renderMap} from "../img-render";
+import {Context, h, Logger} from "koishi";
+import {renderMap, RenderOption} from "../img-render";
 import {APIService} from "../service";
 
 interface QueryOption {
@@ -30,13 +30,19 @@ export function KeySearchCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger
         key = input.slice(0,15)
         session.sendQuote(session.text('commands.bsbot.search.too-long-key',{key}))
       }
-      const res = await api.BeatSaver.searchMapByKeyword(key)
+      const res = await api.BeatSaver.wrapperResult().searchMapByKeyword(key)
       if(!res.isSuccess()) {
         session.sendQuote(session.text('commands.bsbot.search.not-found',{key}))
         return
       }
+      let renderOpt:RenderOption = {
+        type:'remote',
+        puppeteer: ctx.puppeteer,
+        renderBaseURL: cfg.remoteRenderURL,
+        waitTimeout: cfg.rankWaitTimeout,
+      }
       const toBeSend = res.data.slice(0,3).map(it=> ({
-        img: renderMap(it,ctx,cfg),
+        img: renderMap(it, renderOpt),
         bsmap:it
       }))
       const text = session.text('commands.bsbot.search.success', {key: key, length: toBeSend.length})

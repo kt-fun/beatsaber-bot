@@ -1,12 +1,15 @@
 import {Context, h, Logger, $, Session} from "koishi";
 import {Config} from "../../config";
-import {APIService} from "../../service";
-import {getUserBSAccountInfo} from "../../utils/db";
+import {APIService} from "../../service/api";
+import {getUserBSAccountInfo} from "../../service/db/db";
 import {BSRelateOAuthAccount} from "../../index";
 
 
 export const handleScoreSaberBind = async (ctx:Context,api:APIService,{session,options}:{session: Session<'id',never, Context>, options:{}}, input:string) => {
-  const scoreSaberUser = await api.withRetry(() => api.ScoreSaber.getScoreUserById(input),3)
+  const scoreSaberUser = await api.ScoreSaber
+    .wrapperResult()
+    .withRetry(3)
+    .getScoreUserById(input)
   if(!scoreSaberUser.isSuccess()) {
     const text = session.text('commands.bsbot.bind.not-found', {id: input, platform:"ScoreSaber"})
     session.send(h('message', h('quote', {id: session.messageId}), text))

@@ -9,10 +9,13 @@ export const formatDuration = (duration:number)=> {
   return d.format('m[m]s[s]')
 }
 
+// export const formatDuration = (duration: number) => {
+//   return dayjs.duration(duration,'seconds').format('mm:ss')
+// }
+
 export const formatTime = (time: string) => {
   return dayjs(time).locale(zh).fromNow()
 }
-
 
 
 export const formatNumber = (number: number) => {

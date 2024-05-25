@@ -1,7 +1,8 @@
-import {Context, Logger, SessionError} from "koishi";
+import {Context, Logger} from "koishi";
 import {Config} from "../config";
-import {RenderOpts, renderRank} from "../img-render";
+import {RenderOption, renderRank} from "../img-render";
 import {APIService} from "../service";
+import {Platform} from "../types/platform";
 
 export function RankCmd(ctx: Context, cfg: Config,api:APIService,logger:Logger) {
   const rankCmd = ctx
@@ -17,17 +18,17 @@ export function RankCmd(ctx: Context, cfg: Config,api:APIService,logger:Logger) 
     .alias('irankbl', {options: {p: "bl"}})
     .option('p', '[platform:string]')
     .action(async ({session, options}, input) => {
-      let rankOps = {
+      let platform = options.p=='ss'? Platform.SS : Platform.BL
+      let rankOps:RenderOption = {
+        type:"local",
         puppeteer:ctx.puppeteer,
-        renderBaseURL: cfg.remoteRenderURL,
+        // renderBaseURL: cfg.remoteRenderURL,
         onStartRender() {
           session.send(session.text('common.render.wait', {sec: cfg.rankWaitTimeout / 1000}))
         },
-        platform:  options.p=='ss'? 'score-saber' : 'beat-leader',
-        background: 'default',
         waitTimeout: cfg.rankWaitTimeout
-      } satisfies RenderOpts
-      const img = await renderRank(input, rankOps)
+      }
+      const img = await renderRank(input, platform,api, rankOps)
       session.sendQueued(img)
     })
     return {

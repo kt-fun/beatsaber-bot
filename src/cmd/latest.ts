@@ -1,6 +1,6 @@
 import {Context, h, Logger} from "koishi";
 import {Config} from "../config";
-import { renderMap} from "../img-render";
+import {renderMap, RenderOption} from "../img-render";
 import {APIService} from "../service";
 
 export function LatestCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
@@ -10,7 +10,7 @@ export function LatestCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
     .alias('bbnew')
     .alias('bblatest')
     .action(async ({ session, options }, input) => {
-      const res = await api.withRetry(()=> api.BeatSaver.getLatestMaps(3))
+      const res = await api.BeatSaver.wrapperResult().withRetry(3).getLatestMaps(3)
 
       if(!res.isSuccess()) {
         log.info(`fetch new failed, msg: ${res.msg}`)
@@ -19,9 +19,16 @@ export function LatestCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
       }
       const text = session.text('commands.bsbot.latest.info')
       session.sendQuote(text)
+
+      let renderOpt:RenderOption = {
+        type:'remote',
+        puppeteer: ctx.puppeteer,
+        renderBaseURL: cfg.remoteRenderURL,
+        waitTimeout: cfg.defaultWaitTimeout,
+      }
       const msgs = res.data.map(item=>  ({
         audio:h.audio(item.versions[0].previewURL),
-        image: renderMap(item,ctx,cfg)
+        image: renderMap(item,renderOpt)
       }))
       for (const msg of msgs) {
         session.sendQueued(await msg.image)

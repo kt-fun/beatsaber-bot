@@ -2,22 +2,29 @@ import {Context, h, Logger, Session} from "koishi";
 import {APIService} from "../../service";
 import {BSRelateOAuthAccount} from "../../index";
 
+
 export const handleBeatLeaderBind = async (ctx:Context,api:APIService,{session,options}:{session: Session<'id',never, Context>, options:{}}, input:string) => {
-  let tokenInfo = await api.withRetry(() => api.AIOSaber.getBLOAuthToken(input),3)
+
+  let tokenInfo = await api.AIOSaber
+    .wrapperResult()
+    .getBLOAuthToken(input)
   if(!tokenInfo.isSuccess()) {
     session.sendQuote(session.text("commands.bsbot.bind.bl.not-found"))
     return
   }
   let token = tokenInfo.data
-  let self = await api.BeatLeader.getTokenInfo(token.access_token)
+  let self = await api.BeatLeader.wrapperResult().getTokenInfo(token.access_token)
   if(!self.isSuccess()) {
-    const refreshToken = await api.BeatLeader.refreshOAuthToken(token.refresh_token)
+    const refreshToken = await api.BeatLeader.wrapperResult().refreshOAuthToken(token.refresh_token)
     if(!refreshToken.isSuccess()) {
       session.sendQuote(session.text('commands.bsbot.bind.bl.invalid-token'))
       return
     }
     token = refreshToken.data
-    self = await api.withRetry(()=>api.BeatLeader.getTokenInfo(token.access_token), 3)
+    self = await api.BeatLeader
+      .withRetry(3)
+      .wrapperResult()
+      .getTokenInfo(token.access_token)
     if(!self.isSuccess()) {
       session.sendQuote(session.text('commands.bsbot.bind.bl.unknown-error'))
       return

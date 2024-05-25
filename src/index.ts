@@ -22,12 +22,14 @@ import {screenshotTmp} from "./img-render/rendertmp";
 
 export * from './config'
 
-
 export const name = 'bs-bot'
 
 export const inject = ['database','puppeteer','cron']
 
 declare module 'koishi' {
+  interface Session {
+    sendQuote: (text: string)=> Promise<string[]>
+  }
   interface Tables {
     BSBotSubscribe: BSBotSubscribe,
     BSSubscribeMember: BSSubscribeMember,
