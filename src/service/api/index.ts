@@ -6,7 +6,7 @@ import {BeatSaverService} from "./composed/beatsaver";
 import {ScoreSaberService} from "./composed/scoresaber";
 import {AIOSaberService} from "./composed/aiosaber";
 import {NetReqResult} from "./netResult";
-import {sleep} from "../../img-render/utils/sleep";
+import {sleep} from "../../utils/sleep";
 
 type ServiceWithAPIHelper<API, Wrap extends boolean = false> = Wrapped<API,Wrap> & APIHelper<API,Wrap>
 

@@ -2,13 +2,13 @@
 export interface BeatLeaderUser {
   accPp: number;
   avatar: string;
-  badges: Badge[];
+  badges: BLBadge[];
   banDescription: null;
   banned: boolean;
   bot: boolean;
-  changes: Change[];
+  changes: BLChange[];
   clanOrder: string;
-  clans: Clan[];
+  clans: BLClan[];
   contextExtensions: null;
   country: string;
   countryRank: number;
@@ -27,11 +27,11 @@ export interface BeatLeaderUser {
   pinnedScores: null;
   platform: string;
   pp: number;
-  profileSettings: ProfileSettings;
+  profileSettings: BLProfileSettings;
   rank: number;
   role: string;
-  scoreStats: ScoreStats;
-  socials: Social[];
+  scoreStats: BLScoreStats;
+  socials: BLSocial[];
   techPp: number;
   "topHMD": number,
   "sspPlays": number,
@@ -42,7 +42,7 @@ export interface BeatLeaderUser {
   [property: string]: any;
 }
 
-export interface Badge {
+export interface BLBadge {
   description: string;
   hidden: boolean;
   id: number;
@@ -52,7 +52,7 @@ export interface Badge {
   [property: string]: any;
 }
 
-export interface Change {
+export interface BLChange {
   changer: null | string;
   id: number;
   newCountry: null | string;
@@ -64,7 +64,7 @@ export interface Change {
   [property: string]: any;
 }
 
-export interface Clan {
+export interface BLClan {
   color: string;
   id: number;
   name: null;
@@ -72,7 +72,7 @@ export interface Clan {
   [property: string]: any;
 }
 
-export interface ProfileSettings {
+export interface BLProfileSettings {
   bio: null;
   effectName: string;
   hue: number;
@@ -89,7 +89,7 @@ export interface ProfileSettings {
   [property: string]: any;
 }
 
-export interface ScoreStats {
+export interface BLScoreStats {
   anonimusReplayWatched: number;
   aPlays: number;
   authorizedReplayWatched: number;
@@ -149,12 +149,31 @@ export interface ScoreStats {
   [property: string]: any;
 }
 
-export interface Social {
+export interface BLSocial {
   id: number;
   link: string;
   playerId: string;
   service: string;
   user: string;
   userId: string;
+  [property: string]: any;
+}
+
+export interface BLPlayer {
+  avatar: string;
+  bot: boolean;
+  clans: string[];
+  contextExtensions: null;
+  country: string;
+  countryRank: number;
+  id: string;
+  name: string;
+  patreonFeatures: null;
+  platform: string;
+  pp: number;
+  profileSettings: null;
+  rank: number;
+  role: string;
+  socials: null;
   [property: string]: any;
 }

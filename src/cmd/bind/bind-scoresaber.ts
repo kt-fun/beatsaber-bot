@@ -1,6 +1,5 @@
-import {Context, h, Logger, $, Session} from "koishi";
-import {Config} from "../../config";
-import {APIService} from "../../service/api";
+import {Context, h, Session} from "koishi";
+import {APIService} from "../../service";
 import {getUserBSAccountInfo} from "../../service/db/db";
 import {BSRelateOAuthAccount} from "../../index";
 

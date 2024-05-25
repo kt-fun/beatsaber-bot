@@ -1,4 +1,4 @@
-import {Context, h, Logger} from "koishi";
+import {Context, Logger} from "koishi";
 import {Config} from "../config";
 import {APIService} from "../service";
 

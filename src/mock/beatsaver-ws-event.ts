@@ -9,7 +9,7 @@ export const MockBeatsaverWsEvent:BeatSaverWSEvent = {
     "uploader":{
       "id":202666,
       "name":"chiikawa_._.",
-      "uniqueSet":true,
+      "uniqueSet": true,
       "avatar":"https://cdn.beatsaver.com/avatar/54d3f024ab3eede26b5f4344ef51fc7e9b297d2f.png",
       "type":"DISCORD",
       "admin":false,

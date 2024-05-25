@@ -1,11 +1,11 @@
 /** @jsxImportSource react */
-import getPart from "../utils/getPart";
+import getPart from "../utils/bl/getPart";
 import ScoreBadge from "../components/socre-badge";
 import SkillGraph from "../components/skill-graph";
 import BeatLeaderItem from "../components/blScoreItem";
 import Flags, {EarchIcon} from "../components/flag";
 import {twJoin} from "../utils/tw-join";
-import {getHeadsetForHMD} from "../libs/blheadset";
+import {getHeadsetForHMD} from "../utils/bl/blheadset";
 
 
 interface BLPlayerInfoProps {

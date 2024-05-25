@@ -1,5 +1,5 @@
-import {Context, h, Logger, Session} from "koishi";
-import {APIService} from "../../service/api";
+import {Context, Session} from "koishi";
+import {APIService} from "../../service";
 import {BSRelateOAuthAccount} from "../../index";
 
 export const handleBeatSaverBind = async (ctx:Context,api:APIService,{session,options}:{session: Session<'id',never, Context>, options:{}}, input:string) => {

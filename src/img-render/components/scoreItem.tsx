@@ -1,5 +1,5 @@
 /** @jsxImportSource react */
-import { ScoreSaberItem } from "../interface/scoresaber";
+import { ScoreSaberItem } from "../interfaces";
 import {BarChart, Key, Star, Wrench} from "lucide-react";
 
 const diffConv = (diff:string) => {

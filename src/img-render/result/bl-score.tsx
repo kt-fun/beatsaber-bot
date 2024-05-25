@@ -1,12 +1,9 @@
 /** @jsxImportSource react */
 import { BarChart, Check, Key, Star, Clock, ThumbsUp, ThumbsDown, Calendar } from "lucide-react";
-import {BeatLeaderItem} from "../../types/scoresaber";
-import {BSMap} from "../../types";
-import {Score} from "../../types/beatleader";
 import {diffConv, formatDuration, formatTime} from "../utils";
 import Progressbar from "../components/progressbar";
 import ScoreGraph from "../components/scoregraph";
-import {BSOR} from "../interface/beatleaderScore";
+import {Score, BSMap, BSOR} from "../interfaces";
 import React from "react";
 
 interface BLScoreProps {

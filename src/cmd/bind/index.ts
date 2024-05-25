@@ -1,6 +1,6 @@
 import {Context, Logger} from "koishi";
 import {Config} from "../../config";
-import {APIService} from "../../service/api";
+import {APIService} from "../../service";
 import {handleScoreSaberBind} from "./bind-scoresaber";
 import {handleBeatSaverBind} from "./bind-beatsaver";
 import {handleBeatLeaderBind} from "./bind-beatleader";

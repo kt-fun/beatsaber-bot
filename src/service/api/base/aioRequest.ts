@@ -1,12 +1,7 @@
 import {Context} from "koishi";
 import {Config} from "../../../config";
-export interface AioOauthTokenResponse {
-    "access_token": string,
-    "token_type": string,
-    expires_in: number,
-    refresh_token: string,
-    scope?: string
-}
+import {AioOauthTokenResponse} from "../interfaces/aiosaber";
+
 export const aioRequest =(ctx:Context, cfg:Config)=> {
   const http = ctx.http
   let host =  "https://aiobs.ktlab.io"

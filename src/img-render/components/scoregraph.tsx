@@ -1,9 +1,8 @@
 /** @jsxImportSource react */
-import { BSOR } from '../interface/beatleaderScore'
-import { processAccGraphs, processUnderswings } from '../libs/bsorReplayAcc'
-import { createDistanceWeightFunction, createMinMaxCounter } from '../libs/beatleader'
-import getStatistic from '../libs/stastic'
-import { Datum } from '../interface/beatleaderreq';
+import {BSOR, Score} from '../interfaces'
+import { processAccGraphs, processUnderswings } from '../utils/bl/bsorReplayAcc'
+import { createDistanceWeightFunction, createMinMaxCounter } from '../utils/bl/beatleader'
+import getStatistic from '../utils/bl/stastic'
 import Chart from 'chart.js/auto';
 import {canvasToDataURL, createCanvas} from "../utils/canvas";
 
@@ -66,7 +65,7 @@ export default function ScoreGraph(
   bsor
 }:{
   scoreId: number,
-  scoreInfo: Datum,
+  scoreInfo: Score,
   statistic: any,
   bsor: BSOR,
 }

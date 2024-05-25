@@ -1,4 +1,4 @@
-import {BeatLeaderUser} from "../interface/beatleader";
+import {BeatLeaderUser} from "../../interfaces";
 
 const DEFAULT_MAX_TECH_PP = 1300;
 const DEFAULT_MAX_ACC_PP = 15000;

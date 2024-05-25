@@ -1,9 +1,9 @@
 import Puppeteer from "koishi-plugin-puppeteer";
-import {BSMap} from "../types";
+import {BSMap} from "./interfaces";
 import {renderRemoteMap, renderRemoteRank, renderRemoteScore} from "./remote";
 import {renderBLPlayerImg, renderBLScoreImg, renderBSMapImg, renderSSPlayerImg} from "./result";
 import {APIService} from "../service";
-import {Platform} from "../types/platform";
+import {Platform} from "../types";
 import createQrcode from "./utils/qrcode";
 
 export * from './remote'
@@ -74,3 +74,5 @@ export const renderMap = async (bsMap: BSMap, renderOpts:RenderOption) => {
   const bsMapQrUrl = await createQrcode(`https://beatsaver.com/maps/${bsMap.id}`)
   return await renderBSMapImg(renderOpts.puppeteer,bsMap, bsMapQrUrl, previewQrUrl, renderOpts.onStartRender, renderOpts.onRenderError)
 }
+
+export * from  './renderImg'

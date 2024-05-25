@@ -1,18 +1,3 @@
-// bsMapper
-export interface BeatLeaderPlayerScoreRequest {
-  diff: string,
-  mode: string,
-  hash: string,
-  playerID: string,
-  leaderboardContext: string
-}
-
-export interface BeadLeaderScoresResponse {
-  data: Score[];
-  metadata: Metadata;
-  [property: string]: any;
-}
-
 export interface Score {
   accLeft: number;
   accPP: number;
@@ -180,12 +165,5 @@ export interface ScoreImprovement {
   totalPp: number;
   totalRank: number;
   wallsHit: number;
-  [property: string]: any;
-}
-
-export interface Metadata {
-  itemsPerPage: number;
-  page: number;
-  total: number;
   [property: string]: any;
 }

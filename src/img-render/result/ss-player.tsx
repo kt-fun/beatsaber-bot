@@ -2,7 +2,7 @@
 import Flags, {EarchIcon} from "../components/flag";
 import {twJoin} from "../utils/tw-join";
 import ScoreItem from "../components/ssScoreItem";
-import {ScoreSaberItem, ScoreSaberUser} from "../interface/scoresaber";
+import {ScoreSaberItem, ScoreSaberUser} from "../interfaces";
 
 interface SSPlayerProps {
   leaderItems: ScoreSaberItem[],

@@ -4,11 +4,13 @@ export interface BSMap{
     name: string,
     description: string,
     declaredAi: string,
+
     uploader: {
       id: number,
       name: string,
       avatar: string,
       type: string,
+      [key: string]: any,
     },
     metadata: {
       bpm:number,
@@ -23,7 +25,9 @@ export interface BSMap{
       downloads: number,
       upvotes: number,
       downvotes: number,
-      score: number
+      score: number,
+      reviews?: number,
+      [key: string]: any,
     },
     automapper: boolean,
     versions: {
@@ -33,6 +37,7 @@ export interface BSMap{
       downloadURL: string,
       coverURL: string,
       previewURL: string,
+      sageScore?: number,
       diffs: {
         notes: number,
         bombs: number,
@@ -42,13 +47,13 @@ export interface BSMap{
         length: number,
         characteristic: string,
         difficulty: string,
-        events: string,
+        events: number,
         chroma: boolean,
         me: boolean,
         ne: boolean,
         cinema: boolean,
         seconds: number,
-        maxScore: string,
+        maxScore: number,
         paritySummary: any,
         [key: string]: any
       }[]
@@ -57,7 +62,7 @@ export interface BSMap{
     updatedAt: string,
     createdAt: string,
     tags: string[],
-    ranked: boolean,
-    blRanked: boolean,
+    ranked?: boolean,
+    blRanked?: boolean,
     [key: string]: any
   }

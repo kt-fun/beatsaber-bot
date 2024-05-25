@@ -1,6 +1,4 @@
-import {BeatLeaderWSEvent} from "../types/ws/beatleader";
-import {BLScoreFilter} from "../types/beatleader-condition";
-
+import {BeatLeaderWSEvent, BLScoreFilter} from "../types";
 
 type FilterFC = (event:BeatLeaderWSEvent,...args:any[]) => boolean
 

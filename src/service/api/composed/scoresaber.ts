@@ -1,7 +1,7 @@
 import {BeatSaverClient, ScoreSaberClient} from "../base";
 import {sortScore} from "../sortScore";
 import {BSMap, HashResponse} from "../../../types";
-import {ScoreSaberItem} from "../../../img-render/interface/scoresaber";
+import {ScoreSaberItem} from "../interfaces/scoresaber";
 
 export class ScoreSaberService {
   bsClient: BeatSaverClient

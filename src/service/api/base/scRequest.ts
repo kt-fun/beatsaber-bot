@@ -1,7 +1,6 @@
 import {Context} from "koishi";
 import {Config} from "../../../config";
-import {ScoreSaberUser} from "../../../types/scoresaber";
-import {ScoreSaberUserResponse} from "../../../img-render/interface/scoresaber";
+import {ScoreSaberUser, ScoreSaberUserResponse} from "../interfaces/scoresaber";
 
 export const scRequest =(ctx:Context,cfg:Config)=> {
   const http = ctx.http

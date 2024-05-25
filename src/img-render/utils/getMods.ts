@@ -1,4 +1,4 @@
-import {BSMap} from "../../types";
+import {BSMap} from "../interfaces";
 
 export const getMods = (bsMap: BSMap) => {
   let res:string[] = []

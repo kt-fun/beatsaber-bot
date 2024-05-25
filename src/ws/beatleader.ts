@@ -1,9 +1,9 @@
 import {$, Context, h, Logger} from "koishi";
 import {Config} from "../config";
-import {BeatLeaderWSEvent} from "../types/ws/beatleader";
+import {BeatLeaderWSEvent} from "../types/api";
 import {RenderOption, renderScore} from "../img-render";
 import {BeatLeaderFilter} from "./bl-filter";
-import {Platform} from "../types/platform";
+import {Platform} from "../types";
 import {APIService} from "../service";
 
 export function BeatLeaderWS(ctx: Context, cfg:Config, api:APIService,logger:Logger) {

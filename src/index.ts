@@ -18,7 +18,7 @@ import {} from 'koishi-plugin-cron'
 import {} from './utils/extendedMethod'
 import schedules from "./schedules";
 import {pluginWS} from "./ws";
-import {screenshotTmp} from "./img-render/rendertmp";
+import {screenshotTmp} from "./img-render";
 
 export * from './config'
 

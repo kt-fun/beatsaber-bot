@@ -1,9 +1,7 @@
 import {Context} from "koishi";
-import {BeadLeaderScoresResponse, BeatLeaderPlayerScoreRequest, Leaderboard, Score} from "../../../types/beatleader";
+import {BeadLeaderScoresResponse, BeatLeaderPlayerScoreRequest, Leaderboard, Score, BeatLeaderUser} from "../interfaces/beatleader";
 import {Config} from "../../../config";
 import {OAuthTokenInfoResponse, OAuthTokenResponse} from "./bsRequest";
-import {BeatLeaderUser} from "../../../img-render/interface/beatleader";
-
 
 export const blRequest =(ctx:Context, cfg:Config)=> {
   const http = ctx.http

@@ -1,5 +1,5 @@
 /** @jsxImportSource react */
-import { Datum } from "../interface/beatleaderreq";
+import { Score } from "../interfaces";
 import {BarChart, Key, Pin, Star, Wrench} from "lucide-react";
 import {diffConv} from "../utils";
 
@@ -13,7 +13,7 @@ export default function BeatLeaderItem(
 {
   item
 }:{
-    item: Datum & {
+    item: Score & {
         pinned?: boolean
     }
 }

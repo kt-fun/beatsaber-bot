@@ -1,4 +1,4 @@
-import {Leaderboard, Score} from "../../types/beatleader";
+import { Leaderboard } from "./interfaces/beatleader";
 
 
 const difficulties = {

@@ -6,10 +6,7 @@ import BSMapShare from "./bs-map";
 import SSPlayerPage from "./ss-player";
 import BLPlayerPage from "./bl-player";
 import Puppeteer from "koishi-plugin-puppeteer";
-import { ScoreSaberUser } from "../../types/scoresaber";
-import { ScoreSaberItem } from "../interface/scoresaber";
-import { BeatLeaderUser } from "../interface/beatleader";
-import { Score } from "../../types/beatleader";
+import { ScoreSaberUser, ScoreSaberItem, BeatLeaderUser, Score } from "../interfaces";
 import { BLScore } from "./bl-score";
 
 export const renderBSMapImg = (puppeteer: Puppeteer, bsMap:BSMap, bsMapQrUrl:string, previewQrUrl:string, onStart?: ()=>void, onError?: (e?:any)=> void) => {

@@ -1,7 +1,7 @@
 import {Context, h, Logger} from "koishi";
 import {Config} from "../config";
 import {APIService} from "../service";
-import {screenshotTmp} from "../img-render/rendertmp";
+import {screenshotTmp} from "../img-render";
 import dayjs from "dayjs";
 import isBetween from 'dayjs/plugin/isBetween'
 dayjs.extend(isBetween)

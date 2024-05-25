@@ -1,7 +1,6 @@
 import {Context} from "koishi";
 import {Config} from "../../../config";
-import {BSMap, BSMapLatestResponse, BSUserResponse, HashReqResponse} from "../../../types";
-import {BeatsaverAlert, BeatsaverAlertStats} from "../../../types/beatsaver";
+import {BeatsaverAlert, BeatsaverAlertStats, BSMap, BSMapLatestResponse, BSUserResponse, HashReqResponse} from "../interfaces/beatsaver";
 
 
 export interface OAuthTokenResponse {

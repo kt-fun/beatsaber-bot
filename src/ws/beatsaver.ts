@@ -2,7 +2,6 @@ import {$, Context, h, Logger} from "koishi";
 import {Config} from "../config";
 import {BeatSaverWSEvent} from "../types";
 import {renderMap, RenderOption} from "../img-render";
-import {MockBeatsaverWsEvent} from "../mock/beatsaver-ws-event";
 
 export function BeatSaverWS(ctx: Context, config:Config,logger:Logger) {
   const ws = ctx.http.ws(config.beatSaverWSURL ?? "wss://ws.beatsaver.com/maps") as any
