@@ -22,5 +22,8 @@
   },
   "include": [
     "src"
-  ]
+  ],
+  "atsc": {
+    "loaders": [".yaml",".yml",".js"]
+  }
 }

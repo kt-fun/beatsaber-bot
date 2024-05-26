@@ -1,4 +1,4 @@
 export interface BLScoreFilter {
-  filterName: string,
+  filterName: string
   filterParams: any[]
 }

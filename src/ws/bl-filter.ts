@@ -1,61 +1,61 @@
-import {BeatLeaderWSEvent, BLScoreFilter} from "../types";
+import { BeatLeaderWSEvent, BLScoreFilter } from '../types'
 
-type FilterFC = (event:BeatLeaderWSEvent,...args:any[]) => boolean
+type FilterFC = (event: BeatLeaderWSEvent, ...args: any[]) => boolean
 
-
-const filterMap:Record<string, FilterFC> = {
+const filterMap: Record<string, FilterFC> = {
   'rank-only': RankOnly,
   'huge-improve': HugeImprove,
   'high-stars': HighStar,
-  'standard': StandardMode,
+  standard: StandardMode,
   'high-pp': HighPP,
   'top-score': TopScore,
   'fc-only': FullComboOnly,
 }
 
-function RankOnly(event:BeatLeaderWSEvent) {
+function RankOnly(event: BeatLeaderWSEvent) {
   return event.pp != 0
 }
 
-function FullComboOnly(event:BeatLeaderWSEvent) {
+function FullComboOnly(event: BeatLeaderWSEvent) {
   return event.fullCombo
 }
 
-
-function HugeImprove(event:BeatLeaderWSEvent, ppImprovePercent: number) {
+function HugeImprove(event: BeatLeaderWSEvent, ppImprovePercent: number) {
   event.scoreImprovement.pp
   return event.rankVoting != null
 }
 
-function HighStar(event:BeatLeaderWSEvent, stars: number) {
+function HighStar(event: BeatLeaderWSEvent, stars: number) {
   return event.leaderboard.difficulty.stars >= stars
 }
 
-function StandardMode (event:BeatLeaderWSEvent) {
-  return event.leaderboard.difficulty.modeName === "Standard"
+function StandardMode(event: BeatLeaderWSEvent) {
+  return event.leaderboard.difficulty.modeName === 'Standard'
 }
 
-function HighPP(event:BeatLeaderWSEvent, minPP: number) {
+function HighPP(event: BeatLeaderWSEvent, minPP: number) {
   return event.pp > minPP
 }
 
-function TopScore(event:BeatLeaderWSEvent, minTop: number) {
-  return event.rank != 0  && event.rank <= minTop
+function TopScore(event: BeatLeaderWSEvent, minTop: number) {
+  return event.rank != 0 && event.rank <= minTop
 }
 
-
-export function BeatLeaderFilter(event:BeatLeaderWSEvent,...filters:BLScoreFilter[]) {
-  for(const filter of filters) {
+export function BeatLeaderFilter(
+  event: BeatLeaderWSEvent,
+  ...filters: BLScoreFilter[]
+) {
+  for (const filter of filters) {
     const fc = filterMap[filter.filterName]
-    if(fc) {
+    if (fc) {
       try {
-        if(fc.length - 1 > filter.filterParams.length) {
+        if (fc.length - 1 > filter.filterParams.length) {
           continue
         }
         const res = fc(event, ...filter.filterParams)
-        if(!res) return false
-      }catch (e) {
-
+        if (!res) return false
+      } catch (e) {
+        console.error(e)
       }
     }
   }

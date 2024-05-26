@@ -1,13 +1,13 @@
-const diffMap =  {
-  "E":"Easy",
-  "N":"Normal",
-  "H":"Hard",
-  "EX":"Expert",
-  "EP":"ExpertPlus",
-  "EX+":"ExpertPlus",
+const diffMap = {
+  E: 'Easy',
+  N: 'Normal',
+  H: 'Hard',
+  EX: 'Expert',
+  EP: 'ExpertPlus',
+  'EX+': 'ExpertPlus',
 }
 
-export const convertDiff = (diff: string|null) => {
+export const convertDiff = (diff: string | null) => {
   if (!diff) {
     return diff
   }

@@ -1,7 +1,7 @@
-import {blRequest} from "./blRequset";
-import {bsRequest} from "./bsRequest";
-import {scRequest} from "./scRequest";
-import {aioRequest} from "./aioRequest";
+import { blRequest } from './blRequset'
+import { bsRequest } from './bsRequest'
+import { scRequest } from './scRequest'
+import { aioRequest } from './aioRequest'
 
 export type BeatLeaderClient = ReturnType<typeof blRequest>
 export type BeatSaverClient = ReturnType<typeof bsRequest>

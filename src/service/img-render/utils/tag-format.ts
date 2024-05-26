@@ -1,227 +1,229 @@
-export const getTag =(slug:string) => {
-  return tags[slug].value??slug
+export const getTag = (slug: string) => {
+  return tags[slug].value ?? slug
 }
 
-
-const tags: Record<string,{
-  type: string,
-  value: string,
-  slug: string
-}> = {
-  "tech": {
+const tags: Record<
+  string,
+  {
+    type: string
+    value: string
+    slug: string
+  }
+> = {
+  tech: {
     type: 'Style',
     value: 'Tech',
-    slug: 'tech'
+    slug: 'tech',
   },
-  "dance-style": {
+  'dance-style': {
     type: 'Style',
     value: 'Dance',
-    slug: 'dance-style'
+    slug: 'dance-style',
   },
-  "speed": {
+  speed: {
     type: 'Style',
     value: 'Speed',
-    slug: 'speed'
+    slug: 'speed',
   },
-  "balanced": {
+  balanced: {
     type: 'Style',
     value: 'Balanced',
-    slug: 'balanced'
+    slug: 'balanced',
   },
-  "challenge": {
+  challenge: {
     type: 'Style',
     value: 'Challenge',
-    slug: 'challenge'
+    slug: 'challenge',
   },
-  "accuracy": {
+  accuracy: {
     type: 'Style',
     value: 'Accuracy',
-    slug: 'accuracy'
+    slug: 'accuracy',
   },
-  "fitness": {
+  fitness: {
     type: 'Style',
     value: 'Fitness',
-    slug: 'fitness'
+    slug: 'fitness',
   },
 
-  "k-pop": {
+  'k-pop': {
     type: 'Genre',
     value: 'K-Pop',
-    slug: 'k-pop'
+    slug: 'k-pop',
   },
-  "swing": {
+  swing: {
     type: 'Genre',
     value: 'Swing',
-    slug: 'swing'
+    slug: 'swing',
   },
-  "nightcore": {
+  nightcore: {
     type: 'Genre',
     value: 'Nightcore',
-    slug: 'nightcore'
+    slug: 'nightcore',
   },
-  "folk-acoustic": {
+  'folk-acoustic': {
     type: 'Genre',
     value: 'Folk & Acoustic',
-    slug: 'folk-acoustic'
+    slug: 'folk-acoustic',
   },
-  "kids-family": {
+  'kids-family': {
     type: 'Genre',
     value: 'Kids & Family',
-    slug: 'kids-family'
+    slug: 'kids-family',
   },
-  "ambient": {
+  ambient: {
     type: 'Genre',
     value: 'Ambient',
-    slug: 'ambient'
+    slug: 'ambient',
   },
-  "funk-disco": {
+  'funk-disco': {
     type: 'Genre',
     value: 'Funk & Disco',
-    slug: 'funk-disco'
+    slug: 'funk-disco',
   },
-  "jazz": {
+  jazz: {
     type: 'Genre',
     value: 'Jazz',
-    slug: 'jazz'
+    slug: 'jazz',
   },
-  "classical-orchestral": {
+  'classical-orchestral': {
     type: 'Genre',
     value: 'Classical & Orchestral',
-    slug: 'classical-orchestral'
+    slug: 'classical-orchestral',
   },
-  "soul": {
+  soul: {
     type: 'Genre',
     value: 'Soul',
-    slug: 'soul'
+    slug: 'soul',
   },
-  "speedcore": {
+  speedcore: {
     type: 'Genre',
     value: 'Speedcore',
-    slug: 'speedcore'
+    slug: 'speedcore',
   },
-  "punk": {
+  punk: {
     type: 'Genre',
     value: 'Punk',
-    slug: 'punk'
+    slug: 'punk',
   },
-  "rb": {
+  rb: {
     type: 'Genre',
     value: 'R&B',
-    slug: 'rb'
+    slug: 'rb',
   },
-  "holiday": {
+  holiday: {
     type: 'Genre',
     value: 'Holiday',
-    slug: 'holiday'
+    slug: 'holiday',
   },
-  "vocaloid": {
+  vocaloid: {
     type: 'Genre',
     value: 'Vocaloid',
-    slug: 'vocaloid'
+    slug: 'vocaloid',
   },
-  "j-rock": {
+  'j-rock': {
     type: 'Genre',
     value: 'J-Rock',
-    slug: 'j-rock'
+    slug: 'j-rock',
   },
-  "trance": {
+  trance: {
     type: 'Genre',
     value: 'Trance',
-    slug: 'trance'
+    slug: 'trance',
   },
-  "drum-and-bass": {
+  'drum-and-bass': {
     type: 'Genre',
     value: 'Drum and Bass',
-    slug: 'drum-and-bass'
+    slug: 'drum-and-bass',
   },
-  "comedy-meme": {
+  'comedy-meme': {
     type: 'Genre',
     value: 'Comedy & Meme',
-    slug: 'comedy-meme'
+    slug: 'comedy-meme',
   },
-  "instrumental": {
+  instrumental: {
     type: 'Genre',
     value: 'Instrumental',
-    slug: 'instrumental'
+    slug: 'instrumental',
   },
-  "hardcore": {
+  hardcore: {
     type: 'Genre',
     value: 'Hardcore',
-    slug: 'hardcore'
+    slug: 'hardcore',
   },
-  "indie": {
+  indie: {
     type: 'Genre',
     value: 'Indie',
-    slug: 'indie'
+    slug: 'indie',
   },
-  "techno": {
+  techno: {
     type: 'Genre',
     value: 'Techno',
-    slug: 'techno'
+    slug: 'techno',
   },
-  "house": {
+  house: {
     type: 'Genre',
     value: 'House',
-    slug: 'house'
+    slug: 'house',
   },
-  "video-game-soundtrack": {
+  'video-game-soundtrack': {
     type: 'Genre',
     value: 'Video Game',
-    slug: 'video-game-soundtrack'
+    slug: 'video-game-soundtrack',
   },
-  "tv-movie-soundtrack": {
+  'tv-movie-soundtrack': {
     type: 'Genre',
     value: 'TV & Film',
-    slug: 'tv-movie-soundtrack'
+    slug: 'tv-movie-soundtrack',
   },
-  "alternative": {
+  alternative: {
     type: 'Genre',
     value: 'Alternative',
-    slug: 'alternative'
+    slug: 'alternative',
   },
-  "dubstep": {
+  dubstep: {
     type: 'Genre',
     value: 'Dubstep',
-    slug: 'dubstep'
+    slug: 'dubstep',
   },
-  "metal": {
+  metal: {
     type: 'Genre',
     value: 'Metal',
-    slug: 'metal'
+    slug: 'metal',
   },
-  "anime": {
+  anime: {
     type: 'Genre',
     value: 'Anime',
-    slug: 'anime'
+    slug: 'anime',
   },
-  "hip-hop-rap": {
+  'hip-hop-rap': {
     type: 'Genre',
     value: 'Hip Hop & Rap',
-    slug: 'hip-hop-rap'
+    slug: 'hip-hop-rap',
   },
-  "j-pop": {
+  'j-pop': {
     type: 'Genre',
     value: 'J-Pop',
-    slug: 'j-pop'
+    slug: 'j-pop',
   },
-  "dance": {
+  dance: {
     type: 'Genre',
     value: 'Dance',
-    slug: 'dance'
+    slug: 'dance',
   },
-  "rock": {
+  rock: {
     type: 'Genre',
     value: 'Rock',
-    slug: 'rock'
+    slug: 'rock',
   },
-  "pop": {
+  pop: {
     type: 'Genre',
     value: 'Pop',
-    slug: 'pop'
+    slug: 'pop',
   },
-  "electronic": {
+  electronic: {
     type: 'Genre',
     value: 'Electronic',
-    slug: 'electronic'
-  }
+    slug: 'electronic',
+  },
 }

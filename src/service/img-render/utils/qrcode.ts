@@ -1,8 +1,17 @@
+import {
+  CornerDotType,
+  CornerSquareType,
+  DotType,
+  QRCodeCanvas,
+  TypeNumber,
+} from '@loskir/styled-qr-code-node'
 
-import {CornerDotType, CornerSquareType, DotType, QRCodeCanvas, TypeNumber} from '@loskir/styled-qr-code-node';
-
-export default async function createQrcode(url: string,width: number = 300, height: number = 300) {
-  const options ={
+export default async function createQrcode(
+  url: string,
+  width: number = 300,
+  height: number = 300
+) {
+  const options = {
     width: width ?? 300,
     height: height ?? 300,
     type: 'canvas' as any,
@@ -11,7 +20,7 @@ export default async function createQrcode(url: string,width: number = 300, heig
     qrOptions: {
       typeNumber: 0 as TypeNumber,
       mode: 'Byte' as any,
-      errorCorrectionLevel: 'Q' as any
+      errorCorrectionLevel: 'Q' as any,
     },
     imageOptions: {
       hideBackgroundDots: true,
@@ -21,7 +30,7 @@ export default async function createQrcode(url: string,width: number = 300, heig
     },
     dotsOptions: {
       color: '#ffffff',
-      type: 'rounded' as DotType
+      type: 'rounded' as DotType,
     },
     backgroundOptions: {
       color: 'rgb(0,0,0,0)',
@@ -33,9 +42,9 @@ export default async function createQrcode(url: string,width: number = 300, heig
     cornersDotOptions: {
       color: '#ffffff',
       type: 'dot' as CornerDotType,
-    }
+    },
   }
-  const qrCode = new QRCodeCanvas(options);
+  const qrCode = new QRCodeCanvas(options)
 
   const svg = await qrCode.toDataUrl('svg')
   return svg

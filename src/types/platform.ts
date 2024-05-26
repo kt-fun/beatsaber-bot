@@ -1,5 +1,5 @@
 export enum Platform {
-  SS = "scoresaber",
-  BS = "beatsaver",
-  BL = "beatleader"
+  SS = 'scoresaber',
+  BS = 'beatsaver',
+  BL = 'beatleader',
 }
