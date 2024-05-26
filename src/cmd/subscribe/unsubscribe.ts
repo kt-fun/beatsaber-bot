@@ -1,8 +1,8 @@
-import {Context, h} from "koishi";
+import {Context, h, Logger} from "koishi";
 import {Config} from "../../config";
-import {APIService} from "../../service";
+import {APIService, RenderService} from "../../service";
 
-export function UnSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
+export function UnSubscribeCmd(ctx:Context,cfg:Config,render:RenderService,api:APIService, logger:Logger) {
   const unsub = ctx
     .command('bsbot.unsubscribe')
     .alias('bbunsub')

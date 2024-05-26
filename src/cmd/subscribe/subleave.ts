@@ -1,7 +1,7 @@
-import {$, Command, Context, h} from "koishi";
+import {$, Command, Context, h, Logger} from "koishi";
 import {Config} from "../../config";
-import {APIService} from "../../service";
-export function LeaveSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
+import {APIService, RenderService} from "../../service";
+export function LeaveSubscribeCmd(ctx:Context,cfg:Config,render:RenderService,api:APIService, logger:Logger) {
 
   const leaveCmd = ctx
     .command('bsbot.subscribe.leave')

@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-beatsaber-bot",
   "description": "一个 用于 BeatSaber 的 koishi Bot 插件",
-  "version": "0.1.0-rc.patch09",
+  "version": "0.1.0-rc.patch14",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -58,17 +58,12 @@
     "koishi-plugin-puppeteer": "^3.7.3",
     "lucide-react": "^0.379.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "@loskir/styled-qr-code-node": "^1.5.1"
   },
   "scripts": {
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
-  },
-  "dependencies": {
-    "country-flag-icons": "^1.5.11",
-    "lucide-react": "^0.379.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
   }
 }

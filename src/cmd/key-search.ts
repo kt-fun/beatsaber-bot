@@ -1,7 +1,6 @@
 import {Config} from "../config";
 import {Context, h, Logger} from "koishi";
-import {renderMap, RenderOption} from "../img-render";
-import {APIService} from "../service";
+import {APIService, RenderService} from "../service";
 
 interface QueryOption {
   mapper?: string;
@@ -17,13 +16,12 @@ interface QueryOption {
   tags?: string;
 }
 
-export function KeySearchCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
+export function KeySearchCmd(ctx:Context, cfg:Config, render:RenderService, api:APIService, logger:Logger) {
   const serachCmd = ctx
     .command('bsbot.search <key:text>')
     .alias('bbsou')
     .alias('bbsearch')
     .alias('bbmap')
-    // .option('-n','<data:string>')
     .action(async ({ session, options }, input) => {
       let key = input
       if(input.length > 15) {
@@ -35,14 +33,11 @@ export function KeySearchCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger
         session.sendQuote(session.text('commands.bsbot.search.not-found',{key}))
         return
       }
-      let renderOpt:RenderOption = {
-        type:'remote',
-        puppeteer: ctx.puppeteer,
-        renderBaseURL: cfg.remoteRenderURL,
-        waitTimeout: cfg.rankWaitTimeout,
+      let onStartRender = () => {
+        session.send(session.text('common.render.wait', {sec: cfg.rankWaitTimeout / 1000}))
       }
       const toBeSend = res.data.slice(0,3).map(it=> ({
-        img: renderMap(it, renderOpt),
+        img: render.renderMap(it, onStartRender),
         bsmap:it
       }))
       const text = session.text('commands.bsbot.search.success', {key: key, length: toBeSend.length})

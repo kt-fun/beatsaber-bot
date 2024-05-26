@@ -1,10 +1,9 @@
 import {Context, Logger} from "koishi";
 import {Config} from "../config";
-import {RenderOption, renderRank} from "../img-render";
-import {APIService} from "../service";
-import {Platform} from "../types/platform";
+import {APIService, RenderService} from "../service";
+import {Platform} from "../types";
 
-export function RankCmd(ctx: Context, cfg: Config,api:APIService,logger:Logger) {
+export function RankCmd(ctx: Context, cfg: Config, render:RenderService,api:APIService,logger:Logger) {
   const rankCmd = ctx
     .command('bsbot.rank <uid:text>')
     .alias('bbrank')
@@ -19,16 +18,11 @@ export function RankCmd(ctx: Context, cfg: Config,api:APIService,logger:Logger) 
     .option('p', '[platform:string]')
     .action(async ({session, options}, input) => {
       let platform = options.p=='ss'? Platform.SS : Platform.BL
-      let rankOps:RenderOption = {
-        type:"local",
-        puppeteer:ctx.puppeteer,
-        // renderBaseURL: cfg.remoteRenderURL,
-        onStartRender() {
-          session.send(session.text('common.render.wait', {sec: cfg.rankWaitTimeout / 1000}))
-        },
-        waitTimeout: cfg.rankWaitTimeout
+
+      let onStartRender = () => {
+        session.send(session.text('common.render.wait', {sec: cfg.rankWaitTimeout / 1000}))
       }
-      const img = await renderRank(input, platform,api, rankOps)
+      const img = await render.renderRank(input, platform, onStartRender)
       session.sendQueued(img)
     })
     return {

@@ -1,9 +1,8 @@
 import {Context} from "koishi";
 import {Config} from "../config";
 import {BeatLeaderWS} from "./beatleader";
-import {ScoreSaberWS} from "./scoresaber";
 import {BeatSaverWS} from "./beatsaver";
-import {APIService} from "../service";
+import {APIService, RenderService} from "../service";
 
 class WS {
   closed: boolean;
@@ -31,17 +30,18 @@ export function pluginWS(ctx:Context, cfg:Config) {
   const bllogger = logger.extend('BeatSaverWS')
   const bslogger = logger.extend('BeatSaverWS')
   const  api = APIService.create(ctx,cfg)
+  const render = RenderService.create(ctx, cfg,api)
   const ws = {
-    bsws: new WS(BeatLeaderWS(ctx,cfg,api,bslogger)),
-    blws: new WS(BeatSaverWS(ctx,cfg,bllogger))
+    bsws: new WS(BeatLeaderWS(ctx,cfg,render,bslogger)),
+    blws: new WS(BeatSaverWS(ctx,cfg,render,bllogger))
   }
 
   ctx.setInterval(()=> {
     if(ws.blws.closed) {
-      ws.blws.reopen(BeatLeaderWS(ctx, cfg, api, bslogger))
+      ws.blws.reopen(BeatLeaderWS(ctx, cfg,render, bslogger))
     }
     if(ws.bsws.closed) {
-      ws.bsws.reopen(BeatSaverWS(ctx,cfg,bslogger))
+      ws.bsws.reopen(BeatSaverWS(ctx,cfg,render,bslogger))
     }
   }, 30000)
 }

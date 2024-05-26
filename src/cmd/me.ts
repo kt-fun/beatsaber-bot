@@ -1,13 +1,12 @@
 import {Context, Logger} from "koishi";
 import {Config} from "../config";
-import {RenderOption, renderRank, renderScore} from "../img-render";
-import {APIService} from "../service";
+import {APIService, RenderService} from "../service";
 import {convertDiff} from "../utils/converter";
 import {getUserBSAccountInfo} from "../service/db/db";
-import {Platform} from "../types/platform";
+import {Platform} from "../types";
 
 
-export function MeCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
+export function MeCmd(ctx:Context,cfg:Config, render:RenderService, api:APIService,logger:Logger) {
   const meCmd = ctx
     .command('bsbot.me [mapId:string]')
     .userFields(['id'])
@@ -40,14 +39,8 @@ export function MeCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
         return
       }
 
-      let renderOpts:RenderOption = {
-        type:'remote',
-        puppeteer: ctx.puppeteer,
-        renderBaseURL: cfg.remoteRenderURL,
-        waitTimeout: cfg.rankWaitTimeout,
-        onStartRender() {
-          session.sendQueued(session.text('common.render.wait', {sec: cfg.rankWaitTimeout / 1000}))
-        },
+      let onStartRender = () => {
+        session.send(session.text('common.render.wait', {sec: cfg.rankWaitTimeout / 1000}))
       }
       if(input && input !== "") {
         // todo improve diff opts
@@ -62,10 +55,11 @@ export function MeCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
         if(!scoreReq.isSuccess()) {
           return session.text('commands.bsbot.me.score-not-found',{user: accountId, id: input})
         }
-        const img = await renderScore(scoreReq.data.id.toString(), rankPlatform, api, renderOpts)
+
+        const img = await render.renderScore(scoreReq.data.id.toString(), rankPlatform,onStartRender)
         session.sendQueued(img)
       }else {
-        const img = await renderRank(accountId, rankPlatform, api, renderOpts)
+        const img = await render.renderRank(accountId, rankPlatform,onStartRender)
         session.sendQueued(img)
       }
     })

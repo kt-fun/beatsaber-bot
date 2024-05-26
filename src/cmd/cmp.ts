@@ -1,8 +1,8 @@
 import {Context, Logger} from "koishi";
 import {Config} from "../config";
-import {APIService} from "../service";
+import {APIService, RenderService} from "../service";
 
-export function CmpCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
+export function CmpCmd(ctx:Context,cfg:Config,render:RenderService,api:APIService,logger:Logger) {
   const cmpcmd = ctx
     .command('bsbot.cmp')
     .alias('bbcmp')

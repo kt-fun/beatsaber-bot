@@ -1,6 +1,5 @@
 /** @jsxImportSource react */
 import React from "react";
-import {BSMap} from "../../types";
 import RankIcon from "../components/icons/RankIcon";
 import {Calendar, Clock, Gauge, HeartPulse, Key, Star, ThumbsDown, ThumbsUp} from "lucide-react";
 import dayjs from "dayjs";
@@ -8,6 +7,7 @@ import {diffConv, formatNumber, formatTime, getTag} from "../utils";
 import {getMods} from "../utils/getMods";
 import Progressbar from "../components/progressbar";
 import {CharacteristicIcon} from "../components/characteristic";
+import {BSMap} from "../../api/interfaces/beatsaver";
 
 
 

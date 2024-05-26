@@ -1,7 +1,7 @@
 import {Context, h, Session} from "koishi";
 import {APIService} from "../../service";
 import {getUserBSAccountInfo} from "../../service/db/db";
-import {BSRelateOAuthAccount} from "../../index";
+import {BSRelateOAuthAccount} from "../../tables";
 
 
 export const handleScoreSaberBind = async (ctx:Context,api:APIService,{session,options}:{session: Session<'id',never, Context>, options:{}}, input:string) => {

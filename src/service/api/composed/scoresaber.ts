@@ -66,7 +66,7 @@ export class ScoreSaberService {
     } as ScoreSaberItem))
     return {
       scores: res,
-      userInfo: awaitedUserInfo.data
+      userInfo: awaitedUserInfo
     }
   }
 

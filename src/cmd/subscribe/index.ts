@@ -1,6 +1,6 @@
 import {$, Context, h, Logger} from "koishi";
 import { Config } from "../../config";
-import { APIService } from "../../service";
+import {APIService, RenderService} from "../../service";
 import {alert} from './alert'
 import {beatleader} from "./beatleader";
 import {beatsaver} from "./beatsaver";
@@ -9,7 +9,7 @@ export { UnSubscribeCmd } from './unsubscribe'
 export {JoinSubscribeCmd} from './subjoin'
 
 
-export function SubscribeCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
+export function SubscribeCmd(ctx:Context,cfg:Config,render:RenderService,api:APIService,logger:Logger) {
   const subcmd = ctx
     .command('bsbot.subscribe')
     .alias('bbsub')

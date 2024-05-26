@@ -1,12 +1,12 @@
 import {$, Context, h, Logger} from "koishi";
 import {Config} from "../../config";
-import {APIService} from "../../service";
-import {BLScoreFilter} from "../../types/beatleader-condition";
+import {APIService, RenderService} from "../../service";
+import {BLScoreFilter} from "../../types";
 
 
 
 // manage bl filter condition
-export function BLFilterCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
+export function BLFilterCmd(ctx:Context,cfg:Config,render:RenderService,api:APIService,logger:Logger) {
   const filterCmd = ctx
     .command('bsbot.subscribe.filter')
     .alias('bbfilter')

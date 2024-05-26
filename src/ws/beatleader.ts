@@ -1,12 +1,11 @@
 import {$, Context, h, Logger} from "koishi";
 import {Config} from "../config";
 import {BeatLeaderWSEvent} from "../types/api";
-import {RenderOption, renderScore} from "../img-render";
 import {BeatLeaderFilter} from "./bl-filter";
 import {Platform} from "../types";
-import {APIService} from "../service";
+import {APIService, RenderService} from "../service";
 
-export function BeatLeaderWS(ctx: Context, cfg:Config, api:APIService,logger:Logger) {
+export function BeatLeaderWS(ctx: Context, cfg:Config,render:RenderService, logger:Logger) {
 
   const ws = ctx.http.ws("wss://sockets.api.beatleader.xyz/scores") as any
   ws.on('open', (event)=> {
@@ -45,16 +44,10 @@ export function BeatLeaderWS(ctx: Context, cfg:Config, api:APIService,logger:Log
       //   const memberFilters = item.member.subscribeData
       //   return BeatLeaderFilter(data, ...channelFilters, ...memberFilters)
       // })
-      let renderOpts:RenderOption = {
-        type:'remote',
-        puppeteer:ctx.puppeteer,
-        renderBaseURL: cfg.remoteRenderURL,
-        waitTimeout: cfg.rankWaitTimeout,
-      }
       for (const item of subscribes) {
           const bot = ctx.bots[`${item.sub.platform}:${item.sub.selfId}`]
           if(!bot) continue
-          const img = await renderScore(data.id.toString(),Platform.BL,api, renderOpts)
+          const img = await render.renderScore(data.id.toString(),Platform.BL)
           const res = await ctx.database.get('binding', {
             platform: item.sub.platform,
             aid: item.member.memberUid

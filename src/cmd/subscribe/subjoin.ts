@@ -1,7 +1,7 @@
-import {Context, h} from "koishi";
+import {Context, h, Logger} from "koishi";
 import {Config} from "../../config";
-import {APIService} from "../../service";
-export function JoinSubscribeCmd(ctx:Context,cfg:Config,api:APIService) {
+import {APIService, RenderService} from "../../service";
+export function JoinSubscribeCmd(ctx:Context,cfg:Config,render:RenderService,api:APIService,logger:Logger) {
   const joinCmd = ctx
     .command('bsbot.subscribe.join')
     .alias('bbjoin')

@@ -18,7 +18,8 @@ import {} from 'koishi-plugin-cron'
 import {} from './utils/extendedMethod'
 import schedules from "./schedules";
 import {pluginWS} from "./ws";
-import {screenshotTmp} from "./img-render";
+import {screenshotTmp} from "./service/img-render/renderImg";
+import {BeatSaverMapMessage, BSBotSubscribe, BSRelateOAuthAccount, BSSubscribeMember} from "./tables";
 
 export * from './config'
 
@@ -36,56 +37,10 @@ declare module 'koishi' {
     BSRelateOAuthAccount: BSRelateOAuthAccount
     BeatSaverMapMessage:BeatSaverMapMessage,
   }
-  interface User {
-    bindSteamId: string
-  }
 }
 
 
-export interface BSRelateOAuthAccount {
-  id: number,
-  uid: number,
-  platform: string,
-  platformUid: string,
-  platformScope: string,
-  platformUname: string,
-  otherPlatformInfo: any,
-  accessToken: string,
-  refreshToken: string,
-  lastModifiedAt: Date,
-  lastRefreshAt: Date,
-  valid: string,
-  type: string,
-}
 
-interface BSBotSubscribe {
-  id: number,
-  platform: string,
-  selfId: string,
-  channelId: string|null,
-  enable: boolean,
-  uid: string,
-  time: Date,
-  type: string,
-  data: {
-    [key: string]: any
-  }
-}
-
-interface BSSubscribeMember {
-  id: number,
-  subscribeId: number,
-  memberUid: number,
-  subscribeData: any,
-  joinedAt: Date,
-}
-
-interface BeatSaverMapMessage {
-  id: number,
-  platform: string,
-  mapId: string,
-  messageId: number,
-}
 function pluginInit(ctx: Context, config:Config) {
   const zhLocal = require('./locales/zh-CN')
   ctx.i18n.define('zh-CN', zhLocal)
@@ -161,6 +116,7 @@ async function sendTmpHit(ctx,session) {
   session.sendQueued(hitmsg)
 }
 async function sendTmpScore(ctx,session) {
+
   const buf = await screenshotTmp(ctx.puppeteer, 'https://aiobs.ktlab.io/tmp/lb/score', '#render-result', ()=> {
     session.sendQueued(h('message', [
       "开始渲染打分榜了，请耐心等待 10s"

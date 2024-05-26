@@ -1,7 +1,7 @@
 import {BeatLeaderClient, BeatSaverClient} from "../base";
 import {sortScore} from "../sortScore";
 import {Leaderboard} from "../interfaces/beatleader";
-import {decode} from "../../../img-render/utils/bl/bsorDecoder";
+import {decode} from "../../img-render/utils/bl/bsorDecoder";
 
 
 interface MapDiffOption {

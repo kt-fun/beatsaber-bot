@@ -1,9 +1,8 @@
 import {Context, h, Logger} from "koishi";
 import {Config} from "../config";
-import {renderMap, RenderOption} from "../img-render";
-import {APIService} from "../service";
+import {APIService, RenderService} from "../service";
 
-export function IdSearchCmd(ctx:Context,cfg:Config,api:APIService, logger:Logger) {
+export function IdSearchCmd(ctx:Context,cfg:Config,render:RenderService,api:APIService, logger:Logger) {
   const searchIdCmd = ctx
     .command('bsbot.id [mapId:string]')
     .alias('bbid')
@@ -22,13 +21,10 @@ export function IdSearchCmd(ctx:Context,cfg:Config,api:APIService, logger:Logger
       if(!res.isSuccess()) {
         session.sendQuote(session.text('commands.bsbot.id.not-found',{input}))
       }else {
-        let renderOpt:RenderOption = {
-          type:'local',
-          puppeteer: ctx.puppeteer,
-          // renderBaseURL: cfg.remoteRenderURL,
-          waitTimeout: cfg.rankWaitTimeout,
+        let onStartRender = () => {
+          session.send(session.text('common.render.wait', {sec: cfg.rankWaitTimeout / 1000}))
         }
-        const image = await renderMap(res.data,renderOpt)
+        const image = await render.renderMap(res.data, onStartRender)
         await session.sendQueued(image)
         session.sendQueued(h.audio(res.data.versions[0].previewURL))
       }

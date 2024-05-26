@@ -1,6 +1,6 @@
 import {Context, Session} from "koishi";
 import {APIService} from "../../service";
-import {BSRelateOAuthAccount} from "../../index";
+import {BSRelateOAuthAccount} from "../../tables";
 
 
 export const handleBeatLeaderBind = async (ctx:Context,api:APIService,{session,options}:{session: Session<'id',never, Context>, options:{}}, input:string) => {

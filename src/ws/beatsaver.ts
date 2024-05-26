@@ -1,9 +1,9 @@
 import {$, Context, h, Logger} from "koishi";
 import {Config} from "../config";
 import {BeatSaverWSEvent} from "../types";
-import {renderMap, RenderOption} from "../img-render";
+import {RenderService} from "../service";
 
-export function BeatSaverWS(ctx: Context, config:Config,logger:Logger) {
+export function BeatSaverWS(ctx: Context, config:Config,render:RenderService,logger:Logger) {
   const ws = ctx.http.ws(config.beatSaverWSURL ?? "wss://ws.beatsaver.com/maps") as any
   ws.on('open', (evt)=> {
     logger.info("BeatsaverWS opened");
@@ -57,13 +57,7 @@ export function BeatSaverWS(ctx: Context, config:Config,logger:Logger) {
         }else {
           texts = [`谱师「${bsmap.uploader.name}」刚刚发布了新谱面，「${bsmap.name}」`]
         }
-        let renderOpt:RenderOption = {
-          type:'remote',
-          puppeteer: ctx.puppeteer,
-          renderBaseURL: config.remoteRenderURL,
-          waitTimeout: config.rankWaitTimeout,
-        }
-        let image = renderMap(bsmap,renderOpt)
+        let image = render.renderMap(bsmap)
         await bot.sendMessage(item.subscribe.channelId, h('message', texts))
         await bot.sendMessage(item.subscribe.channelId, await image)
         await bot.sendMessage(item.subscribe.channelId, h.audio(bsmap.versions[0].previewURL))

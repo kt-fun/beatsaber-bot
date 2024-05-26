@@ -1,19 +1,22 @@
 import {Context, Logger} from "koishi";
 import {Config} from "../../config";
-import {APIService} from "../../service";
+import {APIService, RenderService} from "../../service";
 import {handleScoreSaberBind} from "./bind-scoresaber";
 import {handleBeatSaverBind} from "./bind-beatsaver";
 import {handleBeatLeaderBind} from "./bind-beatleader";
-import {Platform} from "../../types/platform";
+import {Platform} from "../../types";
 
 
 
 
-export function BindCmd(ctx:Context,cfg:Config,api:APIService, logger:Logger) {
+export function BindCmd(ctx:Context,cfg:Config,render:RenderService,api:APIService, logger:Logger) {
   const bindCmd = ctx
     .command('bsbot.bind <scoresaberId:string>')
     .userFields(['id'])
     .alias('bbbind')
+    .alias('bbbindbs', {options: {p: "bs"}})
+    .alias('bbbindbl', {options: {p: "bl"}})
+    .alias('bbbindss', {options: {p: "ss"}})
     .option('p', '<platform:string>')
     .action(async ({ session, options }, input) => {
       if(!options.p) {

@@ -1,5 +1,5 @@
 import { Schema } from 'koishi'
-import {BLScoreFilter} from "./types/beatleader-condition";
+import {BLScoreFilter} from "./types";
 
 export interface Config {
   beatSaverHost: string,
@@ -8,7 +8,7 @@ export interface Config {
   minRawMatchMapIdLength: number,
   defaultWaitTimeout: number,
   rankWaitTimeout: number,
-  renderMode: 'local'| 'screenshot',
+  renderMode: 'local'| 'remote',
   bsOauthClientId: string,
   bsOauthClientSecret: string,
   blOauthClientId: string,
@@ -24,7 +24,7 @@ export const Config =Schema.object({
   beatSaverWSHost: Schema.string().default('wss://ws.beatsaver.com/maps'),
   remoteRenderURL: Schema.string().default('https://aiobs.ktlab.io'),
   minRawMatchMapIdLength: Schema.number().default(3),
-  renderMode: Schema.string().default('screenshot'),
+  renderMode: Schema.string().default('remote'),
   defaultWaitTimeout: Schema.number().default(3000),
   rankWaitTimeout: Schema.number().default(8000),
   bsNotifyMonitorCron: Schema.string().default("*/15 * * * *"),

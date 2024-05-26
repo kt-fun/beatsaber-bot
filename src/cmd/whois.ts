@@ -1,12 +1,11 @@
 import {Context, Logger} from "koishi";
 import {Config} from "../config";
-import {RenderOption, renderRank} from "../img-render";
-import {APIService} from "../service";
+import {APIService, RenderService} from "../service";
 import {getUserBSAccountInfo} from "../service/db/db";
 import '../utils/extendedMethod'
-import {Platform} from "../types/platform";
+import {Platform} from "../types";
 
-export function WhoisCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
+export function WhoisCmd(ctx:Context,cfg:Config,render:RenderService,api:APIService,logger:Logger) {
   const whois = ctx
     .command('bsbot.who')
     .alias('bbwho')
@@ -43,16 +42,10 @@ export function WhoisCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
         session.sendQuote(session.text('commands.bsbot.who.not-bind'))
         return
       }
-      let rankOps:RenderOption = {
-        type: 'remote',
-        puppeteer: ctx.puppeteer,
-        renderBaseURL: cfg.remoteRenderURL,
-        waitTimeout: cfg.rankWaitTimeout,
-        onStartRender() {
-          session.send(session.text('common.render.wait', {sec: cfg.rankWaitTimeout / 1000}))
-        }
+      let onStartRender = () => {
+        session.send(session.text('common.render.wait', {sec: cfg.rankWaitTimeout / 1000}))
       }
-      const img = await renderRank(accountId, rankPlatform, api, rankOps)
+      const img = await render.renderRank(accountId, rankPlatform, onStartRender)
       session.sendQueued(img)
     })
   return {

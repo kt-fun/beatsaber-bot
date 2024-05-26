@@ -1,9 +1,8 @@
 import {Context, h, Logger} from "koishi";
 import {Config} from "../config";
-import {renderMap, RenderOption} from "../img-render";
-import {APIService} from "../service";
+import {APIService, RenderService} from "../service";
 
-export function LatestCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
+export function LatestCmd(ctx:Context,cfg:Config, render:RenderService, api:APIService,logger:Logger) {
   const log = logger.extend('LatestCmd')
   const latestCmd = ctx
     .command('bsbot.latest')
@@ -18,18 +17,15 @@ export function LatestCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
         return
       }
       const text = session.text('commands.bsbot.latest.info')
-      session.sendQuote(text)
-
-      let renderOpt:RenderOption = {
-        type:'remote',
-        puppeteer: ctx.puppeteer,
-        renderBaseURL: cfg.remoteRenderURL,
-        waitTimeout: cfg.defaultWaitTimeout,
+      let onStartRender = () => {
+        session.send(session.text('common.render.wait', {sec: cfg.rankWaitTimeout / 1000}))
       }
+        session.sendQuote(text)
       const msgs = res.data.map(item=>  ({
         audio:h.audio(item.versions[0].previewURL),
-        image: renderMap(item,renderOpt)
+        image: render.renderMap(item, onStartRender)
       }))
+
       for (const msg of msgs) {
         session.sendQueued(await msg.image)
         session.sendQueued(msg.audio)

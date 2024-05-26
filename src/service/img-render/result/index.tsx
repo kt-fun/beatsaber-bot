@@ -1,12 +1,11 @@
 /** @jsxImportSource react */
-import {BSMap} from "../../types";
 import {renderImg} from "../render";
 import React from "react";
 import BSMapShare from "./bs-map";
 import SSPlayerPage from "./ss-player";
 import BLPlayerPage from "./bl-player";
 import Puppeteer from "koishi-plugin-puppeteer";
-import { ScoreSaberUser, ScoreSaberItem, BeatLeaderUser, Score } from "../interfaces";
+import {ScoreSaberUser, ScoreSaberItem, BeatLeaderUser, Score, BSMap} from "../interfaces";
 import { BLScore } from "./bl-score";
 
 export const renderBSMapImg = (puppeteer: Puppeteer, bsMap:BSMap, bsMapQrUrl:string, previewQrUrl:string, onStart?: ()=>void, onError?: (e?:any)=> void) => {

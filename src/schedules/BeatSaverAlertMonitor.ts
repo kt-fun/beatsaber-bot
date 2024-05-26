@@ -1,8 +1,7 @@
 import {$, Context, h, Logger} from "koishi";
 import {Config} from "../config";
-import {APIService} from "../service";
-import {renderMap, RenderOption} from "../img-render";
-import {BSRelateOAuthAccount} from "../index";
+import {APIService, RenderService} from "../service";
+import {BSRelateOAuthAccount} from "../tables";
 
 interface Alert {
   id: number,
@@ -12,7 +11,7 @@ interface Alert {
   time: string
 }
 
-const AlertMonitor = (ctx:Context,config:Config,api:APIService,logger:Logger) => async ()=> {
+const AlertMonitor = (ctx:Context,config:Config,render:RenderService,api:APIService,logger:Logger) => async ()=> {
   logger.info('trigger alertMonitor')
   const selection = ctx.database.join(['BSRelateOAuthAccount','BSBotSubscribe'])
   const subscribe = await selection.where(row=>
@@ -38,14 +37,14 @@ const AlertMonitor = (ctx:Context,config:Config,api:APIService,logger:Logger) =>
   // }))
   logger.info(`handle ${subscribe.length} account's notification`)
   for (const item of subscribes) {
-    await handleOauthNotify(item, ctx,config, api,logger)
+    await handleOauthNotify(item, ctx,config,render, api,logger)
   }
   logger.info(`handle notification over`)
 }
 
 export default AlertMonitor
 
-const handleOauthNotify = async (item:{sub,account: BSRelateOAuthAccount},ctx:Context,config:Config,api:APIService,logger:Logger) => {
+const handleOauthNotify = async (item:{sub,account: BSRelateOAuthAccount},ctx:Context,config:Config,render:RenderService,api:APIService,logger:Logger) => {
   const bot = ctx.bots[`${item.sub.platform}:${item.sub.selfId}`]
   if(!bot) {
     logger.info('no bot found, skip')
@@ -81,7 +80,7 @@ const handleOauthNotify = async (item:{sub,account: BSRelateOAuthAccount},ctx:Co
   try {
     for (const it of todo) {
       try {
-        const msg = await buildMessage(it, api,ctx,config, logger)
+        const msg = await buildMessage(it, render,api,ctx,config, logger)
         logger.info(`send alert id:${it.id}, type:${it.type}`)
         bot.sendMessage(item.sub.channelId, msg)
         res.data.lastNotifiedId = it.id
@@ -116,12 +115,10 @@ const selfMapCuratedRegex = /^(@\w._+)\sjust\scurated+\s#([a-f0-9]{1,5})/
 const selfMapUncuratedRegex = /^(@\w._+)\sjust\suncrated\syour\smap\s#([a-f0-9]{1,5}):\s\*\*(.+)\*\*.+Reason:\s\*"(.+)"\*/
 const selfMapDeletionRegex = /^Your map #([a-f0-9]{1,5}):.+Reason:\s\*"(.+)"\*$/
 
-async function buildMessage (alert:Alert,api:APIService,ctx:Context,cfg:Config,logger:Logger) {
+const noop = ()=>{}
+
+async function buildMessage (alert:Alert,render:RenderService,api:APIService,ctx:Context,cfg:Config,logger:Logger) {
   let msg = []
-  let renderOpts:RenderOption = {
-    type: 'local',
-    puppeteer: ctx.puppeteer,
-  }
   if(alert.type === "MapRelease") {
     const [full, username, mapId] =  releasedRegex.exec(alert.body)
     const res = await api.BeatSaver.wrapperResult().searchMapById(mapId)
@@ -129,7 +126,7 @@ async function buildMessage (alert:Alert,api:APIService,ctx:Context,cfg:Config,l
       logger.info(`failed to retrieve release map ${mapId},body: ${alert.body}`)
       msg = [`你关注的「${username}」发布了新谱面，但似乎因为某些原因找不到了，谱面ID：「${mapId}」`]
     }else {
-      const image = await renderMap(res.data,renderOpts)
+      const image = await render.renderMap(res.data,noop,noop,'local')
       msg = [
         `你关注的「${username}」发布了新谱面`,
         h('message', [image]),
@@ -143,7 +140,7 @@ async function buildMessage (alert:Alert,api:APIService,ctx:Context,cfg:Config,l
       logger.info(`failed to retrieve release map ${mapId},body: ${alert.body}`)
       msg = [`你关注的「${username}」Curate 了新谱面，但似乎因为某些原因找不到了，谱面ID：「${mapId}」`]
     }else {
-      const image = await renderMap(res.data,renderOpts)
+      const image = await render.renderMap(res.data,noop,noop,'local')
       msg = [`你关注的「${username}」Curate 了新谱面`,
         h('message', [image]),h('audio',{src: res.data.versions[0].previewURL})
       ]
@@ -151,7 +148,7 @@ async function buildMessage (alert:Alert,api:APIService,ctx:Context,cfg:Config,l
   }else if(alert.type === "Curation") {
     const [full, username, mapId] =  selfMapCuratedRegex.exec(alert.body)
     const res = await api.BeatSaver.wrapperResult().searchMapById(mapId)
-    const image = await renderMap(res.data,renderOpts)
+    const image = await render.renderMap(res.data,noop,noop,'local')
     msg = [`🎉，「${username}」刚刚 Curate 了你的谱面 ${mapId}`,
       h('message', [image]),h('audio',{src: res.data.versions[0].previewURL})
     ]
@@ -159,7 +156,7 @@ async function buildMessage (alert:Alert,api:APIService,ctx:Context,cfg:Config,l
   else if(alert.type === "Uncuration") {
     const [full, username, mapId, name, reason] =  selfMapUncuratedRegex.exec(alert.body)
     const res = await api.BeatSaver.wrapperResult().searchMapById(mapId)
-    const image = await renderMap(res.data,renderOpts)
+    const image = await render.renderMap(res.data,noop,noop,'local')
     msg = [`😯，「${username}」 刚刚 Uncurate 了你的谱面 ${mapId}，原因：${reason}`,
       h('message', [image]),h('audio',{src: res.data.versions[0].previewURL})
     ]
@@ -175,7 +172,7 @@ async function buildMessage (alert:Alert,api:APIService,ctx:Context,cfg:Config,l
   else if(alert.type === "Review") {
     const [full, username,mapId, mapName, review] =  reviewRegex.exec(alert.body)
     const res = await api.BeatSaver.wrapperResult().searchMapById(mapId)
-    const image = await renderMap(res.data,renderOpts)
+    const image = await render.renderMap(res.data,noop,noop,'local')
     msg = [`「${username}」 刚刚在你的谱面${mapName}(${mapId})中发表了评论：${review}`,
       h('message', [image]),h('audio',{src: res.data.versions[0].previewURL})
     ]

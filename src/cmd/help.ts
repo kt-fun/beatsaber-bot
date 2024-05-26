@@ -1,8 +1,8 @@
 import {Context, h, Logger} from "koishi";
 import {Config} from "../config";
-import {APIService} from "../service";
+import {APIService, RenderService} from "../service";
 
-export function HelpCmd(ctx:Context,cfg:Config,api:APIService,logger:Logger) {
+export function HelpCmd(ctx:Context,cfg:Config,render:RenderService,api:APIService,logger:Logger) {
   const helpCmd = ctx
     .command('bsbot.help')
     .alias('bbhelp')
