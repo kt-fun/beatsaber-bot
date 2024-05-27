@@ -3,3 +3,8 @@ export enum Platform {
   BS = 'beatsaver',
   BL = 'beatleader',
 }
+
+export enum ImgRenderMode {
+  Local = 'local',
+  Remote = 'remote',
+}

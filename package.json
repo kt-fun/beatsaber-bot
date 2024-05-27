@@ -50,11 +50,13 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
     "globals": "^15.3.0",
+    "globby": "^14.0.1",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.5",
     "prettier": "^3.2.5",
+    "typescript": "^5.4.5",
     "typescript-eslint": "^7.10.0",
-    "vitepress": "^1.0.0-rc.44"
+    "vitepress": "^1.2.2"
   },
   "peerDependencies": {
     "@loskir/styled-qr-code-node": "^1.5.1",
@@ -77,12 +79,15 @@
     "lint-fix": "eslint --fix src",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
-    "build": "esbuild ./src"
+    "clean": "rm -rf lib  tsconfig.tsbuildinfo",
+    "copy-yml-resource": "node ./scripts/build.mjs",
+    "compile": "tsc",
+    "build": "npm run clean && npm run copy-yml-resource && npm run compile",
+    "pub": "npm run build && npm publish"
   },
   "lint-staged": {
     "*.{js,ts,vue,jsx,tsx}": [
-      "eslint --cache --fix src",
-      "git add"
+      "eslint --cache --fix src"
     ]
   }
 }
