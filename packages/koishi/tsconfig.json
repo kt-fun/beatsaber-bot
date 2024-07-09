@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib",
+    "jsx": "react-jsx",
+    "jsxImportSource": "@satorijs/element",
+    "sourceMap": true,
+    "types": [
+      "node",
+      "react"
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["**/*.spec.ts"],
+//  for koishi build tool: prevent yakomo-tsc copy source js to output file
+  "atsc": {
+    "loaders": [".yaml",".yml",".js"]
+  }
+}

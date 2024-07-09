@@ -1,0 +1,80 @@
+{
+  "name": "koishi-plugin-beatsaber-bot",
+  "description": "一个 用于 BeatSaber 的 koishi Bot 插件",
+  "version": "0.1.0-rc.patch14",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "ktKongTong",
+    "email": "kt@ktlab.io"
+  },
+  "repository": "https://github.com/ktKongTong/koishi-beats-bot",
+  "homepage": "https://koishi-beats-bot.vercel.app/",
+  "keywords": [
+    "beatsaber",
+    "koishi",
+    "koishi-plugin"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "koishi": {
+    "service": {
+      "required": [
+        "database",
+        "puppeteer",
+        "cron"
+      ]
+    },
+    "locales": [
+      "en",
+      "zh"
+    ],
+    "description": {
+      "en": "a koishi bot plugin for BeatSaber",
+      "zh": "一个 BeatSaber Bot 插件"
+    }
+  },
+  "devDependencies": {
+    "@koishijs/plugin-console": "^5.29.1",
+    "@koishijs/plugin-database-sqlite": "^4.4.1",
+    "@koishijs/plugin-echo": "^2.2.5",
+    "@koishijs/plugin-http": "^0.5.3",
+    "@koishijs/plugin-logger": "^2.6.8",
+    "@koishijs/plugin-mock": "^2.6.6",
+    "@koishijs/plugin-sandbox": "^3.3.1",
+    "@types/node": "^20.14.2",
+    "esbuild-register": "^3.5.0",
+    "koishi": "4.17.4",
+    "koishi-plugin-adapter-onebot": "6.5.3",
+    "koishi-plugin-cron": "^3.1.0",
+    "koishi-plugin-puppeteer": "^3.8.4",
+    "beatsaber-bot-core": "workspace:*"
+  },
+  "peerDependencies": {
+    "js-yaml": "^4.1.0",
+    "lodash": "^4.17.21",
+    "beatsaber-bot-core": "workspace:*",
+    "dayjs": "^1.11.3",
+    "koishi": "^4.17.4",
+    "koishi-plugin-cron": "^3.1.0",
+    "koishi-plugin-puppeteer": "^3.7.3"
+  },
+
+  "scripts": {
+    "typecheck": "tsc",
+    "compile": "tsc -p tsconfig.build.json  && tsc-alias",
+    "copy-yml-resource": "node scripts/build.mjs",
+    "clean": "rm -rf lib  tsconfig.tsbuildinfo",
+    "build": "pnpm run copy-yml-resource && pnpm run compile",
+    "dev": "ts-node dev/index.ts && tsc-alias --debug",
+    "bd": "pnpm run build & pnpm run dev",
+    "kdev": "koishi start dev/koishi.yml"
+  }
+}
