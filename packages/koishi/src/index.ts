@@ -42,10 +42,6 @@ function loadCmd(ctx: Context, config: Config) {
       desc = optional ? `[${desc}]` : `<${desc}>`
       cmd = cmd.option(option.name, desc)
     }
-    // getUidAndGidOfSession
-    // feed in session
-    // ctx.database.get('')
-
     const db = new KoishiDB(ctx)
     const api = APIService.create(config)
     // @ts-ignore
@@ -59,8 +55,28 @@ function loadCmd(ctx: Context, config: Config) {
         selfId: session.selfId,
         platform: session.platform,
       }
+      const mentionReg = /<at\s+id="(\w+)"\/>/
+      let content = session.content
+      const ids = []
+      let match
+      while ((match = mentionReg.exec(content)) !== null) {
+        ids.push(match[1])
+        content = content.replace(match[0], '')
+      }
+      const idChans = ids
+        .filter((it) => it.uid == session.selfId)
+        .map((id) => ({
+          uid: id,
+          channelId: session.channelId,
+          selfId: session.selfId,
+          platform: session.platform,
+        }))
+      const uags = idChans.map((idChan) => {
+        return db.getUAndGBySessionInfo(idChan)
+      })
       const [u, g] = await db.getUAndGBySessionInfo(s)
-      const kSession = new KSession(session, u, g)
+      const mentions = (await Promise.all(uags)).map((it) => it?.[0])
+      const kSession = new KSession(session, u, g, mentions)
       const ctx = {
         api: api,
         logger: logger,

@@ -6,15 +6,30 @@ export class KSession implements Session<ChannelInfo> {
   // create a session Object?
   private readonly session: KoiSession
   lang: string
-  mentions: number[]
+  mentions: RelateChannelInfo<ChannelInfo>[] = []
   u: RelateChannelInfo<ChannelInfo>
   g: RelateChannelInfo<ChannelInfo>
-  constructor(session: KoiSession, u, g) {
+  constructor(session: KoiSession, u, g, mentions) {
     this.session = session
     this.u = u
     this.g = g
+    this.mentions = mentions
     this.lang = 'zh-cn'
   }
+  // convert sessionInfo
+  mentionReg = /<at\s+id="(\w+)"\/>/
+  transformMention(session: KoiSession): void {
+    let content = session.content
+    const ids = []
+    let match
+    while ((match = this.mentionReg.exec(content)) !== null) {
+      ids.push(match[1])
+      content = content.replace(match[0], '')
+    }
+    //channel info to uid
+    this.mentions = ids
+  }
+
   getSessionInfo(): ChannelInfo {
     return {
       uid: this.session.uid,

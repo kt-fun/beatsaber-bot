@@ -4,7 +4,9 @@ export default () =>
   new CommandBuilder()
     .setName('subleave')
     .addAlias('bbleave')
-    .addOption('type', '<type:string>')
+    .addAlias('/leavebl', { type: 'beatleader' })
+    .addAlias('/leavebs', { type: 'beatsaver' })
+    .addOption('type', 'type:string')
     .setDescription('clear an auth account relate info')
     .setExecutor(async (c) => {
       // getUserJoinedGroupMember

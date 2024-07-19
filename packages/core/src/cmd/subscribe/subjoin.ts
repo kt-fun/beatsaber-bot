@@ -3,7 +3,9 @@ export default () =>
   new CommandBuilder()
     .setName('subjoin')
     .addAlias('bbjoin')
-    .addOption('type', '<type:string>')
+    .addAlias('/joinbl', { type: 'beatleader' })
+    .addAlias('/joinbs', { type: 'beatsaver' })
+    .addOption('type', 'type:string')
     .setDescription('clear an auth account relate info')
     .setExecutor(async (c) => {
       const { blSub, bsMapSub } = await c.db.getSubscriptionsByGID(

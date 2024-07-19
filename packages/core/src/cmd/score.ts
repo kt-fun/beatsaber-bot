@@ -7,8 +7,8 @@ export default () =>
     .addOption('p', 'platform:string')
     .addOption('d', 'diffculty:string')
     .addOption('m', 'mode:string')
-    .setDescription('clear an auth account relate info')
     .addAlias('bbscore')
+    .addAlias('/score')
     .setExecutor(async (c) => {
       const platform = c.options.p == 'ss' ? Platform.SS : Platform.BL
       const onStartRender = () => {

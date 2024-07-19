@@ -10,7 +10,7 @@ export interface BotService<T extends ChannelInfo, S extends Session<T>> {
 export interface Session<T extends any = any> {
   u: RelateChannelInfo<T>
   g: RelateChannelInfo<T>
-  mentions: (number | undefined)[]
+  mentions: (RelateChannelInfo<T> | undefined)[]
   getSessionInfo(): T
   sendImgBuffer(content: any, mimeType?: string): Promise<void>
   sendImgUrl(url: string): Promise<void>

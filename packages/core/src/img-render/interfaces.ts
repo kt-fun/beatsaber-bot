@@ -1,8 +1,6 @@
-import Puppeteer from 'koishi-plugin-puppeteer'
-
 interface BaseRenderOpts {
   type: 'local' | 'remote'
-  puppeteer: Puppeteer
+  puppeteer: any
   onRenderStart?: () => void
   onRenderError?: (e) => void
   customBackground?: string

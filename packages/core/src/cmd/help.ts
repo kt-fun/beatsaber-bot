@@ -3,6 +3,7 @@ import { CommandBuilder } from '@/cmd/builder'
 export default () =>
   new CommandBuilder()
     .setName('help')
+    .addAlias('/help')
     .addAlias('bbhelp')
     .addAlias('!help')
     .setDescription('clear an auth account relate info')

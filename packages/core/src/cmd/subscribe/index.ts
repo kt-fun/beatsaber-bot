@@ -6,6 +6,8 @@ export default () =>
   new CommandBuilder()
     .setName('subscribe')
     .addAlias('bbsub')
+    .addAlias('/subbl', { type: 'beatleader' })
+    .addAlias('/subbs', { type: 'beatsaver' })
     .addOption('type', '<type:string>')
     .setDescription('clear an auth account relate info')
     .setExecutor(async (c) => {

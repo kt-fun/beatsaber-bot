@@ -5,7 +5,7 @@ import { Bot, h } from 'koishi'
 export class KoishiSession implements Session<ChannelInfo> {
   bot: Bot
   channelInfo: ChannelInfo
-  mentions: number[]
+  mentions: RelateChannelInfo<ChannelInfo>[] = []
   g: RelateChannelInfo<ChannelInfo>
   u: RelateChannelInfo<ChannelInfo>
   lang: string

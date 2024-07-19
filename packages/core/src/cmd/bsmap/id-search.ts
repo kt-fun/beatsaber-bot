@@ -3,7 +3,9 @@ import { CommandBuilder } from '@/cmd/builder'
 export default () =>
   new CommandBuilder()
     .setName('id') // <mapId:string>
+    .addAlias('/id')
     .addAlias('bbid')
+    .addAlias('/bbid')
     .addAlias('!bsr')
     // .shortcut(/(^[0-9a-fA-F]{3,5}$)/, { args: ['$1'] })
     .setDescription('clear an auth account relate info')
@@ -32,7 +34,8 @@ export default () =>
           )
         }
         const image = await c.render.renderMap(res.data, onStartRender)
-        await c.session.sendQueued(image)
+        // upload to s3?
+        await c.session.send(image)
         c.session.sendAudio(res.data.versions[0].previewURL)
       }
     })

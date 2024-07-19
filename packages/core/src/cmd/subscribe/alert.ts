@@ -1,4 +1,3 @@
-// import { Context, h, Logger } from 'koishi'
 // import { APIService } from '../../service'
 //
 // export const alert = async (

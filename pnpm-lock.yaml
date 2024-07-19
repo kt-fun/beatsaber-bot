@@ -79,7 +79,7 @@ importers:
         version: 8.0.0-alpha.30(eslint@9.5.0)(typescript@5.4.5)
       vitepress:
         specifier: ^1.2.3
-        version: 1.2.3(@algolia/client-search@4.23.3)(@types/node@20.14.2)(@types/react@18.3.3)(jwt-decode@4.0.0)(postcss@8.4.38)(react-dom@18.3.1(react@0.14.10))(react@0.14.10)(search-insights@2.14.0)(typescript@5.4.5)
+        version: 1.2.3(@algolia/client-search@4.23.3)(@types/node@20.14.2)(@types/react@18.3.3)(axios@1.7.2)(postcss@8.4.38)(react-dom@18.3.1(react@0.14.10))(react@0.14.10)(search-insights@2.14.0)(typescript@5.4.5)
 
   packages/core:
     dependencies:
@@ -98,15 +98,6 @@ importers:
       dayjs:
         specifier: ^1.11.3
         version: 1.11.11
-      koishi:
-        specifier: ^4.17.4
-        version: 4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2))
-      koishi-plugin-cron:
-        specifier: ^3.1.0
-        version: 3.1.0(koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2)))
-      koishi-plugin-puppeteer:
-        specifier: ^3.7.3
-        version: 3.8.4(koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2)))
       lucide-react:
         specifier: ^0.379.0
         version: 0.379.0(react@18.3.1)
@@ -132,6 +123,9 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
     devDependencies:
+      '@koishijs/plugin-adapter-qq':
+        specifier: 4.6.2
+        version: 4.6.2(@satorijs/satori@3.7.0)(koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2)))
       '@koishijs/plugin-console':
         specifier: ^5.29.1
         version: 5.29.1(koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2)))
@@ -153,6 +147,9 @@ importers:
       '@koishijs/plugin-sandbox':
         specifier: ^3.3.1
         version: 3.3.1(@koishijs/plugin-console@5.29.1(koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2))))(koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2)))
+      '@satorijs/adapter-qq':
+        specifier: 4.6.2
+        version: 4.6.2(@satorijs/satori@3.7.0)
       '@types/node':
         specifier: ^20.14.2
         version: 20.14.2
@@ -171,9 +168,18 @@ importers:
       koishi-plugin-cron:
         specifier: ^3.1.0
         version: 3.1.0(koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2)))
+      koishi-plugin-downloads:
+        specifier: 0.1.3
+        version: 0.1.3(koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2)))
+      koishi-plugin-ffmpeg:
+        specifier: 1.1.0
+        version: 1.1.0(koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2)))
       koishi-plugin-puppeteer:
         specifier: ^3.8.4
         version: 3.8.4(koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2)))
+      koishi-plugin-silk:
+        specifier: 1.3.1
+        version: 1.3.1(koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2)))
 
 packages:
 
@@ -591,6 +597,11 @@ packages:
     peerDependencies:
       '@koishijs/core': 4.17.4
 
+  '@koishijs/plugin-adapter-qq@4.6.2':
+    resolution: {integrity: sha512-eumnCFgCdf6CgsJ+Uu3X72/2LxoQwIb2lwouaw1WUf51t8NEKq5Ck5MdZYFAMyC19+5tdW+WvO/UJ6TS154LsA==}
+    peerDependencies:
+      koishi: ^4.17.3
+
   '@koishijs/plugin-console@5.29.1':
     resolution: {integrity: sha512-oio5txymTs9X0Vd6K88wCPKPvXVBcINV018tFYBpAOeCkl5LQKtxghxO5YgUqstc2pep6Un2ZBFCWTbFAKyI+g==}
     peerDependencies:
@@ -787,6 +798,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@satorijs/adapter-qq@4.6.2':
+    resolution: {integrity: sha512-HkJyXMn+pwae8ZSnXAQD2docMhg7Vq8B5dkfEIhf19PcEW6cdaPkQMhz04Jn0LVtVdTzIx8ILY7UlqZzKoZe3g==}
+    peerDependencies:
+      '@satorijs/satori': ^3.6.5
+
   '@satorijs/core@3.7.0':
     resolution: {integrity: sha512-aNDt0E0DEW/jqQuQGKzW68w5uu/ZUkjgr+VyOrctOdfd4+HCTgnsFYDjJmKfN4GzahaxuFzm19KYMCD6tHdNVA==}
 
@@ -804,6 +820,10 @@ packages:
 
   '@shikijs/transformers@1.6.5':
     resolution: {integrity: sha512-iuKa1uQtPQEe5vgCsXIb162b/3imRiAIdoF5IqafrTWL1uqZUpipfPjWZPuAAszOzYU//yIYRbhUk8reHVXA/w==}
+
+  '@shopify/semaphore@3.1.0':
+    resolution: {integrity: sha512-LxonkiWEu12FbZhuOMhsdocpxCqm7By8C/2U9QgNuEoXUx2iMrlXjJv3p93RwfNC6TrdlNRo17gRer1z1309VQ==}
+    engines: {node: '>=18.12.0'}
 
   '@sindresorhus/merge-streams@2.3.0':
     resolution: {integrity: sha512-LtoMMhxAlorcGhmFYI+LhPgbPZCkgP6ra1YL604EeF6U98pLlQ3iWIGMdWSC+vWmPBWBNgmDBAhnAobLROJmwg==}
@@ -1208,9 +1228,15 @@ packages:
     resolution: {integrity: sha512-qEdtR2UH78yyHX/AUNfXmJTlM48XoFZKBdwi1nzkI1mJL21cmbu0cvjxjpkXJ5NENMq42H+hNs8VLJcqXLerBQ==}
     engines: {node: '>= 0.8'}
 
+  asynckit@0.4.0:
+    resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
+
   available-typed-arrays@1.0.7:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
+
+  axios@1.7.2:
+    resolution: {integrity: sha512-2A8QhOMrbomlDuiLeK9XibIBzuHeRcqqNOHp0Cyp5EoJ1IFDh+XZH3A6BkXtv0K4gFGCI0Y4BM7B1wOEi0Rmgw==}
 
   b4a@1.6.6:
     resolution: {integrity: sha512-5Tk1HLk6b6ctmjIkAcU/Ujv/1WqiDl0F0JdRCR80VsOcUlHcu7pWeWRlOqQLHfDEsVx9YH/aif5AG4ehoCtTmg==}
@@ -1450,6 +1476,10 @@ packages:
   colorette@2.0.20:
     resolution: {integrity: sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==}
 
+  combined-stream@1.0.8:
+    resolution: {integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==}
+    engines: {node: '>= 0.8'}
+
   commander@12.1.0:
     resolution: {integrity: sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==}
     engines: {node: '>=18'}
@@ -1620,6 +1650,10 @@ packages:
   degenerator@5.0.1:
     resolution: {integrity: sha512-TllpMR/t0M5sqCXfj85i4XaAzxmS5tVA16dqvdkMwGmzI+dXLXnw3J+3Vdv7VKw+ThlTMboK6i9rnZ6Nntj5CQ==}
     engines: {node: '>= 14'}
+
+  delayed-stream@1.0.0:
+    resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
+    engines: {node: '>=0.4.0'}
 
   delegates@1.0.0:
     resolution: {integrity: sha512-bd2L678uiWATM6m5Z1VzNCErI3jiGzt6HGY8OVICs40JQq/HALfbyNJmp0UDakEY4pMMaN0Ly5om/B1VI/+xfQ==}
@@ -1916,8 +1950,21 @@ packages:
   focus-trap@7.5.4:
     resolution: {integrity: sha512-N7kHdlgsO/v+iD/dMoJKtsSqs5Dz/dXZVebRgJw23LDk+jMi/974zyiOYDziY2JPp8xivq9BmUGwIJMiuSBi7w==}
 
+  follow-redirects@1.15.6:
+    resolution: {integrity: sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+
   for-each@0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
+
+  form-data@4.0.0:
+    resolution: {integrity: sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==}
+    engines: {node: '>= 6'}
 
   formidable@2.1.2:
     resolution: {integrity: sha512-CM3GuJ57US06mlpQ47YcunuUZ9jpm8Vx+P2CGt2j7HpgkKZO/DJYQ0Bobim8G6PFQmK5lOqOOdUXboU+h73A4g==}
@@ -1979,6 +2026,9 @@ packages:
   get-intrinsic@1.2.4:
     resolution: {integrity: sha512-5uYhsJH8VJBTv7oslg4BznJYhDoRI6waYCxMmCdnTrcCrHA/fCFKoTFz2JKKE0HdDFUF7/oQuhzumXJK7paBRQ==}
     engines: {node: '>= 0.4'}
+
+  get-registry@1.1.0:
+    resolution: {integrity: sha512-D/0p/sxhBYQVVHJA7e8r47HSLeU7OTEfBxDR2v5AY9wU0l8esIsD6hbaAdVYRx8HVSQCgwgDHHxWT+rhoisnkQ==}
 
   get-stream@5.2.0:
     resolution: {integrity: sha512-nBF+F1rAZVCu/p7rjzgA+Yb4lfYXrpl7a6VmJrU8wF9I1CKvP/QwPNZHnOlwbTkY6dvtFIzFMSyQXbLoTQPRpA==}
@@ -2357,10 +2407,6 @@ packages:
     engines: {node: '>=0.8.8'}
     hasBin: true
 
-  jwt-decode@4.0.0:
-    resolution: {integrity: sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==}
-    engines: {node: '>=18'}
-
   keygrip@1.1.0:
     resolution: {integrity: sha512-iYSchDJ+liQ8iwbSI2QqsQOvqv58eJCEanyJPJi+Khyu8smkcKSFUCbPwzFcL7YVtZ6eONjqRX/38caJ7QjRAQ==}
     engines: {node: '>= 0.6'}
@@ -2400,10 +2446,25 @@ packages:
     peerDependencies:
       koishi: ^4.15.6
 
+  koishi-plugin-downloads@0.1.3:
+    resolution: {integrity: sha512-TyNWwWPwpwB56x+p0XDmApOnHZRURUsNSSXD8SotF/EbFv7Nf1K9SLgU0+9HugykgnOUxiKvoUswx3DL5AOLFA==}
+    peerDependencies:
+      koishi: ^4.15.4
+
+  koishi-plugin-ffmpeg@1.1.0:
+    resolution: {integrity: sha512-DiDgbYugIrEfVZDJGX/R8H1RNL6ENeP51OFw7rVOYKdBOXzjg3SOjO8gFw/zDYYGW50qdkGu8HdmNrpPZ7/JsA==}
+    peerDependencies:
+      koishi: ^4.15.5
+
   koishi-plugin-puppeteer@3.8.4:
     resolution: {integrity: sha512-Fjd8wsgluY+FApm7QCDjpvPoZUXFBNu0J3hNvB3LyIFTerUyachxwynFP31zW4aWd73+hgtoOl4D0Ruufgpl+Q==}
     peerDependencies:
       koishi: ^4.17.3
+
+  koishi-plugin-silk@1.3.1:
+    resolution: {integrity: sha512-CzEWZDxyncIvQMiYsileSo6v77B3/K3jo33W/R3C34V/QCl3+Xj0mOz1NXg8RYFsp7flBZsvnotWt+6RdAVrqA==}
+    peerDependencies:
+      koishi: ^4.17.7
 
   koishi@4.17.4:
     resolution: {integrity: sha512-9lCvzkBGAyWFaYzAg51M487YxR2Nc9qRTfw/6PVDpW+R1m6PHQh6Bn67w1DbOQEo3rq5y8FGvN3d7j+eSi5rLg==}
@@ -2637,6 +2698,9 @@ packages:
   negotiator@0.6.3:
     resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
     engines: {node: '>= 0.6'}
+
+  nereid@0.0.5:
+    resolution: {integrity: sha512-94w0iIvC2EwORtZjEg1s/AgujltlxMRNFokPzLT4+doxytIgdODh8FktrruMb3JShv2lP9f/h0br0XWaptCseQ==}
 
   netmask@2.0.2:
     resolution: {integrity: sha512-dBpDMdxv9Irdq66304OLfEmQ9tbNRFnFTuZiLo+bD+r332bBmMJ8GBLXklIXXgxd3+v9+KUnZaUR5PJMa75Gsg==}
@@ -3155,6 +3219,10 @@ packages:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
 
+  silk-wasm@3.6.1:
+    resolution: {integrity: sha512-8LeNBvnrXp4zCu9XIdhv8sUNdgvs6LR5SlQC1+JWD7SsPvDrfRCV5WLplDLXRyl1Z4hhBtoLXc2TEuPIU5P7Zg==}
+    engines: {node: '>=16.14.0'}
+
   simple-concat@1.0.1:
     resolution: {integrity: sha512-cSFtAPtRhljv69IK0hTVZQ+OfE9nePi/rtJmw5UjHeVyVroEqJXP1sFztKUy1qU+xvz3u/sfYJLa947b7nAN2Q==}
 
@@ -3354,6 +3422,10 @@ packages:
 
   text-table@0.2.0:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}
+
+  throttle-debounce@5.0.2:
+    resolution: {integrity: sha512-B71/4oyj61iNH0KeCamLuE2rmKuTO5byTOSVwECM5FA7TiAiAW+UqTKZ9ERueC4qvgSttUhdmq1mXC3kJqGX7A==}
+    engines: {node: '>=12.22'}
 
   through@2.3.8:
     resolution: {integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==}
@@ -3605,6 +3677,10 @@ packages:
 
   which-module@2.0.1:
     resolution: {integrity: sha512-iBdZ57RDvnOR9AGBhML2vFZf7h8vmBjhoaZqODJBFWHVtKkDmKuHai3cx5PgVMrX5YDNp27AofYbAwctSS+vhQ==}
+
+  which-pm-runs@1.1.0:
+    resolution: {integrity: sha512-n1brCuqClxfFfq/Rb0ICg9giSZqCS+pLtccdag6C2HyufBrh3fBOiy9nb6ggRMvWOVH5GrdJskj5iGTZNxd7SA==}
+    engines: {node: '>=4'}
 
   which-pm@2.0.0:
     resolution: {integrity: sha512-Lhs9Pmyph0p5n5Z3mVnN0yWcbQYUAD7rbQUiMsQxOJ3T57k7RFe35SUwWMf7dsbDZks1uOmw4AecB/JMDj3v/w==}
@@ -4261,6 +4337,13 @@ snapshots:
       js-yaml: 4.1.0
       ns-require: 1.1.4
 
+  '@koishijs/plugin-adapter-qq@4.6.2(@satorijs/satori@3.7.0)(koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2)))':
+    dependencies:
+      '@satorijs/adapter-qq': 4.6.2(@satorijs/satori@3.7.0)
+      koishi: 4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2))
+    transitivePeerDependencies:
+      - '@satorijs/satori'
+
   '@koishijs/plugin-console@5.29.1(koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2)))':
     dependencies:
       '@koishijs/console': 5.29.1(koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2)))
@@ -4463,6 +4546,10 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.18.0':
     optional: true
 
+  '@satorijs/adapter-qq@4.6.2(@satorijs/satori@3.7.0)':
+    dependencies:
+      '@satorijs/satori': 3.7.0
+
   '@satorijs/core@3.7.0':
     dependencies:
       '@cordisjs/plugin-http': 0.4.2(cordis@3.16.2)
@@ -4497,6 +4584,8 @@ snapshots:
   '@shikijs/transformers@1.6.5':
     dependencies:
       shiki: 1.6.5
+
+  '@shopify/semaphore@3.1.0': {}
 
   '@sindresorhus/merge-streams@2.3.0': {}
 
@@ -4811,14 +4900,14 @@ snapshots:
       - '@vue/composition-api'
       - vue
 
-  '@vueuse/integrations@10.11.0(focus-trap@7.5.4)(jwt-decode@4.0.0)(vue@3.4.29(typescript@5.4.5))':
+  '@vueuse/integrations@10.11.0(axios@1.7.2)(focus-trap@7.5.4)(vue@3.4.29(typescript@5.4.5))':
     dependencies:
       '@vueuse/core': 10.11.0(vue@3.4.29(typescript@5.4.5))
       '@vueuse/shared': 10.11.0(vue@3.4.29(typescript@5.4.5))
       vue-demi: 0.14.8(vue@3.4.29(typescript@5.4.5))
     optionalDependencies:
+      axios: 1.7.2
       focus-trap: 7.5.4
-      jwt-decode: 4.0.0
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
@@ -4961,9 +5050,19 @@ snapshots:
 
   ast-types@0.9.6: {}
 
+  asynckit@0.4.0: {}
+
   available-typed-arrays@1.0.7:
     dependencies:
       possible-typed-array-names: 1.0.0
+
+  axios@1.7.2:
+    dependencies:
+      follow-redirects: 1.15.6
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
 
   b4a@1.6.6: {}
 
@@ -5251,6 +5350,10 @@ snapshots:
 
   colorette@2.0.20: {}
 
+  combined-stream@1.0.8:
+    dependencies:
+      delayed-stream: 1.0.0
+
   commander@12.1.0: {}
 
   commander@2.20.3: {}
@@ -5416,6 +5519,8 @@ snapshots:
       ast-types: 0.13.4
       escodegen: 2.1.0
       esprima: 4.0.1
+
+  delayed-stream@1.0.0: {}
 
   delegates@1.0.0: {}
 
@@ -5798,9 +5903,17 @@ snapshots:
     dependencies:
       tabbable: 6.2.0
 
+  follow-redirects@1.15.6: {}
+
   for-each@0.3.3:
     dependencies:
       is-callable: 1.2.7
+
+  form-data@4.0.0:
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      mime-types: 2.1.35
 
   formidable@2.1.2:
     dependencies:
@@ -5874,6 +5987,10 @@ snapshots:
       has-proto: 1.0.3
       has-symbols: 1.0.3
       hasown: 2.0.2
+
+  get-registry@1.1.0:
+    dependencies:
+      which-pm-runs: 1.1.0
 
   get-stream@5.2.0:
     dependencies:
@@ -6241,9 +6358,6 @@ snapshots:
       object-assign: 2.1.1
       source-map: 0.4.4
 
-  jwt-decode@4.0.0:
-    optional: true
-
   keygrip@1.1.0:
     dependencies:
       tsscmp: 1.0.6
@@ -6310,6 +6424,20 @@ snapshots:
       cron-parser: 4.9.0
       koishi: 4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2))
 
+  koishi-plugin-downloads@0.1.3(koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2))):
+    dependencies:
+      koishi: 4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2))
+      nereid: 0.0.5
+      open: 8.4.2
+      throttle-debounce: 5.0.2
+    transitivePeerDependencies:
+      - debug
+
+  koishi-plugin-ffmpeg@1.1.0(koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2))):
+    dependencies:
+      get-registry: 1.1.0
+      koishi: 4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2))
+
   koishi-plugin-puppeteer@3.8.4(koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2))):
     dependencies:
       '@koishijs/canvas': 0.2.0(koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2)))
@@ -6320,6 +6448,12 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+
+  koishi-plugin-silk@1.3.1(koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2))):
+    dependencies:
+      '@shopify/semaphore': 3.1.0
+      koishi: 4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2))
+      silk-wasm: 3.6.1
 
   koishi@4.17.4(cordis@3.16.2)(undios@0.3.3(cordis@3.16.2)):
     dependencies:
@@ -6571,6 +6705,13 @@ snapshots:
   natural-compare@1.4.0: {}
 
   negotiator@0.6.3: {}
+
+  nereid@0.0.5:
+    dependencies:
+      axios: 1.7.2
+      tar-stream: 3.1.7
+    transitivePeerDependencies:
+      - debug
 
   netmask@2.0.2: {}
 
@@ -7096,6 +7237,8 @@ snapshots:
 
   signal-exit@4.1.0: {}
 
+  silk-wasm@3.6.1: {}
+
   simple-concat@1.0.1: {}
 
   simple-get@3.1.1:
@@ -7328,6 +7471,8 @@ snapshots:
 
   text-table@0.2.0: {}
 
+  throttle-debounce@5.0.2: {}
+
   through@2.3.8: {}
 
   tmp@0.0.33:
@@ -7520,7 +7665,7 @@ snapshots:
       '@types/node': 20.14.2
       fsevents: 2.3.3
 
-  vitepress@1.2.3(@algolia/client-search@4.23.3)(@types/node@20.14.2)(@types/react@18.3.3)(jwt-decode@4.0.0)(postcss@8.4.38)(react-dom@18.3.1(react@0.14.10))(react@0.14.10)(search-insights@2.14.0)(typescript@5.4.5):
+  vitepress@1.2.3(@algolia/client-search@4.23.3)(@types/node@20.14.2)(@types/react@18.3.3)(axios@1.7.2)(postcss@8.4.38)(react-dom@18.3.1(react@0.14.10))(react@0.14.10)(search-insights@2.14.0)(typescript@5.4.5):
     dependencies:
       '@docsearch/css': 3.6.0
       '@docsearch/js': 3.6.0(@algolia/client-search@4.23.3)(@types/react@18.3.3)(react-dom@18.3.1(react@0.14.10))(react@0.14.10)(search-insights@2.14.0)
@@ -7531,7 +7676,7 @@ snapshots:
       '@vue/devtools-api': 7.2.1(vue@3.4.29(typescript@5.4.5))
       '@vue/shared': 3.4.29
       '@vueuse/core': 10.11.0(vue@3.4.29(typescript@5.4.5))
-      '@vueuse/integrations': 10.11.0(focus-trap@7.5.4)(jwt-decode@4.0.0)(vue@3.4.29(typescript@5.4.5))
+      '@vueuse/integrations': 10.11.0(axios@1.7.2)(focus-trap@7.5.4)(vue@3.4.29(typescript@5.4.5))
       focus-trap: 7.5.4
       mark.js: 8.11.1
       minisearch: 6.3.0
@@ -7603,6 +7748,8 @@ snapshots:
       is-symbol: 1.0.4
 
   which-module@2.0.1: {}
+
+  which-pm-runs@1.1.0: {}
 
   which-pm@2.0.0:
     dependencies:

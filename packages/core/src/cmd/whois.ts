@@ -17,7 +17,7 @@ export default () =>
     .addAlias('iwhob', { options: { p: 'bl' } })
     .setExecutor(async (c) => {
       const rankPlatform = c.options.p == 'ss' ? Platform.SS : Platform.BL
-      const uid = c.session.mentions[0]
+      const uid = c.session.mentions?.[0]
       if (!uid) {
         c.session.sendQuote(c.session.text('commands.bsbot.who.need-at'))
         return

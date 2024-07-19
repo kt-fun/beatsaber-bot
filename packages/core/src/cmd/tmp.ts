@@ -3,6 +3,8 @@ import { CommandBuilder } from '@/cmd/builder'
 export default () =>
   new CommandBuilder()
     .setName('lb')
+    .addAlias('/lb')
+
     .setDescription('clear an auth account relate info')
     .addAlias('bblb')
     .setExecutor(async (c) => {

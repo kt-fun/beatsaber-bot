@@ -1,4 +1,3 @@
-import { Context } from 'koishi'
 import { Config } from '@/config'
 import {
   ScoreSaberUser,

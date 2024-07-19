@@ -1,4 +1,5 @@
 export interface BSAbility {
+  // need bs oauth token
   bsNotify: {
     enabled: boolean
     MonitorCron: string
