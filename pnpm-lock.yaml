@@ -112,16 +112,6 @@ importers:
         version: 1.0.1
 
   packages/koishi:
-    dependencies:
-      dayjs:
-        specifier: ^1.11.3
-        version: 1.11.11
-      js-yaml:
-        specifier: ^4.1.0
-        version: 4.1.0
-      lodash:
-        specifier: ^4.17.21
-        version: 4.17.21
     devDependencies:
       '@koishijs/plugin-adapter-qq':
         specifier: 4.6.2

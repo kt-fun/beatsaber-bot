@@ -44,8 +44,8 @@
     }
   },
   "keywords": [
-    "steam",
-    "steam-family"
+    "beatsaber",
+    "beatsaber-bot"
   ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
