@@ -12,7 +12,7 @@ hero:
 
 features:
   - title: Rank 渲染
-    details: 基于 beatleader / scoresaber 渲染的个人图片
+    details: 基于 beatleader / scoresaber 渲染的图片
   - title: 谱师订阅
     details: 订阅谱师更新，及时获取关注的谱师谱面
   - title: 谱面查找
