@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.5
+
+### Patch Changes
+
+- fix: getAllSubScriptionByUIDAndPlatform
+
 ## 0.2.0-dev.4
 
 ### Patch Changes
