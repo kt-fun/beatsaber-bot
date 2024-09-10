@@ -47,10 +47,11 @@ export class BeatSaverWSHandler<T> implements WSHandler {
         return
       }
       const userId = bsmap.uploader.id
-      const subscriptions = await this.db.getAllSubScriptionByUIDAndPlatform(
-        userId,
-        'beatsaver'
-      )
+      const subscriptions =
+        await this.db.getAllSubScriptionByUIDAndPlatform.apply(this.db, [
+          userId,
+          'beatsaver',
+        ])
       const restSub = subscriptions.filter(
         (it) =>
           it.subscribe.type == 'beatsaver-map' && it.subscribe.enable == true

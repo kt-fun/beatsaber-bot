@@ -230,6 +230,7 @@ export class KoishiDB implements DB<ChannelInfo> {
     id: string | number,
     platform: string
   ): Promise<SubDetailWithGroupRes<ChannelInfo>[]> {
+    console.log('this.db', this.db)
     const subs = await this.db
       .join(['BSRelateAccount', 'BSRelateChannelInfo'], (acc, c1) =>
         // $.eq(acc.uid, c1.id)
