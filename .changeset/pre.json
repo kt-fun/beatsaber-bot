@@ -6,6 +6,7 @@
     "koishi-plugin-beatsaber-bot": "0.2.0-dev.0"
   },
   "changesets": [
+    "gorgeous-phones-join",
     "small-turtles-shave"
   ]
 }
