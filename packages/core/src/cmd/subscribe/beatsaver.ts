@@ -1,16 +1,14 @@
 import { CmdContext } from '@/interface'
+import { SubscriptionExistError } from '@/errors'
 export const beatsaver = async <T, C>(c: CmdContext<T, C>) => {
   const { bsMapSub } = await c.db.getSubscriptionsByGID(c.session.g.id)
   if (bsMapSub) {
     if (bsMapSub.enable) {
-      c.session.sendQuote(
-        c.session.text('commands.bsbot.subscribe.beatsaver.exist')
-      )
-      return
+      throw new SubscriptionExistError()
     }
     const data = { ...bsMapSub, enable: true }
     await c.db.upsertSubscription(data)
-    c.session.sendQuote(
+    await c.session.sendQuote(
       c.session.text('commands.bsbot.subscribe.beatsaver.success')
     )
     return
@@ -23,7 +21,7 @@ export const beatsaver = async <T, C>(c: CmdContext<T, C>) => {
     data: {},
   }
   await c.db.upsertSubscription(data)
-  c.session.sendQuote(
+  await c.session.sendQuote(
     c.session.text('commands.bsbot.subscribe.beatsaver.success')
   )
 }

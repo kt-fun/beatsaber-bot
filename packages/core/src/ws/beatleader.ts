@@ -52,10 +52,15 @@ export class BeatleaderWSHandler<T> implements WSHandler {
     //   const memberFilters = item.member.subscribeData
     //   return BeatLeaderFilter(data, ...channelFilters, ...memberFilters)
     // })
-    if (subscriptions.length === 0) return
+    const restSub = subscriptions.filter(
+      (it) =>
+        it.subscribe.type == 'beatleader-score' && it.subscribe.enable == true
+    )
+    // cacheService
+    if (restSub.length === 0) return
     const img = await this.render.renderScore(data.id.toString(), Platform.BL)
 
-    for (const item of subscriptions) {
+    for (const item of restSub) {
       const session = this.botService.getSessionByChannelInfo(item.groupChannel)
       if (!session) {
         continue
@@ -63,7 +68,7 @@ export class BeatleaderWSHandler<T> implements WSHandler {
       session.send(
         `恭喜 <at id="${item.account.uid}"/> 刚刚在谱面「${data.leaderboard.song.name}」中打出了 ${(data.accuracy * 100).toFixed(2)}% 的好成绩`
       )
-      await session.sendImgBuffer(await img, 'image/png')
+      await session.sendImgBuffer(await img)
     }
   }
 }

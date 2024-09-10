@@ -40,16 +40,16 @@ export const handleBeatSaverBind = async <T, C>(c: CmdContext<T, C>) => {
   const account: Partial<RelateAccount> = {
     uid: c.session.u.id,
     platform: 'beatsaver',
-    platformScope: 'identity,alerts',
     platformUid: self.data.id,
     platformUname: self.data.name,
     otherPlatformInfo: {},
+    platformScope: 'identity,alerts',
     accessToken: token.access_token,
     refreshToken: token.refresh_token,
     lastModifiedAt: now,
     lastRefreshAt: now,
     type: 'oauth',
-    valid: 'ok',
+    status: 'ok',
   }
   if (bsAccount) {
     account.id = bsAccount.id

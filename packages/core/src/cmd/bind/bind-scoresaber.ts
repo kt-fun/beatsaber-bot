@@ -1,18 +1,20 @@
 import { RelateAccount } from '@/db'
 import { CmdContext } from '@/interface'
+import {
+  ScoreSaberIDNotFoundError,
+  SessionPromotionCancelError,
+  SessionPromotionTimeoutError,
+} from '@/errors'
 
 export const handleScoreSaberBind = async <T, C>(c: CmdContext<T, C>) => {
   const scoreSaberUser = await c.api.ScoreSaber.wrapperResult()
     .withRetry(3)
     .getScoreUserById(c.input)
+
   if (!scoreSaberUser.isSuccess()) {
-    const text = c.session.text('commands.bsbot.bind.not-found', {
-      id: c.input,
-      platform: 'ScoreSaber',
-    })
-    c.session.sendQuote(text)
-    return
+    throw new ScoreSaberIDNotFoundError(c.input)
   }
+
   const { ssAccount, blAccount } = await c.db.getUserAccountsByUid(
     c.session.u.id
   )
@@ -26,16 +28,14 @@ export const handleScoreSaberBind = async <T, C>(c: CmdContext<T, C>) => {
           id: ssAccount.platformUid,
         })
       : '')
-  c.session.sendQuote(text)
+
+  await c.session.sendQuote(text)
 
   const prompt = await c.session.prompt(30000)
   if (!prompt || (prompt != 'y' && prompt != 'yes')) {
-    c.session.sendQuote(
-      c.session.text(
-        prompt ? 'commands.bsbot.bind.cancel' : 'commands.bsbot.bind.timeout'
-      )
-    )
-    return
+    throw prompt
+      ? new SessionPromotionCancelError()
+      : new SessionPromotionTimeoutError()
   }
   const now = new Date()
   const account: Partial<RelateAccount> = {
@@ -46,19 +46,20 @@ export const handleScoreSaberBind = async <T, C>(c: CmdContext<T, C>) => {
     lastRefreshAt: now,
     platformUname: scoreSaberUser.data.name,
     type: 'id',
+    status: 'ok',
   }
-  if (!blAccount) {
-    const account: Partial<RelateAccount> = {
-      uid: c.session.u.id,
-      platform: 'beatleader',
-      platformUid: scoreSaberUser.data.id,
-      lastModifiedAt: now,
-      lastRefreshAt: now,
-      platformUname: scoreSaberUser.data.name,
-      type: 'id',
-    }
-    await c.db.addUserBindingInfo(account)
-  }
+  // if (!blAccount) {
+  //   const account: Partial<RelateAccount> = {
+  //     uid: c.session.u.id,
+  //     platform: 'beatleader',
+  //     platformUid: scoreSaberUser.data.id,
+  //     lastModifiedAt: now,
+  //     lastRefreshAt: now,
+  //     platformUname: scoreSaberUser.data.name,
+  //     type: 'id',
+  //   }
+  //   await c.db.addUserBindingInfo(account)
+  // }
   if (ssAccount) {
     account.id = ssAccount.id
   }

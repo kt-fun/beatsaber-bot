@@ -17,12 +17,16 @@ export class KoishiSession implements Session<ChannelInfo> {
     this.channelInfo = channelInfo
   }
 
-  async sendImgUrl(url: string): Promise<void> {
+  async sendImgByUrl(url: string): Promise<void> {
     await this.bot.sendMessage(
       this.channelInfo.channelId,
       h('message', [h('img', { src: url })])
     )
   }
+  async sendAudioByUrl(url: string): Promise<void> {
+    await this.bot.sendMessage(this.channelInfo.channelId, h.audio(url))
+  }
+
   async sendImgBuffer(content: any, mimeType?: string): Promise<void> {
     await this.bot.sendMessage(
       this.channelInfo.channelId,
@@ -48,10 +52,6 @@ export class KoishiSession implements Session<ChannelInfo> {
   text(path: string, params: object = {}): string {
     const res = tran(path, params, 'zh-cn')
     return res ?? path
-  }
-
-  async sendAudio(url: string): Promise<void> {
-    await this.bot.sendMessage(this.channelInfo.channelId, h.audio(url))
   }
 
   async prompt(timeout: number): Promise<string | undefined> {

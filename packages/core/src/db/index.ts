@@ -11,11 +11,11 @@ export interface RelateAccount {
   otherPlatformInfo: any
   lastModifiedAt: Date
   lastRefreshAt: Date
-  valid: string
+  status: string
 }
 
+// primaryKey subscribeId + memberUid
 export interface SubscribeMember {
-  id: number
   subscribeId: number
   memberUid: number
   subscribeData: any
@@ -31,16 +31,16 @@ export interface Subscribe {
   data: any
 }
 
-export type UserAndUGroupRel = {
-  uid: number
-  gid: number
-  // optional
-  nickname: string
-}
+// export type UserAndUGroupRel = {
+//   uid: number
+//   gid: number
+//   // optional
+//   nickname: string
+// }
 
 export type RelateChannelInfo<CHANNEL> = {
   id: number
   name: string
   type: 'user' | 'group' | string
-  enable: boolean
+  // enable: boolean
 } & CHANNEL

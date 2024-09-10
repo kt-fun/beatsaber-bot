@@ -1,13 +1,12 @@
-import { Context } from 'koishi'
+import { Context, Session } from 'koishi'
 import {} from 'koishi-plugin-cron'
-import { botCommands, Command, Config } from 'beatsaber-bot-core'
-import { ChannelInfo } from '@/types'
-import { InitDBModel, KoishiDB } from '@/service/db'
-import { APIService } from 'beatsaber-bot-core'
-import { KSession } from '@/session-impl'
+import { botCommands, Command, Config, APIService } from 'beatsaber-bot-core'
+import { ChannelInfo, KoiRelateChannelInfo } from '@/types'
+import { InitDBModel, KoishiDB } from '@/service'
+import { KSession } from '@/service'
 import { ImgRender } from '@/service'
-import { loadWS } from '@/ws'
-import { loadSchedule } from '@/schedule'
+import { loadWS } from '@/service'
+import { loadSchedule } from '@/service'
 export * from './config'
 
 export const name = 'beatsaber-bot'
@@ -24,59 +23,47 @@ export function apply(ctx: Context, config: Config) {
 }
 
 function loadCmd(ctx: Context, config: Config) {
-  botCommands<ChannelInfo>().forEach((c: Command<ChannelInfo>) => {
+  const registerCmd = registerFn(ctx, config)
+  botCommands<ChannelInfo>().map(registerCmd)
+  ctx
+    .command('bsbot <prompt:string>')
+    .alias('bb')
+    .action(async ({ session, options }, input) => {
+      await session.send(input)
+    })
+}
+
+const registerFn = (ctx: Context, config: Config) => {
+  const db = new KoishiDB(ctx)
+  const api = APIService.create(config)
+  // @ts-ignore
+  const logger = ctx.logger('beats-bot.cmd')
+  const render = new ImgRender(config, api, ctx)
+
+  return (c: Command<ChannelInfo>) => {
     let cmd = ctx.command(`bsbot.${c.name}`)
-    for (const alias of c.aliases) {
-      if (alias.option) {
-        cmd = cmd.alias(alias.alias, alias.option)
-      } else {
-        cmd = cmd.alias(alias.alias)
-      }
-    }
-    for (const option of c.options) {
-      let desc = option.description
-      const regex = /^(.+):(.+?)\??$/
-      const [, fullname, type] = regex.exec(desc)
-      const optional = desc.endsWith('?')
-      desc = `${fullname}:${type}`
-      desc = optional ? `[${desc}]` : `<${desc}>`
-      cmd = cmd.option(option.name, desc)
-    }
-    const db = new KoishiDB(ctx)
-    const api = APIService.create(config)
-    // @ts-ignore
-    const logger = ctx.logger('beats-bot.cmd')
-    const render = new ImgRender(config, api, ctx)
+
+    cmd = c.aliases.reduce(
+      (acc, alias) =>
+        alias.option
+          ? acc.alias(alias.alias, alias.option)
+          : acc.alias(alias.alias),
+      cmd
+    )
+
+    cmd = c.options.reduce(
+      (acc, option) =>
+        acc.option(option.name, extractKoiOptionDesc(option.description)),
+      cmd
+    )
+
     cmd.action(async ({ session, options }, input) => {
-      // create user
-      const s = {
-        uid: session.uid,
-        channelId: session.channelId,
-        selfId: session.selfId,
-        platform: session.platform,
-      }
-      const mentionReg = /<at\s+id="(\w+)"\/>/
-      let content = session.content
-      const ids = []
-      let match
-      while ((match = mentionReg.exec(content)) !== null) {
-        ids.push(match[1])
-        content = content.replace(match[0], '')
-      }
-      const idChans = ids
-        .filter((it) => it.uid == session.selfId)
-        .map((id) => ({
-          uid: id,
-          channelId: session.channelId,
-          selfId: session.selfId,
-          platform: session.platform,
-        }))
-      const uags = idChans.map((idChan) => {
-        return db.getUAndGBySessionInfo(idChan)
-      })
-      const [u, g] = await db.getUAndGBySessionInfo(s)
-      const mentions = (await Promise.all(uags)).map((it) => it?.[0])
-      const kSession = new KSession(session, u, g, mentions)
+      const [u, g] = await db.getUAndGBySessionInfo(session)
+      // 2. get mentioned uids(exclude self & cur uid) and rest input
+      const exclude = [session.uid, session.selfId]
+      const [rest, mentions] = await transformInput(session, db, input, exclude)
+      const lang = session.locales[0]
+      const kSession = new KSession(session, u, g, lang, mentions)
       const ctx = {
         api: api,
         logger: logger,
@@ -85,15 +72,82 @@ function loadCmd(ctx: Context, config: Config) {
         session: kSession,
         render: render,
         options: options,
-        input: input,
+        input: rest,
       }
       await c.callback(ctx)
     })
+  }
+}
+
+const regex = /^(.+):(.+?)\??$/
+function extractKoiOptionDesc(description: string) {
+  let desc = description
+  const [, fullname, type] = regex.exec(desc)
+  const optional = desc.endsWith('?')
+  desc = `${fullname}:${type}`
+  desc = optional ? `[${desc}]` : `<${desc}>`
+  return desc
+}
+
+const mentionRegex = /<\s?at\sid="(\w+)"\s?\/?>/g
+
+async function transformInput(
+  session: Session,
+  db: KoishiDB,
+  input: string,
+  exclude: string[]
+): Promise<[string, KoiRelateChannelInfo[]]> {
+  if (!input) {
+    return ['', []]
+  }
+  const mentioned = input.match(mentionRegex)
+  const rest = input.replace(mentionRegex, ' ')
+  const mentionsStr =
+    mentioned
+      ?.map((it) => mentionRegex?.exec(it))
+      ?.map((it) => it?.[1])
+      ?.filter((it) => !exclude.includes(it)) ?? []
+  // db: batch get uid by strings and sessions info
+  // if user not exist, then create it
+  // query db and convert it to uid
+  const sessions = mentionsStr.map((it) => ({
+    ...session,
+    uid: `${session.platform}:${it}`,
+  }))
+  // 得到所有 mention
+  const mentions = await db.batchGetOrCreateUBySessionInfo(sessions)
+
+  return [rest.trim(), mentions]
+}
+
+async function transform2(session: Session, db: KoishiDB) {
+  // create user
+  const s = {
+    uid: session.uid,
+    channelId: session.channelId,
+    selfId: session.selfId,
+    platform: session.platform,
+  }
+  const mentionReg = /<at\s+id="(\w+)"\/>/
+  let content = session.content
+  const ids = []
+  let match
+  while ((match = mentionReg.exec(content)) !== null) {
+    ids.push(match[1])
+    content = content.replace(match[0], '')
+  }
+  const idChans = ids
+    .filter((it) => it.uid == session.selfId)
+    .map((id) => ({
+      uid: id,
+      channelId: session.channelId,
+      selfId: session.selfId,
+      platform: session.platform,
+    }))
+  const uags = idChans.map((idChan) => {
+    return db.getUAndGBySessionInfo(idChan)
   })
-  ctx
-    .command('bsbot <prompt:string>')
-    .alias('bb')
-    .action(async ({ session, options }, input) => {
-      session.send(input)
-    })
+  const [u, g] = await db.getUAndGBySessionInfo(s)
+  const mentions = (await Promise.all(uags)).map((it) => it?.[0])
+  const kSession = new KSession(session, u, g, 'zh-cn', mentions)
 }

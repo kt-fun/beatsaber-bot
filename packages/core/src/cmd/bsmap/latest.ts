@@ -19,20 +19,20 @@ export default () =>
         return
       }
       const text = c.session.text('commands.bsbot.latest.info')
-      const onStartRender = () => {
-        c.session.send(
-          c.session.text('common.render.wait', {
-            sec: c.config.rankWaitTimeout / 1000,
-          })
-        )
-      }
-      c.session.sendQuote(text)
+      // const onStartRender = () => {
+      //   c.session.send(
+      //     c.session.text('common.render.wait', {
+      //       sec: c.config.rankWaitTimeout / 1000,
+      //     })
+      //   )
+      // }
+      await c.session.sendQuote(text)
       const msgs = res.data.map((item) => ({
         audio: item.versions[0].previewURL,
         image: c.render.renderMap(item),
       }))
       for (const msg of msgs) {
-        c.session.sendQueued(await msg.image)
-        c.session.sendAudio(msg.audio)
+        await c.session.sendQueued(await msg.image)
+        await c.session.sendAudioByUrl(msg.audio)
       }
     })

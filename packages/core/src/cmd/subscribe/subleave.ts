@@ -4,10 +4,12 @@ export default () =>
   new CommandBuilder()
     .setName('subleave')
     .addAlias('bbleave')
-    .addAlias('/leavebl', { type: 'beatleader' })
-    .addAlias('/leavebs', { type: 'beatsaver' })
+    .addAlias('/leavebl', { options: { type: 'beatleader' } })
+    .addAlias('/leavebs', { options: { type: 'beatsaver' } })
+    .addAlias('leavebl', { options: { type: 'beatleader' } })
+    .addAlias('leavebs', { options: { type: 'beatsaver' } })
     .addOption('type', 'type:string')
-    .setDescription('clear an auth account relate info')
+    .setDescription('')
     .setExecutor(async (c) => {
       // getUserJoinedGroupMember
       const subs = await c.db.getSubscriptionInfoByUGID(
@@ -34,7 +36,7 @@ export default () =>
       } else if (c.options.type === 'beatsaver') {
         const bsSub = subs.find((it) => it.subscribe.type == 'beatsaver-map')
         if (!bsSub?.me) {
-          c.session.sendQuote(
+          await c.session.sendQuote(
             c.session.text('commands.bsbot.subscribe.leave.not-exist.beatsaver')
           )
           return
@@ -44,7 +46,7 @@ export default () =>
           bsSub.subscribe.id,
           c.session.u.id
         )
-        c.session.sendQuote(
+        await c.session.sendQuote(
           c.session.text('commands.bsbot.subscribe.leave.success.beatsaver')
         )
       }

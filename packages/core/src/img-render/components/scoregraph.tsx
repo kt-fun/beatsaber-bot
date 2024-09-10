@@ -5,7 +5,7 @@ import {
 } from '../utils/bl/beatleader'
 import getStatistic from '../utils/bl/stastic'
 import Chart from 'chart.js/auto'
-import { canvasToDataURL, createCanvas } from '../utils/canvas'
+import { canvasHelper } from '../utils/canvas'
 import { BSOR, Score } from '@/api/interfaces/beatleader'
 
 export function formatNumber(
@@ -82,7 +82,7 @@ export default function ScoreGraph({
   statistic: any
   bsor: BSOR
 }) {
-  const canvas = createCanvas(400 * 4, 192 * 4)
+  const canvas = canvasHelper.createCanvas(400 * 4, 192 * 4)
 
   const setupChart = (
     canvas: any,
@@ -343,7 +343,7 @@ export default function ScoreGraph({
   const replayAccGraphs = processAccGraphs(bsor)
   const underswingsData = processUnderswings(bsor)
   setupChart(canvas, replayAccGraphs, underswingsData, beatSavior)
-  const dataURL = canvasToDataURL(canvas)
+  const dataURL = canvasHelper.canvasToDataURL(canvas)
   return (
     <>
       <div style={{ height: '12em' }}>

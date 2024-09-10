@@ -51,21 +51,26 @@ export class BeatSaverWSHandler<T> implements WSHandler {
         userId,
         'beatsaver'
       )
+      const restSub = subscriptions.filter(
+        (it) =>
+          it.subscribe.type == 'beatsaver-map' && it.subscribe.enable == true
+      )
       // cacheService
-      if (subscriptions.length === 0) return
+      if (restSub.length === 0) return
       const image = this.render.renderMap(bsmap)
-      for (const item of subscriptions) {
+      for (const item of restSub) {
         const session = this.botService.getSessionByChannelInfo(
           item.groupChannel
         )
         if (!session) {
           continue
         }
-        session.send(
-          `本群谱师 「<at id="${item.account.uid}"/> ${bsmap.uploader.name}」刚刚发布了新谱面，「${bsmap.name}」`
+        await session.send(
+          `本群谱师 「<at id="${item.account.uid}"/> (${bsmap.uploader.name})」刚刚发布了新谱面，「${bsmap.name}」`
         )
-        await session.sendImgBuffer(await image, 'image/png')
-        await session.sendAudio(bsmap.versions[0].previewURL)
+        // text + mention element
+        await session.send(await image)
+        await session.sendAudioByUrl(bsmap.versions[0].previewURL)
       }
     }
   }

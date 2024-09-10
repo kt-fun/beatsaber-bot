@@ -3,6 +3,8 @@ import { CommandBuilder } from '@/cmd/builder'
 import { Platform } from '@/interface'
 import { handleBeatLeaderBind } from '@/cmd/bind/bind-beatleader'
 import { handleBeatSaverBind } from '@/cmd/bind/bind-beatsaver'
+import { handleBeatLeaderIDBind } from '@/cmd/bind/bind-id-beatleader'
+import { handleBeatSaverIDBind } from '@/cmd/bind/bind-id-beatsaver'
 
 export default () =>
   new CommandBuilder()
@@ -40,10 +42,10 @@ export default () =>
           await handleScoreSaberBind(c)
           break
         case Platform.BS:
-          await handleBeatSaverBind(c)
+          await handleBeatSaverIDBind(c)
           break
         case Platform.BL:
-          await handleBeatLeaderBind(c)
+          await handleBeatLeaderIDBind(c)
           break
         default:
           throw Error('unreachable code line')

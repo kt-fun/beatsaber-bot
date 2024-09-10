@@ -7,8 +7,8 @@ import {
   WSHandler,
 } from 'beatsaber-bot-core'
 import { KoishiDB } from '@/service/db'
-import { KoishiBotService } from '@/session-impl'
-import { ImgRender } from '@/service'
+import { KoishiBotService } from '@/service/session'
+import { ImgRender } from '@/service/render'
 
 class WS {
   closed: boolean

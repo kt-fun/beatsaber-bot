@@ -7,7 +7,6 @@ import {
   RelateAccount,
   Subscribe,
   SubscribeMember,
-  UserAndUGroupRel,
   RelateChannelInfo,
 } from 'beatsaber-bot-core'
 declare module 'koishi' {
@@ -16,7 +15,7 @@ declare module 'koishi' {
     BSRelateChannelInfo: RelateChannelInfo<ChannelInfo>
     BSSubscribe: Subscribe
     BSSubscribeMember: SubscribeMember
-    BSUserAndUGroupRel: UserAndUGroupRel
+    // BSUserAndUGroupRel: UserAndUGroupRel
   }
 }
 
@@ -28,7 +27,6 @@ export function InitDBModel(ctx: Context) {
       id: 'unsigned',
       uid: 'unsigned',
       type: 'string',
-      accountId: 'unsigned',
       platform: 'string',
       platformUname: 'string',
       platformUid: 'string',
@@ -38,7 +36,7 @@ export function InitDBModel(ctx: Context) {
       otherPlatformInfo: 'json',
       lastModifiedAt: 'timestamp',
       lastRefreshAt: 'timestamp',
-      valid: 'string',
+      status: 'string',
     },
     {
       autoInc: true,
@@ -48,14 +46,13 @@ export function InitDBModel(ctx: Context) {
   ctx.model.extend(
     'BSSubscribeMember',
     {
-      id: 'unsigned',
       subscribeId: 'unsigned',
       memberUid: 'unsigned',
       subscribeData: 'json',
       joinedAt: 'date',
     },
     {
-      autoInc: true,
+      primary: ['subscribeId', 'memberUid'],
     }
   )
 
@@ -71,17 +68,17 @@ export function InitDBModel(ctx: Context) {
     { autoInc: true }
   )
 
-  ctx.model.extend(
-    'BSUserAndUGroupRel',
-    {
-      uid: 'unsigned',
-      gid: 'unsigned',
-      nickname: 'string',
-    },
-    {
-      primary: ['uid', 'gid'],
-    }
-  )
+  // ctx.model.extend(
+  //   'BSUserAndUGroupRel',
+  //   {
+  //     uid: 'unsigned',
+  //     gid: 'unsigned',
+  //     nickname: 'string',
+  //   },
+  //   {
+  //     primary: ['uid', 'gid'],
+  //   }
+  // )
 
   ctx.model.extend(
     'BSRelateChannelInfo',
@@ -90,7 +87,6 @@ export function InitDBModel(ctx: Context) {
       id: 'unsigned',
       name: 'string',
       type: 'string',
-      enabled: 'boolean',
       platform: 'string',
       selfId: 'string',
       channelId: 'string',
@@ -98,7 +94,6 @@ export function InitDBModel(ctx: Context) {
     },
     {
       autoInc: true,
-      primary: ['id', 'type'],
     }
   )
 }

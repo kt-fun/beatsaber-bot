@@ -49,7 +49,7 @@ export const handleBeatLeaderBind = async <T, C>(c: CmdContext<T, C>) => {
     lastModifiedAt: now,
     lastRefreshAt: now,
     type: 'oauth',
-    valid: 'ok',
+    status: 'ok',
   }
   if (blAccount) {
     account.id = blAccount.id

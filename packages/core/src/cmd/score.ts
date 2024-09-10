@@ -1,6 +1,7 @@
 import { CommandBuilder } from '@/cmd/builder'
 import { Platform } from '@/interface'
 import { convertDiff } from '@/utils'
+import { AccountBindingNotFoundError, ScoreNotFoundError } from '@/errors'
 export default () =>
   new CommandBuilder()
     .setName('score') // <uid:text>
@@ -10,35 +11,17 @@ export default () =>
     .addAlias('bbscore')
     .addAlias('/score')
     .setExecutor(async (c) => {
-      const platform = c.options.p == 'ss' ? Platform.SS : Platform.BL
-      const onStartRender = () => {
-        c.session.send(
-          c.session.text('common.render.wait', {
-            sec: c.config.rankWaitTimeout / 1000,
-          })
-        )
+      // who? 没有即是自己，有mention 就是 mention
+      let uid = c.session.u.id
+      if (c.session.mentions && c.session.mentions.length > 0) {
+        uid = c.session.mentions[0].id
       }
-      // give a scoreId? bad
-      // if (!reg.test(input)) {
-      //   if (/^[0-9]+$/.test(input)) {
-      //     const img = await c.render.renderScore(input, platform, onStartRender)
-      //     session.sendQueued(img)
-      //   } else {
-      //     const res = await session.sendQuote(
-      //       session.text('commands.bsbot.score.not-a-score-id')
-      //     )
-      //   }
-      //   return
-      // }
-      const mapId = c.input
-      const { blAccount, ssAccount } = await c.db.getUserAccountsByUid(
-        c.session.u.id
-      )
+
+      const { blAccount, ssAccount } = await c.db.getUserAccountsByUid(uid)
       let accountId = Platform.BL && blAccount.platformUid
       accountId ||= Platform.SS && ssAccount.platformUid
       if (!accountId) {
-        c.session.sendQuote(c.session.text('commands.bsbot.score.not-bind'))
-        return
+        throw new AccountBindingNotFoundError()
       }
 
       let diffOption
@@ -48,6 +31,10 @@ export default () =>
           mode: c.options.m,
         }
       }
+
+      // 从 input 中提取出 mapId
+      const mapId = c.input
+
       const score =
         await c.api.BeatLeader.wrapperResult().getScoreByPlayerIdAndMapId(
           accountId,
@@ -55,13 +42,10 @@ export default () =>
           diffOption
         )
       if (!score.isSuccess()) {
-        c.session.sendQuote(
-          c.session.text('commands.bsbot.score.score-not-found', {
-            user: accountId,
-            id: mapId,
-          })
-        )
+        throw new ScoreNotFoundError({ user: accountId, id: mapId })
       }
+
+      const platform = c.options.p == 'ss' ? Platform.SS : Platform.BL
       const img = await c.render.renderScore(score.data.id.toString(), platform)
-      c.session.sendQueued(img)
+      await c.session.sendQueued(img)
     })

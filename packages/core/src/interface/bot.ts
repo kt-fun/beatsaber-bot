@@ -13,10 +13,10 @@ export interface Session<T extends any = any> {
   mentions: (RelateChannelInfo<T> | undefined)[]
   getSessionInfo(): T
   sendImgBuffer(content: any, mimeType?: string): Promise<void>
-  sendImgUrl(url: string): Promise<void>
+  sendImgByUrl(url: string): Promise<void>
+  sendAudioByUrl(url: string): Promise<void>
   send(msg: string): Promise<void>
   sendQueued(msg: string): Promise<void>
-  sendAudio(url: string): Promise<void>
   sendQuote(msg: string): Promise<void>
   text(path: string, args?): string
   prompt(timeout?: number): Promise<string | undefined>

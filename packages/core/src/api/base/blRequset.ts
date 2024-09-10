@@ -20,12 +20,14 @@ export const blRequest = (cfg: Config) => {
     }
     return host + path
   }
-  const getPlayerScore = async (req: BeatLeaderPlayerScoreRequest) =>
-    get<Leaderboard>(
+  const getPlayerScore = async (req: BeatLeaderPlayerScoreRequest) => {
+    const res = await get<Leaderboard>(
       url(
         `/score/${req.leaderboardContext}/${req.playerID}/${req.hash}/${req.diff}/${req.mode}`
       )
     )
+    return res
+  }
 
   const getTokenInfo = async (accessToken: string) => {
     return get<OAuthTokenInfoResponse>(url(`/oauth2/identity`), {

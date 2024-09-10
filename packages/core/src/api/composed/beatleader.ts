@@ -16,12 +16,25 @@ export class BeatLeaderService {
     this.blClient = blClient
   }
 
+  async getPlayerInfoById(id: string): Promise<any> {
+    return this.blClient.getPlayerInfo(id)
+  }
+
+  async getScore(item) {
+    let r = null
+    try {
+      r = await this.blClient.getPlayerScore(item)
+    } catch (e) {
+      return r
+    }
+    return r
+  }
   async getScoreByPlayerIdAndMapId(
     playerId: string,
     mapId: string,
     option?: MapDiffOption
   ): Promise<Leaderboard> {
-    const map = await this.bsClient.searchMapById(mapId)
+    const [map] = await Promise.all([this.bsClient.searchMapById(mapId)])
     if (!map) {
       throw Error('error.not.found')
     }
@@ -39,12 +52,8 @@ export class BeatLeaderService {
     if (option && option.mode) {
       reqs = reqs.filter((item) => item.mode == option.mode)
     }
-    const res = await Promise.all(
-      reqs.map((item) => {
-        return this.blClient.getPlayerScore(item)
-      })
-    )
-    const scores = res.filter((item) => item != null)
+    const res = await Promise.all(reqs.map((it) => this.getScore(it)))
+    const scores = res.map((it) => it.data).filter((item) => item != null)
     // todo sort score
     if (scores.length < 1) {
       throw Error('error.not.found')

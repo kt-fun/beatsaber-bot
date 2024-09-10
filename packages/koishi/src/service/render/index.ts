@@ -1,8 +1,13 @@
 import Puppeteer from 'koishi-plugin-puppeteer'
-import { sleep } from '@/utils/sleep'
 import { RenderService } from 'beatsaber-bot-core/img-render'
 import { APIService, Config } from 'beatsaber-bot-core'
 import { Context } from 'koishi'
+
+export const sleep = async (millsec: number = 5000) => {
+  await new Promise<void>((resolve, reject) => {
+    setTimeout(resolve, millsec)
+  })
+}
 
 export const screenshot = async (
   puppeteer: Puppeteer,
@@ -78,30 +83,30 @@ export class ImgRender extends RenderService {
     }
   }
 }
-
-export const screenshotTmp = async (
-  puppeteer: Puppeteer,
-  url: string,
-  selector: string,
-  onLoad?: () => any,
-  waitTime: number = 5000
-) => {
-  const page = await puppeteer.page()
-  await page.setViewport({
-    width: 1400,
-    height: 4096,
-    deviceScaleFactor: 2,
-  })
-  await page.goto(url, { timeout: 0, waitUntil: 'domcontentloaded' })
-  onLoad?.()
-  await new Promise<void>((resolve, reject) => {
-    setTimeout(() => {
-      resolve()
-    }, waitTime)
-  })
-  const elm = await page.waitForSelector(selector, { timeout: waitTime })
-  const buffer = await elm.screenshot({})
-  // = await page.screenshot({})
-  await page.close()
-  return buffer
-}
+//
+// export const screenshotTmp = async (
+//   puppeteer: Puppeteer,
+//   url: string,
+//   selector: string,
+//   onLoad?: () => any,
+//   waitTime: number = 5000
+// ) => {
+//   const page = await puppeteer.page()
+//   await page.setViewport({
+//     width: 1400,
+//     height: 4096,
+//     deviceScaleFactor: 2,
+//   })
+//   await page.goto(url, { timeout: 0, waitUntil: 'domcontentloaded' })
+//   onLoad?.()
+//   await new Promise<void>((resolve, reject) => {
+//     setTimeout(() => {
+//       resolve()
+//     }, waitTime)
+//   })
+//   const elm = await page.waitForSelector(selector, { timeout: waitTime })
+//   const buffer = await elm.screenshot({})
+//   // = await page.screenshot({})
+//   await page.close()
+//   return buffer
+// }

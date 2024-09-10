@@ -32,12 +32,16 @@ export interface SubWithGroupRes<T> {
 
 export interface DB<T> {
   getUserAccountsByUid(id: number): Promise<Record<string, RelateAccount>>
-  addUserBindingInfo(account: Partial<RelateAccount>): Promise<void>
 
+  batchGetOrCreateUBySessionInfo(s: T[]): Promise<RelateChannelInfo<T>[]>
   getUAndGBySessionInfo(
     s: T
   ): Promise<[RelateChannelInfo<T>, RelateChannelInfo<T>]>
 
+  // binding
+  addUserBindingInfo(account: Partial<RelateAccount>): Promise<void>
+
+  // subscription
   upsertSubscription(data: Partial<Subscribe>): Promise<void>
 
   getSubscriptionInfoByUGID(gid: number, uid: number): Promise<SubInfoRes[]>
@@ -49,6 +53,7 @@ export interface DB<T> {
 
   getSubscriptionInfoByType(type: string): Promise<SubWithGroupRes<T>[]>
 
+  // subscriptionMember
   addSubscribeMember(data: Partial<SubscribeMember>): Promise<void>
   removeFromSubGroupBySubAndUid(subId: number, id: number): Promise<void>
 }

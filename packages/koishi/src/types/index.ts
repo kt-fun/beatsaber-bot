@@ -1,4 +1,9 @@
-export * from './beatleader-condition'
+import { RelateChannelInfo } from 'beatsaber-bot-core'
+
+export interface BLScoreFilter {
+  filterName: string
+  filterParams: any[]
+}
 
 export interface ChannelInfo {
   uid: string
@@ -6,3 +11,5 @@ export interface ChannelInfo {
   selfId: string
   platform: string
 }
+
+export type KoiRelateChannelInfo = RelateChannelInfo<ChannelInfo>

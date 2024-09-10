@@ -1,7 +1,6 @@
 import {
   DB,
   RelateAccount,
-  RelateChannelInfo,
   SubDetailWithGroupRes,
   SubInfoRes,
   Subscribe,
@@ -9,7 +8,7 @@ import {
   SubWithGroupRes,
 } from 'beatsaber-bot-core'
 import { $, Context, Database, Tables } from 'koishi'
-import { ChannelInfo } from '@/types'
+import { ChannelInfo, KoiRelateChannelInfo } from '@/types'
 
 export class KoishiDB implements DB<ChannelInfo> {
   db: Database<Tables>
@@ -85,8 +84,8 @@ export class KoishiDB implements DB<ChannelInfo> {
 
   async getUAndGBySessionInfo(
     s: ChannelInfo
-  ): Promise<[RelateChannelInfo<ChannelInfo>, RelateChannelInfo<ChannelInfo>]> {
-    let u, g
+  ): Promise<[KoiRelateChannelInfo, KoiRelateChannelInfo]> {
+    let u: KoiRelateChannelInfo, g: KoiRelateChannelInfo
     await this.db.withTransaction(async (tx) => {
       while (!u) {
         const res = await tx.get('BSRelateChannelInfo', (r) =>
@@ -125,7 +124,42 @@ export class KoishiDB implements DB<ChannelInfo> {
         }
       }
     })
-    return Promise.resolve([u ?? undefined, g ?? undefined])
+    return [u, g]
+  }
+
+  async batchGetOrCreateUBySessionInfo(
+    s: ChannelInfo[]
+  ): Promise<KoiRelateChannelInfo[]> {
+    const uids = s.map((s) => s.uid)
+    const exists = await this.db.get('BSRelateChannelInfo', (c) =>
+      $.and(
+        // $.eq(c.refId, u.id),
+        $.eq(c.type, 'user'),
+        $.in(c.uid, uids)
+      )
+    )
+
+    const needCreate = s.filter(
+      (session) => !exists.map((r) => r.uid).includes(session.uid)
+    )
+
+    await this.db.withTransaction(async (tx) => {
+      const data = needCreate.map((it) => ({
+        type: 'user',
+        platform: it.platform,
+        uid: it.uid,
+        selfId: it.selfId,
+      }))
+      await tx.upsert('BSRelateChannelInfo', data)
+    })
+    const all = await this.db.get('BSRelateChannelInfo', (c) =>
+      $.and(
+        // $.eq(c.refId, u.id),
+        $.eq(c.type, 'user'),
+        $.in(c.uid, uids)
+      )
+    )
+    return all
   }
 
   async removeFromSubGroupBySubAndUid(

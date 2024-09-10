@@ -1,5 +1,7 @@
 import { CommandBuilder } from '@/cmd/builder'
+import { InvalidMapIdError, MapIdNotFoundError } from '@/errors'
 
+const mapIdReg = /^[a-fA-F0-9]{1,6}$/
 export default () =>
   new CommandBuilder()
     .setName('id') // <mapId:string>
@@ -13,29 +15,24 @@ export default () =>
       if (!c.input || (c.input && c.input.length < 1)) {
         return
       }
-      const reg = /^[a-fA-F0-9]{1,6}$/
-      if (!reg.test(c.input)) {
-        c.session.sendQuote(
-          c.session.text('commands.bsbot.id.error-map-id', { input: c.input })
-        )
-        return
+      if (!mapIdReg.test(c.input)) {
+        throw new InvalidMapIdError({ input: c.input })
       }
       const res = await c.api.BeatSaver.wrapperResult().searchMapById(c.input)
+
       if (!res.isSuccess()) {
-        c.session.sendQuote(
-          c.session.text('commands.bsbot.id.not-found', { input: c.input })
-        )
-      } else {
-        const onStartRender = () => {
-          c.session.send(
-            c.session.text('common.render.wait', {
-              sec: c.config.rankWaitTimeout / 1000,
-            })
-          )
-        }
-        const image = await c.render.renderMap(res.data, onStartRender)
-        // upload to s3?
-        await c.session.send(image)
-        c.session.sendAudio(res.data.versions[0].previewURL)
+        throw new MapIdNotFoundError({ input: c.input })
       }
+
+      const onStartRender = () => {
+        c.session.send(
+          c.session.text('common.render.wait', {
+            sec: c.config.rankWaitTimeout / 1000,
+          })
+        )
+      }
+      const image = await c.render.renderMap(res.data, onStartRender)
+      // upload to s3?
+      await c.session.send(image)
+      await c.session.sendAudioByUrl(res.data.versions[0].previewURL)
     })

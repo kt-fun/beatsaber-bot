@@ -1,33 +1,20 @@
 import { RelateChannelInfo, Session, tran } from 'beatsaber-bot-core'
 
 import { h, Session as KoiSession } from 'koishi'
-import { ChannelInfo } from '@/types'
+import { ChannelInfo, KoiRelateChannelInfo } from '@/types'
 export class KSession implements Session<ChannelInfo> {
   // create a session Object?
   private readonly session: KoiSession
   lang: string
   mentions: RelateChannelInfo<ChannelInfo>[] = []
-  u: RelateChannelInfo<ChannelInfo>
-  g: RelateChannelInfo<ChannelInfo>
-  constructor(session: KoiSession, u, g, mentions) {
+  u: KoiRelateChannelInfo
+  g: KoiRelateChannelInfo
+  constructor(session: KoiSession, u, g, locale, mentions) {
     this.session = session
     this.u = u
     this.g = g
+    this.lang = locale
     this.mentions = mentions
-    this.lang = 'zh-cn'
-  }
-  // convert sessionInfo
-  mentionReg = /<at\s+id="(\w+)"\/>/
-  transformMention(session: KoiSession): void {
-    let content = session.content
-    const ids = []
-    let match
-    while ((match = this.mentionReg.exec(content)) !== null) {
-      ids.push(match[1])
-      content = content.replace(match[0], '')
-    }
-    //channel info to uid
-    this.mentions = ids
   }
 
   getSessionInfo(): ChannelInfo {
@@ -42,18 +29,23 @@ export class KSession implements Session<ChannelInfo> {
   async send(msg: string): Promise<void> {
     await this.session.send(msg)
   }
-  async sendImgUrl(url: string): Promise<void> {
+  async sendImgByUrl(url: string): Promise<void> {
     await this.session.send(h('message', [h('img', { src: url })]))
   }
+  async sendAudioByUrl(url: string): Promise<void> {
+    await this.session.send(h.audio(url))
+  }
+  async sendAudio(url: string): Promise<void> {
+    await this.session.send(h.audio(url))
+  }
+
   async sendImgBuffer(content: any, mimeType?: string): Promise<void> {
     await this.session.send(h.image(content, mimeType ?? 'image/png'))
   }
   async sendQueued(msg: string): Promise<void> {
     await this.session.sendQueued(msg)
   }
-  async sendAudio(url: string): Promise<void> {
-    await this.session.send(h.audio(url))
-  }
+
   async sendQuote(msg: string): Promise<void> {
     await this.session.sendQueued(msg)
   }
@@ -67,3 +59,17 @@ export class KSession implements Session<ChannelInfo> {
     return this.session.prompt(timeout)
   }
 }
+
+// convert sessionInfo
+// mentionReg = /<at\s+id="(\w+)"\/>/
+// transformMention(session: KoiSession): void {
+//   let content = session.content
+//   const ids = []
+//   let match
+//   while ((match = this.mentionReg.exec(content)) !== null) {
+//     ids.push(match[1])
+//     content = content.replace(match[0], '')
+//   }
+//   //channel info to uid
+//   this.mentions = ids
+// }
