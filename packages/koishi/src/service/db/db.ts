@@ -46,9 +46,12 @@ export class KoishiDB implements DB<ChannelInfo> {
     const rows = await this.db
       .join(
         ['BSSubscribe', 'BSSubscribeMember'],
-        (s, m) => $.and($.eq(s.id, m.subscribeId), $.eq(s.gid, gid)),
+        (s, m) => $.and($.eq(s.id, m.subscribeId)),
         [false, true]
       )
+      .where((r) => {
+        return $.eq(r.BSSubscribe.gid, gid)
+      })
       .groupBy(['BSSubscribe.id'], {
         subscribe: (row) => row.BSSubscribe,
         memberCount: (row) => $.count(row.BSSubscribeMember.memberUid),
@@ -172,56 +175,56 @@ export class KoishiDB implements DB<ChannelInfo> {
     })
   }
 
-  async getAllSubScriptionByBSID(
-    userId: number
-  ): Promise<SubDetailWithGroupRes<ChannelInfo>[]> {
-    const subs = await this.db
-      .join(['BSRelateAccount', 'BSRelateChannelInfo'], (acc, c1) =>
-        $.and(
-          $.eq(acc.platformUid, userId.toString()),
-          $.eq(acc.platform, 'beatsaver'),
-          $.eq(acc.uid, c1.id),
-          $.eq(c1.type, 'user')
-          // $.eq(m.memberUid, acc.uid),
-          // $.eq(m.subscribeId, s.id),
-          // $.eq(s.enable, true),
-          // $.eq(s.type, 'beatsaver-map'),
-          // $.eq(s.gid, c2.id),
-          // $.eq(c2.type, 'group')
-        )
-      )
-      .join(
-        'BSSubscribeMember',
-        this.db.select('BSSubscribeMember'),
-        // ['BSSubscribeMember', 'BSSubscribe', 'BSRelateChannelInfo'],
-        (r, m) => $.eq(r.BSRelateAccount.uid, m.memberUid)
-      )
-      .join(
-        'BSSubscribe',
-        this.db.select('BSSubscribe'),
-        // ['BSSubscribeMember', 'BSSubscribe', 'BSRelateChannelInfo'],
-        (r, s) =>
-          $.and(
-            $.eq(r.BSSubscribeMember.subscribeId, s.id),
-            $.eq(s.enable, true)
-          )
-      )
-      .join(
-        'BSSubRelateChannelInfo',
-        this.db.select('BSRelateChannelInfo'),
-        // ['BSSubscribeMember', 'BSSubscribe', 'BSRelateChannelInfo'],
-        (r, c) => $.and($.eq(r.BSSubscribe.gid, c.id), $.eq(c.type, 'group'))
-      )
-      .execute()
-    const res = subs.map((sub) => ({
-      account: sub.BSRelateAccount,
-      accountChannel: sub.BSRelateChannelInfo,
-      subscribeMember: sub.BSSubscribeMember,
-      subscribe: sub.BSSubscribe,
-      groupChannel: sub.BSSubRelateChannelInfo,
-    }))
-    return res
-  }
+  // async getAllSubScriptionByBSID(
+  //   userId: number
+  // ): Promise<SubDetailWithGroupRes<ChannelInfo>[]> {
+  //   const subs = await this.db
+  //     .join(['BSRelateAccount', 'BSRelateChannelInfo'], (acc, c1) =>
+  //       $.and(
+  //         $.eq(acc.platformUid, userId.toString()),
+  //         $.eq(acc.platform, 'beatsaver'),
+  //         $.eq(acc.uid, c1.id),
+  //         $.eq(c1.type, 'user')
+  //         // $.eq(m.memberUid, acc.uid),
+  //         // $.eq(m.subscribeId, s.id),
+  //         // $.eq(s.enable, true),
+  //         // $.eq(s.type, 'beatsaver-map'),
+  //         // $.eq(s.gid, c2.id),
+  //         // $.eq(c2.type, 'group')
+  //       )
+  //     )
+  //     .join(
+  //       'BSSubscribeMember',
+  //       this.db.select('BSSubscribeMember'),
+  //       // ['BSSubscribeMember', 'BSSubscribe', 'BSRelateChannelInfo'],
+  //       (r, m) => $.eq(r.BSRelateAccount.uid, m.memberUid)
+  //     )
+  //     .join(
+  //       'BSSubscribe',
+  //       this.db.select('BSSubscribe'),
+  //       // ['BSSubscribeMember', 'BSSubscribe', 'BSRelateChannelInfo'],
+  //       (r, s) =>
+  //         $.and(
+  //           $.eq(r.BSSubscribeMember.subscribeId, s.id),
+  //           $.eq(s.enable, true)
+  //         )
+  //     )
+  //     .join(
+  //       'BSSubRelateChannelInfo',
+  //       this.db.select('BSRelateChannelInfo'),
+  //       // ['BSSubscribeMember', 'BSSubscribe', 'BSRelateChannelInfo'],
+  //       (r, c) => $.and($.eq(r.BSSubscribe.gid, c.id), $.eq(c.type, 'group'))
+  //     )
+  //     .execute()
+  //   const res = subs.map((sub) => ({
+  //     account: sub.BSRelateAccount,
+  //     accountChannel: sub.BSRelateChannelInfo,
+  //     subscribeMember: sub.BSSubscribeMember,
+  //     subscribe: sub.BSSubscribe,
+  //     groupChannel: sub.BSSubRelateChannelInfo,
+  //   }))
+  //   return res
+  // }
 
   async getAllSubScriptionByUIDAndPlatform(
     id: string | number,
@@ -229,13 +232,19 @@ export class KoishiDB implements DB<ChannelInfo> {
   ): Promise<SubDetailWithGroupRes<ChannelInfo>[]> {
     const subs = await this.db
       .join(['BSRelateAccount', 'BSRelateChannelInfo'], (acc, c1) =>
+        // $.eq(acc.uid, c1.id)
         $.and(
+          $.eq(acc.uid, c1.id),
           $.eq(acc.platformUid, id?.toString()),
           $.eq(acc.platform, platform),
-          $.eq(acc.uid, c1.id),
           $.eq(c1.type, 'user')
         )
       )
+      // .where((r)=> $.and(
+      //   $.eq(r.BSRelateAccount.platformUid, id?.toString()),
+      //   $.eq(r.BSRelateAccount.platform, platform),
+      //   $.eq(r.BSRelateChannelInfo.type, 'user')
+      // ))
       .join('BSSubscribeMember', this.db.select('BSSubscribeMember'), (r, m) =>
         $.eq(r.BSRelateAccount.uid, m.memberUid)
       )
@@ -278,23 +287,23 @@ export class KoishiDB implements DB<ChannelInfo> {
   //   }))
   //   return res
   // }
-  async getSubscriptionInfoByType(
-    type: string
-  ): Promise<SubWithGroupRes<ChannelInfo>[]> {
-    const subs = await this.db
-      .join(['BSSubscribe', 'BSRelateChannelInfo'], (sub, c1) =>
-        $.and(
-          $.eq(sub.gid, c1.id),
-          $.eq(sub.type, type),
-          $.eq(sub.enable, true),
-          $.eq(c1.type, 'group')
-        )
-      )
-      .execute()
-    const res = subs.map((sub) => ({
-      subscribe: sub.BSSubscribe,
-      groupChannel: sub.BSRelateChannelInfo,
-    }))
-    return res
-  }
+  // async getSubscriptionInfoByType(
+  //   type: string
+  // ): Promise<SubWithGroupRes<ChannelInfo>[]> {
+  //   const subs = await this.db
+  //     .join(['BSSubscribe', 'BSRelateChannelInfo'], (sub, c1) =>
+  //       $.and(
+  //         $.eq(sub.gid, c1.id),
+  //         $.eq(sub.type, type),
+  //         $.eq(sub.enable, true),
+  //         $.eq(c1.type, 'group')
+  //       )
+  //     )
+  //     .execute()
+  //   const res = subs.map((sub) => ({
+  //     subscribe: sub.BSSubscribe,
+  //     groupChannel: sub.BSRelateChannelInfo,
+  //   }))
+  //   return res
+  // }
 }

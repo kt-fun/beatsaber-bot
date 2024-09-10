@@ -43,6 +43,7 @@ export class BeatleaderWSHandler<T> implements WSHandler {
     //   return
     // }
     // logger.info('Received beatleader message',data.id, data.player.id);
+    // cache all playerId
     const subscriptions = await this.db.getAllSubScriptionByUIDAndPlatform(
       playerId,
       'beatleader'

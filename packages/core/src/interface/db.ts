@@ -51,7 +51,7 @@ export interface DB<T> {
     type: string
   ): Promise<SubDetailWithGroupRes<T>[]>
 
-  getSubscriptionInfoByType(type: string): Promise<SubWithGroupRes<T>[]>
+  // getSubscriptionInfoByType(type: string): Promise<SubWithGroupRes<T>[]>
 
   // subscriptionMember
   addSubscribeMember(data: Partial<SubscribeMember>): Promise<void>
