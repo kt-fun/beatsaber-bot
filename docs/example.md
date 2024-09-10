@@ -30,11 +30,3 @@
 ### bsbot.bind
 
 ![](public/bbbind.png)
-
-### bsbot.me
-
-![](public/bbme.png)
-
-### bsbot.who
-
-![](public/bbwho.png)
