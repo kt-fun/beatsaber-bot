@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.4
+
+### Patch Changes
+
+- fix: getSubscriptionInfoByUGID
+
 ## 0.2.0-dev.3
 
 ### Patch Changes

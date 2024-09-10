@@ -6,6 +6,7 @@
     "koishi-plugin-beatsaber-bot": "0.2.0-dev.0"
   },
   "changesets": [
+    "calm-rings-rest",
     "gorgeous-phones-join",
     "mean-bulldogs-accept",
     "small-turtles-shave"
