@@ -1,0 +1,9 @@
+{
+  "mode": "pre",
+  "tag": "dev",
+  "initialVersions": {
+    "beatsaber-bot-core": "0.2.0-dev.0",
+    "koishi-plugin-beatsaber-bot": "0.2.0-dev.0"
+  },
+  "changesets": []
+}
