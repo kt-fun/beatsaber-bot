@@ -230,32 +230,42 @@ export class KoishiDB implements DB<ChannelInfo> {
     id: string | number,
     platform: string
   ): Promise<SubDetailWithGroupRes<ChannelInfo>[]> {
-    console.log('this.db', this.db)
     const subs = await this.db
-      .join(['BSRelateAccount', 'BSRelateChannelInfo'], (acc, c1) =>
-        // $.eq(acc.uid, c1.id)
-        $.and(
-          $.eq(acc.uid, c1.id),
-          $.eq(acc.platformUid, id?.toString()),
-          $.eq(acc.platform, platform),
-          $.eq(c1.type, 'user')
-        )
-      )
-      // .where((r)=> $.and(
-      //   $.eq(r.BSRelateAccount.platformUid, id?.toString()),
-      //   $.eq(r.BSRelateAccount.platform, platform),
-      //   $.eq(r.BSRelateChannelInfo.type, 'user')
-      // ))
-      .join('BSSubscribeMember', this.db.select('BSSubscribeMember'), (r, m) =>
-        $.eq(r.BSRelateAccount.uid, m.memberUid)
-      )
-      .join('BSSubscribe', this.db.select('BSSubscribe'), (r, s) =>
-        $.and($.eq(r.BSSubscribeMember.subscribeId, s.id), $.eq(s.enable, true))
-      )
       .join(
-        'BSSubRelateChannelInfo',
-        this.db.select('BSRelateChannelInfo'),
-        (r, c) => $.and($.eq(r.BSSubscribe.gid, c.id), $.eq(c.type, 'group'))
+        {
+          BSRelateAccount: this.db
+            .select('BSRelateAccount')
+            .where((r) =>
+              $.and(
+                $.eq(r.platform, platform),
+                $.eq(r.platformUid, id?.toString())
+              )
+            ),
+          BSRelateChannelInfo: this.db
+            .select('BSRelateChannelInfo')
+            .where((r) => $.eq(r.type, 'user')),
+          BSSubscribeMember: this.db.select('BSSubscribeMember'),
+
+          BSSubscribe: this.db
+            .select('BSSubscribe')
+            .where((r) => $.eq(r.enable, true)),
+          BSSubRelateChannelInfo: this.db
+            .select('BSRelateChannelInfo')
+            .where((r) => $.eq(r.type, 'group')),
+        },
+        ({
+          BSRelateAccount,
+          BSRelateChannelInfo,
+          BSSubscribeMember,
+          BSSubscribe,
+          BSSubRelateChannelInfo,
+        }) =>
+          $.and(
+            $.eq(BSRelateAccount.uid, BSRelateChannelInfo.id),
+            $.eq(BSRelateAccount.uid, BSSubscribeMember.memberUid),
+            $.eq(BSSubscribeMember.subscribeId, BSSubscribe.id),
+            $.eq(BSSubRelateChannelInfo.id, BSSubscribe.gid)
+          )
       )
       .execute()
     const res = subs.map((sub) => ({
