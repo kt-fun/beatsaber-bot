@@ -5,6 +5,7 @@ import { Config } from '@/config'
 import { DB } from '@/interface/db'
 import { BeatSaverWSEvent } from '@/api/interfaces/beatsaver'
 import { BotService, Session } from '@/interface'
+import { cache, handleWSEventWithCache } from '@/utils'
 
 export class BeatSaverWSHandler<T> implements WSHandler {
   private readonly logger: Logger
@@ -35,8 +36,7 @@ export class BeatSaverWSHandler<T> implements WSHandler {
     this.logger.info('BeatsaverWS closed')
   }
 
-  async onEvent(event: any) {
-    const data = JSON.parse(event.toString()) as BeatSaverWSEvent
+  async BSWSHandler(data: BeatSaverWSEvent) {
     // this.logger.info('Beatsaver message received', data.type, data?.msg?.id)
     if (data.type === 'MAP_UPDATE') {
       const bsmap = data.msg
@@ -47,11 +47,10 @@ export class BeatSaverWSHandler<T> implements WSHandler {
         return
       }
       const userId = bsmap.uploader.id
-      const subscriptions =
-        await this.db.getAllSubScriptionByUIDAndPlatform.apply(this.db, [
-          userId,
-          'beatsaver',
-        ])
+      const subscriptions = await this.db.getAllSubScriptionByUIDAndPlatform(
+        userId,
+        'beatsaver'
+      )
       const restSub = subscriptions.filter(
         (it) =>
           it.subscribe.type == 'beatsaver-map' && it.subscribe.enable == true
@@ -75,4 +74,13 @@ export class BeatSaverWSHandler<T> implements WSHandler {
       }
     }
   }
+
+  onEvent = handleWSEventWithCache(
+    this,
+    this.BSWSHandler,
+    1000 * 60 * 15,
+    (data) =>
+      `ws.bs.${data.type === 'MAP_DELETE' ? data.msg : data.msg.id}.${data.type}`,
+    (event) => JSON.parse(event.toString()) as BeatSaverWSEvent
+  )
 }

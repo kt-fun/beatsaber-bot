@@ -7,7 +7,8 @@ import {
 } from '../interfaces/beatleader'
 import { Config } from '@/config'
 import { OAuthTokenInfoResponse, OAuthTokenResponse } from './bsRequest'
-const get = <T>(...args) => fetch(args as any).then((res) => res.json() as T)
+import { fetchWithCache as get } from '../../utils'
+
 export const blRequest = (cfg: Config) => {
   let host = 'https://api.beatleader.xyz'
   if (host.endsWith('/')) {
