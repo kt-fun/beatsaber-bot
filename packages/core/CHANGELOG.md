@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.7
+
+### Patch Changes
+
+- feat: add cache, throttled for repeat ws event(beatsaver map update)
+
 ## 0.2.0-dev.6
 
 ### Patch Changes

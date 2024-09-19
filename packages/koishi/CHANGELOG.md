@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-dev.7
+
+### Patch Changes
+
+- feat: add cache, throttled for repeat ws event(beatsaver map update)
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-dev.7
+
 ## 0.2.0-dev.6
 
 ### Patch Changes
