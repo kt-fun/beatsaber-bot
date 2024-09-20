@@ -3,7 +3,9 @@ import {
   RelateChannelInfo,
   Subscribe,
   SubscribeMember,
-} from '@/db'
+} from './models'
+
+export * from './models'
 
 export interface SubInfoRes {
   subscribe: Subscribe

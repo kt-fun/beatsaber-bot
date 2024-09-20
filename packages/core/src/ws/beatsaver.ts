@@ -3,7 +3,7 @@ import { Logger } from '@/interface/logger'
 import { RenderService } from '@/img-render'
 import { Config } from '@/config'
 import { DB } from '@/interface/db'
-import { BeatSaverWSEvent } from '@/api/interfaces/beatsaver'
+import { BeatSaverWSEvent, BSMap } from '@/api/interfaces/beatsaver'
 import { BotService, Session } from '@/interface'
 import { cache, handleWSEventWithCache } from '@/utils'
 
@@ -36,42 +36,47 @@ export class BeatSaverWSHandler<T> implements WSHandler {
     this.logger.info('BeatsaverWS closed')
   }
 
+  eventParser(event) {
+    return JSON.parse(event.toString()) as BeatSaverWSEvent
+  }
+
+  eventFilter = (data: BeatSaverWSEvent) => {
+    return (
+      data.type === 'MAP_UPDATE' &&
+      data.msg.versions.some((it) => it.state == 'Published') &&
+      data.msg.declaredAi === 'None'
+    )
+  }
+  eventIdSelector = (data: BeatSaverWSEvent) =>
+    `ws.bs.${data.type === 'MAP_DELETE' ? data.msg : data.msg.id}.${data.type}`
+
   async BSWSHandler(data: BeatSaverWSEvent) {
     // this.logger.info('Beatsaver message received', data.type, data?.msg?.id)
-    if (data.type === 'MAP_UPDATE') {
-      const bsmap = data.msg
-      if (!bsmap.versions.some((it) => it.state == 'Published')) {
-        return
+
+    const bsmap = data.msg as BSMap
+    const userId = bsmap.uploader.id
+    const subscriptions = await this.db.getAllSubScriptionByUIDAndPlatform(
+      userId,
+      'beatsaver'
+    )
+    const restSub = subscriptions.filter(
+      (it) =>
+        it.subscribe.type == 'beatsaver-map' && it.subscribe.enable == true
+    )
+    // cacheService
+    if (restSub.length === 0) return
+    const image = this.render.renderMap(bsmap)
+    for (const item of restSub) {
+      const session = this.botService.getSessionByChannelInfo(item.groupChannel)
+      if (!session) {
+        continue
       }
-      if (bsmap.declaredAi != 'None') {
-        return
-      }
-      const userId = bsmap.uploader.id
-      const subscriptions = await this.db.getAllSubScriptionByUIDAndPlatform(
-        userId,
-        'beatsaver'
+      await session.send(
+        `本群谱师 「<at id="${item.account.uid}"/> (${bsmap.uploader.name})」刚刚发布了新谱面，「${bsmap.name}」`
       )
-      const restSub = subscriptions.filter(
-        (it) =>
-          it.subscribe.type == 'beatsaver-map' && it.subscribe.enable == true
-      )
-      // cacheService
-      if (restSub.length === 0) return
-      const image = this.render.renderMap(bsmap)
-      for (const item of restSub) {
-        const session = this.botService.getSessionByChannelInfo(
-          item.groupChannel
-        )
-        if (!session) {
-          continue
-        }
-        await session.send(
-          `本群谱师 「<at id="${item.account.uid}"/> (${bsmap.uploader.name})」刚刚发布了新谱面，「${bsmap.name}」`
-        )
-        // text + mention element
-        await session.send(await image)
-        await session.sendAudioByUrl(bsmap.versions[0].previewURL)
-      }
+      // text + mention element
+      await session.send(await image)
+      await session.sendAudioByUrl(bsmap.versions[0].previewURL)
     }
   }
 
@@ -79,8 +84,8 @@ export class BeatSaverWSHandler<T> implements WSHandler {
     this,
     this.BSWSHandler,
     1000 * 60 * 15,
-    (data) =>
-      `ws.bs.${data.type === 'MAP_DELETE' ? data.msg : data.msg.id}.${data.type}`,
-    (event) => JSON.parse(event.toString()) as BeatSaverWSEvent
+    this.eventParser,
+    this.eventFilter,
+    this.eventIdSelector
   )
 }

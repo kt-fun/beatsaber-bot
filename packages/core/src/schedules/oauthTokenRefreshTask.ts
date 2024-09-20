@@ -1,17 +1,7 @@
-import { Config } from '../config'
-import { BotService, DB, Logger, Session } from '@/interface'
-import { RenderService } from '@/img-render'
-import { APIService } from '@/api'
+import { ScheduleTaskCtx } from './interface'
 
-export const tokenRefreshTask = async <T>(
-  config: Config,
-  db: DB<T>,
-  render: RenderService,
-  api: APIService,
-  logger: Logger,
-  botService: BotService<T, Session<T>>
-) => {
-  logger.info('start token refresh task')
+export const tokenRefreshTask = async <T>(c: ScheduleTaskCtx<T>) => {
+  c.logger.info('start token refresh task')
   // getAllOauthToken
   const accounts = []
   // await db.getAllOAuthTokenNeedRefresh()
@@ -20,16 +10,16 @@ export const tokenRefreshTask = async <T>(
   //   type: 'oauth',
   // })
   for (const account of accounts) {
-    logger.info(
+    c.logger.info(
       `try to refresh ${account.platform} ${account.platformUid}'s token`
     )
     const now = new Date()
     if (account.platform === 'beatleader') {
-      const token = await api.BeatLeader.wrapperResult().refreshOAuthToken(
+      const token = await c.api.BeatLeader.wrapperResult().refreshOAuthToken(
         account.refreshToken
       )
       if (!token.isSuccess()) {
-        logger.info(
+        c.logger.info(
           `failed to refresh ${account.platform} token, invalid this account, ${JSON.stringify(account)}`
         )
         account.valid = 'invalid'
@@ -42,11 +32,11 @@ export const tokenRefreshTask = async <T>(
       account.accessToken = token.data.access_token
       account.refreshToken = token.data.refresh_token
     } else if (account.platform === 'beatsaver') {
-      const token = await api.BeatSaver.wrapperResult().refreshOAuthToken(
+      const token = await c.api.BeatSaver.wrapperResult().refreshOAuthToken(
         account.refreshToken
       )
       if (!token.isSuccess()) {
-        logger.info(
+        c.logger.info(
           `failed to refresh ${account.platform} token, invalid this account, ${JSON.stringify(account)}`
         )
         account.valid = 'invalid'
@@ -63,9 +53,9 @@ export const tokenRefreshTask = async <T>(
     account.lastModifiedAt = now
     //
     // await ctx.database.upsert('BSRelateOAuthAccount', [account])
-    logger.info(
+    c.logger.info(
       `refresh ${account.platform} token successfully ${account.platformUid}`
     )
   }
-  logger.info(`token refresh task finished`)
+  c.logger.info(`token refresh task finished`)
 }

@@ -1,5 +1,4 @@
 export * from './db'
-export * from './db'
 export * from './logger'
 export * from './cmd'
 export * from './render'

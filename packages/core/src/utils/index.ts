@@ -19,15 +19,14 @@ export const handleWSEventWithCache = (
   fnThat,
   fn,
   ttl,
-  eventIdSelector,
-  eventParser
+  eventParser,
+  eventFilter,
+  eventIdSelector
 ) => {
   const WSCache = new LRUCache({
     max: 500,
     size: 50,
-    sizeCalculation: (value, key) => {
-      return 1
-    },
+    sizeCalculation: (value, key) => 1,
     // for use with tracking overall storage size
     maxSize: 5000,
     allowStale: false,
@@ -39,7 +38,7 @@ export const handleWSEventWithCache = (
   return async function (event: any) {
     const data = eventParser(event)
     const key = eventIdSelector(data)
-    if (WSCache.get(key)) {
+    if (eventFilter(data) || WSCache.get(key)) {
       // console.log(`${key} hit cache, skip it, remainingTTL: `, WSCache.getRemainingTTL(key))
       return
     }

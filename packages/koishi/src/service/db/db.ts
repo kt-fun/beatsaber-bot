@@ -5,7 +5,6 @@ import {
   SubInfoRes,
   Subscribe,
   SubscribeMember,
-  SubWithGroupRes,
 } from 'beatsaber-bot-core'
 import { $, Context, Database, Tables } from 'koishi'
 import { ChannelInfo, KoiRelateChannelInfo } from '@/types'

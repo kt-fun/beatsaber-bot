@@ -1,13 +1,7 @@
 import Puppeteer from 'koishi-plugin-puppeteer'
 import { RenderService } from 'beatsaber-bot-core/img-render'
-import { APIService, Config } from 'beatsaber-bot-core'
+import { APIService, Config, sleep } from 'beatsaber-bot-core'
 import { Context } from 'koishi'
-
-export const sleep = async (millsec: number = 5000) => {
-  await new Promise<void>((resolve, reject) => {
-    setTimeout(resolve, millsec)
-  })
-}
 
 export const screenshot = async (
   puppeteer: Puppeteer,
@@ -48,11 +42,23 @@ export class ImgRender extends RenderService {
       waitTimeout: this.config.rankWaitTimeout,
     }
     this.htmlToImgBufferConverter = async (html) => {
+      // to img element str
       const buf = await this.ctx.puppeteer.render(html, async (page, next) => {
         // onStart?.()
-        await new Promise<void>((resolve, reject) => {
-          setTimeout(resolve, 5000)
-        })
+        // const page = await this.page()
+        // await page.goto(pathToFileURL(resolve(__dirname, '../index.html')).href)
+        // if (content) await page.setContent(content)
+        //
+        // callback ||= async (_, next) => page.$('body').then(next)
+        // const output = await callback(page, async (handle) => {
+        //   const clip = handle ? await handle.boundingBox() : null
+        //   const buffer = await page.screenshot({ clip })
+        //   return h.image(buffer, 'image/png').toString()
+        // })
+        //
+        // page.close()
+        // return output
+        await sleep(5000)
         return (
           page
             .$('body')

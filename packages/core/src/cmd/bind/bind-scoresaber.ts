@@ -1,5 +1,4 @@
-import { RelateAccount } from '@/db'
-import { CmdContext } from '@/interface'
+import { RelateAccount, CmdContext } from '@/interface'
 import {
   ScoreSaberIDNotFoundError,
   SessionPromotionCancelError,

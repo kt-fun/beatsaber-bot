@@ -1,10 +1,9 @@
-import { CmdContext } from '@/interface'
+import { CmdContext, RelateAccount } from '@/interface'
 import {
   AccountBindingNotFoundError,
   SessionPromotionCancelError,
   SessionPromotionTimeoutError,
 } from '@/errors'
-import { RelateAccount } from '@/db'
 
 export const handleBeatLeaderIDBind = async <T, C>(c: CmdContext<T, C>) => {
   const player = await c.api.BeatLeader.wrapperResult()

@@ -1,5 +1,4 @@
-import { CmdContext } from '@/interface'
-import { RelateAccount } from '@/db'
+import { CmdContext, RelateAccount } from '@/interface'
 
 export const handleBeatLeaderBind = async <T, C>(c: CmdContext<T, C>) => {
   const tokenInfo = await c.api.AIOSaber.wrapperResult().getBLOAuthToken(

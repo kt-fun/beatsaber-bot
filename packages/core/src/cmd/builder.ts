@@ -1,4 +1,5 @@
-import { CmdAlias, CmdExecutor, CmdOption } from '@/interface/cmd'
+import { CmdAlias, CmdContext, CmdExecutor, CmdOption } from '@/interface/cmd'
+import { BizError } from '@/errors'
 
 type Extend<BASE extends {}, N extends string, D> = {
   [P in N | keyof BASE]?: (P extends keyof BASE ? BASE[P] : unknown) &
@@ -51,12 +52,34 @@ export class CommandBuilder<CHANNEL, OPT extends {} = {}> {
     return this
   }
   setExecutor(executor: CmdExecutor<CHANNEL, OPT>) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const that = this
+    const errorHandler = (executor: CmdExecutor<CHANNEL, OPT>) => {
+      return async (c: CmdContext<CHANNEL, OPT>) => {
+        try {
+          await executor(c)
+        } catch (e: any) {
+          if (e instanceof BizError) {
+            await c.session.send(c.session.text(e.name, e.params))
+          } else {
+            c.logger.error(
+              `unexpectError occur during cmd 「${that.name}」executing`,
+              e
+            )
+            c.session.send(
+              'An unexpected error occurs, reporting it may help to fix it.'
+            )
+          }
+        }
+      }
+    }
+
     return {
       name: this.name,
       description: this.description,
       aliases: this.aliases,
       options: this.options,
-      callback: executor,
+      callback: errorHandler(executor),
       children: [],
     }
   }

@@ -1,5 +1,5 @@
-import { CmdContext } from '@/interface'
-import { RelateAccount } from '@/db'
+import { CmdContext, RelateAccount } from '@/interface'
+
 import {
   AccountBindingNotFoundError,
   SessionPromotionCancelError,
