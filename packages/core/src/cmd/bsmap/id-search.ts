@@ -20,7 +20,7 @@ export default () =>
       }
       const res = await c.api.BeatSaver.wrapperResult().searchMapById(c.input)
 
-      if (!res.isSuccess()) {
+      if (!res.isSuccess() || res.data.success === false) {
         throw new MapIdNotFoundError({ input: c.input })
       }
 

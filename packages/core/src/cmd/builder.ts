@@ -60,7 +60,7 @@ export class CommandBuilder<CHANNEL, OPT extends {} = {}> {
           await executor(c)
         } catch (e: any) {
           if (e instanceof BizError) {
-            await c.session.send(c.session.text(e.name, e.params))
+            await c.session.send(c.session.text(e.id, e.params))
           } else {
             c.logger.error(
               `unexpectError occur during cmd 「${that.name}」executing`,
