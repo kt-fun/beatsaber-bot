@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-dev.8
+
+### Patch Changes
+
+- feat: unify error handler for cmd executor
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-dev.8
+
 ## 0.2.0-dev.7
 
 ### Patch Changes
