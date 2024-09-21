@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.11
+
+### Patch Changes
+
+- fix: typo avatar
+
 ## 0.2.0-dev.10
 
 ### Patch Changes
