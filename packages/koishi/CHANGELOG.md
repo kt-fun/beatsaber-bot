@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-dev.12
+
+### Patch Changes
+
+- improve palyer render & fix rank cmd bug
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-dev.12
+
 ## 0.2.0-dev.11
 
 ### Patch Changes

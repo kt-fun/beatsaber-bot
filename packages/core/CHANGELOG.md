@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.12
+
+### Patch Changes
+
+- improve palyer render & fix rank cmd bug
+
 ## 0.2.0-dev.11
 
 ### Patch Changes
