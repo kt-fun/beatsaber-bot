@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.9
+
+### Patch Changes
+
+- feat: improve score render
+
 ## 0.2.0-dev.8
 
 ### Patch Changes
