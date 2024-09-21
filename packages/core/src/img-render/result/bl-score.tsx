@@ -181,6 +181,8 @@ export function BLScore({
               scoreInfo={score}
               statistic={statistic}
               bsor={bsor}
+              height={192}
+              width={400}
             />
           </div>
         </div>

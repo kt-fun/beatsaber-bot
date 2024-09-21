@@ -76,13 +76,18 @@ export default function ScoreGraph({
   scoreInfo,
   statistic,
   bsor,
+  height,
+  width,
 }: {
   scoreId: number
   scoreInfo: Score
   statistic: any
   bsor: BSOR
+  height: number
+  width: number
 }) {
-  const canvas = canvasHelper.createCanvas(400 * 4, 192 * 4)
+  // 400 192
+  const canvas = canvasHelper.createCanvas(width * 4, height * 4)
 
   const setupChart = (
     canvas: any,
@@ -346,8 +351,9 @@ export default function ScoreGraph({
   const dataURL = canvasHelper.canvasToDataURL(canvas)
   return (
     <>
-      <div style={{ height: '12em' }}>
-        <img src={dataURL} width={400} height={192} />
+      <div>
+        {/*style={{ height: '12em' }}*/}
+        <img src={dataURL} width={width} height={height} />
       </div>
     </>
   )

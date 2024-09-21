@@ -6,6 +6,7 @@ import { BLScore } from './bl-score'
 import { BSMap } from '@/api/interfaces/beatsaver'
 import { BeatLeaderUser, Score } from '@/api/interfaces/beatleader'
 import { ScoreSaberItem, ScoreSaberUser } from '@/api/interfaces/scoresaber'
+import BLRankScore from '@/img-render/result/bs-score-with-rank'
 
 export const getBSMapComp = (
   bsMap: BSMap,
@@ -45,6 +46,28 @@ export const getBLScoreComp = (
       statistic={statistic}
       bsor={bsor}
       qrcodeUrl={qrcodeUrl}
+    />
+  )
+}
+
+export const getBLRankScoreComp = (
+  score,
+  aroundScores,
+  regionTopScores,
+  difficulties,
+  bsMap,
+  statistic,
+  bsor
+) => {
+  return (
+    <BLRankScore
+      score={score}
+      bsMap={bsMap}
+      aroundScores={aroundScores}
+      regionTopScores={regionTopScores}
+      difficulties={difficulties}
+      statistic={statistic}
+      bsor={bsor}
     />
   )
 }

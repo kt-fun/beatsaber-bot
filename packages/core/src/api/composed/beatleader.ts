@@ -2,6 +2,7 @@ import { BeatLeaderClient, BeatSaverClient } from '../base'
 import { sortScore } from '../sortScore'
 import { Leaderboard } from '../interfaces/beatleader'
 import { decode } from '@/img-render/utils/bl/bsorDecoder'
+import * as url from 'node:url'
 
 interface MapDiffOption {
   difficulty?: string
@@ -34,7 +35,7 @@ export class BeatLeaderService {
     mapId: string,
     option?: MapDiffOption
   ): Promise<Leaderboard> {
-    const [map] = await Promise.all([this.bsClient.searchMapById(mapId)])
+    const map = await this.bsClient.searchMapById(mapId)
     if (!map) {
       throw Error('error.not.found')
     }
@@ -101,6 +102,32 @@ export class BeatLeaderService {
       bsMap: bsMap,
       statistic: statistic,
       bsor: bsor,
+    }
+  }
+
+  async getAroundScoreAndRegionScoreByRankAndPage(
+    leaderboardId: string,
+    rank: number,
+    regionCode: string
+  ) {
+    // return (await res.json()) as any
+    const page = Math.ceil(rank / 10)
+    const rest = rank % 10
+    let startIndex = 0
+    if (rest > 7) {
+      startIndex = 2
+    }
+    const regionUrl = `https://api.beatleader.xyz/leaderboard/${leaderboardId}?leaderboardContext=general&page=1&sortBy=rank&order=desc&countries=${regionCode}`
+    const aroundUrl = `https://api.beatleader.xyz/leaderboard/${leaderboardId}?leaderboardContext=general&page=${page}&sortBy=rank&order=desc`
+    const [regionScore, aroundScore] = await Promise.all([
+      fetch(regionUrl).then((res) => res.json()),
+      fetch(aroundUrl).then((res) => res.json()),
+    ])
+    const difficulties = regionScore.song.difficulties
+    return {
+      difficulties: difficulties,
+      aroundScores: aroundScore.scores.slice(startIndex, startIndex + 7),
+      regionTopScores: regionScore.scores,
     }
   }
 }

@@ -3,7 +3,7 @@ export * from './tag-format'
 
 export const diffConv = (diff: string) => {
   if (diff.includes('ExpertPlus')) {
-    return 'E+'
+    return 'EX+'
   } else if (diff.includes('Expert')) {
     return 'EX'
   } else if (diff.includes('Hard')) {

@@ -5,9 +5,7 @@ const options = {
 
   // for use with tracking overall storage size
   maxSize: 5000,
-  // sizeCalculation: (value, key) => {
-  //   return 1
-  // },
+  sizeCalculation: (value, key) => 1,
 
   // for use when you need to clean up something when objects
   // are evicted from the cache

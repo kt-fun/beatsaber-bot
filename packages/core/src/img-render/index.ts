@@ -1,6 +1,7 @@
 import { APIService } from '@/api'
 import {
   getBLPlayerComp,
+  getBLRankScoreComp,
   getBLScoreComp,
   getBSMapComp,
   getSSPlayerComp,
@@ -110,11 +111,31 @@ export abstract class RenderService implements ImgRender {
       .catch((e) => {
         throw Error('渲染错误')
       })
-    const qrcodeUrl = await createQrcode(
-      `https://replay.beatleader.xyz/?scoreId=${score.id}`
-    )
+
+    const { aroundScores, regionTopScores, difficulties } =
+      await api.BeatLeader.withRetry(
+        3
+      ).getAroundScoreAndRegionScoreByRankAndPage(
+        score.leaderboardId,
+        score.rank,
+        score.player.country
+      )
+    // api.BeatLeader
+    // const qrcodeUrl = await createQrcode(
+    //   `https://replay.beatleader.xyz/?scoreId=${score.id}`
+    // )
     return this.htmlToImgBufferConverter(
-      getHtml(getBLScoreComp(score, bsMap, statistic, bsor, qrcodeUrl)),
+      getHtml(
+        getBLRankScoreComp(
+          score,
+          aroundScores,
+          regionTopScores,
+          difficulties,
+          bsMap,
+          statistic,
+          bsor
+        )
+      ),
       renderOpts.onRenderStart,
       renderOpts.onRenderError
     )

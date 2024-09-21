@@ -32,3 +32,11 @@ export const formatNumber = (number: number) => {
     return '0'
   }
 }
+
+export function numberWithCommas(x: number) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+export const formatDate = (time: Date | undefined, template?: string) => {
+  if (!time) return undefined
+  return dayjs(time).format(template ?? 'YYYY-MM-DD')
+}
