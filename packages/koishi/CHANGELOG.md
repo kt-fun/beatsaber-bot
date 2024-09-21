@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-dev.10
+
+### Patch Changes
+
+- fix: replace api that is not support in node env
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-dev.10
+
 ## 0.2.0-dev.9
 
 ### Patch Changes

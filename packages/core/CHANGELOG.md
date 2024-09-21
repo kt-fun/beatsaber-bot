@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.10
+
+### Patch Changes
+
+- fix: replace api that is not support in node env
+
 ## 0.2.0-dev.9
 
 ### Patch Changes
