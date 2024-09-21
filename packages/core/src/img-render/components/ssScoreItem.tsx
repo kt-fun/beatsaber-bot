@@ -1,5 +1,5 @@
 import { BarChart, Key, Star, Wrench } from 'lucide-react'
-import { diffConv } from '../utils'
+import { diffConv, formatRelativeTimeByDay } from '../utils'
 import React from 'react'
 import { ScoreSaberItem } from '@/api/interfaces/scoresaber'
 
@@ -68,6 +68,9 @@ export default function SsScoreItem({
             <span className={'text-orange-200'}>
               {scoreItem.score.pp.toFixed(1)}
               PP
+            </span>
+            <span className={'opacity-70'}>
+              {formatRelativeTimeByDay(scoreItem.score.timeSet)}
             </span>
           </div>
           {getModifiers(scoreItem.score.modifiers).length > 0 && (

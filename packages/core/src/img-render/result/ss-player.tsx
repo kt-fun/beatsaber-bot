@@ -63,7 +63,7 @@ export default function SSPlayerPage({
                 'text-4xl pl-40 items-center flex text-gray-100 opacity-70'
               }
             >
-              <span>coming soon 👷</span>
+              <span>coming soon, ... maybe?</span>
             </div>
           </div>
           <div className={'grid grid-cols-4 gap-2'}>
