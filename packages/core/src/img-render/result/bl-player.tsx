@@ -24,6 +24,7 @@ export default function BLPlayerPage({
     <>
       <div
         id={'render-result'}
+        key={'render-result'}
         className={
           'flex flex-col justify-center items-center relative h-[720px] w-[1024px] my-auto'
         }

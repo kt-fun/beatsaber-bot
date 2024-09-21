@@ -39,7 +39,7 @@ function App({ children }: { children?: React.ReactNode }) {
         <script src="https://cdn.tailwindcss.com"></script>
         <title>IMG Render</title>
       </head>
-      <body className={'bg-red-400 flex w-fit'}>{children}</body>
+      <body className={'bg-black flex w-fit'}>{children}</body>
 
       <style dangerouslySetInnerHTML={{ __html: styles }} />
     </html>

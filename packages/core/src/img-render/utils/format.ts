@@ -17,6 +17,20 @@ export const formatTime = (time: string) => {
   return dayjs(time).locale(zh).fromNow()
 }
 
+export function formatRelativeTimeByDay(time: string | number | Date) {
+  let res = dayjs().diff(dayjs(time), 'd')
+  let unit = 'd'
+  if (res <= 0) {
+    res = dayjs().diff(dayjs(time), 'h')
+    unit = 'h'
+  }
+  if (res <= 0) {
+    res = dayjs().diff(dayjs(time), 'm')
+    unit = 'm'
+  }
+  return `${res}${unit}`
+}
+
 export const formatNumber = (number: number) => {
   // 1.11w
   try {

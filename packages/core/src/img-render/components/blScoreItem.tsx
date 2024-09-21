@@ -1,5 +1,5 @@
 import { BarChart, Key, Pin, Star, Wrench } from 'lucide-react'
-import { diffConv } from '../utils'
+import { diffConv, formatRelativeTimeByDay } from '../utils'
 import { Score } from '@/api/interfaces/beatleader'
 
 const getModifiers = (modifiers: string) => {
@@ -62,7 +62,7 @@ export default function BeatLeaderItem({
               </span>
             </div>
           </div>
-          <div className={'flex space-x-2 text-xs'}>
+          <div className={'flex space-x-2 text-xs items-center'}>
             <span>
               {(
                 (item.baseScore / item.leaderboard.difficulty.maxScore) *
@@ -70,16 +70,21 @@ export default function BeatLeaderItem({
               ).toFixed(2)}
               %
             </span>
-            <span className={'text-orange-200'}>{item.pp.toFixed(1)}PP</span>
+            <span className={'text-orange-200'}>{item.pp.toFixed(2)}PP</span>
+            <span className={'text-xs opacity-70'}>
+              {formatRelativeTimeByDay(item.timepost * 1000)}
+            </span>
           </div>
-          {getModifiers(item.modifiers).length > 0 && (
-            <div className="text-xs flex flex-wrap space-x-2 items-center">
-              <Wrench className="h-3 w-3" />
-              {getModifiers(item.modifiers).map((modifier) => (
-                <span key={modifier}>{modifier}</span>
-              ))}
-            </div>
-          )}
+          <div className={'flex items-center space-x-2'}>
+            {getModifiers(item.modifiers).length > 0 && (
+              <div className="text-xs flex flex-wrap space-x-2 items-center">
+                <Wrench className="h-3 w-3" />
+                {getModifiers(item.modifiers).map((modifier) => (
+                  <span key={modifier}>{modifier}</span>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
