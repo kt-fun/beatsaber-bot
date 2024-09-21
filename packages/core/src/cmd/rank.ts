@@ -31,15 +31,16 @@ export default () =>
       }
       const { blAccount, ssAccount } = await c.db.getUserAccountsByUid(uid)
       let accountId = Platform.BL && blAccount.platformUid
-      if (!accountId) {
+
+      if (c.input) {
+        accountId = c.input
+      } else if (!accountId) {
         accountId = Platform.SS && ssAccount.platformUid
       }
 
       if (!accountId && !c.input) {
         // c.session.sendQuote(c.session.text('commands.bsbot.me.not-found'))
         throw Error(`Unknown user ID: ${uid}`)
-      } else if (!accountId) {
-        accountId = c.input
       }
       // const onStartRender = () => {
       //   c.session.send(
