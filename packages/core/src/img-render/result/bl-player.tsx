@@ -36,7 +36,7 @@ export default function BLPlayerPage({
           <div className={'flex justify-between'}>
             <div className="flex space-x-4 pb-2">
               <img
-                src={user.avater}
+                src={user.avatar}
                 className={'h-36 w-36 rounded-md z-10'}
                 loading={'eager'}
               />
