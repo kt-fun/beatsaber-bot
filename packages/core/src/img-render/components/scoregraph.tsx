@@ -20,7 +20,7 @@ export function formatNumber(
 
   return (
     (addSign && num > 0 ? '+' : '') +
-    num.toLocaleString(navigator.language, {
+    num.toLocaleString('zh-CN', {
       minimumFractionDigits: digits,
       maximumFractionDigits: digits,
     })
