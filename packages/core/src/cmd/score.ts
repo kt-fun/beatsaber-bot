@@ -42,7 +42,12 @@ export default () =>
           diffOption
         )
       if (!score.isSuccess()) {
-        throw new ScoreNotFoundError({ user: accountId, id: mapId })
+        throw new ScoreNotFoundError({
+          user: accountId,
+          id: mapId,
+          diff: diffOption.difficulty,
+          mode: c.options.m,
+        })
       }
 
       const platform = c.options.p == 'ss' ? Platform.SS : Platform.BL
