@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.13
+
+### Patch Changes
+
+- feat: add new parser for i18n interpolate & bug fix
+
 ## 0.2.0-dev.12
 
 ### Patch Changes
