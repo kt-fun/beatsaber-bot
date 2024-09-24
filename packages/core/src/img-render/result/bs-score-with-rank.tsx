@@ -11,7 +11,10 @@ import ScoreGraph from '../components/scoregraph'
 import React from 'react'
 import { BSOR, Score } from '@/api/interfaces/beatleader'
 import { BSMap } from '@/api/interfaces/beatsaver'
-import { RankScoreItem } from '@/img-render/components/rankScoreItem'
+import {
+  RankScoreItem,
+  ScoreItemSkeleton,
+} from '@/img-render/components/rankScoreItem'
 import { RankDifficulty } from '@/img-render/components/RankDifficulty'
 import { Avatar } from '@/img-render/components/base/avatar'
 import { formatDuration, formatTime } from '@/img-render/utils'
@@ -37,6 +40,22 @@ export default function BLRankScore({
   bsor,
 }: BLScoreProps) {
   const bg = 'https://www.loliapi.com/acg/pc/'
+  let aroundScore = aroundScores
+    .slice(0, 7)
+    .map((it) => ({ ...it, template: false }))
+  let regionTopScore = regionTopScores
+    .slice(0, 7)
+    .map((it) => ({ ...it, template: false }))
+  if (aroundScore.length < 7) {
+    aroundScore = aroundScore.concat(
+      new Array(7 - aroundScore.length).fill({ template: true })
+    )
+  }
+  if (regionTopScore.length < 7) {
+    regionTopScore = regionTopScore.concat(
+      new Array(7 - regionTopScore.length).fill({ template: true })
+    )
+  }
 
   return (
     <>
@@ -195,48 +214,56 @@ export default function BLRankScore({
                 {/*<ScoreGraph scoreId={score.id} scoreInfo={score} />*/}
               </div>
             </div>
-            <div className={'flex justify-between gap-2 items-center mt-auto'}>
-              <div className={'flex flex-col items-center gap-2'}>
+            <div className={'flex justify-between gap-2 items-start mt-auto'}>
+              <div className={'flex flex-col items-start gap-2'}>
                 <div className={'text-white font-bold text-3xl mr-auto'}>
                   Global Rank
                 </div>
-                {aroundScores.slice(0, 7).map((aroundScore: any) => (
-                  <RankScoreItem
-                    key={aroundScore.id}
-                    name={aroundScore.player.name}
-                    date={aroundScore.timepost}
-                    countryCode={aroundScore.player.country ?? 'CN'}
-                    avatar={aroundScore.player.avatar}
-                    globalRank={aroundScore.rank}
-                    score={aroundScore.modifiedScore}
-                    modifiers={aroundScore.modifiers}
-                    isRegionRank={false}
-                    acc={aroundScore.accuracy}
-                    pp={aroundScore.pp}
-                    self={aroundScore.player.id === score.playerId}
-                  />
-                ))}
+                {aroundScore.map((cur: any, idx) =>
+                  !cur.template ? (
+                    <RankScoreItem
+                      key={cur.id}
+                      name={cur.player.name}
+                      date={cur.timepost}
+                      countryCode={cur.player.country ?? 'CN'}
+                      avatar={cur.player.avatar}
+                      globalRank={cur.rank}
+                      score={cur.modifiedScore}
+                      modifiers={cur.modifiers}
+                      isRegionRank={false}
+                      acc={cur.accuracy}
+                      pp={cur.pp}
+                      self={cur.player.id === score.playerId}
+                    />
+                  ) : (
+                    <ScoreItemSkeleton isRegionRank={false} key={idx} />
+                  )
+                )}
               </div>
-              <div className={'flex flex-col items-center gap-2'}>
+              <div className={'flex flex-col items-start gap-2'}>
                 <div className={'text-white font-bold text-3xl mr-auto'}>
                   Region Top Rank
                 </div>
-                {regionTopScores.slice(0, 7).map((aroundScore: any) => (
-                  <RankScoreItem
-                    key={aroundScore.id}
-                    name={aroundScore.player.name}
-                    date={aroundScore.timepost}
-                    countryCode={aroundScore.player.country ?? 'CN'}
-                    avatar={aroundScore.player.avatar}
-                    globalRank={aroundScore.rank}
-                    score={aroundScore.modifiedScore}
-                    modifiers={aroundScore.modifiers}
-                    isRegionRank
-                    acc={aroundScore.accuracy}
-                    pp={aroundScore.pp}
-                    self={aroundScore.player.id === score.playerId}
-                  />
-                ))}
+                {regionTopScore.map((cur: any, idx) =>
+                  !cur.template ? (
+                    <RankScoreItem
+                      key={cur.id}
+                      name={cur.player.name}
+                      date={cur.timepost}
+                      countryCode={cur.player.country ?? 'CN'}
+                      avatar={cur.player.avatar}
+                      globalRank={cur.rank}
+                      score={cur.modifiedScore}
+                      modifiers={cur.modifiers}
+                      isRegionRank
+                      acc={cur.accuracy}
+                      pp={cur.pp}
+                      self={cur.player.id === score.playerId}
+                    />
+                  ) : (
+                    <ScoreItemSkeleton isRegionRank key={idx} />
+                  )
+                )}
               </div>
             </div>
           </div>
