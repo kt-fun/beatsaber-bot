@@ -38,7 +38,7 @@ export const handleWSEventWithCache = (
   return async function (event: any) {
     const data = eventParser(event)
     const key = eventIdSelector(data)
-    if (eventFilter(data) || WSCache.get(key)) {
+    if (!eventFilter(data) || WSCache.get(key)) {
       // console.log(`${key} hit cache, skip it, remainingTTL: `, WSCache.getRemainingTTL(key))
       return
     }

@@ -2,7 +2,6 @@ import { BeatLeaderClient, BeatSaverClient } from '../base'
 import { sortScore } from '../sortScore'
 import { Leaderboard } from '../interfaces/beatleader'
 import { decode } from '@/img-render/utils/bl/bsorDecoder'
-import * as url from 'node:url'
 
 interface MapDiffOption {
   difficulty?: string
@@ -53,6 +52,7 @@ export class BeatLeaderService {
     if (option && option.mode) {
       reqs = reqs.filter((item) => item.mode == option.mode)
     }
+
     const res = await Promise.all(reqs.map((it) => this.getScore(it)))
     const scores = res.map((it) => it.data).filter((item) => item != null)
     // todo sort score
