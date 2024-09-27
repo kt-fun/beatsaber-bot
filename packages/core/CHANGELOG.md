@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.14
+
+### Patch Changes
+
+- feat: add remote puppeteer & option to upload image before send
+
 ## 0.2.0-dev.13
 
 ### Patch Changes
