@@ -51,11 +51,11 @@ export default () =>
         key: key,
         length: toBeSend.length,
       })
-      c.session.sendQuote(text)
+      await c.session.sendQuote(text)
 
       // consider merge maps image
-      // for (const item of toBeSend) {
-      //   session.sendQueued(await item.img)
-      //   session.sendQueued(h.audio(item.bsmap.versions[0].previewURL))
-      // }
+      for (const item of toBeSend) {
+        await c.session.sendImgBuffer(await item.img)
+        await c.session.sendAudioByUrl(item.bsmap.versions[0].previewURL)
+      }
     })

@@ -19,7 +19,7 @@ type HtmlToImgBufferConverter = (
   html: string,
   onRenderStart?: () => void,
   onRenderError?: (e) => void
-) => Promise<any>
+) => Promise<Buffer>
 
 type UrlToImgBufferConverter = HtmlToImgBufferConverter
 
@@ -28,7 +28,7 @@ export abstract class RenderService implements ImgRender {
   api: APIService
   baseConfig: Partial<RenderOption>
   htmlToImgBufferConverter: HtmlToImgBufferConverter
-  urlToImgBufferConverter: HtmlToImgBufferConverter
+  urlToImgBufferConverter: UrlToImgBufferConverter
   async renderRank(
     accountId: string,
     platform: Platform,

@@ -21,6 +21,18 @@ export const Config = Schema.object({
       filterParams: Schema.array(Schema.any()),
     })
   ).default([]),
+  preferPuppeteerMode: Schema.string().default('local-plugin'),
+  broswerlessWSEndpoint: Schema.string().default(''),
+  uploadImageToS3: Schema.object({
+    enable: Schema.boolean().default(false),
+    s3AccessKey: Schema.string().default(''),
+    s3SecretKey: Schema.string().default(''),
+    bucketName: Schema.string().default(''),
+    keyPrefix: Schema.string().default(''),
+    baseURL: Schema.string().default(''),
+    endpoint: Schema.string().default(''),
+    region: Schema.string().default(''),
+  }),
 }).i18n({
   // eslint--disable-next-line
   'zh-CN': require('./locales/zh-CN')._config,

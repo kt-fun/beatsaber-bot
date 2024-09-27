@@ -75,7 +75,7 @@ export class BeatSaverWSHandler<T> implements WSHandler {
         `本群谱师 「<at id="${item.account.uid}"/> (${bsmap.uploader.name})」刚刚发布了新谱面，「${bsmap.name}」`
       )
       // text + mention element
-      await session.send(await image)
+      await session.sendImgBuffer(await image)
       await session.sendAudioByUrl(bsmap.versions[0].previewURL)
     }
   }

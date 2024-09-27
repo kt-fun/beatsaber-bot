@@ -52,5 +52,5 @@ export default () =>
 
       const platform = c.options.p == 'ss' ? Platform.SS : Platform.BL
       const img = await c.render.renderScore(score.data.id.toString(), platform)
-      await c.session.sendQueued(img)
+      await c.session.sendImgBuffer(img)
     })

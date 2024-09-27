@@ -32,7 +32,7 @@ export default () =>
         image: c.render.renderMap(item),
       }))
       for (const msg of msgs) {
-        await c.session.sendQueued(await msg.image)
+        await c.session.sendImgBuffer(await msg.image)
         await c.session.sendAudioByUrl(msg.audio)
       }
     })

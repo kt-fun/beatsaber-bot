@@ -5,7 +5,7 @@ import { ImgRender } from '@/service/render'
 import { KoishiDB } from '@/service/db'
 
 export const loadSchedule = (ctx: Context, config: Config) => {
-  const botService = new KoishiBotService(ctx)
+  const botService = new KoishiBotService(ctx, config)
   // @ts-ignore
   const logger = ctx.logger('beatsaber-bot.schedule')
   const api = APIService.create(config)

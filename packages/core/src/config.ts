@@ -12,13 +12,25 @@ export interface BSAbility {
 }
 
 export interface Config {
+  preferPuppeteerMode: 'local-plugin' | 'remote'
+  broswerlessWSEndpoint: string
+  uploadImageToS3: {
+    enable: boolean
+    s3AccessKey: string
+    s3SecretKey: string
+    endpoint: string
+    region: string | undefined
+    bucketName: string
+    keyPrefix: string
+    baseURL: string
+  }
+  renderMode: 'local' | 'remote'
   beatSaverHost: string
   beatSaverWSURL: string
   remoteRenderURL: string
   minRawMatchMapIdLength: number
   defaultWaitTimeout: number
   rankWaitTimeout: number
-  renderMode: 'local' | 'remote'
   bsOauthClientId: string
   bsOauthClientSecret: string
   blOauthClientId: string

@@ -37,5 +37,5 @@ export default () =>
         )
       }
       const img = await c.render.renderRank(accountId, rankPlatform)
-      c.session.sendQueued(img)
+      c.session.sendImgBuffer(img)
     })

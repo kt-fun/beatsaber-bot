@@ -1,7 +1,13 @@
-import { RelateChannelInfo, Session, tran } from 'beatsaber-bot-core'
+import {
+  RelateChannelInfo,
+  Session,
+  tran,
+  TmpFileStorage,
+} from 'beatsaber-bot-core'
 
 import { h, Session as KoiSession } from 'koishi'
 import { ChannelInfo, KoiRelateChannelInfo } from '@/types'
+
 export class KSession implements Session<ChannelInfo> {
   // create a session Object?
   private readonly session: KoiSession
@@ -9,12 +15,21 @@ export class KSession implements Session<ChannelInfo> {
   mentions: RelateChannelInfo<ChannelInfo>[] = []
   u: KoiRelateChannelInfo
   g: KoiRelateChannelInfo
-  constructor(session: KoiSession, u, g, locale, mentions) {
+  tmpStorage?: TmpFileStorage | undefined
+  constructor(
+    session: KoiSession,
+    u,
+    g,
+    locale,
+    mentions,
+    tmpStorage?: TmpFileStorage | undefined
+  ) {
     this.session = session
     this.u = u
     this.g = g
     this.lang = locale
     this.mentions = mentions
+    this.tmpStorage = tmpStorage
   }
 
   getSessionInfo(): ChannelInfo {
@@ -35,11 +50,12 @@ export class KSession implements Session<ChannelInfo> {
   async sendAudioByUrl(url: string): Promise<void> {
     await this.session.send(h.audio(url))
   }
-  async sendAudio(url: string): Promise<void> {
-    await this.session.send(h.audio(url))
-  }
 
-  async sendImgBuffer(content: any, mimeType?: string): Promise<void> {
+  async sendImgBuffer(content: Buffer, mimeType?: string): Promise<void> {
+    if (this.tmpStorage) {
+      const url = await this.tmpStorage.uploadImg(content, mimeType)
+      return await this.sendImgByUrl(url)
+    }
     await this.session.send(h.image(content, mimeType ?? 'image/png'))
   }
   async sendQueued(msg: string): Promise<void> {

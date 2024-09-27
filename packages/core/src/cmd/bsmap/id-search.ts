@@ -33,6 +33,6 @@ export default () =>
       }
       const image = await c.render.renderMap(res.data, onStartRender)
       // upload to s3?
-      await c.session.send(image)
+      await c.session.sendImgBuffer(image)
       await c.session.sendAudioByUrl(res.data.versions[0].previewURL)
     })

@@ -276,44 +276,4 @@ export class KoishiDB implements DB<ChannelInfo> {
     }))
     return res
   }
-  // async getSubscriptionInfoByType2(
-  //   type: string
-  // ): Promise<SubWithGroupRes<ChannelInfo>[]> {
-  //   const subs = await this.db
-  //     .join(['BSSubscribe', 'BSRelateChannelInfo'], (sub, c1) =>
-  //       $.and(
-  //         $.eq(sub.gid, c1.id),
-  //         $.eq(sub.type, type),
-  //         $.eq(sub.enable, true),
-  //         $.eq(c1.type, 'group')
-  //       )
-  //     ).join('BSSubscribe', this.db.select('BSSubscribe'), (r, s) =>
-  //       $.and($.eq(r.BSSubscribeMember.subscribeId, s.id), $.eq(s.enable, true))
-  //     )
-  //     .execute()
-  //   const res = subs.map((sub) => ({
-  //     subscribe: sub.BSSubscribe,
-  //     groupChannel: sub.BSRelateChannelInfo,
-  //   }))
-  //   return res
-  // }
-  // async getSubscriptionInfoByType(
-  //   type: string
-  // ): Promise<SubWithGroupRes<ChannelInfo>[]> {
-  //   const subs = await this.db
-  //     .join(['BSSubscribe', 'BSRelateChannelInfo'], (sub, c1) =>
-  //       $.and(
-  //         $.eq(sub.gid, c1.id),
-  //         $.eq(sub.type, type),
-  //         $.eq(sub.enable, true),
-  //         $.eq(c1.type, 'group')
-  //       )
-  //     )
-  //     .execute()
-  //   const res = subs.map((sub) => ({
-  //     subscribe: sub.BSSubscribe,
-  //     groupChannel: sub.BSRelateChannelInfo,
-  //   }))
-  //   return res
-  // }
 }

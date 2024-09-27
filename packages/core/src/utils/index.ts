@@ -2,6 +2,9 @@ import { cache } from '@/utils/cache'
 import { LRUCache } from 'lru-cache'
 
 export * from './cache'
+export * from './s3'
+
+export * from './puppeteer'
 
 export const fetchWithCache = async <T>(...args): Promise<T> => {
   const res = cache.get(args)

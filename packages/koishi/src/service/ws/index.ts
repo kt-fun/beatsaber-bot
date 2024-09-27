@@ -39,7 +39,7 @@ const getWS = (ctx: Context, handler: WSHandler) => {
 }
 
 export function loadWS(ctx: Context, cfg: Config) {
-  const botService = new KoishiBotService(ctx)
+  const botService = new KoishiBotService(ctx, cfg)
   // @ts-ignore
   const logger = ctx.logger('beatsaber-bot.ws')
   const bllogger = logger.extend('BeatLeaderWS')

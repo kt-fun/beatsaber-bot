@@ -32,30 +32,30 @@ export interface ImgRender {
     platform: Platform,
     onRenderStart?: () => void,
     onRenderError?: (e) => void
-  ): Promise<any>
+  ): Promise<Buffer>
 
   renderScore(
     scoreId: string,
     platform: Platform,
     onRenderStart?: () => void,
     onRenderError?: (e) => void
-  ): Promise<any>
+  ): Promise<Buffer>
 
   renderMapById(
     mapId: string,
     onRenderStart?: () => void,
     onRenderError?: (e) => void
-  ): Promise<any>
+  ): Promise<Buffer>
 
   renderMap(
     map: BSMap,
     onRenderStart?: () => void,
     onRenderError?: (e) => void
-  ): Promise<any>
+  ): Promise<Buffer>
 
   renderUrl(
     url: string,
     onRenderStart?: () => void,
     onRenderError?: (e) => void
-  ): Promise<any>
+  ): Promise<Buffer>
 }

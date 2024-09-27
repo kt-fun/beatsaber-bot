@@ -30,12 +30,12 @@ export default () =>
         uid = c.session.mentions[0].id
       }
       const { blAccount, ssAccount } = await c.db.getUserAccountsByUid(uid)
-      let accountId = Platform.BL && blAccount.platformUid
+      let accountId = Platform.BL && blAccount?.platformUid
 
       if (c.input) {
         accountId = c.input
       } else if (!accountId) {
-        accountId = Platform.SS && ssAccount.platformUid
+        accountId = Platform.SS && ssAccount?.platformUid
       }
 
       if (!accountId && !c.input) {
@@ -51,5 +51,5 @@ export default () =>
       // }
       const rankPlatform = c.options.p == 'ss' ? Platform.SS : Platform.BL
       const img = await c.render.renderRank(accountId, rankPlatform)
-      await c.session.sendQueued(img)
+      await c.session.sendImgBuffer(img)
     })

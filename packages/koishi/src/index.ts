@@ -1,6 +1,12 @@
 import { Context, Session } from 'koishi'
 import {} from 'koishi-plugin-cron'
-import { botCommands, Command, Config, APIService } from 'beatsaber-bot-core'
+import {
+  botCommands,
+  Command,
+  Config,
+  APIService,
+  TmpFileStorage,
+} from 'beatsaber-bot-core'
 import { ChannelInfo, KoiRelateChannelInfo } from '@/types'
 import { InitDBModel, KoishiDB } from '@/service'
 import { KSession } from '@/service'
@@ -39,7 +45,10 @@ const registerFn = (ctx: Context, config: Config) => {
   // @ts-ignore
   const logger = ctx.logger('beats-bot.cmd')
   const render = new ImgRender(config, api, ctx)
-
+  let tmpStorage
+  if (config.uploadImageToS3.enable) {
+    tmpStorage = new TmpFileStorage(config)
+  }
   return (c: Command<ChannelInfo>) => {
     let cmd = ctx.command(`bsbot.${c.name}`)
 
@@ -63,7 +72,7 @@ const registerFn = (ctx: Context, config: Config) => {
       const exclude = [session.uid, session.selfId]
       const [rest, mentions] = await transformInput(session, db, input, exclude)
       const lang = session.locales[0]
-      const kSession = new KSession(session, u, g, lang, mentions)
+      const kSession = new KSession(session, u, g, lang, mentions, tmpStorage)
       const ctx = {
         api: api,
         logger: logger,

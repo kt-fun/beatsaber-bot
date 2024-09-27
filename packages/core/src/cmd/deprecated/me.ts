@@ -72,9 +72,9 @@ export default () =>
           scoreReq.data.id.toString(),
           rankPlatform
         )
-        c.session.sendQueued(img)
+        await c.session.sendImgBuffer(img)
         return
       }
       const img = await c.render.renderRank(accountId, rankPlatform)
-      c.session.sendQueued(img)
+      await c.session.sendImgBuffer(img)
     })
