@@ -56,20 +56,21 @@ export class PuppeteerRender {
     const page = await this.browser.newPage()
     await page.setContent(html)
     await page.setViewport({
-      width: 1920,
-      height: 1080,
-      deviceScaleFactor: 2,
+      width: 3840,
+      height: 2160,
+      deviceScaleFactor: 1,
     })
     const elm = await page.waitForSelector(selector, { timeout: 5000 })
     const clip = await elm.boundingBox()
-    const u8Arr = await elm.screenshot(
-      screenShotOption
-        ? screenShotOption(clip)
-        : {
-            clip: clip,
-            type: 'png',
-          }
-    )
+    const u8Arr = await elm!
+      .screenshot
+      // screenShotOption
+      //   ? screenShotOption(clip)
+      //   : {
+      //       clip: clip,
+      //       type: 'png',
+      //     }
+      ()
     await page.close()
     return Buffer.from(u8Arr)
   }
@@ -83,24 +84,25 @@ export class PuppeteerRender {
     onStart?.()
     const page = await this.browser.newPage()
     await page.setViewport({
-      width: 1920,
-      height: 1080,
-      deviceScaleFactor: 2,
+      width: 3840,
+      height: 2160,
+      deviceScaleFactor: 1,
     })
     await page.goto(url, { timeout: 0, waitUntil: 'domcontentloaded' })
 
     const elm = await page.waitForSelector(selector, { timeout: 20000 })
     // wait for potential animation
     await sleep(1000)
-    const clip = await elm.boundingBox()
-    const buffer = await elm!.screenshot(
-      screenShotOption
-        ? screenShotOption(clip)
-        : {
-            clip: clip,
-            type: 'png',
-          }
-    )
+    // const clip = await elm.boundingBox()
+    const buffer = await elm!
+      .screenshot
+      // screenShotOption
+      //   ? screenShotOption(clip)
+      //   : {
+      //       clip: clip,
+      //       type: 'png',
+      //     }
+      ()
     await page.close()
     return Buffer.from(buffer)
   }

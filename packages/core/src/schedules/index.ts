@@ -1,6 +1,6 @@
 import { tokenRefreshTask } from './oauthTokenRefreshTask'
-import { ScheduleTask } from '@/schedules/interface'
 import { Config } from '@/config'
+import { LBScoreMonitor } from '@/schedules/temp'
 
 const oauthTokenRefreshTask = {
   name: 'oauthTokenRefreshTask',
@@ -10,6 +10,12 @@ const oauthTokenRefreshTask = {
 }
 
 export const getScheduleTasks = (config: Config) => {
-  // oauthTokenRefreshTask
-  return [] as ScheduleTask[]
+  return [
+    {
+      name: 'lb-rank-notifier',
+      handler: LBScoreMonitor,
+      cron: config.tempCron.cron,
+      enable: config.tempCron.enable,
+    },
+  ]
 }

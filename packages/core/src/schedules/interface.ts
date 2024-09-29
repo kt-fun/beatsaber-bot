@@ -15,5 +15,6 @@ export type ScheduleTaskCtx<T> = {
 export type ScheduleTask = {
   name: string
   cron: string
-  executor: <T>(c: ScheduleTaskCtx<T>) => Promise<void>
+  handler: <T>(c: ScheduleTaskCtx<T>) => Promise<void>
+  enable: boolean
 }

@@ -44,6 +44,9 @@ export class PluginPuppeteerProvider implements PuppeteerProvider {
 
 export const creatPuppeteerRender = (config: Config, ctx: Context) => {
   const pluginProvider = new PluginPuppeteerProvider(config, ctx)
-  const remoteProvider = new RemotePuppeteerProvider(config)
-  return new PuppeteerRender([pluginProvider, remoteProvider])
+  // const remoteProvider = new RemotePuppeteerProvider(config)
+  return new PuppeteerRender([
+    pluginProvider,
+    // , remoteProvider
+  ])
 }

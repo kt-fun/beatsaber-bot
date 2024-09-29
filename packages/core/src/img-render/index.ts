@@ -170,9 +170,9 @@ export abstract class RenderService implements ImgRender {
     } as RenderOption)
   }
 
-  async renderUrl(url: string) {
+  async renderUrl(url: string, onRenderStart?: () => void) {
     if (this.urlToImgBufferConverter) {
-      return this.urlToImgBufferConverter(url)
+      return this.urlToImgBufferConverter(url, onRenderStart)
     }
   }
 

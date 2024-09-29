@@ -276,4 +276,27 @@ export class KoishiDB implements DB<ChannelInfo> {
     }))
     return res
   }
+
+  async getSubscriptionsByType(type: string) {
+    const subs = await this.db
+      .join(
+        {
+          BSSubscribe: this.db
+            .select('BSSubscribe')
+            .where((r) => $.and($.eq(r.enable, true), $.eq(r.type, type))),
+          BSSubRelateChannelInfo: this.db
+            .select('BSRelateChannelInfo')
+            .where((r) => $.eq(r.type, 'group')),
+        },
+        ({ BSSubscribe, BSSubRelateChannelInfo }) =>
+          $.and($.eq(BSSubRelateChannelInfo.id, BSSubscribe.gid))
+      )
+      .execute()
+    const res = subs.map((sub) => ({
+      // account: sub.BSRelateAccount,
+      subscribe: sub.BSSubscribe,
+      groupChannel: sub.BSSubRelateChannelInfo,
+    })) as any
+    return res
+  }
 }

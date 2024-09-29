@@ -36,8 +36,12 @@ export interface Config {
   blOauthClientId: string
   blOauthClientSecret: string
   // todo: notify
-  bsNotifyMonitorCron: string
-  tokenRefreshCron: string
-  tempCron: string
+  bsNotifyMonitorCron: ScheduleTaskConfig
+  tokenRefreshCron: ScheduleTaskConfig
+  tempCron: ScheduleTaskConfig
   BLScoreFilters: any
+}
+interface ScheduleTaskConfig {
+  cron: string
+  enable: boolean
 }

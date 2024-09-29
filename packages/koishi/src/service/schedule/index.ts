@@ -11,7 +11,7 @@ export const loadSchedule = (ctx: Context, config: Config) => {
   const api = APIService.create(config)
   const render = new ImgRender(config, api, ctx)
   const db = new KoishiDB(ctx)
-  const tasks = getScheduleTasks(config)
+  const tasks = getScheduleTasks(config).filter((task) => task.enable)
   const baseCtx = {
     config: config,
     db: db,
@@ -24,6 +24,7 @@ export const loadSchedule = (ctx: Context, config: Config) => {
       ...baseCtx,
       logger: logger.extend(task.name),
     }
-    ctx.cron(task.cron, () => task.executor(scheduleContext))
+    logger.info(`schedule ${task.name} init, ${task.cron}`)
+    ctx.cron(task.cron, () => task.handler(scheduleContext))
   }
 }

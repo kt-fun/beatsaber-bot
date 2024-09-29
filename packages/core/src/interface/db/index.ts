@@ -53,6 +53,7 @@ export interface DB<T> {
     type: string
   ): Promise<SubDetailWithGroupRes<T>[]>
 
+  getSubscriptionsByType(type: string): Promise<SubDetailWithGroupRes<T>[]>
   // getSubscriptionInfoByType(type: string): Promise<SubWithGroupRes<T>[]>
 
   // subscriptionMember
