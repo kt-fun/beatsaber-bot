@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.15
+
+### Patch Changes
+
+- tmp update
+
 ## 0.2.0-dev.14
 
 ### Patch Changes
