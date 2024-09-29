@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.16
+
+### Patch Changes
+
+- tmp cron update
+
 ## 0.2.0-dev.15
 
 ### Patch Changes
