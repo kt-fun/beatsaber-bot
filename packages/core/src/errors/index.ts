@@ -26,7 +26,14 @@ export class AccountBindingNotFoundError extends BizError {
     this.params = params
   }
 }
-
+export class UnknownUserIDError extends BizError {
+  constructor(params?: any) {
+    super('UnknownUserIDError')
+    this.name = 'UnknownUserIDError'
+    this.id = 'commands.bsbot.me.not-found'
+    this.params = params
+  }
+}
 export class InvalidMapIdError extends BizError {
   constructor(params?: any) {
     super('InvalidMapIdError')

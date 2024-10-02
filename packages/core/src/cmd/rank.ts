@@ -1,5 +1,6 @@
 import { CommandBuilder } from '@/cmd/builder'
 import { Platform } from '@/interface'
+import { UnknownUserIDError } from '@/errors'
 
 export default () =>
   new CommandBuilder()
@@ -40,7 +41,7 @@ export default () =>
 
       if (!accountId && !c.input) {
         // c.session.sendQuote(c.session.text('commands.bsbot.me.not-found'))
-        throw Error(`Unknown user ID: ${uid}`)
+        throw new UnknownUserIDError()
       }
       // const onStartRender = () => {
       //   c.session.send(
