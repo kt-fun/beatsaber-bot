@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.18
+
+### Patch Changes
+
+- fix: i18n error
+
 ## 0.2.0-dev.17
 
 ### Patch Changes
