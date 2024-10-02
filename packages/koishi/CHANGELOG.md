@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-dev.17
+
+### Patch Changes
+
+- fix: i8n error
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-dev.17
+
 ## 0.2.0-dev.16
 
 ### Patch Changes

@@ -8,6 +8,7 @@ export default () =>
     .setDescription('clear an auth account relate info')
     .addAlias('bblb')
     .addAlias('乐团新赛季')
+    .addAlias('乐团榜单')
     .setExecutor(async (c) => {
       const [hit, score] = await Promise.all([
         c.render.renderUrl('https://aiobs.ktlab.io/tmp/lb/hitcnt', () => {
