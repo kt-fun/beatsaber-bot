@@ -56,7 +56,7 @@ commands:
       options:
         p: 查询的平台，ss 代表 scoresaber，默认为 beatleader
       not-found: Ops，似乎还没有绑定到 ScoreSaber 或 BeatLeader
-      score-not-found: "😯，没有找到用户「{{user}}」的谱面「{{id}} ({{mode ? '{{mode}}' : '' }} {{diff ? '-{{diff}}' : '' }})」的打分数据"
+      score-not-found: "😯，没有找到用户「{{user}}」谱面「{{id}} {{mode ? '{{mode}}' : '' }} {{diff ? '-{{diff}}' : '' }}」的BL打分数据"
 
 
 

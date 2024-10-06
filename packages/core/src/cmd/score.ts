@@ -45,7 +45,7 @@ export default () =>
         throw new ScoreNotFoundError({
           user: accountId,
           id: mapId,
-          diff: diffOption.difficulty,
+          diff: diffOption?.difficulty,
           mode: c.options.m,
         })
       }

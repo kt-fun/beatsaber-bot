@@ -164,7 +164,7 @@ export class Parser {
   }
 
   parse(): string {
-    console.log(this.current, this.tokens)
+    // console.log(this.current, this.tokens)
     let result = ''
     while (this.current < this.tokens.length) {
       result += this.parseExpression()
