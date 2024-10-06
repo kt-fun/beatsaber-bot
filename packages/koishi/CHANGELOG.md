@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-dev.20
+
+### Patch Changes
+
+- fix: i18n error
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-dev.20
+
 ## 0.2.0-dev.19
 
 ### Patch Changes
