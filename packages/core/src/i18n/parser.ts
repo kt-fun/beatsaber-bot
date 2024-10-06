@@ -107,8 +107,9 @@ export class Parser {
         char !== '}' &&
         char !== '?' &&
         char !== ':' &&
-        char !== "'" &&
-        !/[a-zA-Z0-9_]/.test(char)
+        char !== "'"
+        // &&
+        // !/[a-zA-Z0-9_]/.test(char)
       ) {
         if (char === '\\' && current + 1 < this.template.length) {
           value += this.template[++current]
