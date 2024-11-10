@@ -33,6 +33,16 @@ export interface SubWithGroupRes<T> {
 }
 
 export interface DB<T> {
+  storeUserPreference<V = any>(
+    uid: number,
+    // channelId: string | undefined,
+    value: V
+  ): Promise<boolean>
+  getUserPreference<V = any>(
+    uid: number
+    // channelId: string | undefined,
+    // value: V
+  ): Promise<V>
   getUserAccountsByUid(id: number): Promise<Record<string, RelateAccount>>
 
   batchGetOrCreateUBySessionInfo(s: T[]): Promise<RelateChannelInfo<T>[]>

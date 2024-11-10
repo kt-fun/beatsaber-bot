@@ -6,6 +6,7 @@ import {
   Config,
   APIService,
   TmpFileStorage,
+  UserPreferenceStore,
 } from 'beatsaber-bot-core'
 import { ChannelInfo, KoiRelateChannelInfo } from '@/types'
 import { InitDBModel, KoishiDB } from '@/service'
@@ -73,6 +74,7 @@ const registerFn = (ctx: Context, config: Config) => {
       const [rest, mentions] = await transformInput(session, db, input, exclude)
       const lang = session.locales[0]
       const kSession = new KSession(session, u, g, lang, mentions, tmpStorage)
+      const userPreference = new UserPreferenceStore(db, u.id)
       const ctx = {
         api: api,
         logger: logger,
@@ -80,7 +82,9 @@ const registerFn = (ctx: Context, config: Config) => {
         config: config,
         session: kSession,
         render: render,
+        userPreference: userPreference,
         options: options,
+        s3: tmpStorage,
         input: rest,
       }
       await c.callback(ctx)

@@ -22,7 +22,21 @@ export class TmpFileStorage {
     this.baseURL = config.uploadImageToS3.baseURL
     this.s3Client = s3
   }
-
+  async uploadImgWithUrl(url: string, mimeType?: string): Promise<string> {
+    const res = await fetch(url).then((it) => it.arrayBuffer())
+    const buf = Buffer.from(res)
+    const md5 = crypto.createHash('md5').update(buf).digest('hex')
+    const key = this.keyPrefix ? `${this.keyPrefix}-${md5}` : md5
+    const params = {
+      Bucket: this.bucket,
+      Key: key,
+      Body: buf,
+      ContentType: mimeType ?? 'image/png',
+    }
+    const command = new PutObjectCommand(params)
+    const data = await this.s3Client.send(command)
+    return `${this.baseURL}${key}`
+  }
   async uploadImg(buffer: Buffer, mimeType?: string): Promise<string> {
     // md5 digest
     const md5 = crypto.createHash('md5').update(buffer).digest('hex')

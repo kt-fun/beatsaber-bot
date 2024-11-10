@@ -17,6 +17,31 @@ export class KoishiDB implements DB<ChannelInfo> {
     this.db = ctx.database
   }
 
+  async storeUserPreference<V = any>(
+    uid: number,
+    // gid: number | undefined,
+    value: V
+  ): Promise<boolean> {
+    const res = await this.db.upsert('BSUserPreference', [
+      {
+        uid: uid,
+        // now means all
+        gid: 0,
+        data: value ?? {},
+      },
+    ])
+    return res.inserted == 1
+  }
+  async getUserPreference<V = any>(
+    uid: number
+    // gid: number | undefined,
+  ): Promise<V> {
+    const res = await this.db.get('BSUserPreference', (row) =>
+      // $.and($.eq(row.uid, uid), $.eq(row.gid, gid))
+      $.eq(row.uid, uid)
+    )
+    return res?.[0]?.data ?? {}
+  }
   async getUserAccountsByUid(uid: number) {
     const accounts = await this.db.get('BSRelateAccount', (row) => {
       return $.and(

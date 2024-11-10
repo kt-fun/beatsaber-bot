@@ -5,6 +5,7 @@ import { Logger } from './logger'
 import { APIService } from '@/api'
 import { DB } from '@/interface/db'
 import { Config } from '@/config'
+import { TmpFileStorage, UserPreferenceStore } from '@/utils'
 
 export interface CmdContext<CHANNEL, OPT> {
   render: ImgRender
@@ -13,6 +14,8 @@ export interface CmdContext<CHANNEL, OPT> {
   db: DB<CHANNEL>
   config: Config
   session: Session
+  userPreference: UserPreferenceStore
+  s3: TmpFileStorage
   options: OPT
   input: string
 }

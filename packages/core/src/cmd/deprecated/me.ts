@@ -53,13 +53,12 @@ export default () =>
             mode: c.options.m,
           }
         }
-        const scoreReq =
-          await c.api.BeatLeader.wrapperResult().getScoreByPlayerIdAndMapId(
-            accountId,
-            c.input,
-            diffOption
-          )
-        if (!scoreReq.isSuccess()) {
+        const scoreReq = await c.api.BeatLeader.getScoreByPlayerIdAndMapId(
+          accountId,
+          c.input,
+          diffOption
+        )
+        if (!scoreReq) {
           c.session.sendQuote(
             c.session.text('commands.bsbot.me.score-not-found', {
               user: accountId,
@@ -69,12 +68,17 @@ export default () =>
           return
         }
         const img = await c.render.renderScore(
-          scoreReq.data.id.toString(),
-          rankPlatform
+          scoreReq.id.toString(),
+          rankPlatform,
+          c.userPreference
         )
         await c.session.sendImgBuffer(img)
         return
       }
-      const img = await c.render.renderRank(accountId, rankPlatform)
+      const img = await c.render.renderRank(
+        accountId,
+        rankPlatform,
+        c.userPreference
+      )
       await c.session.sendImgBuffer(img)
     })

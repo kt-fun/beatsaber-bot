@@ -6,7 +6,7 @@ export default () =>
   new CommandBuilder()
     .setName('score') // <uid:text>
     .addOption('p', 'platform:string')
-    .addOption('d', 'diffculty:string')
+    .addOption('d', 'difficulty:string')
     .addOption('m', 'mode:string')
     .addAlias('bbscore')
     .addAlias('/score')
@@ -18,8 +18,8 @@ export default () =>
       }
 
       const { blAccount, ssAccount } = await c.db.getUserAccountsByUid(uid)
-      let accountId = Platform.BL && blAccount.platformUid
-      accountId ||= Platform.SS && ssAccount.platformUid
+      let accountId = Platform.BL && blAccount?.platformUid
+      accountId ||= Platform.SS && ssAccount?.platformUid
       if (!accountId) {
         throw new AccountBindingNotFoundError()
       }
@@ -35,13 +35,12 @@ export default () =>
       // 从 input 中提取出 mapId
       const mapId = c.input
 
-      const score =
-        await c.api.BeatLeader.wrapperResult().getScoreByPlayerIdAndMapId(
-          accountId,
-          mapId,
-          diffOption
-        )
-      if (!score.isSuccess()) {
+      const score = await c.api.BeatLeader.getScoreByPlayerIdAndMapId(
+        accountId,
+        mapId,
+        diffOption
+      )
+      if (!score) {
         throw new ScoreNotFoundError({
           user: accountId,
           id: mapId,
@@ -51,6 +50,10 @@ export default () =>
       }
 
       const platform = c.options.p == 'ss' ? Platform.SS : Platform.BL
-      const img = await c.render.renderScore(score.data.id.toString(), platform)
+      const img = await c.render.renderScore(
+        score.id.toString(),
+        platform,
+        c.userPreference
+      )
       await c.session.sendImgBuffer(img)
     })

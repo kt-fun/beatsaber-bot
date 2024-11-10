@@ -36,6 +36,10 @@ export default () =>
           })
         )
       }
-      const img = await c.render.renderRank(accountId, rankPlatform)
+      const img = await c.render.renderRank(
+        accountId,
+        rankPlatform,
+        c.userPreference
+      )
       c.session.sendImgBuffer(img)
     })

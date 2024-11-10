@@ -16,8 +16,12 @@ export default () =>
     .addAlias('bbbindbs', { options: { p: 'bs' } })
     .addAlias('bbbindbs', { options: { p: 'bs' } })
     .addAlias('bbbindbs', { options: { p: 'bs' } })
+    .addAlias('bbbindbs', { options: { p: 'bs' } })
     .addAlias('bbbindbl', { options: { p: 'bl' } })
     .addAlias('bbbindss', { options: { p: 'ss' } })
+    .addAlias('ssbind', { options: { p: 'bs' } })
+    .addAlias('blbind', { options: { p: 'bl' } })
+    .addAlias('bsbind', { options: { p: 'ss' } })
     .setDescription('clear an auth account relate info')
     .setExecutor(async (c) => {
       if (!c.options.p) {

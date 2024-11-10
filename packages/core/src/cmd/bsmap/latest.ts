@@ -4,7 +4,15 @@ export default () =>
   new CommandBuilder()
     .setName('latest')
     .addAlias('bbnew')
-    .addAlias('bblatest')
+    .addAlias('sslatest')
+    .addAlias('bllatest')
+    .addAlias('bslatest')
+    .addAlias('blnew')
+    .addAlias('ssnew')
+    .addAlias('bsnew')
+    .addAlias('/blnew')
+    .addAlias('/ssnew')
+    .addAlias('/bsnew')
     .setDescription('clear an auth account relate info')
     .setExecutor(async (c) => {
       const res = await c.api.BeatSaver.wrapperResult()
@@ -29,7 +37,7 @@ export default () =>
       await c.session.sendQuote(text)
       const msgs = res.data.map((item) => ({
         audio: item.versions[0].previewURL,
-        image: c.render.renderMap(item),
+        image: c.render.renderMap(item, c.userPreference),
       }))
       for (const msg of msgs) {
         await c.session.sendImgBuffer(await msg.image)

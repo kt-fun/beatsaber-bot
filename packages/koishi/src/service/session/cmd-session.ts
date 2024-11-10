@@ -72,8 +72,22 @@ export class KSession implements Session<ChannelInfo> {
   }
 
   async prompt(timeout: number): Promise<string | undefined> {
-    return this.session.prompt(timeout)
+    const res = await this.session.prompt(timeout)
+    const transformedResult = tryToTransform(res)
+
+    return transformedResult
   }
+}
+
+const regex = /src="(https?:[^"]+)"/
+const tryToTransform = (t: string | undefined) => {
+  if (!t) return undefined
+  if (typeof t == 'string' && regex.test(t)) {
+    const [, src] = regex.exec(t)
+    const res = src?.replaceAll('&amp;', '&')
+    return res
+  }
+  return t
 }
 
 // convert sessionInfo

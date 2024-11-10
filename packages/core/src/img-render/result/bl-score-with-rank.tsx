@@ -12,9 +12,9 @@ import React from 'react'
 import { BSOR, Score } from '@/api/interfaces/beatleader'
 import { BSMap } from '@/api/interfaces/beatsaver'
 import {
-  RankScoreItem,
+  BlRankScoreItem,
   ScoreItemSkeleton,
-} from '@/img-render/components/rankScoreItem'
+} from '@/img-render/components/bl-rank-score-item'
 import { RankDifficulty } from '@/img-render/components/RankDifficulty'
 import { Avatar } from '@/img-render/components/base/avatar'
 import { formatDuration, formatTime } from '@/img-render/utils'
@@ -28,6 +28,7 @@ interface BLScoreProps {
   difficulties: any[]
   statistic: any
   bsor: BSOR
+  bg: string
 }
 
 export default function BLRankScore({
@@ -38,8 +39,8 @@ export default function BLRankScore({
   bsMap,
   statistic,
   bsor,
+  bg,
 }: BLScoreProps) {
-  const bg = 'https://www.loliapi.com/acg/pc/'
   let aroundScore = aroundScores
     .slice(0, 7)
     .map((it) => ({ ...it, template: false }))
@@ -188,14 +189,15 @@ export default function BLRankScore({
               </div>
               {/*diff code */}
               <div className="text-xl font-bold h-24 w-[500px] rounded-lg  mt-auto flex items-center justify-evenly gap-2 ">
-                {difficulties
-                  .filter((it: any) => it.mode === 1)
-                  .map((diff: any) => (
+                {bsMap.versions[0].diffs
+                  .filter((it) => it.mode === 'Standard')
+                  .map((diff) => (
                     <RankDifficulty
-                      difficulty={diff.difficultyName}
-                      stars={diff.stars}
-                      current={score.difficulty.id === diff.id}
-                      key={diff.difficultyName}
+                      difficulty={diff.difficulty}
+                      star={diff.stars}
+                      blStar={diff.blStars}
+                      current={false}
+                      key={diff.difficulty}
                     />
                   ))}
               </div>
@@ -221,7 +223,7 @@ export default function BLRankScore({
                 </div>
                 {aroundScore.map((cur: any, idx) =>
                   !cur.template ? (
-                    <RankScoreItem
+                    <BlRankScoreItem
                       key={cur.id}
                       name={cur.player.name}
                       date={cur.timepost}
@@ -246,7 +248,7 @@ export default function BLRankScore({
                 </div>
                 {regionTopScore.map((cur: any, idx) =>
                   !cur.template ? (
-                    <RankScoreItem
+                    <BlRankScoreItem
                       key={cur.id}
                       name={cur.player.name}
                       date={cur.timepost}

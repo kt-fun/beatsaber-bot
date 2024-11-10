@@ -1,12 +1,12 @@
 export interface ScoreSaberItem {
-  score: BeatScore
+  score: SSScore
   leaderboard: LeaderBoard
   mapId?: string
 }
 
-interface BeatScore {
+export interface SSScore {
   id: number
-  leaderboardPlayerInfo: any
+  leaderboardPlayerInfo: LeaderboardPlayerInfo
   rank: number
   baseScore: number
   modifiedScore: number
@@ -26,6 +26,15 @@ interface BeatScore {
   deviceControllerRight: string
 }
 
+export interface LeaderboardPlayerInfo {
+  id: string
+  name: string
+  profilePicture: string
+  country: string
+  permissions: number
+  badges?: string
+  role?: string
+}
 interface LeaderBoard {
   id: number
   songHash: string

@@ -1,21 +1,22 @@
 /** @jsxImportSource react */
 import Flags, { EarchIcon } from '../components/flag'
 import { twJoin } from '../utils/tw-join'
-import ScoreItem from '../components/ssScoreItem'
+import ScoreItem from '../components/ss-score-item'
 import { ScoreSaberItem, ScoreSaberUser } from '@/api/interfaces/scoresaber'
 
 interface SSPlayerProps {
   leaderItems: ScoreSaberItem[]
   scoreUser: ScoreSaberUser
   params?: Record<string, string>
+  bg: string
 }
 
 export default function SSPlayerPage({
   leaderItems,
   scoreUser,
+  bg,
   params,
 }: SSPlayerProps) {
-  const bg = 'https://www.loliapi.com/acg/pc/'
   return (
     <>
       <div

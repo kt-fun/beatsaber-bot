@@ -15,7 +15,7 @@ interface ScoreItemProps {
   date: number
   self: boolean
 }
-export function RankScoreItem(props: ScoreItemProps) {
+export function BlRankScoreItem(props: ScoreItemProps) {
   return (
     <div
       className={`${props.self ? 'gradient-border' : ''} bs-bg-gradient shadow-xl rounded-lg -skew-x-12 w-80 h-20 text-white font-bold flex flex-col p-1 z-10 relative max-w-[300px]`}

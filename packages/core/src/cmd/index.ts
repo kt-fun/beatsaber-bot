@@ -11,6 +11,7 @@ import Subleave from '@/cmd/subscribe/subleave'
 import Unsubscribe from '@/cmd/subscribe/unsubscribe'
 import Bind from '@/cmd/bind'
 import Tmp from '@/cmd/deprecated/tmp'
+import Config from '@/cmd/config'
 
 function applyCommand<CHANNEL>(...fns: (() => Command<CHANNEL>)[]) {
   return fns.map((fn) => fn())
@@ -29,5 +30,6 @@ export const botCommands = <CHANNEL>() =>
     Subjoin,
     Subleave,
     Unsubscribe,
-    Tmp
+    Tmp,
+    Config
   )

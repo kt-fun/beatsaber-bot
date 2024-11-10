@@ -5,8 +5,8 @@ export class BeatSaverService {
   constructor(bsClient: BeatSaverClient) {
     this.bsClient = bsClient
   }
-  getUnreadAlertsByPage = (ak: string, page: number) =>
-    this.bsClient.getUnreadAlertsByPage(ak, page)
+  // getUnreadAlertsByPage = (ak: string, page: number) =>
+  //   this.bsClient.getUnreadAlertsByPage(ak, page)
   getTokenInfo = (ak: string) => this.bsClient.getTokenInfo(ak)
   searchMapById = (key: string) => this.bsClient.searchMapById(key)
   searchMapByKeyword = (key: string) => this.bsClient.searchMapByKeyword(key)

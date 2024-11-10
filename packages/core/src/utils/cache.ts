@@ -31,3 +31,5 @@ const options = {
 }
 
 export const cache = new LRUCache(options)
+
+export const createCache = (opt) => new LRUCache(opt)

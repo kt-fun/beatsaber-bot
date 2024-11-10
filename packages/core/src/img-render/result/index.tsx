@@ -6,7 +6,7 @@ import { BLScore } from './bl-score'
 import { BSMap } from '@/api/interfaces/beatsaver'
 import { BeatLeaderUser, Score } from '@/api/interfaces/beatleader'
 import { ScoreSaberItem, ScoreSaberUser } from '@/api/interfaces/scoresaber'
-import BLRankScore from '@/img-render/result/bs-score-with-rank'
+import BLRankScore from '@/img-render/result/bl-score-with-rank'
 
 export const getBSMapComp = (
   bsMap: BSMap,
@@ -23,13 +23,18 @@ export const getBSMapComp = (
 }
 export const getSSPlayerComp = (
   scores: ScoreSaberItem[],
-  userInfo: ScoreSaberUser
+  userInfo: ScoreSaberUser,
+  bg: string
 ) => {
-  return <SSPlayerPage scoreUser={userInfo} leaderItems={scores} />
+  return <SSPlayerPage scoreUser={userInfo} leaderItems={scores} bg={bg} />
 }
 
-export const getBLPlayerComp = (scores: Score[], userInfo: BeatLeaderUser) => {
-  return <BLPlayerPage user={userInfo} beatleaderItems={scores} />
+export const getBLPlayerComp = (
+  scores: Score[],
+  userInfo: BeatLeaderUser,
+  bg: string
+) => {
+  return <BLPlayerPage user={userInfo} beatleaderItems={scores} bg={bg} />
 }
 
 export const getBLScoreComp = (
@@ -57,7 +62,8 @@ export const getBLRankScoreComp = (
   difficulties,
   bsMap,
   statistic,
-  bsor
+  bsor,
+  bg
 ) => {
   return (
     <BLRankScore
@@ -68,6 +74,7 @@ export const getBLRankScoreComp = (
       difficulties={difficulties}
       statistic={statistic}
       bsor={bsor}
+      bg={bg}
     />
   )
 }

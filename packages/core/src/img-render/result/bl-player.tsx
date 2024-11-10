@@ -2,7 +2,7 @@
 import getPart from '../utils/bl/getPart'
 import ScoreBadge from '../components/socre-badge'
 import SkillGraph from '../components/skill-graph'
-import BeatLeaderItem from '../components/blScoreItem'
+import BeatLeaderItem from '../components/bl-score-item'
 import Flags, { EarchIcon } from '../components/flag'
 import { twJoin } from '../utils/tw-join'
 import { getHeadsetForHMD } from '../utils/bl/blheadset'
@@ -11,15 +11,16 @@ interface BLPlayerInfoProps {
   beatleaderItems: any
   user: any
   params?: Record<string, string>
+  bg: string
 }
 
 export default function BLPlayerPage({
   beatleaderItems,
   user,
   params,
+  bg,
 }: BLPlayerInfoProps) {
   const part = getPart(user)
-  const bg = 'https://www.loliapi.com/acg/pc/'
   return (
     <>
       <div
@@ -128,7 +129,7 @@ export default function BLPlayerPage({
         </div>
         <img
           src={bg}
-          className={'inset-0 rounded-lg absolute h-full object-cover'}
+          className={'rounded-lg absolute h-[720px] w-[1024px] object-cover'}
           loading={'eager'}
         />
       </div>

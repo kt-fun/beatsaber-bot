@@ -1,3 +1,5 @@
+import { UserPreferenceStore } from '@/utils'
+
 interface BaseRenderOpts {
   type: 'local' | 'remote'
   puppeteer: any
@@ -5,6 +7,7 @@ interface BaseRenderOpts {
   onRenderError?: (e) => void
   customBackground?: string
   waitTimeout?: number
+  userPreference?: UserPreferenceStore
   // screenWaitTimeout?: number
 }
 

@@ -44,7 +44,7 @@ export default () =>
         )
       }
       const toBeSend = res.data.slice(0, 3).map((it) => ({
-        img: c.render.renderMap(it, onStartRender),
+        img: c.render.renderMap(it, c.userPreference, onStartRender),
         bsmap: it,
       }))
       const text = c.session.text('commands.bsbot.search.success', {

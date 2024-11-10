@@ -13,7 +13,6 @@ export class ScoreSaberService {
   getScoreUserById(id: string) {
     return this.scClient.getScoreUserById(id)
   }
-
   async getScoreByPlayerIdAndMapId(playerId: string, mapId: string) {
     const map = await this.bsClient.searchMapById(mapId)
     if (!map) {

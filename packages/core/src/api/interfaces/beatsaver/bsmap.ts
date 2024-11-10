@@ -54,6 +54,8 @@ export interface BSMap {
       seconds: number
       maxScore: number
       paritySummary: any
+      star?: number
+      blStar?: number
       [key: string]: any
     }[]
   }[]

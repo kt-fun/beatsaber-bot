@@ -2,6 +2,7 @@ import { BeatLeaderClient, BeatSaverClient } from '../base'
 import { sortScore } from '../sortScore'
 import { Leaderboard } from '../interfaces/beatleader'
 import { decode } from '@/img-render/utils/bl/bsorDecoder'
+import { MapIdNotFoundError, ScoreNotFoundError } from '@/errors'
 
 interface MapDiffOption {
   difficulty?: string
@@ -36,7 +37,7 @@ export class BeatLeaderService {
   ): Promise<Leaderboard> {
     const map = await this.bsClient.searchMapById(mapId)
     if (!map) {
-      throw Error('error.not.found')
+      throw new MapIdNotFoundError()
     }
     const hash = map.versions[0].hash
     let reqs = map.versions[0].diffs.map((it) => ({
@@ -54,10 +55,9 @@ export class BeatLeaderService {
     }
 
     const res = await Promise.all(reqs.map((it) => this.getScore(it)))
-    const scores = res.map((it) => it.data).filter((item) => item != null)
-    // todo sort score
+    const scores = res.filter((item) => item != null)
     if (scores.length < 1) {
-      throw Error('error.not.found')
+      throw new ScoreNotFoundError()
     }
     scores.sort(sortScore)
     return scores[0]

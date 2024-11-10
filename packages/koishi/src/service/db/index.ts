@@ -8,13 +8,16 @@ import {
   Subscribe,
   SubscribeMember,
   RelateChannelInfo,
+  UserPreference,
 } from 'beatsaber-bot-core'
+
 declare module 'koishi' {
   interface Tables {
     BSRelateAccount: RelateAccount
     BSRelateChannelInfo: RelateChannelInfo<ChannelInfo>
     BSSubscribe: Subscribe
     BSSubscribeMember: SubscribeMember
+    BSUserPreference: UserPreference
     // BSUserAndUGroupRel: UserAndUGroupRel
   }
 }
@@ -95,5 +98,18 @@ export function InitDBModel(ctx: Context) {
     {
       autoInc: true,
     }
+  )
+
+  ctx.model.extend(
+    'BSUserPreference',
+    {
+      uid: 'unsigned',
+      gid: {
+        type: 'unsigned',
+        nullable: true,
+      },
+      data: 'json',
+    },
+    { primary: ['uid', 'gid'] }
   )
 }

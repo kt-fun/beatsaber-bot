@@ -2,7 +2,6 @@ import { APIService } from '@/api'
 import {
   getBLPlayerComp,
   getBLRankScoreComp,
-  getBLScoreComp,
   getBSMapComp,
   getSSPlayerComp,
 } from './result'
@@ -12,6 +11,8 @@ import { Config } from '@/config'
 import { getHtml } from '@/img-render/render'
 import { BSMap } from '@/api/interfaces/beatsaver'
 import { ImgRender, Platform } from '@/interface'
+import { preferenceKey, UserPreferenceStore } from '@/utils'
+import { ImageRenderError } from '@/errors'
 
 const noop = () => {}
 // render service supply rendered components, impler just need to provide the html-to-img converter
@@ -32,6 +33,7 @@ export abstract class RenderService implements ImgRender {
   async renderRank(
     accountId: string,
     platform: Platform,
+    userPreference?: UserPreferenceStore,
     onRenderStart?: () => void,
     onRenderError?: (e) => void
     // type: 'remote' | 'local' = this.config.renderMode
@@ -41,6 +43,7 @@ export abstract class RenderService implements ImgRender {
       type: 'local',
       onRenderError,
       onRenderStart,
+      userPreference,
     } as RenderOption)
   }
 
@@ -50,6 +53,13 @@ export abstract class RenderService implements ImgRender {
     api: APIService,
     renderOpts: RenderOption
   ) => {
+    const bg =
+      (await renderOpts.userPreference.get<string>(
+        platform == Platform.SS
+          ? preferenceKey.ssProfileRenderImg.key
+          : preferenceKey.blProfileRenderImg.key
+      )) ?? 'https://www.loliapi.com/acg/pc/'
+    // get user preference
     // if (renderOpts.type == 'remote') {
     //   const remoteP = platform == Platform.SS ? 'score-saber' : 'beat-leader'
     //   return renderRemoteRank(
@@ -63,7 +73,7 @@ export abstract class RenderService implements ImgRender {
         await api.BeatLeader.getPlayerScoresWithUserInfo(accountId)
       //
       return this.htmlToImgBufferConverter(
-        getHtml(getBLPlayerComp(scores, userInfo)),
+        getHtml(getBLPlayerComp(scores, userInfo, bg)),
         renderOpts.onRenderStart,
         renderOpts.onRenderError
       )
@@ -71,7 +81,7 @@ export abstract class RenderService implements ImgRender {
     const { scores, userInfo } =
       await api.ScoreSaber.getPlayerRecentScoreWithUserInfo(accountId)
     return this.htmlToImgBufferConverter(
-      getHtml(getSSPlayerComp(scores, userInfo)),
+      getHtml(getSSPlayerComp(scores, userInfo, bg)),
       renderOpts.onRenderStart,
       renderOpts.onRenderError
     )
@@ -80,6 +90,7 @@ export abstract class RenderService implements ImgRender {
   async renderScore(
     scoreId: string,
     platform: Platform,
+    userPreference?: UserPreferenceStore,
     onRenderStart?: () => void,
     onRenderError?: (e) => void
     // type: 'remote' | 'local' = this.config.renderMode
@@ -87,6 +98,7 @@ export abstract class RenderService implements ImgRender {
     return this._renderScore(scoreId, platform, this.api, {
       ...this.baseConfig,
       type: 'local',
+      userPreference,
       onRenderError,
       onRenderStart,
     } as RenderOption)
@@ -98,51 +110,57 @@ export abstract class RenderService implements ImgRender {
     api: APIService,
     renderOpts: RenderOption
   ) => {
-    const remoteP = 'beat-leader'
-    // if (renderOpts.type == 'remote') {
-    //   const remoteP = platform == Platform.SS ? 'score-saber' : 'beat-leader'
-    //   return renderRemoteScore(scoreId, remoteP, renderOpts as RemoteRenderOpts)
-    // }
-    const { score, statistic, bsor, bsMap } = await api.BeatLeader.withRetry(3)
-      .onRetry((times, e) => {
-        console.log(`retrying ${times} due to ${e}`)
-      })
-      .getScoreAndBSMapByScoreId(scoreId)
-      .catch((e) => {
-        throw Error('渲染错误')
-      })
-
-    const { aroundScores, regionTopScores, difficulties } =
-      await api.BeatLeader.withRetry(
+    const bg =
+      (await renderOpts.userPreference.get<string>(
+        preferenceKey.blScoreImg.key
+      )) ?? 'https://www.loliapi.com/acg/pc/'
+    try {
+      const { score, statistic, bsor, bsMap } = await api.BeatLeader.withRetry(
         3
-      ).getAroundScoreAndRegionScoreByRankAndPage(
-        score.leaderboardId,
-        score.rank,
-        score.player.country
       )
-    // api.BeatLeader
-    // const qrcodeUrl = await createQrcode(
-    //   `https://replay.beatleader.xyz/?scoreId=${score.id}`
-    // )
-    return this.htmlToImgBufferConverter(
-      getHtml(
-        getBLRankScoreComp(
-          score,
-          aroundScores,
-          regionTopScores,
-          difficulties,
-          bsMap,
-          statistic,
-          bsor
+        .onRetry((times, e) => {
+          console.log(
+            ` fetch beatleader score ${scoreId} failed: retrying ${times} due to ${e}`
+          )
+        })
+        .getScoreAndBSMapByScoreId(scoreId)
+        .catch((e) => {
+          console.error(e)
+          throw new ImageRenderError()
+        })
+
+      const { aroundScores, regionTopScores, difficulties } =
+        await api.BeatLeader.withRetry(
+          3
+        ).getAroundScoreAndRegionScoreByRankAndPage(
+          score.leaderboardId,
+          score.rank,
+          score.player.country
         )
-      ),
-      renderOpts.onRenderStart,
-      renderOpts.onRenderError
-    )
+      return this.htmlToImgBufferConverter(
+        getHtml(
+          getBLRankScoreComp(
+            score,
+            aroundScores,
+            regionTopScores,
+            difficulties,
+            bsMap,
+            statistic,
+            bsor,
+            bg
+          )
+        ),
+        renderOpts.onRenderStart,
+        renderOpts.onRenderError
+      )
+    } catch (e) {
+      throw new ImageRenderError()
+    }
   }
 
   async renderMapById(
     mapId: string,
+    userPreference?: UserPreferenceStore,
     onRenderStart?: () => void,
     onRenderError?: (e) => void
     // type: 'remote' | 'local' = this.config.renderMode
@@ -151,6 +169,7 @@ export abstract class RenderService implements ImgRender {
     return this._renderMap(map, {
       ...this.baseConfig,
       type: 'local',
+      userPreference,
       onRenderError,
       onRenderStart,
     } as RenderOption)
@@ -158,6 +177,7 @@ export abstract class RenderService implements ImgRender {
 
   async renderMap(
     map: BSMap,
+    userPreference?: UserPreferenceStore,
     onRenderStart: () => void = noop,
     onRenderError: (e) => void = noop
     // type: 'remote' | 'local' = this.config.renderMode
@@ -165,6 +185,7 @@ export abstract class RenderService implements ImgRender {
     return this._renderMap(map, {
       ...this.baseConfig,
       type: 'local',
+      userPreference,
       onRenderError,
       onRenderStart,
     } as RenderOption)

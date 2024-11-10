@@ -8,6 +8,29 @@ ws:
     update: Hello {{username}}，你关注的谱师「{{mapperName}}」更新啦！✨
 commands:
   bsbot:
+    common:
+      error:
+        not-implemented: 😳被发现了，这个功能还没实现...
+        reach-request-retry-limit: '🤕网络重试到达上限、看来 bot 的网络出了点问题'
+        empty-prompt: 看来你什么都没输入，已取消操作
+    config:
+      clear: 成功清除设置:{{key}}
+      set:
+        success: 👍成功设置:{{key}}
+        fail: 😶‍🌫️用户偏好设置失败，{{reason}}
+      prompt: '请在30s内输入配置值，类型 {{type}}'
+      unknown-key: 🤨{{input}}是一个未知配置项，不可以设置
+      all-available-key: |
+        所有可能配置项如下：
+        - BLProfile背景图片(bl::profile::render::img)
+        - SSProfile背景图片(ss::profile::render::img)
+        - BLScore背景图片(bl::score::render::img)
+      show:
+        not-implemented: 还没实现展示用户偏好...不过你可以先设置着先
+    render:
+      error: 图片渲染超时/出错...也许稍等一会就好了
+      request:
+        error: 数据获取失败了☹️
     help:
       description: 查看帮助 (WIP)
       usage: |-

@@ -51,6 +51,10 @@ export default () =>
       //   )
       // }
       const rankPlatform = c.options.p == 'ss' ? Platform.SS : Platform.BL
-      const img = await c.render.renderRank(accountId, rankPlatform)
+      const img = await c.render.renderRank(
+        accountId,
+        rankPlatform,
+        c.userPreference
+      )
       await c.session.sendImgBuffer(img)
     })

@@ -31,16 +31,20 @@ export interface Subscribe {
   data: any
 }
 
-// export type UserAndUGroupRel = {
+// export type UserPreference = {
 //   uid: number
-//   gid: number
-//   // optional
-//   nickname: string
+//   key: string
+//   value: any
 // }
-
 export type RelateChannelInfo<CHANNEL> = {
   id: number
   name: string
   type: 'user' | 'group' | string
   // enable: boolean
 } & CHANNEL
+
+export type UserPreference<T = any> = {
+  uid: number
+  gid: number
+  data: T
+}
