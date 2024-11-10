@@ -190,13 +190,16 @@ export default function BLRankScore({
               {/*diff code */}
               <div className="text-xl font-bold h-24 w-[500px] rounded-lg  mt-auto flex items-center justify-evenly gap-2 ">
                 {bsMap.versions[0].diffs
-                  .filter((it) => it.mode === 'Standard')
+                  .filter((it) => it.characteristic === 'Standard')
                   .map((diff) => (
                     <RankDifficulty
                       difficulty={diff.difficulty}
                       star={diff.stars}
                       blStar={diff.blStars}
-                      current={false}
+                      current={
+                        score?.difficulty?.modeName === diff?.characteristic &&
+                        score?.difficulty?.difficultyName === diff?.difficulty
+                      }
                       key={diff.difficulty}
                     />
                   ))}
