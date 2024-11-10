@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-dev.21
+
+### Patch Changes
+
+- feat:user preference
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-dev.21
+
 ## 0.2.0-dev.20
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.21
+
+### Patch Changes
+
+- feat:user preference
+
 ## 0.2.0-dev.20
 
 ### Patch Changes
