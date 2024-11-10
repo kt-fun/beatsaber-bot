@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.23
+
+### Patch Changes
+
+- fix: use proper preference while @ someone
+
 ## 0.2.0-dev.22
 
 ### Patch Changes
