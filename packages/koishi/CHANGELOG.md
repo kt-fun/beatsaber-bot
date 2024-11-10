@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-dev.22
+
+### Patch Changes
+
+- fix: bl-score-with-rank.tsx difficulty
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-dev.22
+
 ## 0.2.0-dev.21
 
 ### Patch Changes
