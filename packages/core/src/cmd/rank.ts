@@ -27,8 +27,10 @@ export default () =>
       // let accountId = c.input
       // @someone
       let uid = c.session.u.id
+      let preference = c.userPreference
       if (c.session.mentions && c.session.mentions.length > 0) {
         uid = c.session.mentions[0].id
+        preference = await c.userPreference.getUserPreference(uid)
       }
       const { blAccount, ssAccount } = await c.db.getUserAccountsByUid(uid)
       let accountId = Platform.BL && blAccount?.platformUid
@@ -51,10 +53,6 @@ export default () =>
       //   )
       // }
       const rankPlatform = c.options.p == 'ss' ? Platform.SS : Platform.BL
-      const img = await c.render.renderRank(
-        accountId,
-        rankPlatform,
-        c.userPreference
-      )
+      const img = await c.render.renderRank(accountId, rankPlatform, preference)
       await c.session.sendImgBuffer(img)
     })

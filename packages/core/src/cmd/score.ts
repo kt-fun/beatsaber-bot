@@ -13,8 +13,10 @@ export default () =>
     .setExecutor(async (c) => {
       // who? 没有即是自己，有mention 就是 mention
       let uid = c.session.u.id
+      let preference = c.userPreference
       if (c.session.mentions && c.session.mentions.length > 0) {
         uid = c.session.mentions[0].id
+        preference = await c.userPreference.getUserPreference(uid)
       }
 
       const { blAccount, ssAccount } = await c.db.getUserAccountsByUid(uid)
@@ -53,7 +55,7 @@ export default () =>
       const img = await c.render.renderScore(
         score.id.toString(),
         platform,
-        c.userPreference
+        preference
       )
       await c.session.sendImgBuffer(img)
     })

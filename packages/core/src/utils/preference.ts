@@ -25,6 +25,9 @@ export class UserPreferenceStore {
     private db: DB<any>,
     private uid: number
   ) {}
+  async getUserPreference(uid: number) {
+    return new UserPreferenceStore(this.db, uid)
+  }
   async set<T extends string | number | boolean>(
     key: string,
     value: T
