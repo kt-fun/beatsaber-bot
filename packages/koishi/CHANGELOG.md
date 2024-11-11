@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-dev.24
+
+### Patch Changes
+
+- fix: scoresaber request queryparam error
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-dev.24
+
 ## 0.2.0-dev.23
 
 ### Patch Changes
