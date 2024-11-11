@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-dev.25
+
+### Patch Changes
+
+- fix: api throw error warped by request helper
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-dev.25
+
 ## 0.2.0-dev.24
 
 ### Patch Changes
