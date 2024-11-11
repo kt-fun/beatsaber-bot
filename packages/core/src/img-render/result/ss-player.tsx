@@ -73,9 +73,12 @@ export default function SSPlayerPage({
             ))}
           </div>
         </div>
+
         <img
           src={bg}
-          className={'inset-0 rounded-lg absolute h-full object-cover'}
+          className={
+            'inset-0 mx-auto w-full rounded-lg absolute h-full object-center'
+          }
           loading={'eager'}
         />
       </div>

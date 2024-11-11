@@ -1,6 +1,6 @@
 import { NetReqResult } from '@/api/netResult'
 import { sleep } from '@/utils'
-import { ReachNetworkRetryLimitError, RequestError } from '@/errors'
+import { BizError, ReachNetworkRetryLimitError, RequestError } from '@/errors'
 
 type Res<Base, T> = Base extends true ? NetReqResult<T> : T
 
@@ -36,6 +36,9 @@ export class APIHelper<API, Base extends boolean = false> {
         }
         return result as Res<Base, T>
       } catch (e) {
+        if (e instanceof BizError) {
+          throw e
+        }
         retryTime += 1
         if (times-- > 1) {
           this._onRetry?.(retryTime, e)

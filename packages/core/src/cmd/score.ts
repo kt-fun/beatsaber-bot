@@ -1,7 +1,12 @@
 import { CommandBuilder } from '@/cmd/builder'
 import { Platform } from '@/interface'
 import { convertDiff } from '@/utils'
-import { AccountBindingNotFoundError, ScoreNotFoundError } from '@/errors'
+import {
+  AccountBindingNotFoundError,
+  ImageRenderError,
+  ScoreNotFoundError,
+} from '@/errors'
+import { TimeoutError } from 'puppeteer-core'
 export default () =>
   new CommandBuilder()
     .setName('score') // <uid:text>
@@ -41,21 +46,24 @@ export default () =>
         accountId,
         mapId,
         diffOption
-      )
-      if (!score) {
-        throw new ScoreNotFoundError({
-          user: accountId,
-          id: mapId,
-          diff: diffOption?.difficulty,
-          mode: c.options.m,
-        })
-      }
-
+      ).catch((e) => {
+        if (e instanceof ScoreNotFoundError) {
+          throw new ScoreNotFoundError({
+            user: accountId,
+            id: mapId,
+            diff: diffOption?.difficulty,
+            mode: c.options.m,
+          })
+        }
+        throw e
+      })
       const platform = c.options.p == 'ss' ? Platform.SS : Platform.BL
-      const img = await c.render.renderScore(
-        score.id.toString(),
-        platform,
-        preference
-      )
+      const img = await c.render
+        .renderScore(score.id.toString(), platform, preference)
+        .catch((e) => {
+          if (e instanceof TimeoutError) {
+            throw new ImageRenderError()
+          }
+        })
       await c.session.sendImgBuffer(img)
     })

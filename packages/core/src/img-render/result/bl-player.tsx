@@ -129,7 +129,9 @@ export default function BLPlayerPage({
         </div>
         <img
           src={bg}
-          className={'rounded-lg absolute h-[720px] w-[1024px] object-cover'}
+          className={
+            'inset-0 mx-auto w-full rounded-lg absolute h-full object-center'
+          }
           loading={'eager'}
         />
       </div>
