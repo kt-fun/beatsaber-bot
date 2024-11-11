@@ -13,6 +13,7 @@ import { BSMap } from '@/api/interfaces/beatsaver'
 import { ImgRender, Platform } from '@/interface'
 import { preferenceKey, UserPreferenceStore } from '@/utils'
 import { ImageRenderError } from '@/errors'
+import { TimeoutError } from 'puppeteer-core'
 
 const noop = () => {}
 // render service supply rendered components, impler just need to provide the html-to-img converter
@@ -44,7 +45,12 @@ export abstract class RenderService implements ImgRender {
       onRenderError,
       onRenderStart,
       userPreference,
-    } as RenderOption)
+    } as RenderOption).catch((e) => {
+      if (e instanceof TimeoutError) {
+        throw new ImageRenderError()
+      }
+      throw e
+    })
   }
 
   _renderRank = async (
@@ -101,7 +107,12 @@ export abstract class RenderService implements ImgRender {
       userPreference,
       onRenderError,
       onRenderStart,
-    } as RenderOption)
+    } as RenderOption).catch((e) => {
+      if (e instanceof TimeoutError) {
+        throw new ImageRenderError()
+      }
+      throw e
+    })
   }
 
   _renderScore = async (
@@ -188,7 +199,12 @@ export abstract class RenderService implements ImgRender {
       userPreference,
       onRenderError,
       onRenderStart,
-    } as RenderOption)
+    } as RenderOption).catch((e) => {
+      if (e instanceof TimeoutError) {
+        throw new ImageRenderError()
+      }
+      throw e
+    })
   }
 
   async renderUrl(url: string, onRenderStart?: () => void) {

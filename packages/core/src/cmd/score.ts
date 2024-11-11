@@ -25,9 +25,9 @@ export default () =>
       }
 
       const { blAccount, ssAccount } = await c.db.getUserAccountsByUid(uid)
-      let accountId = Platform.BL && blAccount?.platformUid
-      accountId ||= Platform.SS && ssAccount?.platformUid
-      if (!accountId) {
+      let account = Platform.BL && blAccount
+      account ||= Platform.SS && ssAccount
+      if (!account) {
         throw new AccountBindingNotFoundError()
       }
 
@@ -43,13 +43,13 @@ export default () =>
       const mapId = c.input
 
       const score = await c.api.BeatLeader.getScoreByPlayerIdAndMapId(
-        accountId,
+        account.platformUid,
         mapId,
         diffOption
       ).catch((e) => {
         if (e instanceof ScoreNotFoundError) {
           throw new ScoreNotFoundError({
-            user: accountId,
+            user: account.platformUname,
             id: mapId,
             diff: diffOption?.difficulty,
             mode: c.options.m,
