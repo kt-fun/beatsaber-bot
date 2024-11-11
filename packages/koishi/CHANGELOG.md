@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-dev.26
+
+### Patch Changes
+
+- fix: render timeout error
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-dev.26
+
 ## 0.2.0-dev.25
 
 ### Patch Changes

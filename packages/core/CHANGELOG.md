@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.26
+
+### Patch Changes
+
+- fix: render timeout error
+
 ## 0.2.0-dev.25
 
 ### Patch Changes
