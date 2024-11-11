@@ -25,7 +25,7 @@ export class BeatSaverClient {
   async getLatestMaps(pageSize: number = 5) {
     return this.f
       .get<BSMapLatestResponse>(`/maps/latest`, {
-        params: {
+        query: {
           sort: 'FIRST_PUBLISHED',
           pageSize,
         },
@@ -39,7 +39,7 @@ export class BeatSaverClient {
   ) {
     return this.f
       .get<BSMapLatestResponse>(`/search/text/0`, {
-        params: {
+        query: {
           q: key,
           ...params,
         },

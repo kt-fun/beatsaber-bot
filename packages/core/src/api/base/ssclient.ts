@@ -22,10 +22,10 @@ export class ScoreSaberClient {
 
   async getScoreItemsById(userId: string, page: number, pageSize: number = 8) {
     return this.f.get<ScoreSaberUserResponse>(`/api/player/${userId}/scores`, {
-      params: {
+      query: {
         sort: 'top',
         page: page,
-        pageSize: pageSize,
+        limit: pageSize,
       },
     })
   }
@@ -38,9 +38,9 @@ export class ScoreSaberClient {
   ): Promise<ScoresaberLeaderboardResp> {
     const id = convertToLeaderboardId(mapId, diff, mode)
     return this.f.get(`/api/leaderboard/by-id/${id}/scores`, {
-      params: {
+      query: {
         page: page,
-        pageSize: pageSize,
+        limit: pageSize,
       },
     })
   }
