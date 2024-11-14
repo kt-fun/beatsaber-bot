@@ -8,13 +8,23 @@ import {
   BSUserResponse,
   HashReqResponse,
 } from '@/api/interfaces/beatsaver'
+import { Logger } from '@/interface'
+import { RequestError } from '@/errors'
 
 export class BeatSaverClient {
   cfg: Config
   f: Fetch
-  constructor(cfg: Config) {
+  constructor(cfg: Config, logger: Logger) {
     this.f = ofetch.extend({
       baseURL: cfg.beatSaverHost ?? 'https://api.beatsaver.com',
+      retry: 3,
+      onRequestError: ({ error, request, response }) => {
+        if (response.status === 404) {
+          return null
+        }
+        logger.error(`external request ${request} fail: ${error}`)
+        throw new RequestError(error)
+      },
     })
     this.cfg = cfg
   }

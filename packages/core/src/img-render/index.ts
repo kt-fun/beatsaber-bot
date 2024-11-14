@@ -12,7 +12,7 @@ import { getHtml } from '@/img-render/render'
 import { BSMap } from '@/api/interfaces/beatsaver'
 import { ImgRender, Platform } from '@/interface'
 import { preferenceKey, UserPreferenceStore } from '@/utils'
-import { ImageRenderError } from '@/errors'
+import { ImageRenderError, RequestError } from '@/errors'
 import { TimeoutError } from 'puppeteer-core'
 
 const noop = () => {}
@@ -126,24 +126,11 @@ export abstract class RenderService implements ImgRender {
         preferenceKey.blScoreImg.key
       )) ?? 'https://www.loliapi.com/acg/pc/'
     try {
-      const { score, statistic, bsor, bsMap } = await api.BeatLeader.withRetry(
-        3
-      )
-        .onRetry((times, e) => {
-          console.log(
-            ` fetch beatleader score ${scoreId} failed: retrying ${times} due to ${e}`
-          )
-        })
-        .getScoreAndBSMapByScoreId(scoreId)
-        .catch((e) => {
-          console.error(e)
-          throw new ImageRenderError()
-        })
+      const { score, statistic, bsor, bsMap } =
+        await api.BeatLeader.getScoreAndBSMapByScoreId(scoreId)
 
       const { aroundScores, regionTopScores, difficulties } =
-        await api.BeatLeader.withRetry(
-          3
-        ).getAroundScoreAndRegionScoreByRankAndPage(
+        await api.BeatLeader.getAroundScoreAndRegionScoreByRankAndPage(
           score.leaderboardId,
           score.rank,
           score.player.country
@@ -165,6 +152,9 @@ export abstract class RenderService implements ImgRender {
         renderOpts.onRenderError
       )
     } catch (e) {
+      if (e instanceof RequestError) {
+        throw e
+      }
       throw new ImageRenderError()
     }
   }

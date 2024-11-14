@@ -9,49 +9,39 @@ import {
   BeatSaverClient,
   ScoreSaberClient,
 } from '@/api/base'
-import { createProxiedAPIService, ServiceWithAPIHelper } from '@/api/helper'
+import { Logger } from '@/interface'
 
 export class APIService {
-  BeatLeader: ServiceWithAPIHelper<BeatLeaderService>
-  ScoreSaber: ServiceWithAPIHelper<ScoreSaberService>
-  BeatSaver: ServiceWithAPIHelper<BeatSaverService>
-  AIOSaber: ServiceWithAPIHelper<AIOSaberService>
-  private constructor(cfg: Config) {
-    const bsClient = new BeatSaverClient(cfg)
-    const blClient = new BeatLeaderClient(cfg)
-    const scClient = new ScoreSaberClient(cfg)
-    const aioClient = new AIOSaberClient(cfg)
-    this.BeatLeader = new BeatLeaderService(
-      bsClient,
-      blClient
-    ) as unknown as ServiceWithAPIHelper<BeatLeaderService>
-    this.BeatSaver = new BeatSaverService(
-      bsClient
-    ) as unknown as ServiceWithAPIHelper<BeatSaverService>
-    this.ScoreSaber = new ScoreSaberService(
-      bsClient,
-      scClient
-    ) as unknown as ServiceWithAPIHelper<ScoreSaberService>
-    this.AIOSaber = new AIOSaberService(
-      aioClient
-    ) as unknown as ServiceWithAPIHelper<AIOSaberService>
+  BeatLeader: BeatLeaderService
+  ScoreSaber: ScoreSaberService
+  BeatSaver: BeatSaverService
+  AIOSaber: AIOSaberService
+  private constructor(cfg: Config, logger: Logger) {
+    const bsClient = new BeatSaverClient(cfg, logger)
+    const blClient = new BeatLeaderClient(cfg, logger)
+    const scClient = new ScoreSaberClient(cfg, logger)
+    const aioClient = new AIOSaberClient(cfg, logger)
+    this.BeatLeader = new BeatLeaderService(bsClient, blClient)
+    this.BeatSaver = new BeatSaverService(bsClient)
+    this.ScoreSaber = new ScoreSaberService(bsClient, scClient)
+    this.AIOSaber = new AIOSaberService(aioClient)
   }
 
-  static create(cfg: Config) {
-    // return new APIService(cfg)
-    const ins = new APIService(cfg)
-    const proxied = new Proxy<APIService>(ins, {
-      get(target, prop, receiver) {
-        const member = target[prop]
-        if (member) {
-          return createProxiedAPIService(member)
-        }
-        return undefined
-      },
-      set(target, property, value, receiver) {
-        return false
-      },
-    })
-    return proxied
+  static create(cfg: Config, logger: Logger) {
+    return new APIService(cfg, logger)
+    // const ins = new APIService(cfg)
+    // const proxied = new Proxy<APIService>(ins, {
+    //   get(target, prop, receiver) {
+    //     const member = target[prop]
+    //     if (member) {
+    //       return createProxiedAPIService(member)
+    //     }
+    //     return undefined
+    //   },
+    //   set(target, property, value, receiver) {
+    //     return false
+    //   },
+    // })
+    // return proxied
   }
 }

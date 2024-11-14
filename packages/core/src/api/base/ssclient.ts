@@ -6,13 +6,23 @@ import {
   ScoreSaberUserResponse,
 } from '@/api/interfaces/scoresaber'
 import { ScoresaberLeaderboardResp } from '@/api/interfaces/scoresaber/leaderboard'
+import { Logger } from '@/interface'
+import { RequestError } from '@/errors'
 
 export class ScoreSaberClient {
   cfg: Config
   f: Fetch
-  constructor(cfg: Config) {
+  constructor(cfg: Config, logger: Logger) {
     this.f = ofetch.extend({
       baseURL: 'https://scoresaber.com',
+      retry: 3,
+      onRequestError: ({ error, request, response }) => {
+        if (response.status === 404) {
+          return null
+        }
+        logger.error(`external request ${request} fail: ${error}`)
+        throw new RequestError(error)
+      },
     })
     this.cfg = cfg
   }

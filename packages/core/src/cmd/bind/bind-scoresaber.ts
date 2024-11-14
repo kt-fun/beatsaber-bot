@@ -6,11 +6,9 @@ import {
 } from '@/errors'
 
 export const handleScoreSaberBind = async <T, C>(c: CmdContext<T, C>) => {
-  const scoreSaberUser = await c.api.ScoreSaber.wrapperResult()
-    .withRetry(3)
-    .getScoreUserById(c.input)
+  const scoreSaberUser = await c.api.ScoreSaber.getScoreUserById(c.input)
 
-  if (!scoreSaberUser.isSuccess()) {
+  if (!scoreSaberUser) {
     throw new ScoreSaberIDNotFoundError(c.input)
   }
 

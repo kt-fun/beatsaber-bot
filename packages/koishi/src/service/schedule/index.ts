@@ -8,7 +8,7 @@ export const loadSchedule = (ctx: Context, config: Config) => {
   const botService = new KoishiBotService(ctx, config)
   // @ts-ignore
   const logger = ctx.logger('beatsaber-bot.schedule')
-  const api = APIService.create(config)
+  const api = APIService.create(config, logger)
   const render = new ImgRender(config, api, ctx)
   const db = new KoishiDB(ctx)
   const tasks = getScheduleTasks(config).filter((task) => task.enable)

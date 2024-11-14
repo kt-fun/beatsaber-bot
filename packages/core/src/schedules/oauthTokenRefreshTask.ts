@@ -15,10 +15,10 @@ export const tokenRefreshTask = async <T>(c: ScheduleTaskCtx<T>) => {
     )
     const now = new Date()
     if (account.platform === 'beatleader') {
-      const token = await c.api.BeatLeader.wrapperResult().refreshOAuthToken(
+      const token = await c.api.BeatLeader.refreshOAuthToken(
         account.refreshToken
       )
-      if (!token.isSuccess()) {
+      if (!token) {
         c.logger.info(
           `failed to refresh ${account.platform} token, invalid this account, ${JSON.stringify(account)}`
         )
@@ -29,13 +29,13 @@ export const tokenRefreshTask = async <T>(c: ScheduleTaskCtx<T>) => {
         // bot.sendMessage(item.sub.channelId, '似乎 BeatSaver 通知的 token 已经失效了，通过 bbbind 重新绑定吧')
         continue
       }
-      account.accessToken = token.data.access_token
-      account.refreshToken = token.data.refresh_token
+      account.accessToken = token.access_token
+      account.refreshToken = token.refresh_token
     } else if (account.platform === 'beatsaver') {
-      const token = await c.api.BeatSaver.wrapperResult().refreshOAuthToken(
+      const token = await c.api.BeatSaver.refreshOAuthToken(
         account.refreshToken
       )
-      if (!token.isSuccess()) {
+      if (!token) {
         c.logger.info(
           `failed to refresh ${account.platform} token, invalid this account, ${JSON.stringify(account)}`
         )
@@ -46,8 +46,8 @@ export const tokenRefreshTask = async <T>(c: ScheduleTaskCtx<T>) => {
         // bot.sendMessage(item.sub.channelId, '似乎 BeatSaver 通知的 token 已经失效了，通过 bbbind 重新绑定吧')
         continue
       }
-      account.accessToken = token.data.access_token
-      account.refreshToken = token.data.refresh_token
+      account.accessToken = token.access_token
+      account.refreshToken = token.refresh_token
     }
     account.lastRefreshAt = now
     account.lastModifiedAt = now

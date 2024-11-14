@@ -9,5 +9,6 @@ import { BSUserResponse } from './user'
 export type BSUserResp = BSUserResponse | BSErrorResponse
 
 export interface BSErrorResponse {
-  error?: string
+  success?: boolean
+  errors?: string
 }

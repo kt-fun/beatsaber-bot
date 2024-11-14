@@ -18,9 +18,9 @@ export default () =>
       if (!mapIdReg.test(c.input)) {
         throw new InvalidMapIdError({ input: c.input })
       }
-      const res = await c.api.BeatSaver.wrapperResult().searchMapById(c.input)
+      const res = await c.api.BeatSaver.searchMapById(c.input)
 
-      if (!res.isSuccess() || res.data.success === false) {
+      if (!res) {
         throw new MapIdNotFoundError({ input: c.input })
       }
 

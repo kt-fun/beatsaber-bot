@@ -1,33 +1,26 @@
 import { CmdContext, RelateAccount } from '@/interface'
 
 export const handleBeatLeaderBind = async <T, C>(c: CmdContext<T, C>) => {
-  const tokenInfo = await c.api.AIOSaber.wrapperResult().getBLOAuthToken(
-    c.input
-  )
-  if (!tokenInfo.isSuccess()) {
+  const tokenInfo = await c.api.AIOSaber.getBLOAuthToken(c.input)
+  if (!tokenInfo) {
     c.session.sendQuote(c.session.text('commands.bsbot.bind.bl.not-found'))
     return
   }
-  let token = tokenInfo.data
-  let self = await c.api.BeatLeader.wrapperResult().getTokenInfo(
-    token.access_token
-  )
-  if (!self.isSuccess()) {
-    const refreshToken =
-      await c.api.BeatLeader.wrapperResult().refreshOAuthToken(
-        token.refresh_token
-      )
-    if (!refreshToken.isSuccess()) {
+  let token = tokenInfo
+  let self = await c.api.BeatLeader.getTokenInfo(token.access_token)
+  if (!self) {
+    const refreshToken = await c.api.BeatLeader.refreshOAuthToken(
+      token.refresh_token
+    )
+    if (!refreshToken) {
       c.session.sendQuote(
         c.session.text('commands.bsbot.bind.bl.invalid-token')
       )
       return
     }
-    token = refreshToken.data
-    self = await c.api.BeatLeader.withRetry(3)
-      .wrapperResult()
-      .getTokenInfo(token.access_token)
-    if (!self.isSuccess()) {
+    token = refreshToken
+    self = await c.api.BeatLeader.getTokenInfo(token.access_token)
+    if (!self) {
       c.session.sendQuote(
         c.session.text('commands.bsbot.bind.bl.unknown-error')
       )
@@ -40,8 +33,8 @@ export const handleBeatLeaderBind = async <T, C>(c: CmdContext<T, C>) => {
     uid: c.session.u.id,
     platform: 'beatleader',
     platformScope: 'profile clan offline_access',
-    platformUid: self.data.id,
-    platformUname: self.data.name,
+    platformUid: self.id,
+    platformUname: self.name,
     otherPlatformInfo: {},
     accessToken: token.access_token,
     refreshToken: token.refresh_token,
@@ -57,8 +50,8 @@ export const handleBeatLeaderBind = async <T, C>(c: CmdContext<T, C>) => {
   await c.db.addUserBindingInfo(account)
   c.session.sendQuote(
     c.session.text('commands.bsbot.bind.bl.success', {
-      name: self.data.name,
-      id: self.data.id,
+      name: self.name,
+      id: self.id,
     })
   )
 }

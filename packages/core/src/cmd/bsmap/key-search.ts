@@ -29,9 +29,9 @@ export default () =>
           c.session.text('commands.bsbot.search.too-long-key', { key })
         )
       }
-      const res = await c.api.BeatSaver.wrapperResult().searchMapByKeyword(key)
-      if (!res.isSuccess()) {
-        c.session.sendQuote(
+      const res = await c.api.BeatSaver.searchMapByKeyword(key)
+      if (res && res.length == 0) {
+        await c.session.sendQuote(
           c.session.text('commands.bsbot.search.not-found', { key })
         )
         return
@@ -43,7 +43,7 @@ export default () =>
           })
         )
       }
-      const toBeSend = res.data.slice(0, 3).map((it) => ({
+      const toBeSend = res.slice(0, 3).map((it) => ({
         img: c.render.renderMap(it, c.userPreference, onStartRender),
         bsmap: it,
       }))

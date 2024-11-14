@@ -42,9 +42,9 @@ function loadCmd(ctx: Context, config: Config) {
 
 const registerFn = (ctx: Context, config: Config) => {
   const db = new KoishiDB(ctx)
-  const api = APIService.create(config)
   // @ts-ignore
   const logger = ctx.logger('beats-bot.cmd')
+  const api = APIService.create(config, logger)
   const render = new ImgRender(config, api, ctx)
   let tmpStorage
   if (config.uploadImageToS3.enable) {

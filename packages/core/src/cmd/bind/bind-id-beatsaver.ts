@@ -7,10 +7,8 @@ import {
 } from '@/errors'
 
 export const handleBeatSaverIDBind = async <T, C>(c: CmdContext<T, C>) => {
-  const mapper = await c.api.BeatSaver.wrapperResult()
-    .withRetry(3)
-    .getBSMapperById(c.input)
-  if (!mapper.isSuccess()) {
+  const mapper = await c.api.BeatSaver.getBSMapperById(c.input)
+  if (!mapper) {
     throw new AccountBindingNotFoundError()
   }
   // 如果当前bind 是 oauth？改为 id？
@@ -19,7 +17,7 @@ export const handleBeatSaverIDBind = async <T, C>(c: CmdContext<T, C>) => {
 
   const text =
     c.session.text('commands.bsbot.bind.ack-prompt', {
-      user: `${mapper.data.name}(${mapper.data.id})`,
+      user: `${mapper.name}(${mapper.id})`,
     }) +
     (bsAccount
       ? ',' +
@@ -43,8 +41,8 @@ export const handleBeatSaverIDBind = async <T, C>(c: CmdContext<T, C>) => {
   const account: Partial<RelateAccount> = {
     uid: c.session.u.id,
     platform: 'beatsaver',
-    platformUid: mapper.data.id.toString(),
-    platformUname: mapper.data.name,
+    platformUid: mapper.id.toString(),
+    platformUname: mapper.name,
     otherPlatformInfo: {},
     lastModifiedAt: now,
     lastRefreshAt: now,
@@ -57,8 +55,8 @@ export const handleBeatSaverIDBind = async <T, C>(c: CmdContext<T, C>) => {
   await c.db.addUserBindingInfo(account)
   c.session.sendQuote(
     c.session.text('commands.bsbot.bind.bs.success', {
-      name: mapper.data.name,
-      id: mapper.data.id,
+      name: mapper.name,
+      id: mapper.id,
     })
   )
 }

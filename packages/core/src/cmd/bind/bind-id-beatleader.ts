@@ -6,10 +6,8 @@ import {
 } from '@/errors'
 
 export const handleBeatLeaderIDBind = async <T, C>(c: CmdContext<T, C>) => {
-  const player = await c.api.BeatLeader.wrapperResult()
-    .withRetry(3)
-    .getPlayerInfoById(c.input)
-  if (!player.isSuccess()) {
+  const player = await c.api.BeatLeader.getPlayerInfoById(c.input)
+  if (!player) {
     throw new AccountBindingNotFoundError()
   }
   // 如果当前bind 是 oauth？改为 id？

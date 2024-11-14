@@ -44,7 +44,7 @@ export function loadWS(ctx: Context, cfg: Config) {
   const logger = ctx.logger('beatsaber-bot.ws')
   const bllogger = logger.extend('BeatLeaderWS')
   const bslogger = logger.extend('BeatSaverWS')
-  const api = APIService.create(cfg)
+  const api = APIService.create(cfg, logger)
   const render = new ImgRender(cfg, api, ctx)
   const db = new KoishiDB(ctx)
   const bsHandler = new BeatSaverWSHandler(
