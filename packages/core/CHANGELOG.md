@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.31
+
+### Patch Changes
+
+- refactor(api): error handler
+
 ## 0.2.0-dev.30
 
 ### Patch Changes
