@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-dev.30
+
+### Patch Changes
+
+- build(core): move canvas peer deps to optional
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-dev.30
+
 ## 0.2.0-dev.29
 
 ### Patch Changes

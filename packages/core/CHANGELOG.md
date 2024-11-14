@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.30
+
+### Patch Changes
+
+- build(core): move canvas peer deps to optional
+
 ## 0.2.0-dev.29
 
 ### Patch Changes
