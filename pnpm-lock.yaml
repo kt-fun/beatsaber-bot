@@ -89,6 +89,9 @@ importers:
       '@loskir/styled-qr-code-node':
         specifier: ^1.5.1
         version: 1.5.1
+      '@napi-rs/canvas':
+        specifier: ^0.1.61
+        version: 0.1.61
       canvas:
         specifier: ^2.11.2
         version: 2.11.2
@@ -852,6 +855,68 @@ packages:
 
   '@minatojs/sql.js@3.1.0':
     resolution: {integrity: sha512-jaEFlM03k+maWc4JHv5DgEPq6r5bcg5OmXUZ6klWbYUi7tfRySGxLjwh70v4+p8A9qxdyL9yX3D2YQiXwl1HKw==}
+
+  '@napi-rs/canvas-android-arm64@0.1.61':
+    resolution: {integrity: sha512-vnQobU4n2oTMXtDW0EHwdDIpUs4PqtAAK6vvYr9I9w984xrKe+NzFypmtGy/NkFrLoXn/i8WuCHAd1jLDGO3eA==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [android]
+
+  '@napi-rs/canvas-darwin-arm64@0.1.61':
+    resolution: {integrity: sha512-zH44Bs7SoaTMJ5TEuTwE4MQuijWNdvvleJacnclapKYSWywc4X5YResFmlDieHLESS0C0EwxpqyX0JT07IKKnQ==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@napi-rs/canvas-darwin-x64@0.1.61':
+    resolution: {integrity: sha512-pTNL/peBGHUZxECDXPw9IbL3aQdn+7UBjzqM1xo+L4rwBkFLewpst5aWsMDpYyjVGvKZHbNj3J1PMmlbu6XgzA==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@napi-rs/canvas-linux-arm-gnueabihf@0.1.61':
+    resolution: {integrity: sha512-sXrPJ+HvX3H58/uHP3QGe2Nafk1cUBfnErfQ8PtO464lEnhvCHdGsdml48dqhnQHErFkPYhHYobHDXfYT6Kq0w==}
+    engines: {node: '>= 10'}
+    cpu: [arm]
+    os: [linux]
+
+  '@napi-rs/canvas-linux-arm64-gnu@0.1.61':
+    resolution: {integrity: sha512-HtLV2lWc3VIJ1XpXqoGJo596UCSYVbHIoFAO9Apj/BdNteBGUfUq1gDALrgM+WPhNM8XLMaU+HBphUVWRvgwBw==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+    libc: [glibc]
+
+  '@napi-rs/canvas-linux-arm64-musl@0.1.61':
+    resolution: {integrity: sha512-W3jYZhDLghJauKQWl8lvA7ISElWzlkdUIM+bwQqlDzYtpD4wEgi/vICiMuUbJz73fKGgYwFLgKL6dF2H3bpVYg==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+    libc: [musl]
+
+  '@napi-rs/canvas-linux-x64-gnu@0.1.61':
+    resolution: {integrity: sha512-tfMIZukLG+Q9mg+1LJFa852GhSlwg29pZaZ/UrLRdLRG0AJ1lckyHxOhNf9z+srMsEsryaQAIYHFIoOGYGhweA==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+    libc: [glibc]
+
+  '@napi-rs/canvas-linux-x64-musl@0.1.61':
+    resolution: {integrity: sha512-Go7zAENKdoDELf4X55pCbt4IrbrNOL+BarxO8A3MdDKF+isBioG4lNXpnAdswrDx8iJu+o1rzaGupQsF9YWxFg==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+    libc: [musl]
+
+  '@napi-rs/canvas-win32-x64-msvc@0.1.61':
+    resolution: {integrity: sha512-awGSMk4PlCV7SWC9ZxREkZvtiY+NWkramwYoQIEUJ+0KatLCbFnAaoxT7B7QE25ZUrjd1c3ZeV/Ae4Sggt276A==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [win32]
+
+  '@napi-rs/canvas@0.1.61':
+    resolution: {integrity: sha512-IJDok7OsGQ+Wd9QOWaOnFszw1mxNtJuynD+tBAhWMV6QJr7fWZx83eYS9xSl+3XR2tUa9oiHc44APcHBgdErmA==}
+    engines: {node: '>= 10'}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -5411,6 +5476,45 @@ snapshots:
       minato: 3.4.0(cordis@3.16.2)
 
   '@minatojs/sql.js@3.1.0': {}
+
+  '@napi-rs/canvas-android-arm64@0.1.61':
+    optional: true
+
+  '@napi-rs/canvas-darwin-arm64@0.1.61':
+    optional: true
+
+  '@napi-rs/canvas-darwin-x64@0.1.61':
+    optional: true
+
+  '@napi-rs/canvas-linux-arm-gnueabihf@0.1.61':
+    optional: true
+
+  '@napi-rs/canvas-linux-arm64-gnu@0.1.61':
+    optional: true
+
+  '@napi-rs/canvas-linux-arm64-musl@0.1.61':
+    optional: true
+
+  '@napi-rs/canvas-linux-x64-gnu@0.1.61':
+    optional: true
+
+  '@napi-rs/canvas-linux-x64-musl@0.1.61':
+    optional: true
+
+  '@napi-rs/canvas-win32-x64-msvc@0.1.61':
+    optional: true
+
+  '@napi-rs/canvas@0.1.61':
+    optionalDependencies:
+      '@napi-rs/canvas-android-arm64': 0.1.61
+      '@napi-rs/canvas-darwin-arm64': 0.1.61
+      '@napi-rs/canvas-darwin-x64': 0.1.61
+      '@napi-rs/canvas-linux-arm-gnueabihf': 0.1.61
+      '@napi-rs/canvas-linux-arm64-gnu': 0.1.61
+      '@napi-rs/canvas-linux-arm64-musl': 0.1.61
+      '@napi-rs/canvas-linux-x64-gnu': 0.1.61
+      '@napi-rs/canvas-linux-x64-musl': 0.1.61
+      '@napi-rs/canvas-win32-x64-msvc': 0.1.61
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
