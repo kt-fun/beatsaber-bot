@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-dev.28
+
+### Patch Changes
+
+- build(deps): update qrcode lib deps
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-dev.28
+
 ## 0.2.0-dev.27
 
 ### Patch Changes

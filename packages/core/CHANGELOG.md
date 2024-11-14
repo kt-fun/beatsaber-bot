@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.28
+
+### Patch Changes
+
+- build(deps): update qrcode lib deps
+
 ## 0.2.0-dev.27
 
 ### Patch Changes
