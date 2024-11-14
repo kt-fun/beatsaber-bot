@@ -67,7 +67,10 @@
     "beatsaber-bot-core": "workspace:*",
     "koishi": "^4.17.4",
     "koishi-plugin-cron": "^3.1.0",
-    "koishi-plugin-puppeteer": "^3.7.3"
+    "koishi-plugin-puppeteer": "^3.7.3",
+    "canvas": "^2.11.2",
+    "skia-canvas": "^1.0.1",
+    "@napi-rs/canvas": "^0.1.61"
   },
   "scripts": {
     "typecheck": "tsc",

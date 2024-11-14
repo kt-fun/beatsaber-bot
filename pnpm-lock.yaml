@@ -86,9 +86,9 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.658.1
         version: 3.658.1
-      '@loskir/styled-qr-code-node':
-        specifier: ^1.5.1
-        version: 1.5.1
+      '@ktfun/styled-qr-code-node':
+        specifier: ^1.6.0
+        version: 1.6.0(@napi-rs/canvas@0.1.61)(skia-canvas@1.0.1)
       '@napi-rs/canvas':
         specifier: ^0.1.61
         version: 0.1.61
@@ -127,6 +127,16 @@ importers:
         version: 1.0.1
 
   packages/koishi:
+    dependencies:
+      '@napi-rs/canvas':
+        specifier: ^0.1.61
+        version: 0.1.61
+      canvas:
+        specifier: ^2.11.2
+        version: 2.11.2
+      skia-canvas:
+        specifier: ^1.0.1
+        version: 1.0.1
     devDependencies:
       '@koishijs/plugin-adapter-qq':
         specifier: 4.6.2
@@ -827,11 +837,14 @@ packages:
   '@koishijs/utils@7.2.1':
     resolution: {integrity: sha512-c9pqz5zX6M6Lky3F3zIzltm3ogebv03RNZH17bfycjH9wPx9oGt4D6YUgVxKdRKVmDfMfp3X2dC2/Wf5c/WTnA==}
 
+  '@ktfun/styled-qr-code-node@1.6.0':
+    resolution: {integrity: sha512-/060YFHlNFRPWG5tMP095m7NJA5JLfmDZ41PFPf3cS11a/Ei8414B+AXBvBbAhprqgu44oQhEIDn3GHHjc3MWw==, tarball: https://registry.npmjs.org/@ktfun/styled-qr-code-node/-/styled-qr-code-node-1.6.0.tgz}
+    peerDependencies:
+      '@napi-rs/canvas': ^0.1.61
+      skia-canvas: ^1.0.2
+
   '@kurkle/color@0.3.2':
     resolution: {integrity: sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==}
-
-  '@loskir/styled-qr-code-node@1.5.1':
-    resolution: {integrity: sha512-GAGaUiQw+6b27nVJWtURUMXbqEr5mk9OOHoMfqhbGKKWI8fEcICf5VFkxcMgI/kQrSgOh/yag+aBb3rKA11gwg==}
 
   '@manypkg/find-root@1.1.0':
     resolution: {integrity: sha512-mki5uBvhHzO8kYYix/WRy2WX8S3B5wdVSc9D6KcU5lQNglP2yt58/VfLuAK49glRXChosY8ap2oJ1qgma3GUVA==}
@@ -5422,15 +5435,13 @@ snapshots:
       cosmokit: 1.6.2
       inaba: 1.1.1
 
-  '@kurkle/color@0.3.2': {}
-
-  '@loskir/styled-qr-code-node@1.5.1':
+  '@ktfun/styled-qr-code-node@1.6.0(@napi-rs/canvas@0.1.61)(skia-canvas@1.0.1)':
     dependencies:
+      '@napi-rs/canvas': 0.1.61
       qrcode-generator: 1.4.4
       skia-canvas: 1.0.1
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
+
+  '@kurkle/color@0.3.2': {}
 
   '@manypkg/find-root@1.1.0':
     dependencies:

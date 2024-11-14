@@ -1,10 +1,12 @@
-import {
-  CornerDotType,
-  CornerSquareType,
-  DotType,
-  QRCodeCanvas,
-  TypeNumber,
-} from '@loskir/styled-qr-code-node'
+// import {
+//   CornerDotType,
+//   CornerSquareType,
+//   DotType,
+//   QRCodeCanvas,
+//   TypeNumber,
+// } from '@loskir/styled-qr-code-node'
+
+import { QRCodeCanvas } from '@ktfun/styled-qr-code-node'
 
 export default async function createQrcode(
   url: string,
@@ -18,7 +20,7 @@ export default async function createQrcode(
     data: url,
     margin: 0,
     qrOptions: {
-      typeNumber: 0 as TypeNumber,
+      typeNumber: 0 as const,
       mode: 'Byte' as any,
       errorCorrectionLevel: 'Q' as any,
     },
@@ -30,18 +32,18 @@ export default async function createQrcode(
     },
     dotsOptions: {
       color: '#ffffff',
-      type: 'rounded' as DotType,
+      type: 'rounded' as const,
     },
     backgroundOptions: {
       color: 'rgb(0,0,0,0)',
     },
     cornersSquareOptions: {
       color: '#ffffff',
-      type: 'extra-rounded' as CornerSquareType,
+      type: 'extra-rounded' as const,
     },
     cornersDotOptions: {
       color: '#ffffff',
-      type: 'dot' as CornerDotType,
+      type: 'dot' as const,
     },
   }
   const qrCode = new QRCodeCanvas(options)
