@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-dev.27
+
+### Patch Changes
+
+- feat: add @napi-rs/canvas as canvas provider
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-dev.27
+
 ## 0.2.0-dev.26
 
 ### Patch Changes
