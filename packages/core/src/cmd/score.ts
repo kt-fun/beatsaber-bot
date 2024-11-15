@@ -38,10 +38,7 @@ export default () =>
           mode: c.options.m,
         }
       }
-
-      // 从 input 中提取出 mapId
       const mapId = c.input
-
       const score = await c.api.BeatLeader.getScoreByPlayerIdAndMapId(
         account.platformUid,
         mapId,
