@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-dev.34
+
+### Patch Changes
+
+- build(core): upgrade @ktfun/styled-qr-code-node to 1.6.5
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-dev.34
+
 ## 0.2.0-dev.33
 
 ### Major Changes
@@ -9,7 +17,7 @@
 ### Patch Changes
 
 - Updated dependencies
-  - beatsaber-bot-core@1.0.0-dev.33
+  - beatsaber-bot-core@0.2.0-dev.33
 
 ## 0.2.0-dev.32
 

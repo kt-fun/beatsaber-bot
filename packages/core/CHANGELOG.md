@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.34
+
+### Patch Changes
+
+- build(core): upgrade @ktfun/styled-qr-code-node to 1.6.5
+
 ## 0.2.0-dev.33
 
 ### Major Changes
