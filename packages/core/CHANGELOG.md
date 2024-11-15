@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.32
+
+### Patch Changes
+
+- fix(core): data access undefined
+
 ## 0.2.0-dev.31
 
 ### Patch Changes

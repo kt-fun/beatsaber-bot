@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-dev.32
+
+### Patch Changes
+
+- fix(core): data access undefined
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-dev.32
+
 ## 0.2.0-dev.31
 
 ### Patch Changes
