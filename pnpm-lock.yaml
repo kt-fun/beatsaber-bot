@@ -87,14 +87,8 @@ importers:
         specifier: ^3.658.1
         version: 3.658.1
       '@ktfun/styled-qr-code-node':
-        specifier: ^1.6.0
-        version: 1.6.0(@napi-rs/canvas@0.1.61)(skia-canvas@1.0.1)
-      '@napi-rs/canvas':
-        specifier: ^0.1.61
-        version: 0.1.61
-      canvas:
-        specifier: ^2.11.2
-        version: 2.11.2
+        specifier: ^1.6.5
+        version: 1.6.5
       chart.js:
         specifier: ^4.4.3
         version: 4.4.3
@@ -122,12 +116,19 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+    optionalDependencies:
+      '@napi-rs/canvas':
+        specifier: ^0.1.61
+        version: 0.1.61
+      canvas:
+        specifier: ^2.11.2
+        version: 2.11.2
       skia-canvas:
         specifier: ^1.0.1
         version: 1.0.1
 
   packages/koishi:
-    dependencies:
+    optionalDependencies:
       '@napi-rs/canvas':
         specifier: ^0.1.61
         version: 0.1.61
@@ -837,11 +838,8 @@ packages:
   '@koishijs/utils@7.2.1':
     resolution: {integrity: sha512-c9pqz5zX6M6Lky3F3zIzltm3ogebv03RNZH17bfycjH9wPx9oGt4D6YUgVxKdRKVmDfMfp3X2dC2/Wf5c/WTnA==}
 
-  '@ktfun/styled-qr-code-node@1.6.0':
-    resolution: {integrity: sha512-/060YFHlNFRPWG5tMP095m7NJA5JLfmDZ41PFPf3cS11a/Ei8414B+AXBvBbAhprqgu44oQhEIDn3GHHjc3MWw==, tarball: https://registry.npmjs.org/@ktfun/styled-qr-code-node/-/styled-qr-code-node-1.6.0.tgz}
-    peerDependencies:
-      '@napi-rs/canvas': ^0.1.61
-      skia-canvas: ^1.0.2
+  '@ktfun/styled-qr-code-node@1.6.5':
+    resolution: {integrity: sha512-D9K8dpVrzGlFbZtCsViucEnB+jHlHoitssGVpbMQwJiUdNKlr7UqKImZ2JVhXJY4gmwwaRCM98ZV6v5epHfvjA==}
 
   '@kurkle/color@0.3.2':
     resolution: {integrity: sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==}
@@ -898,28 +896,24 @@ packages:
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@napi-rs/canvas-linux-arm64-musl@0.1.61':
     resolution: {integrity: sha512-W3jYZhDLghJauKQWl8lvA7ISElWzlkdUIM+bwQqlDzYtpD4wEgi/vICiMuUbJz73fKGgYwFLgKL6dF2H3bpVYg==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@napi-rs/canvas-linux-x64-gnu@0.1.61':
     resolution: {integrity: sha512-tfMIZukLG+Q9mg+1LJFa852GhSlwg29pZaZ/UrLRdLRG0AJ1lckyHxOhNf9z+srMsEsryaQAIYHFIoOGYGhweA==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@napi-rs/canvas-linux-x64-musl@0.1.61':
     resolution: {integrity: sha512-Go7zAENKdoDELf4X55pCbt4IrbrNOL+BarxO8A3MdDKF+isBioG4lNXpnAdswrDx8iJu+o1rzaGupQsF9YWxFg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@napi-rs/canvas-win32-x64-msvc@0.1.61':
     resolution: {integrity: sha512-awGSMk4PlCV7SWC9ZxREkZvtiY+NWkramwYoQIEUJ+0KatLCbFnAaoxT7B7QE25ZUrjd1c3ZeV/Ae4Sggt276A==}
@@ -981,55 +975,46 @@ packages:
     resolution: {integrity: sha512-C/zbRYRXFjWvz9Z4haRxcTdnkPt1BtCkz+7RtBSuNmKzMzp3ZxdM28Mpccn6pt28/UWUCTXa+b0Mx1k3g6NOMA==}
     cpu: [arm]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-arm-musleabihf@4.18.0':
     resolution: {integrity: sha512-l3m9ewPgjQSXrUMHg93vt0hYCGnrMOcUpTz6FLtbwljo2HluS4zTXFy2571YQbisTnfTKPZ01u/ukJdQTLGh9A==}
     cpu: [arm]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-linux-arm64-gnu@4.18.0':
     resolution: {integrity: sha512-rJ5D47d8WD7J+7STKdCUAgmQk49xuFrRi9pZkWoRD1UeSMakbcepWXPF8ycChBoAqs1pb2wzvbY6Q33WmN2ftw==}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-arm64-musl@4.18.0':
     resolution: {integrity: sha512-be6Yx37b24ZwxQ+wOQXXLZqpq4jTckJhtGlWGZs68TgdKXJgw54lUUoFYrg6Zs/kjzAQwEwYbp8JxZVzZLRepQ==}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-linux-powerpc64le-gnu@4.18.0':
     resolution: {integrity: sha512-hNVMQK+qrA9Todu9+wqrXOHxFiD5YmdEi3paj6vP02Kx1hjd2LLYR2eaN7DsEshg09+9uzWi2W18MJDlG0cxJA==}
     cpu: [ppc64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-gnu@4.18.0':
     resolution: {integrity: sha512-ROCM7i+m1NfdrsmvwSzoxp9HFtmKGHEqu5NNDiZWQtXLA8S5HBCkVvKAxJ8U+CVctHwV2Gb5VUaK7UAkzhDjlg==}
     cpu: [riscv64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-s390x-gnu@4.18.0':
     resolution: {integrity: sha512-0UyyRHyDN42QL+NbqevXIIUnKA47A+45WyasO+y2bGJ1mhQrfrtXUpTxCOrfxCR4esV3/RLYyucGVPiUsO8xjg==}
     cpu: [s390x]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-x64-gnu@4.18.0':
     resolution: {integrity: sha512-xuglR2rBVHA5UsI8h8UbX4VJ470PtGCf5Vpswh7p2ukaqBGFTnsfzxUBetoWBWymHMxbIG0Cmx7Y9qDZzr648w==}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-x64-musl@4.18.0':
     resolution: {integrity: sha512-LKaqQL9osY/ir2geuLVvRRs+utWUNilzdE90TpyoX0eNqPzWjRm14oMEE+YLve4k/NAqCdPkGYDaDF5Sw+xBfg==}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-win32-arm64-msvc@4.18.0':
     resolution: {integrity: sha512-7J6TkZQFGo9qBKH0pk2cEVSRhJbL6MtfWxth7Y5YmZs57Pi+4x6c2dStAUvaQkHQLnEQv1jzBUW43GvZW8OFqA==}
@@ -3731,6 +3716,10 @@ packages:
 
   skia-canvas@1.0.1:
     resolution: {integrity: sha512-/HtZlmib2BD3Fi6P4ZywSq7VquPl2A1Frc0pA+xD5hJSvSzN7FoOJpBWDpDd0e1ByzrVO6ZIjO98dNSQ2XqlKw==}
+    deprecated: Version no longer available via npm. See https://github.com/samizdatco/skia-canvas/releases/tag/v1.0.1 for alternative installation instructions.
+
+  skia-canvas@1.0.2:
+    resolution: {integrity: sha512-9IjebOdBf6ir5Ktq0aM0wPshZ61oNX+T+2/ZBNJQZ63Z3SsSAd7i6YaYbqqtP6X8bK9mqB8QO1Y5DUZXNXuYHw==}
 
   slash@3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
@@ -5435,11 +5424,15 @@ snapshots:
       cosmokit: 1.6.2
       inaba: 1.1.1
 
-  '@ktfun/styled-qr-code-node@1.6.0(@napi-rs/canvas@0.1.61)(skia-canvas@1.0.1)':
+  '@ktfun/styled-qr-code-node@1.6.5':
     dependencies:
-      '@napi-rs/canvas': 0.1.61
       qrcode-generator: 1.4.4
-      skia-canvas: 1.0.1
+    optionalDependencies:
+      '@napi-rs/canvas': 0.1.61
+      skia-canvas: 1.0.2
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
 
   '@kurkle/color@0.3.2': {}
 
@@ -5473,6 +5466,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
       - supports-color
+    optional: true
 
   '@minatojs/driver-sqlite@4.4.1(minato@3.4.0(cordis@3.16.2))':
     dependencies:
@@ -5526,6 +5520,7 @@ snapshots:
       '@napi-rs/canvas-linux-x64-gnu': 0.1.61
       '@napi-rs/canvas-linux-x64-musl': 0.1.61
       '@napi-rs/canvas-win32-x64-msvc': 0.1.61
+    optional: true
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -6321,7 +6316,8 @@ snapshots:
       - '@vue/composition-api'
       - vue
 
-  abbrev@1.1.1: {}
+  abbrev@1.1.1:
+    optional: true
 
   accepts@1.3.8:
     dependencies:
@@ -6341,6 +6337,7 @@ snapshots:
       debug: 4.3.7
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   agent-base@7.1.1:
     dependencies:
@@ -6400,12 +6397,14 @@ snapshots:
       normalize-path: 3.0.0
       picomatch: 2.3.1
 
-  aproba@2.0.0: {}
+  aproba@2.0.0:
+    optional: true
 
   are-we-there-yet@2.0.0:
     dependencies:
       delegates: 1.0.0
       readable-stream: 3.6.2
+    optional: true
 
   argparse@1.0.10:
     dependencies:
@@ -6630,8 +6629,10 @@ snapshots:
     transitivePeerDependencies:
       - encoding
       - supports-color
+    optional: true
 
-  cargo-cp-artifact@0.1.9: {}
+  cargo-cp-artifact@0.1.9:
+    optional: true
 
   chai@5.1.1:
     dependencies:
@@ -6686,7 +6687,8 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  chownr@2.0.0: {}
+  chownr@2.0.0:
+    optional: true
 
   chromium-bidi@0.5.23(devtools-protocol@0.0.1299070):
     dependencies:
@@ -6755,7 +6757,8 @@ snapshots:
 
   color-name@1.1.4: {}
 
-  color-support@1.1.3: {}
+  color-support@1.1.3:
+    optional: true
 
   colorette@2.0.20: {}
 
@@ -6783,7 +6786,8 @@ snapshots:
 
   concat-map@0.0.1: {}
 
-  console-control-strings@1.1.0: {}
+  console-control-strings@1.1.0:
+    optional: true
 
   content-disposition@0.5.4:
     dependencies:
@@ -6896,10 +6900,12 @@ snapshots:
   decompress-response@4.2.1:
     dependencies:
       mimic-response: 2.1.0
+    optional: true
 
   decompress-response@6.0.0:
     dependencies:
       mimic-response: 3.1.0
+    optional: true
 
   deep-eql@5.0.2: {}
 
@@ -6947,7 +6953,8 @@ snapshots:
 
   detect-indent@6.1.0: {}
 
-  detect-libc@2.0.3: {}
+  detect-libc@2.0.3:
+    optional: true
 
   detective@4.7.1:
     dependencies:
@@ -7366,6 +7373,7 @@ snapshots:
   fs-minipass@2.1.0:
     dependencies:
       minipass: 3.3.6
+    optional: true
 
   fs.realpath@1.0.0: {}
 
@@ -7394,6 +7402,7 @@ snapshots:
       string-width: 4.2.3
       strip-ansi: 6.0.1
       wide-align: 1.1.5
+    optional: true
 
   get-caller-file@2.0.5: {}
 
@@ -7462,6 +7471,7 @@ snapshots:
       minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
+    optional: true
 
   glob@8.1.0:
     dependencies:
@@ -7528,7 +7538,8 @@ snapshots:
     dependencies:
       has-symbols: 1.0.3
 
-  has-unicode@2.0.1: {}
+  has-unicode@2.0.1:
+    optional: true
 
   hasown@2.0.2:
     dependencies:
@@ -7576,6 +7587,7 @@ snapshots:
       debug: 4.3.7
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   https-proxy-agent@7.0.4:
     dependencies:
@@ -7994,6 +8006,7 @@ snapshots:
   make-dir@3.1.0:
     dependencies:
       semver: 6.3.1
+    optional: true
 
   map-obj@1.0.1: {}
 
@@ -8038,9 +8051,11 @@ snapshots:
 
   mimic-fn@4.0.0: {}
 
-  mimic-response@2.1.0: {}
+  mimic-response@2.1.0:
+    optional: true
 
-  mimic-response@3.1.0: {}
+  mimic-response@3.1.0:
+    optional: true
 
   min-indent@1.0.1: {}
 
@@ -8072,8 +8087,10 @@ snapshots:
   minipass@3.3.6:
     dependencies:
       yallist: 4.0.0
+    optional: true
 
-  minipass@5.0.0: {}
+  minipass@5.0.0:
+    optional: true
 
   minisearch@6.3.0: {}
 
@@ -8081,6 +8098,7 @@ snapshots:
     dependencies:
       minipass: 3.3.6
       yallist: 4.0.0
+    optional: true
 
   mitt@3.0.1: {}
 
@@ -8090,7 +8108,8 @@ snapshots:
     dependencies:
       minimist: 1.2.8
 
-  mkdirp@1.0.4: {}
+  mkdirp@1.0.4:
+    optional: true
 
   mocha@10.4.0:
     dependencies:
@@ -8121,7 +8140,8 @@ snapshots:
 
   mylas@2.1.13: {}
 
-  nan@2.20.0: {}
+  nan@2.20.0:
+    optional: true
 
   nanoid@3.3.7: {}
 
@@ -8143,10 +8163,12 @@ snapshots:
   node-fetch@2.7.0:
     dependencies:
       whatwg-url: 5.0.0
+    optional: true
 
   nopt@5.0.0:
     dependencies:
       abbrev: 1.1.1
+    optional: true
 
   normalize-package-data@2.5.0:
     dependencies:
@@ -8167,12 +8189,14 @@ snapshots:
       console-control-strings: 1.1.0
       gauge: 3.0.2
       set-blocking: 2.0.0
+    optional: true
 
   ns-require@1.1.4: {}
 
   object-assign@2.1.1: {}
 
-  object-assign@4.1.1: {}
+  object-assign@4.1.1:
+    optional: true
 
   object-inspect@1.13.1: {}
 
@@ -8274,7 +8298,8 @@ snapshots:
     dependencies:
       callsites: 3.1.0
 
-  parenthesis@3.1.8: {}
+  parenthesis@3.1.8:
+    optional: true
 
   parse-json@5.2.0:
     dependencies:
@@ -8285,7 +8310,8 @@ snapshots:
 
   parseurl@1.3.3: {}
 
-  path-browserify@1.0.1: {}
+  path-browserify@1.0.1:
+    optional: true
 
   path-exists@4.0.0: {}
 
@@ -8566,6 +8592,7 @@ snapshots:
   rimraf@3.0.2:
     dependencies:
       glob: 7.2.3
+    optional: true
 
   rollup@4.18.0:
     dependencies:
@@ -8622,7 +8649,8 @@ snapshots:
 
   semver@5.7.2: {}
 
-  semver@6.3.1: {}
+  semver@6.3.1:
+    optional: true
 
   semver@7.6.0:
     dependencies:
@@ -8685,19 +8713,22 @@ snapshots:
 
   silk-wasm@3.6.1: {}
 
-  simple-concat@1.0.1: {}
+  simple-concat@1.0.1:
+    optional: true
 
   simple-get@3.1.1:
     dependencies:
       decompress-response: 4.2.1
       once: 1.4.0
       simple-concat: 1.0.1
+    optional: true
 
   simple-get@4.0.1:
     dependencies:
       decompress-response: 6.0.0
       once: 1.4.0
       simple-concat: 1.0.1
+    optional: true
 
   skia-canvas@1.0.1:
     dependencies:
@@ -8710,6 +8741,20 @@ snapshots:
     transitivePeerDependencies:
       - encoding
       - supports-color
+    optional: true
+
+  skia-canvas@1.0.2:
+    dependencies:
+      '@mapbox/node-pre-gyp': 1.0.11
+      cargo-cp-artifact: 0.1.9
+      glob: 8.1.0
+      path-browserify: 1.0.1
+      simple-get: 4.0.1
+      string-split-by: 1.0.0
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+    optional: true
 
   slash@3.0.0: {}
 
@@ -8806,6 +8851,7 @@ snapshots:
   string-split-by@1.0.0:
     dependencies:
       parenthesis: 3.1.8
+    optional: true
 
   string-width@4.2.3:
     dependencies:
@@ -8918,6 +8964,7 @@ snapshots:
       minizlib: 2.1.2
       mkdirp: 1.0.4
       yallist: 4.0.0
+    optional: true
 
   term-size@2.2.1: {}
 
@@ -8950,7 +8997,8 @@ snapshots:
       '@tokenizer/token': 0.3.0
       ieee754: 1.2.1
 
-  tr46@0.0.3: {}
+  tr46@0.0.3:
+    optional: true
 
   trim-newlines@3.0.1: {}
 
@@ -9192,7 +9240,8 @@ snapshots:
     dependencies:
       defaults: 1.0.4
 
-  webidl-conversions@3.0.1: {}
+  webidl-conversions@3.0.1:
+    optional: true
 
   whatwg-fetch@0.9.0: {}
 
@@ -9200,6 +9249,7 @@ snapshots:
     dependencies:
       tr46: 0.0.3
       webidl-conversions: 3.0.1
+    optional: true
 
   which-boxed-primitive@1.0.2:
     dependencies:
@@ -9237,6 +9287,7 @@ snapshots:
   wide-align@1.1.5:
     dependencies:
       string-width: 4.2.3
+    optional: true
 
   word-wrap@1.2.5: {}
 
