@@ -5,7 +5,7 @@ export const Config = Schema.object({
   beatSaverWSHost: Schema.string().default('wss://ws.beatsaver.com/maps'),
   remoteRenderURL: Schema.string().default('https://aiobs.ktlab.io'),
   minRawMatchMapIdLength: Schema.number().default(3),
-  renderMode: Schema.string().default('remote'),
+  renderMode: Schema.string().default('local'),
   defaultWaitTimeout: Schema.number().default(3000),
   rankWaitTimeout: Schema.number().default(8000),
   bsOauthClientId: Schema.string().default('bs-oauth-client-id'),
@@ -13,11 +13,11 @@ export const Config = Schema.object({
   blOauthClientId: Schema.string().default('bl-oauth-client-id'),
   blOauthClientSecret: Schema.string().default('bl-oauth-client-secret'),
   bsNotifyMonitorCron: Schema.object({
-    enable: Schema.boolean().default(true),
+    enable: Schema.boolean().default(false),
     cron: Schema.string().default('*/15 * * * *'),
   }),
   tokenRefreshCron: Schema.object({
-    enable: Schema.boolean().default(true),
+    enable: Schema.boolean().default(false),
     cron: Schema.string().default('0 20 * * *'),
   }),
   tempCron: Schema.object({

@@ -17,7 +17,7 @@ export const handleScoreSaberBind = async <T, C>(c: CmdContext<T, C>) => {
   )
   const text =
     c.session.text('commands.bsbot.bind.ack-prompt', {
-      user: `${scoreSaberUser.data.name}(${scoreSaberUser.data.id})`,
+      user: `${scoreSaberUser.name}(${scoreSaberUser.id})`,
     }) +
     (ssAccount
       ? ',' +
@@ -38,10 +38,10 @@ export const handleScoreSaberBind = async <T, C>(c: CmdContext<T, C>) => {
   const account: Partial<RelateAccount> = {
     uid: c.session.u.id,
     platform: 'scoresaber',
-    platformUid: scoreSaberUser.data.id,
+    platformUid: scoreSaberUser.id,
     lastModifiedAt: now,
     lastRefreshAt: now,
-    platformUname: scoreSaberUser.data.name,
+    platformUname: scoreSaberUser.name,
     type: 'id',
     status: 'ok',
   }
@@ -63,7 +63,7 @@ export const handleScoreSaberBind = async <T, C>(c: CmdContext<T, C>) => {
   await c.db.addUserBindingInfo(account)
   c.session.sendQuote(
     c.session.text('commands.bsbot.bind.success', {
-      user: `${scoreSaberUser.data.name}(${scoreSaberUser.data.id})`,
+      user: `${scoreSaberUser.name}(${scoreSaberUser.id})`,
     })
   )
 }

@@ -17,7 +17,7 @@ export class BeatLeaderService {
     this.blClient = blClient
   }
 
-  async getPlayerInfoById(id: string): Promise<any> {
+  async getPlayerInfoById(id: string) {
     return this.blClient.getPlayerInfo(id)
   }
 

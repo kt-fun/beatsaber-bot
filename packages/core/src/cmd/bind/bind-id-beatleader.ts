@@ -16,7 +16,7 @@ export const handleBeatLeaderIDBind = async <T, C>(c: CmdContext<T, C>) => {
 
   const text =
     c.session.text('commands.bsbot.bind.ack-prompt', {
-      user: `${player.data.name}(${player.data.id})`,
+      user: `${player.name}(${player.id})`,
     }) +
     (blAccount
       ? ',' +
@@ -40,8 +40,8 @@ export const handleBeatLeaderIDBind = async <T, C>(c: CmdContext<T, C>) => {
   const account: Partial<RelateAccount> = {
     uid: c.session.u.id,
     platform: 'beatleader',
-    platformUid: player.data.id.toString(),
-    platformUname: player.data.name,
+    platformUid: player.id.toString(),
+    platformUname: player.name,
     otherPlatformInfo: {},
     lastModifiedAt: now,
     lastRefreshAt: now,
@@ -54,8 +54,8 @@ export const handleBeatLeaderIDBind = async <T, C>(c: CmdContext<T, C>) => {
   await c.db.addUserBindingInfo(account)
   c.session.sendQuote(
     c.session.text('commands.bsbot.bind.bl.success', {
-      name: player.data.name,
-      id: player.data.id,
+      name: player.name,
+      id: player.id,
     })
   )
 }

@@ -1,14 +1,12 @@
-import {
-  Config,
-  PuppeteerProvider,
-  PuppeteerRender,
-  RemotePuppeteerProvider,
-} from 'beatsaber-bot-core'
+import { Config, PuppeteerProvider, PuppeteerRender } from 'beatsaber-bot-core'
 import { Context } from 'koishi'
 
 let enable = false
 
 async function init() {
+  if (enable) {
+    return
+  }
   try {
     await import('koishi-plugin-puppeteer')
     enable = true

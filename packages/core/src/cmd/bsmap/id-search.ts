@@ -2,6 +2,7 @@ import { CommandBuilder } from '@/cmd/builder'
 import { InvalidMapIdError, MapIdNotFoundError } from '@/errors'
 
 const mapIdReg = /^[a-fA-F0-9]{1,6}$/
+
 export default () =>
   new CommandBuilder()
     .setName('id') // <mapId:string>
@@ -32,11 +33,11 @@ export default () =>
         )
       }
       const image = await c.render.renderMap(
-        res.data,
+        res,
         c.userPreference,
         onStartRender
       )
       // upload to s3?
       await c.session.sendImgBuffer(image)
-      await c.session.sendAudioByUrl(res.data.versions[0].previewURL)
+      await c.session.sendAudioByUrl(res.versions[0].previewURL)
     })
