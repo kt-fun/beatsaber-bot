@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.33
+
+### Major Changes
+
+- refactor(core): update help command resource
+
 ## 0.2.0-dev.32
 
 ### Patch Changes

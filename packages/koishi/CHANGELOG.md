@@ -1,5 +1,16 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-dev.33
+
+### Major Changes
+
+- refactor(core): update help command resource
+
+### Patch Changes
+
+- Updated dependencies
+  - beatsaber-bot-core@1.0.0-dev.33
+
 ## 0.2.0-dev.32
 
 ### Patch Changes
