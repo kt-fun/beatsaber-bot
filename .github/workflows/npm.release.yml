@@ -28,6 +28,9 @@ jobs:
         run: pnpm run ci:publish-dev
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+#          for reuse secret https://github.com/github/roadmap/issues/636
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
   call-workflow-docker-build:
     needs: release
     uses: ./.github/workflows/docker-aio.yml
