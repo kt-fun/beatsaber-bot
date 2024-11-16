@@ -4,8 +4,7 @@ on:
   push:
     tags:
       - 'v*'  # Trigger on version tags (e.g., v1.0.0)
-  workflow_dispatch:  # Allow manual triggering
-  workflow_call:
+  workflow_dispatch:
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -28,5 +27,15 @@ jobs:
         run: pnpm run ci:publish-dev
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - uses: ./.github/workflows/docker-aio.yml
-      - uses: ./.github/workflows/docker.lite.aio.yml
+  call-workflow-docker-build:
+    needs: release
+    uses: ./.github/workflows/docker-aio.yml
+    secrets:
+      docker_username: ${{ secrets.DOCKER_USERNAME }}
+      docker_password: ${{ secrets.DOCKER_PASSWORD }}
+  call-workflow-docker-lite-build:
+    needs: release
+    uses: ./.github/workflows/docker.lite.aio.yml
+    secrets:
+      docker_username: ${{ secrets.DOCKER_USERNAME }}
+      docker_password: ${{ secrets.DOCKER_PASSWORD }}

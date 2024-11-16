@@ -2,6 +2,14 @@ name: Docker Build and Push
 
 on:
   workflow_call:
+    secrets:
+      docker_username:
+        description: 'docker username'
+        required: true
+
+      docker_password:
+        description: 'docker password'
+        required: true
 env:
   DOCKERHUB_SLUG: aktdocker/koishi-beatsaber-bot-lite
 jobs:
@@ -15,7 +23,7 @@ jobs:
       - name: Create matrix
         id: platforms
         run: |
-          echo "matrix=$(docker buildx bake -f ./docker/docker-bake.hcl koishi-beatsaber-bot-lite --print | jq -cr '.target."koishi-beatsaber-bot-lite".platforms')" >>${GITHUB_OUTPUT}
+          echo "matrix=$(docker buildx bake -f ./.github/docker/docker-bake-lite.hcl koishi-beatsaber-bot-lite --print | jq -cr '.target."koishi-beatsaber-bot-lite".platforms')" >>${GITHUB_OUTPUT}
       - name: Show matrix
         run: |
           echo ${{ steps.platforms.outputs.matrix }}
@@ -35,12 +43,12 @@ jobs:
             org.opencontainers.image.vendor=aktdocker
       - name: Rename meta bake definition file
         run: |
-          mv "${{ steps.meta.outputs.bake-file }}" "/tmp/bake-meta.json"
+          mv "${{ steps.meta.outputs.bake-file }}" "/tmp/bake-meta-lite.json"
       - name: Upload meta bake definition
         uses: actions/upload-artifact@v4
         with:
-          name: bake-meta
-          path: /tmp/bake-meta.json
+          name: bake-meta-lite
+          path: /tmp/bake-meta-lite.json
           if-no-files-found: error
           retention-days: 1
 
@@ -53,6 +61,12 @@ jobs:
       matrix:
         platform: ${{ fromJson(needs.prepare.outputs.matrix) }}
     steps:
+      - name: Prepare
+        run: |
+          platform=${{ matrix.platform }}
+          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Get current git tag
         id: get_tag
         run: |
@@ -61,16 +75,10 @@ jobs:
           TAG=${TAG#v}
           echo "Current tag without v prefix: $TAG"
           echo "TAG=$TAG" >> $GITHUB_ENV
-      - name: Prepare
-        run: |
-          platform=${{ matrix.platform }}
-          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: Download meta bake definition
         uses: actions/download-artifact@v4
         with:
-          name: bake-meta
+          name: bake-meta-lite
           path: /tmp
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -82,16 +90,20 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ secrets.docker_username }}
+          password: ${{ secrets.docker_password }}
+      - name: rewrite package.json deps version
+        run: |
+          sed -i 's/workspace:\*/${{env.TAG}}/g' ./.github/boilerplate/package.json
+          cat ./.github/boilerplate/package.json
       -
         name: Build
         id: bake
         uses: docker/bake-action@v5
         with:
           files: |
-            ./docker/docker-bake.hcl
-            /tmp/bake-meta.json
+            ./.github/docker/docker-bake-lite.hcl
+            /tmp/bake-meta-lite.json
           targets: koishi-beatsaber-bot-lite
           set: |
             *.tags=
@@ -124,7 +136,7 @@ jobs:
       - name: Download meta bake definition
         uses: actions/download-artifact@v4
         with:
-          name: bake-meta
+          name: bake-meta-lite
           path: /tmp
 
       - name: Download digests
@@ -140,15 +152,15 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ secrets.docker_username }}
+          password: ${{ secrets.docker_password }}
 
       - name: Create manifest list and push
         working-directory: /tmp/digests
         run: |
           echo $DOCKER_METADATA_OUTPUT_JSON
-          docker buildx imagetools create $(jq -cr '.target."docker-metadata-action".tags | map(select(startswith("${{ env.DOCKERHUB_SLUG }}")) | "-t " + .) | join(" ")' /tmp/bake-meta.json) $(printf '${{ env.DOCKERHUB_SLUG }}@sha256:%s ' *)
+          docker buildx imagetools create $(jq -cr '.target."docker-metadata-action".tags | map(select(startswith("${{ env.DOCKERHUB_SLUG }}")) | "-t " + .) | join(" ")' /tmp/bake-meta-lite.json) $(printf '${{ env.DOCKERHUB_SLUG }}@sha256:%s ' *)
 
       - name: Inspect image
         run: |
-          docker buildx imagetools inspect ${{ env.DOCKERHUB_SLUG }}:$(jq -r '.target."docker-metadata-action".args.DOCKER_META_VERSION' /tmp/bake-meta.json)
+          docker buildx imagetools inspect ${{ env.DOCKERHUB_SLUG }}:$(jq -r '.target."docker-metadata-action".args.DOCKER_META_VERSION' /tmp/bake-meta-lite.json)
