@@ -26,7 +26,7 @@ jobs:
         run: pnpm run build
       - name: Publish
         run: pnpm run ci:publish-dev
-        with:
-          env: ${{ secrets.NPM_TOKEN }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - uses: ./.github/workflows/docker-aio.yml
       - uses: ./.github/workflows/docker.lite.aio.yml
