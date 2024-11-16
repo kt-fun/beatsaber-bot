@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-dev.37
+
+### Patch Changes
+
+- refactor(service): change koishi-plugin-puppeteer from required optional service
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-dev.37
+
 ## 0.2.0-dev.36
 
 ### Patch Changes
