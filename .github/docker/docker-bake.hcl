@@ -23,7 +23,7 @@ target "koishi-beatsaber-bot-lite" {
   platforms = [
     "linux/amd64",
     "linux/arm64",
-  ],
+  ]
   args = {
     VERSION = "${TAG}",
   }
