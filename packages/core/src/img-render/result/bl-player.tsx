@@ -15,19 +15,23 @@ interface BLPlayerInfoProps {
 }
 
 export default function BLPlayerPage({
-  beatleaderItems,
+  beatleaderItems: items,
   user,
   params,
   bg,
 }: BLPlayerInfoProps) {
   const part = getPart(user)
+  const beatleaderItems = items.map((it) => ({
+    ...it,
+    pinned: it.metadata?.pinnedContexts !== undefined,
+  }))
   return (
     <>
       <div
         id={'render-result'}
         key={'render-result'}
         className={
-          'flex flex-col justify-center items-center relative h-[720px] w-[1024px] my-auto'
+          'flex flex-col justify-center items-center relative h-[720px] w-[1200px] my-auto'
         }
       >
         <div

@@ -21,7 +21,7 @@ export default function SSPlayerPage({
     <>
       <div
         className={
-          'flex flex-col justify-center items-center relative h-[720px] w-[1024px] my-auto'
+          'flex flex-col justify-center items-center relative h-[720px] w-[1200px] my-auto'
         }
         id="render-result"
       >
