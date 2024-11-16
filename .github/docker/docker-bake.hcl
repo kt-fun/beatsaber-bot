@@ -8,7 +8,7 @@ target "docker-metadata-action" {}
 
 target "koishi-beatsaber-bot" {
   inherits = ["docker-metadata-action"]
-  context = "./github"
+  context = "./.github"
   dockerfile = ".github/docker/Dockerfile"
   platforms = [
     "linux/amd64",
@@ -18,7 +18,7 @@ target "koishi-beatsaber-bot" {
 
 target "koishi-beatsaber-bot-lite" {
   inherits = ["docker-metadata-action"]
-  context = "./github"
+  context = "./.github"
   dockerfile = ".github/docker/lite.Dockerfile"
   platforms = [
     "linux/amd64",
