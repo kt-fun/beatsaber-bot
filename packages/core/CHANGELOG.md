@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.36
+
+### Patch Changes
+
+- ci: update workflow
+
 ## 0.2.0-dev.35
 
 ### Patch Changes
