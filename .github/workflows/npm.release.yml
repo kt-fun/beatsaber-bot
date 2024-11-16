@@ -29,8 +29,10 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
   call-workflow-docker-build:
+    needs: release
     uses: ./.github/workflows/docker-aio.yml
     secrets: inherit
   call-workflow-docker-lite-build:
+    needs: release
     uses: ./.github/workflows/docker.lite.aio.yml
     secrets: inherit

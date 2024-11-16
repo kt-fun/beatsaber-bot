@@ -39,7 +39,7 @@ jobs:
       - name: Upload meta bake definition
         uses: actions/upload-artifact@v4
         with:
-          name: bake-meta
+          name: bake-meta-lite
           path: /tmp/bake-meta.json
           if-no-files-found: error
           retention-days: 1
@@ -70,7 +70,7 @@ jobs:
       - name: Download meta bake definition
         uses: actions/download-artifact@v4
         with:
-          name: bake-meta
+          name: bake-meta-lite
           path: /tmp
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -91,7 +91,7 @@ jobs:
         with:
           files: |
             ./docker/docker-bake.hcl
-            /tmp/bake-meta.json
+            /tmp/bake-meta-lite.json
           targets: koishi-beatsaber-bot-lite
           set: |
             *.tags=
@@ -124,7 +124,7 @@ jobs:
       - name: Download meta bake definition
         uses: actions/download-artifact@v4
         with:
-          name: bake-meta
+          name: bake-meta-lite
           path: /tmp
 
       - name: Download digests
@@ -147,8 +147,8 @@ jobs:
         working-directory: /tmp/digests
         run: |
           echo $DOCKER_METADATA_OUTPUT_JSON
-          docker buildx imagetools create $(jq -cr '.target."docker-metadata-action".tags | map(select(startswith("${{ env.DOCKERHUB_SLUG }}")) | "-t " + .) | join(" ")' /tmp/bake-meta.json) $(printf '${{ env.DOCKERHUB_SLUG }}@sha256:%s ' *)
+          docker buildx imagetools create $(jq -cr '.target."docker-metadata-action".tags | map(select(startswith("${{ env.DOCKERHUB_SLUG }}")) | "-t " + .) | join(" ")' /tmp/bake-meta-lite.json) $(printf '${{ env.DOCKERHUB_SLUG }}@sha256:%s ' *)
 
       - name: Inspect image
         run: |
-          docker buildx imagetools inspect ${{ env.DOCKERHUB_SLUG }}:$(jq -r '.target."docker-metadata-action".args.DOCKER_META_VERSION' /tmp/bake-meta.json)
+          docker buildx imagetools inspect ${{ env.DOCKERHUB_SLUG }}:$(jq -r '.target."docker-metadata-action".args.DOCKER_META_VERSION' /tmp/bake-meta-lite.json)
