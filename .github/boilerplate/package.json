@@ -45,8 +45,8 @@
     "koishi": "4.18.1",
     "koishi-plugin-adapter-onebot": "6.7.4",
     "koishi-plugin-theme-vanilla": "1.0.6",
-    "beatsaber-bot-core": "^workspace:*",
-    "koishi-plugin-beatsaber-bot": "^workspace:*",
+    "beatsaber-bot-core": "workspace:*",
+    "koishi-plugin-beatsaber-bot": "workspace:*",
     "@napi-rs/canvas": "0.1.62"
   },
   "resolutions": {
