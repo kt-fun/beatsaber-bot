@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-dev.38
+
+### Patch Changes
+
+- refactor(koishi): update inject dependencies
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-dev.38
+
 ## 0.2.0-dev.37
 
 ### Patch Changes
