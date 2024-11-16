@@ -3,9 +3,7 @@ name: Docker Build and Push
 on:
   workflow_call:
 env:
-#  read version from git tag, remove v prefix
-  VERSION: ${{ github.ref_name }}
-  DOCKERHUB_SLUG: aktdocker/koishi-beatsaber-bot
+  DOCKERHUB_SLUG: aktdocker/koishi-beatsaber-bot-lite
 jobs:
   prepare:
     runs-on: ubuntu-latest
