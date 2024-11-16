@@ -54,6 +54,12 @@ jobs:
       matrix:
         platform: ${{ fromJson(needs.prepare.outputs.matrix) }}
     steps:
+      - name: Prepare
+        run: |
+          platform=${{ matrix.platform }}
+          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Get current git tag
         id: get_tag
         run: |
@@ -62,12 +68,6 @@ jobs:
           TAG=${TAG#v}
           echo "Current tag without v prefix: $TAG"
           echo "TAG=$TAG" >> $GITHUB_ENV
-      - name: Prepare
-        run: |
-          platform=${{ matrix.platform }}
-          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: Download meta bake definition
         uses: actions/download-artifact@v4
         with:
