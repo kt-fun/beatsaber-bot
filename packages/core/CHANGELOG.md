@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-dev.35
+
+### Patch Changes
+
+- fix some error
+
 ## 0.2.0-dev.34
 
 ### Patch Changes
