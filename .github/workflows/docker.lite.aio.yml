@@ -98,7 +98,7 @@ jobs:
         uses: docker/bake-action@v5
         with:
           files: |
-            ./docker/docker-bake.hcl
+            ./.github/docker/docker-bake.hcl
             /tmp/bake-meta-lite.json
           targets: koishi-beatsaber-bot-lite
           set: |
