@@ -29,8 +29,10 @@
     "service": {
       "required": [
         "database",
-        "puppeteer",
         "cron"
+      ],
+      "optional": [
+        "puppeteer"
       ]
     },
     "locales": [
