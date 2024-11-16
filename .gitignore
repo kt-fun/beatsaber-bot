@@ -1,6 +1,7 @@
 lib
 dist
 external
+
 docs/.vitepress/dist
 docs/.vitepress/cache
 node_modules
@@ -17,3 +18,5 @@ tsconfig.tsbuildinfo
 *.ntvs*
 *.njsproj
 *.sln
+packages/koishi/dev
+!/packages/koishi/dev/

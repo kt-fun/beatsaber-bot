@@ -1,0 +1,99 @@
+{
+  "name": "beatsaber-bot-core",
+  "description": "一个用于新版 Steam 家庭的库存监控 Bot 插件",
+  "version": "0.2.0-dev.35",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "ktKongTong",
+    "email": "kt@ktlab.io"
+  },
+  "exports": {
+    ".": {
+      "require": "./lib/index.js",
+      "default": "./lib/index.js",
+      "types": "./src/index.ts",
+      "development": "./src/index.ts"
+    },
+    "./interface": {
+      "require": "./lib/interface/index.js",
+      "default": "./lib/interface/index.js",
+      "types": "./src/interface/index.ts",
+      "development": "./src/interface/index.ts"
+    },
+    "./schedules": {
+      "require": "./lib/schedules/index.js",
+      "default": "./lib/schedules/index.js",
+      "types": "./src/schedules/index.ts",
+      "development": "./src/schedules/index.ts"
+    },
+    "./img-render": {
+      "require": "./lib/img-render/index.js",
+      "default": "./lib/img-render/index.js",
+      "types": "./src/img-render/index.ts",
+      "development": "./src/img-render/index.ts"
+    },
+    "./cmd": {
+      "require": "./lib/cmd/index.js",
+      "default": "./lib/cmd/index.js",
+      "types": "./src/cmd/index.ts",
+      "development": "./src/cmd/index.ts"
+    }
+  },
+  "keywords": [
+    "beatsaber",
+    "beatsaber-bot"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.658.1",
+    "@ktfun/styled-qr-code-node": "^1.6.5",
+    "chart.js": "^4.4.3",
+    "country-flag-icons": "^1.5.11",
+    "dayjs": "^1.11.3",
+    "lru-cache": "^11.0.1",
+    "lucide-react": "^0.379.0",
+    "ofetch": "^1.4.1",
+    "puppeteer-core": "^23.8.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.15",
+    "autoprefixer": "^10.4.20"
+  },
+  "optionalDependencies": {
+    "canvas": "^2.11.2",
+    "skia-canvas": "^1.0.1",
+    "@napi-rs/canvas": "^0.1.61"
+  },
+  "scripts": {
+    "copy-yml-resource": "node scripts/build.mjs",
+    "clean": "rm -rf lib tsconfig.tsbuildinfo",
+    "compile": "tsc -p tsconfig.build.json && tsc-alias",
+    "build": "pnpm run copy-yml-resource && pnpm run compile",
+    "pub": "pnpm run build && pnpm publish"
+  },
+  "typesVersions": {
+    "*": {
+      "index": [
+        "lib/index.d.ts"
+      ],
+      "schedules": [
+        "lib/schedules/index.d.ts"
+      ],
+      "img-render": [
+        "lib/img-render/index.d.ts"
+      ],
+      "interface": [
+        "lib/interface/index.d.ts"
+      ]
+    }
+  }
+}

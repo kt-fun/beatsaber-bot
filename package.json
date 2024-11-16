@@ -1,9 +1,8 @@
 {
-  "name": "koishi-plugin-beatsaber-bot",
-  "description": "一个 用于 BeatSaber 的 koishi Bot 插件",
-  "version": "0.1.0-rc.patch14",
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
+  "name": "beatsaber-bot-monorepo",
+  "private": true,
+  "description": "一个 用于 BeatSaber 的 Bot",
+  "type": "module",
   "files": [
     "lib",
     "dist"
@@ -16,78 +15,50 @@
   "repository": "https://github.com/ktKongTong/koishi-beats-bot",
   "homepage": "https://koishi-beats-bot.vercel.app/",
   "keywords": [
-    "beatsaber",
-    "koishi",
-    "koishi-plugin"
+    "beatsaber"
   ],
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "access": "public"
-  },
-  "koishi": {
-    "service": {
-      "required": [
-        "database",
-        "puppeteer",
-        "cron"
-      ]
-    },
-    "locales": [
-      "en",
-      "zh"
-    ],
-    "description": {
-      "en": "a koishi bot plugin for BeatSaber",
-      "zh": "一个 BeatSaber Bot 插件"
-    }
-  },
   "devDependencies": {
+    "@changesets/cli": "^2.27.5",
     "@eslint/js": "^9.3.0",
+    "@types/chai": "^4.3.16",
+    "@types/js-yaml": "^4.0.9",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.14.2",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "dayjs": "^1.11.3",
-    "eslint": "9.x",
+    "chai": "^5.1.1",
+    "eslint": "^9.3.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
     "globals": "^15.3.0",
     "globby": "^14.0.1",
     "husky": "^9.0.11",
+    "js-yaml": "^4.1.0",
     "lint-staged": "^15.2.5",
-    "prettier": "^3.2.5",
+    "mocha": "^10.4.0",
+    "react-jsx": "^1.0.0",
+    "tsc-alias": "^1.8.10",
+    "tsx": "^4.16.2",
     "typescript": "^5.4.5",
-    "typescript-eslint": "^7.10.0",
-    "vitepress": "^1.2.2"
-  },
-  "peerDependencies": {
-    "@loskir/styled-qr-code-node": "^1.5.1",
-    "canvas": "^2.11.2",
-    "chart.js": "^4.4.3",
-    "country-flag-icons": "^1.5.11",
-    "dayjs": "^1.11.3",
-    "koishi": "^4.17.4",
-    "koishi-plugin-cron": "^3.1.0",
-    "koishi-plugin-puppeteer": "^3.7.3",
-    "lucide-react": "^0.379.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "typescript-eslint": "^8.0.0-alpha.24",
+    "vitepress": "^1.2.3"
   },
   "scripts": {
+    "clean": "pnpm run -r clean",
+    "build": "pnpm run -r build",
+    "ci:publish": "pnpm publish -r",
+    "ci:publish-dev": "pnpm publish -r --tag dev",
     "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs",
-    "lint": "eslint src",
-    "lint-fix": "eslint --fix src",
-    "lint-staged": "lint-staged",
-    "prepare": "husky install",
-    "clean": "rm -rf lib  tsconfig.tsbuildinfo",
-    "copy-yml-resource": "node ./scripts/build.mjs",
-    "compile": "tsc",
-    "build": "npm run clean && npm run copy-yml-resource && npm run compile",
-    "pub": "npm run build && npm publish"
+    "docs:build": "vitepress build docs"
   },
   "lint-staged": {
     "*.{js,ts,vue,jsx,tsx}": [
-      "eslint --cache --fix src"
+      "eslint --cache --fix packages"
     ]
-  }
+  },
+
+  "resolutions": {
+    "puppeteer-core": "^23.8.0"
+  },
+  "packageManager": "pnpm@9.4.0+sha256.b6fd0bfda555e7e584ad7e56b30c68b01d5a04f9ee93989f4b93ca8473c49c74"
 }
