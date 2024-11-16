@@ -94,7 +94,7 @@ jobs:
           password: ${{ secrets.docker_password }}
       - name: rewrite package.json deps version
         run: |
-          sed -i '' 's|workspace:\\*|'\"$VERSION\"'|g' ./.github/boilerplate/package.json
+          sed -i 's|"workspace:\*"'$VERSION'"|g' ./.github/boilerplate/package.json
           cat ./.github/boilerplate/package.json
       -
         name: Build
