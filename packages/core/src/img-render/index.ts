@@ -13,7 +13,7 @@ import { BSMap } from '@/api/interfaces/beatsaver'
 import { ImgRender, Platform } from '@/interface'
 import { preferenceKey, UserPreferenceStore } from '@/utils'
 import { ImageRenderError, RequestError } from '@/errors'
-import { TimeoutError } from 'puppeteer-core'
+import { PuppeteerError, TimeoutError } from 'puppeteer-core'
 
 const noop = () => {}
 // render service supply rendered components, impler just need to provide the html-to-img converter
@@ -46,7 +46,8 @@ export abstract class RenderService implements ImgRender {
       onRenderStart,
       userPreference,
     } as RenderOption).catch((e) => {
-      if (e instanceof TimeoutError) {
+      if (e instanceof TimeoutError || e instanceof PuppeteerError) {
+        console.error(e)
         throw new ImageRenderError()
       }
       throw e
@@ -108,7 +109,8 @@ export abstract class RenderService implements ImgRender {
       onRenderError,
       onRenderStart,
     } as RenderOption).catch((e) => {
-      if (e instanceof TimeoutError) {
+      if (e instanceof TimeoutError || e instanceof PuppeteerError) {
+        console.error(e)
         throw new ImageRenderError()
       }
       throw e
@@ -122,7 +124,7 @@ export abstract class RenderService implements ImgRender {
     renderOpts: RenderOption
   ) => {
     const bg =
-      (await renderOpts.userPreference.get<string>(
+      (await renderOpts?.userPreference?.get<string>(
         preferenceKey.blScoreImg.key
       )) ?? 'https://www.loliapi.com/acg/pc/'
     try {
@@ -173,7 +175,13 @@ export abstract class RenderService implements ImgRender {
       userPreference,
       onRenderError,
       onRenderStart,
-    } as RenderOption)
+    } as RenderOption).catch((e) => {
+      if (e instanceof TimeoutError || e instanceof PuppeteerError) {
+        console.error(e)
+        throw new ImageRenderError()
+      }
+      throw e
+    })
   }
 
   async renderMap(
@@ -190,7 +198,8 @@ export abstract class RenderService implements ImgRender {
       onRenderError,
       onRenderStart,
     } as RenderOption).catch((e) => {
-      if (e instanceof TimeoutError) {
+      if (e instanceof TimeoutError || e instanceof PuppeteerError) {
+        console.error(e)
         throw new ImageRenderError()
       }
       throw e
@@ -199,22 +208,17 @@ export abstract class RenderService implements ImgRender {
 
   async renderUrl(url: string, onRenderStart?: () => void) {
     if (this.urlToImgBufferConverter) {
-      return this.urlToImgBufferConverter(url, onRenderStart)
+      return this.urlToImgBufferConverter(url, onRenderStart).catch((e) => {
+        if (e instanceof TimeoutError || e instanceof PuppeteerError) {
+          console.error(e)
+          throw new ImageRenderError()
+        }
+        throw e
+      })
     }
   }
 
   _renderMap = async (bsMap: BSMap, renderOpts: RenderOption) => {
-    // if (renderOpts.type == 'remote') {
-    //   for (let i = 0; i < 3; i++) {
-    //     const image = await renderRemoteMap(
-    //       bsMap.id,
-    //       renderOpts as RemoteRenderOpts
-    //     )
-    //     if (image) {
-    //       return image
-    //     }
-    //   }
-    // }
     const previewQrUrl = await createQrcode(
       `https://allpoland.github.io/ArcViewer/?id=${bsMap.id}`
     )
