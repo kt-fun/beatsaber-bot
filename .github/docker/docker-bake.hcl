@@ -1,5 +1,3 @@
-variable "TAG" {}
-
 group "default" {
   targets = ["koishi-beatsaber-bot"]
 }
@@ -24,7 +22,4 @@ target "koishi-beatsaber-bot-lite" {
     "linux/amd64",
     "linux/arm64",
   ]
-  args = {
-    VERSION = "${TAG}",
-  }
 }

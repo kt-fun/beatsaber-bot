@@ -2,7 +2,6 @@ FROM node:lts-alpine
 ARG TARGETPLATFORM
 
 COPY ./boilerplate /koishi
-RUN sed -i '' 's|workspace:\*|'"$VERSION"'|g' /koishi/package.json
 RUN apk add fontconfig
 RUN cd /koishi && yarn install
 
