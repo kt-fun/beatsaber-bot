@@ -4,8 +4,7 @@ on:
   push:
     tags:
       - 'v*'  # Trigger on version tags (e.g., v1.0.0)
-  workflow_dispatch:  # Allow manual triggering
-  workflow_call:
+  workflow_dispatch:
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -32,11 +31,11 @@ jobs:
     needs: release
     uses: ./.github/workflows/docker-aio.yml
     secrets:
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      docker_username: ${{ secrets.DOCKER_USERNAME }}
+      docker_password: ${{ secrets.DOCKER_PASSWORD }}
   call-workflow-docker-lite-build:
     needs: release
     uses: ./.github/workflows/docker.lite.aio.yml
     secrets:
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      docker_username: ${{ secrets.DOCKER_USERNAME }}
+      docker_password: ${{ secrets.DOCKER_PASSWORD }}
