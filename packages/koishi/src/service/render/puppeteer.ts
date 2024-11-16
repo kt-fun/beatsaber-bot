@@ -1,50 +1,43 @@
-import { Config, PuppeteerProvider, PuppeteerRender } from 'beatsaber-bot-core'
+import {
+  Config,
+  PuppeteerProvider,
+  PuppeteerRender,
+  RemotePuppeteerProvider,
+} from 'beatsaber-bot-core'
 import { Context } from 'koishi'
-
-let enable = false
-
-async function init() {
-  if (enable) {
-    return
-  }
-  try {
-    await import('koishi-plugin-puppeteer')
-    enable = true
-    console.log('enable koishi puppeteer')
-  } catch (e) {
-    console.error('koishi-plugin-puppeteer not installed, render is disable')
-  }
-}
-
-init()
 
 export class PluginPuppeteerProvider implements PuppeteerProvider {
   ctx: Context
-  browser: any
+  _browser: any
+  _ok: boolean = true
+  async browser(): Promise<any> {
+    if (this._browser) {
+      return this._browser
+    }
+    try {
+      await import('koishi-plugin-puppeteer')
+      const pup = this.ctx.puppeteer
+      this._browser = pup.browser
+      return this._browser
+    } catch (e) {
+      console.error('koishi-plugin-puppeteer not installed, render is disable')
+      this._ok = false
+    }
+  }
   constructor(config: Config, ctx: Context) {
     this.ctx = ctx
-    init().then(() => {
-      setTimeout(() => {
-        const pup = this.ctx.puppeteer
-        if (pup) {
-          // @ts-ignore
-          this.browser = pup.browser
-          console.log('puppeteer initialized')
-        }
-      }, 5000)
-    })
   }
 
   get ok() {
-    return this.browser != null && this.browser != undefined
+    return this._ok != null
   }
 }
 
 export const creatPuppeteerRender = (config: Config, ctx: Context) => {
   const pluginProvider = new PluginPuppeteerProvider(config, ctx)
-  // const remoteProvider = new RemotePuppeteerProvider(config)
-  return new PuppeteerRender([
-    pluginProvider,
-    // , remoteProvider
-  ])
+  const remoteProvider = new RemotePuppeteerProvider(config)
+  if (config.preferPuppeteerMode === 'local-plugin') {
+    return new PuppeteerRender([pluginProvider, remoteProvider])
+  }
+  return new PuppeteerRender([remoteProvider, pluginProvider])
 }
