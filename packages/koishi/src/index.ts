@@ -18,8 +18,10 @@ export * from './config'
 
 export const name = 'beatsaber-bot'
 
-export const inject = ['database', 'puppeteer', 'cron']
-
+export const inject = {
+  optional: ['assets'],
+  required: ['database', 'cron'],
+}
 export function apply(ctx: Context, config: Config) {
   // const zhLocal = require('./locales/zh-CN')
   // ctx.i18n.define('zh-CN', zhLocal)
