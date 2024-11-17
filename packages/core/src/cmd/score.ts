@@ -6,7 +6,7 @@ import {
   ImageRenderError,
   ScoreNotFoundError,
 } from '@/errors'
-import { TimeoutError } from 'puppeteer-core'
+import { NotFoundError } from '@/utils/fetch/error'
 export default () =>
   new CommandBuilder()
     .setName('score') // <uid:text>
@@ -16,7 +16,6 @@ export default () =>
     .addAlias('bbscore')
     .addAlias('/score')
     .setExecutor(async (c) => {
-      // who? 没有即是自己，有mention 就是 mention
       let uid = c.session.u.id
       let preference = c.userPreference
       if (c.session.mentions && c.session.mentions.length > 0) {
@@ -44,7 +43,7 @@ export default () =>
         mapId,
         diffOption
       ).catch((e) => {
-        if (e instanceof ScoreNotFoundError) {
+        if (e instanceof NotFoundError) {
           throw new ScoreNotFoundError({
             user: account.platformUname,
             id: mapId,
@@ -55,12 +54,10 @@ export default () =>
         throw e
       })
       const platform = c.options.p == 'ss' ? Platform.SS : Platform.BL
-      const img = await c.render
-        .renderScore(score.id.toString(), platform, preference)
-        .catch((e) => {
-          if (e instanceof TimeoutError) {
-            throw new ImageRenderError()
-          }
-        })
+      const img = await c.render.renderScore(
+        score.id?.toString(),
+        platform,
+        preference
+      )
       await c.session.sendImgBuffer(img)
     })

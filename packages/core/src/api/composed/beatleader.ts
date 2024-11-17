@@ -2,7 +2,8 @@ import { BeatLeaderClient, BeatSaverClient } from '../base'
 import { sortScore } from '../sortScore'
 import { Leaderboard } from '../interfaces/beatleader'
 import { decode } from '@/img-render/utils/bl/bsorDecoder'
-import { MapIdNotFoundError, ScoreNotFoundError } from '@/errors'
+import { BLIDNotFoundError, MapIdNotFoundError } from '@/errors'
+import { NotFoundError } from '@/utils/fetch/error'
 
 interface MapDiffOption {
   difficulty?: string
@@ -57,7 +58,7 @@ export class BeatLeaderService {
     const res = await Promise.all(reqs.map((it) => this.getScore(it)))
     const scores = res.filter((item) => item != null)
     if (scores.length < 1) {
-      throw new ScoreNotFoundError()
+      throw new NotFoundError()
     }
     scores.sort(sortScore)
     return scores[0]
@@ -74,6 +75,9 @@ export class BeatLeaderService {
       this.blClient.getPlayerScores(accountId),
       this.blClient.getPlayerPinnedScores(accountId),
     ])
+    if (!(userInfo && playerScores)) {
+      throw new BLIDNotFoundError({ accountId })
+    }
     const filteredScores = playerScores.data.filter(
       (item) => !pinnedScores.some((pinned) => pinned.id === item.id)
     )
@@ -117,11 +121,20 @@ export class BeatLeaderService {
     if (rest > 7) {
       startIndex = 2
     }
-    const regionUrl = `https://api.beatleader.xyz/leaderboard/${leaderboardId}?leaderboardContext=general&page=1&sortBy=rank&order=desc&countries=${regionCode}`
-    const aroundUrl = `https://api.beatleader.xyz/leaderboard/${leaderboardId}?leaderboardContext=general&page=${page}&sortBy=rank&order=desc`
     const [regionScore, aroundScore] = await Promise.all([
-      fetch(regionUrl).then((res) => res.json()),
-      fetch(aroundUrl).then((res) => res.json()),
+      this.blClient.getLeaderboard(leaderboardId, {
+        leaderboardContext: 'general',
+        page: 1,
+        sortBy: 'rank',
+        order: 'desc',
+        countries: regionCode,
+      }),
+      this.blClient.getLeaderboard(leaderboardId, {
+        leaderboardContext: 'general',
+        page: page,
+        sortBy: 'rank',
+        order: 'desc',
+      }),
     ])
     const difficulties = regionScore.song.difficulties
     return {

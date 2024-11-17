@@ -1,22 +1,33 @@
-import { createFetch, Fetch } from './ofetch'
+import { createFetch as c, Fetch } from './ofetch'
+import { Logger } from '@/interface'
+import { NotFoundError } from './error'
 
-const rofetch = createFetch({
+const rofetch = c({
   defaults: {
     retryStatusCodes: [400, 408, 409, 425, 429, 502, 503, 504],
     retry: 2,
-    retryDelay: 800,
-  },
-}).create({
-  onResponseError: (err) => {
-    // logger.error(err)
-    if (err.response._data) {
-      err.error = new Error(
-        err.response._data?.error ?? err.response._data?.message
-      )
-    }
+    retryDelay: 400,
   },
 })
 
-// convert error info
 const ofetch = new Fetch(rofetch)
-export default ofetch
+
+export const createFetch = (logger: Logger) => {
+  return ofetch.extend({
+    onRequest: (context) => {
+      logger.debug(`[fetch -->] ${context.options.baseURL}${context.request}`)
+    },
+    onResponse: (context) => {
+      logger.debug(`[fetch <--] ${context.request} ${context.response.status}`)
+    },
+    onResponseError: (context) => {
+      if (context.response.status === 404) {
+        throw new NotFoundError()
+      }
+      throw context.error
+    },
+    ignoreResponseError: false,
+  })
+}
+
+export { Fetch } from './ofetch'

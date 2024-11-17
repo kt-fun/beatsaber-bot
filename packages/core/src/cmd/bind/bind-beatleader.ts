@@ -3,7 +3,7 @@ import { CmdContext, RelateAccount } from '@/interface'
 export const handleBeatLeaderBind = async <T, C>(c: CmdContext<T, C>) => {
   const tokenInfo = await c.api.AIOSaber.getBLOAuthToken(c.input)
   if (!tokenInfo) {
-    c.session.sendQuote(c.session.text('commands.bsbot.bind.bl.not-found'))
+    c.session.sendQuote(c.session.text('commands.bsbot.bl.account.not-found'))
     return
   }
   let token = tokenInfo

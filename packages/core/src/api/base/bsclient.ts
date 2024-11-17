@@ -1,7 +1,6 @@
 import { OAuthTokenInfoResponse, OAuthTokenResponse } from '../interfaces'
 import { Config } from '@/config'
-import ofetch from '@/utils/fetch'
-import { Fetch } from '@/utils/fetch/ofetch'
+import { createFetch, Fetch } from '@/utils/fetch'
 import {
   BSMap,
   BSMapLatestResponse,
@@ -9,23 +8,22 @@ import {
   HashReqResponse,
 } from '@/api/interfaces/beatsaver'
 import { Logger } from '@/interface'
-import { RequestError } from '@/errors'
+import { NotFoundError } from '@/utils/fetch/error'
 
 export class BeatSaverClient {
   cfg: Config
   f: Fetch
   constructor(cfg: Config, logger: Logger) {
-    this.f = ofetch.extend({
-      baseURL: cfg.beatSaverHost ?? 'https://api.beatsaver.com',
-      retry: 3,
-      onRequestError: ({ error, request, response }) => {
-        if (response.status === 404) {
-          return null
-        }
-        logger.error(`external request ${request} fail: ${error}`)
-        throw new RequestError(error)
-      },
-    })
+    this.f = createFetch(logger)
+      .baseUrl(cfg.beatSaverHost ?? 'https://api.beatsaver.com')
+      .extend({
+        ignoreResponseError: false,
+        onResponseError: (context) => {
+          if (context.response.status === 404) {
+            throw new NotFoundError()
+          }
+        },
+      })
     this.cfg = cfg
   }
   async getBSMapperById(userId: string) {

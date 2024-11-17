@@ -11,6 +11,8 @@ export default () =>
     .addAlias('/subbs', { options: { type: 'beatsaver' } })
     .addAlias('blsub', { options: { type: 'beatleader' } })
     .addAlias('bssub', { options: { type: 'beatsaver' } })
+    .addAlias('subbl', { options: { type: 'beatleader' } })
+    .addAlias('subbs', { options: { type: 'beatsaver' } })
     .addOption('type', 'type:string')
     .setDescription('clear an auth account relate info')
     .setExecutor(async (c) => {
@@ -41,6 +43,7 @@ export default () =>
         text += c.session.text('commands.bsbot.subscribe.info.body-item', {
           type: row.subscribe.type,
           cnt: row.memberCount,
+          enable: row.subscribe.enable,
         })
         if (row.me) {
           text += c.session.text(

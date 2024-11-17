@@ -1,15 +1,15 @@
 import { RelateAccount, CmdContext } from '@/interface'
 import {
-  ScoreSaberIDNotFoundError,
   SessionPromotionCancelError,
   SessionPromotionTimeoutError,
+  SSIDNotFoundError,
 } from '@/errors'
 
 export const handleScoreSaberBind = async <T, C>(c: CmdContext<T, C>) => {
   const scoreSaberUser = await c.api.ScoreSaber.getScoreUserById(c.input)
 
   if (!scoreSaberUser) {
-    throw new ScoreSaberIDNotFoundError(c.input)
+    throw new SSIDNotFoundError({ accountId: c.input })
   }
 
   const { ssAccount, blAccount } = await c.db.getUserAccountsByUid(

@@ -52,6 +52,34 @@ export class MapIdNotFoundError extends BizError {
   }
 }
 
+export class BLIDNotFoundError extends BizError {
+  constructor(params?: any) {
+    super('BLIDNotFoundError')
+    this.name = 'BLIDNotFoundError'
+    this.id = 'commands.bsbot.bl.account.not-found'
+    this.params = params
+    this.params = params
+  }
+}
+export class SSIDNotFoundError extends BizError {
+  constructor(params?: any) {
+    super('SSIDNotFoundError')
+    this.name = 'SSIDNotFoundError'
+    this.id = 'commands.bsbot.ss.account.not-found'
+    this.params = params
+    this.params = params
+  }
+}
+export class BSIDNotFoundError extends BizError {
+  constructor(params?: any) {
+    super('BSIDNotFoundError')
+    this.name = 'BSIDNotFoundError'
+    this.id = 'commands.bsbot.bs.account.not-found'
+    this.params = params
+    this.params = params
+  }
+}
+
 export class ScoreSaberIDNotFoundError extends BizError {
   constructor(params?: any) {
     super('ScoreSaberIdNotFoundError')

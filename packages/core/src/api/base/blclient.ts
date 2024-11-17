@@ -1,7 +1,6 @@
 import { OAuthTokenInfoResponse, OAuthTokenResponse } from '../interfaces'
 import { Config } from '@/config'
-import ofetch from '@/utils/fetch'
-import { Fetch } from '@/utils/fetch/ofetch'
+import { createFetch, Fetch } from '@/utils/fetch'
 import {
   BeadLeaderScoresResponse,
   BeatLeaderPlayerScoreRequest,
@@ -10,22 +9,13 @@ import {
   Score,
 } from '@/api/interfaces/beatleader'
 import { Logger } from '@/interface'
-import { RequestError } from '@/errors'
 
 export class BeatLeaderClient {
   cfg: Config
   f: Fetch
   constructor(cfg: Config, logger: Logger) {
-    this.f = ofetch.extend({
-      baseURL: 'https://api.beatleader.xyz',
-      retry: 3,
-      onRequestError: ({ error, request, response }) => {
-        if (response.status === 404) {
-          return null
-        }
-        logger.error(`external request ${request} fail: ${error}`)
-        throw new RequestError(error)
-      },
+    this.f = createFetch(logger).baseUrl('https://api.beatleader.xyz').extend({
+      ignoreResponseError: false,
     })
     this.cfg = cfg
   }
@@ -78,5 +68,9 @@ export class BeatLeaderClient {
 
   async getBeatScore(scoreId: string) {
     return this.f.get<Score>(`/score/${scoreId}`)
+  }
+
+  async getLeaderboard(leaderboardId: string, params?: Record<string, any>) {
+    return this.f.get(`/leaderboard/${leaderboardId}`, { query: params })
   }
 }

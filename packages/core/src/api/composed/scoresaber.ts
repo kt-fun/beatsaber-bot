@@ -2,6 +2,7 @@ import { BeatSaverClient, ScoreSaberClient } from '../base'
 import { sortScore } from '../sortScore'
 import { ScoreSaberItem } from '../interfaces/scoresaber'
 import { BSMap, HashResponse } from '@/api/interfaces/beatsaver'
+import { SSIDNotFoundError } from '@/errors'
 
 export class ScoreSaberService {
   bsClient: BeatSaverClient
@@ -50,7 +51,9 @@ export class ScoreSaberService {
       .getScoreItemsById(uid, 1, 24)
       .then((res) => res.playerScores)
     const awaitedUserInfo = await userInfo
-
+    if (!scores || !awaitedUserInfo) {
+      throw new SSIDNotFoundError({ accountId: uid })
+    }
     const hashes = scores.map((it) => it.leaderboard.songHash)
 
     let hashInfo = await this.bsClient.getMapsByHashes(hashes)

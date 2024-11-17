@@ -21,7 +21,6 @@ export default () =>
     .addAlias('irankss', { options: { p: 'ss' } })
     .addAlias('irankbl', { options: { p: 'bl' } })
     .setExecutor(async (c) => {
-      const platform = c.options.p == 'ss' ? Platform.SS : Platform.BL
       // who，没有即是自己，有mention 就是mention，有非空 input 就视为 id 查询
       // steamid
       // let accountId = c.input
@@ -42,16 +41,8 @@ export default () =>
       }
 
       if (!accountId && !c.input) {
-        // c.session.sendQuote(c.session.text('commands.bsbot.me.not-found'))
         throw new UnknownUserIDError()
       }
-      // const onStartRender = () => {
-      //   c.session.send(
-      //     c.session.text('common.render.wait', {
-      //       sec: c.config.rankWaitTimeout / 1000,
-      //     })
-      //   )
-      // }
       const rankPlatform = c.options.p == 'ss' ? Platform.SS : Platform.BL
       const img = await c.render.renderRank(accountId, rankPlatform, preference)
       await c.session.sendImgBuffer(img)

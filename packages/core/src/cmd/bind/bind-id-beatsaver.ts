@@ -1,7 +1,7 @@
 import { CmdContext, RelateAccount } from '@/interface'
 
 import {
-  AccountBindingNotFoundError,
+  BSIDNotFoundError,
   SessionPromotionCancelError,
   SessionPromotionTimeoutError,
 } from '@/errors'
@@ -9,7 +9,7 @@ import {
 export const handleBeatSaverIDBind = async <T, C>(c: CmdContext<T, C>) => {
   const mapper = await c.api.BeatSaver.getBSMapperById(c.input)
   if (!mapper) {
-    throw new AccountBindingNotFoundError()
+    throw new BSIDNotFoundError({ accountId: c.input })
   }
   // 如果当前bind 是 oauth？改为 id？
   const now = new Date()

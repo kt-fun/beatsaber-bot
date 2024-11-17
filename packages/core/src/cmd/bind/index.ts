@@ -12,16 +12,15 @@ export default () =>
     // <scoresaberId:string>
     .addOption('p', 'platform:string')
     .addAlias('bbbind')
-    .addAlias('bbbindbs', { options: { p: 'bs' } })
-    .addAlias('bbbindbs', { options: { p: 'bs' } })
-    .addAlias('bbbindbs', { options: { p: 'bs' } })
-    .addAlias('bbbindbs', { options: { p: 'bs' } })
+    .addAlias('bindbs', { options: { p: 'bs' } })
+    .addAlias('bindbl', { options: { p: 'bl' } })
+    .addAlias('bindss', { options: { p: 'ss' } })
     .addAlias('bbbindbs', { options: { p: 'bs' } })
     .addAlias('bbbindbl', { options: { p: 'bl' } })
     .addAlias('bbbindss', { options: { p: 'ss' } })
-    .addAlias('ssbind', { options: { p: 'bs' } })
+    .addAlias('ssbind', { options: { p: 'ss' } })
     .addAlias('blbind', { options: { p: 'bl' } })
-    .addAlias('bsbind', { options: { p: 'ss' } })
+    .addAlias('bsbind', { options: { p: 'bs' } })
     .setDescription('clear an auth account relate info')
     .setExecutor(async (c) => {
       if (!c.options.p) {

@@ -1,27 +1,27 @@
 import { Config } from '@/config'
-import { Fetch } from '@/utils/fetch/ofetch'
-import ofetch from '@/utils/fetch'
+import { createFetch, Fetch } from '@/utils/fetch'
 import {
   ScoreSaberUser,
   ScoreSaberUserResponse,
 } from '@/api/interfaces/scoresaber'
 import { ScoresaberLeaderboardResp } from '@/api/interfaces/scoresaber/leaderboard'
 import { Logger } from '@/interface'
-import { RequestError } from '@/errors'
+import { NotFoundError } from '@/utils/fetch/error'
 
 export class ScoreSaberClient {
   cfg: Config
   f: Fetch
   constructor(cfg: Config, logger: Logger) {
-    this.f = ofetch.extend({
+    this.f = createFetch(logger).extend({
       baseURL: 'https://scoresaber.com',
-      retry: 3,
-      onRequestError: ({ error, request, response }) => {
-        if (response.status === 404) {
-          return null
+      ignoreResponseError: false,
+      onResponseError: (context) => {
+        if (
+          context.response.status === 500 ||
+          context.response.status === 404
+        ) {
+          throw new NotFoundError()
         }
-        logger.error(`external request ${request} fail: ${error}`)
-        throw new RequestError(error)
       },
     })
     this.cfg = cfg

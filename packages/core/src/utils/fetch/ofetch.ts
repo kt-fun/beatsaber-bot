@@ -1,7 +1,5 @@
-import { $Fetch, createFetch, FetchOptions, ofetch } from 'ofetch'
-//
-// import { logger } from "./logger"
-// import { isDebug } from "./env";
+import { $Fetch, createFetch, FetchOptions } from 'ofetch'
+import { NotFoundError } from './error'
 
 export const rofetch = createFetch({
   defaults: {
@@ -11,15 +9,11 @@ export const rofetch = createFetch({
   },
 }).create({
   onResponseError({ request, response, options }) {
-    if (options.retry) {
-      // logger.warn(
-      //   `external request ${request} with error ${response.status} remaining retry attempts: ${options.retry}`
-      // )
+    if (response.status === 404) {
+      throw new NotFoundError()
     }
   },
-  onRequestError({ request, error }) {
-    // logger.error(`external request ${request} fail: ${error}`)
-  },
+  onRequestError({ request, error }) {},
 })
 
 export type ExtendFetchOptions = {
@@ -59,12 +53,12 @@ export class Fetch {
       request += '?' + new URLSearchParams(options.searchParams).toString()
       delete options.searchParams
     }
-    // if (isDebug()) {
-    //   logger.debug(`external request ${request}`)
-    // }
     const res = await this.ofetchInstance(request, {
       ...this.options,
       ...options,
+    }).catch((e) => {
+      if (e instanceof NotFoundError) return null
+      throw e
     })
     return res
   }
@@ -104,6 +98,9 @@ export class Fetch {
 
   extend(options: FetchOptions) {
     return new Fetch(this.ofetchInstance, { ...this.options, ...options })
+  }
+  baseUrl(url: string) {
+    return this.extend({ baseURL: url })
   }
 }
 

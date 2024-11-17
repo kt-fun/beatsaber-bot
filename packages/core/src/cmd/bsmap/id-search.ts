@@ -37,7 +37,6 @@ export default () =>
         c.userPreference,
         onStartRender
       )
-      // upload to s3?
       await c.session.sendImgBuffer(image)
       await c.session.sendAudioByUrl(res.versions[0].previewURL)
     })

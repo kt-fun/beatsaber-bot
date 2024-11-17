@@ -8,6 +8,15 @@ ws:
     update: Hello {{username}}，你关注的谱师「{{mapperName}}」更新啦！✨
 commands:
   bsbot:
+    ss:
+      account:
+        not-found: ☹️没有找到SS用户「{{accountId}}」
+    bs:
+      account:
+        not-found: ☹️没有找到BeatSaver用户「{{accountId}}」
+    bl:
+      account:
+        not-found: ☹️没有找到BL用户「{{accountId}}」
     common:
       error:
         not-implemented: 😳被发现了，这个功能还没实现...
@@ -181,7 +190,7 @@ commands:
       info:
         none: 当前群聊/频道没有任何 BeatSaber 事件订阅。
         header: 当前群聊/频道 BeatSaber 订阅如下：
-        body-item: 订阅类型「{{type}}」, 共 {{cnt}} 名参与成员
+        body-item: "订阅类型「{{type}}」{{enable ? '' : '（已禁用）' }}, 共 {{cnt}} 名参与成员"
         body-item-include-you: (包括你哦)
       join:
         description: 加入本群聊订阅的 BeatSaber 相关的事件

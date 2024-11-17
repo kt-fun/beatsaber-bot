@@ -1,6 +1,6 @@
 import { CmdContext, RelateAccount } from '@/interface'
 import {
-  AccountBindingNotFoundError,
+  BLIDNotFoundError,
   SessionPromotionCancelError,
   SessionPromotionTimeoutError,
 } from '@/errors'
@@ -8,7 +8,7 @@ import {
 export const handleBeatLeaderIDBind = async <T, C>(c: CmdContext<T, C>) => {
   const player = await c.api.BeatLeader.getPlayerInfoById(c.input)
   if (!player) {
-    throw new AccountBindingNotFoundError()
+    throw new BLIDNotFoundError({ accountId: c.input })
   }
   // 如果当前bind 是 oauth？改为 id？
   const now = new Date()
