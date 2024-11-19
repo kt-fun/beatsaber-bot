@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-rc.1
+
+### Patch Changes
+
+- chore: update .gitignore
+
 ## 0.2.0-dev.38
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-rc.1
+
+### Patch Changes
+
+- chore: update .gitignore
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-rc.1
+
 ## 0.2.0-dev.38
 
 ### Patch Changes
