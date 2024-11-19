@@ -25,7 +25,7 @@ const canvasBuilder = async ()=> {
     const { createCanvas: _createCanvas } = await import('@napi-rs/canvas')
     canvasHelper.createCanvas = _createCanvas
     canvasHelper.canvasToDataURL = (canvas)=> {
-      return canvas.encode('png')
+      return canvas.toDataURL('image/png')
     }
     canvasHelper.enable = true
 

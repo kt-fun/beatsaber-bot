@@ -70,8 +70,8 @@
   },
   "optionalDependencies": {
     "canvas": "^2.11.2",
-    "skia-canvas": "^1.0.1",
-    "@napi-rs/canvas": "^0.1.61"
+    "skia-canvas": "^1.0.2",
+    "@napi-rs/canvas": "^0.1.62"
   },
   "scripts": {
     "copy-yml-resource": "node scripts/build.mjs",
