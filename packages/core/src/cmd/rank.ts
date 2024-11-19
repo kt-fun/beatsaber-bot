@@ -36,6 +36,7 @@ export default () =>
 
       if (c.input) {
         accountId = c.input
+        preference = undefined
       } else if (!accountId) {
         accountId = Platform.SS && ssAccount?.platformUid
       }

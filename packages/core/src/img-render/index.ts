@@ -61,7 +61,7 @@ export abstract class RenderService implements ImgRender {
     renderOpts: RenderOption
   ) => {
     const bg =
-      (await renderOpts.userPreference.get<string>(
+      (await renderOpts.userPreference?.get<string>(
         platform == Platform.SS
           ? preferenceKey.ssProfileRenderImg.key
           : preferenceKey.blProfileRenderImg.key
