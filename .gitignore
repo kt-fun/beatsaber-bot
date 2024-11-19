@@ -20,3 +20,4 @@ tsconfig.tsbuildinfo
 *.sln
 packages/koishi/dev
 !/packages/koishi/dev/
+test-case.yml

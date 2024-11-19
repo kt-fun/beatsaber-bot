@@ -5,6 +5,7 @@ import {
   SubInfoRes,
   Subscribe,
   SubscribeMember,
+  SubWithGroupRes,
 } from 'beatsaber-bot-core'
 import { $, Context, Database, Tables } from 'koishi'
 import { ChannelInfo, KoiRelateChannelInfo } from '@/types'
@@ -249,7 +250,52 @@ export class KoishiDB implements DB<ChannelInfo> {
   //   }))
   //   return res
   // }
+  async getIDSubscriptionByGID(gid: number) {
+    const res = await this.db
+      .select('BSSubscribe')
+      .where((q) =>
+        $.and(
+          $.eq(q.gid, gid),
+          $.or(
+            $.eq(q.type, 'id-beatsaver-map'),
+            $.eq(q.type, 'id-beatleader-score')
+          )
+        )
+      )
+      .execute()
+    return res
+  }
 
+  async removeIDSubscriptionByID(id: number): Promise<void> {
+    await this.db.remove('BSSubscribe', { id })
+  }
+  async getIDSubscriptionByType(
+    type: string
+  ): Promise<SubWithGroupRes<ChannelInfo>[]> {
+    const res = await this.db
+      .join(
+        {
+          subscribe: this.db
+            .select('BSSubscribe')
+            .where((r) => $.eq(r.type, type)),
+          groupChannel: this.db.select('BSRelateChannelInfo'),
+        },
+        ({ subscribe, groupChannel }) =>
+          $.and($.eq(subscribe.gid, groupChannel.id))
+      )
+      .execute()
+    return res
+  }
+  async getIDSubscriptionByGIDAndType(
+    gid: number,
+    type: string
+  ): Promise<Subscribe[]> {
+    const res = await this.db
+      .select('BSSubscribe')
+      .where((q) => $.and($.eq(q.gid, gid), $.eq(q.type, type)))
+      .execute()
+    return res
+  }
   async getAllSubScriptionByUIDAndPlatform(
     id: string | number,
     platform: string

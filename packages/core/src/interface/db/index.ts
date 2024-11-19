@@ -58,6 +58,11 @@ export interface DB<T> {
 
   getSubscriptionInfoByUGID(gid: number, uid: number): Promise<SubInfoRes[]>
   getSubscriptionsByGID(gid: number): Promise<Record<string, Subscribe>>
+  // group subscription
+  getIDSubscriptionByGID(gid: number): Promise<Subscribe[]>
+  getIDSubscriptionByType(type: string): Promise<SubWithGroupRes<T>[]>
+  removeIDSubscriptionByID(id: number): Promise<void>
+  getIDSubscriptionByGIDAndType(gid: number, type: string): Promise<Subscribe[]>
   getAllSubScriptionByUIDAndPlatform(
     id: string | number,
     type: string

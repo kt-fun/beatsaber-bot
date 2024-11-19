@@ -136,6 +136,15 @@ export class SubscriptionNotExistError extends BizError {
   }
 }
 
+export class BSMapperSubscriptionNotExistError extends BizError {
+  constructor(params?: any) {
+    super('BSMapperSubscriptionNotExistError')
+    this.name = 'BSMapperSubscriptionNotExistError'
+    this.id = 'commands.bsbot.unsubscribe.nosub.beatsaver-mapper'
+    this.params = params
+  }
+}
+
 export class ImageRenderError extends BizError {
   constructor(params?: any) {
     super('ImageRenderError')

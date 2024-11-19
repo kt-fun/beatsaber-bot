@@ -1,5 +1,11 @@
 import { CommandBuilder } from '@/cmd/builder'
-import { NoneSubscriptionExistError, SubscriptionNotExistError } from '@/errors'
+import {
+  BSMapperSubscriptionNotExistError,
+  NoneSubscriptionExistError,
+  SubscriptionNotExistError,
+} from '@/errors'
+import { data } from 'autoprefixer'
+import { CmdContext } from '@/interface'
 
 export default () =>
   new CommandBuilder()
@@ -16,6 +22,10 @@ export default () =>
         c.session.g.id
       )
       if (c.options.type === 'beatleader') {
+        // if (c.input) {
+        //   await unsubGroupBLScore(c)
+        //   return
+        // }
         if (!blSub) {
           throw new SubscriptionNotExistError('beatleader-score')
         }
@@ -27,6 +37,11 @@ export default () =>
       }
 
       if (c.options.type === 'beatsaver') {
+        if (c.input) {
+          await unsubIDBSMapper(c)
+          return
+        }
+
         if (!bsMapSub) {
           throw new SubscriptionNotExistError('beatsaver-map')
         }
@@ -48,3 +63,46 @@ export default () =>
         )
       }
     })
+
+const unsubIDBSMapper = async <T, C>(c: CmdContext<T, C>) => {
+  const input = c.input
+  if (input) {
+    const res = await c.db.getIDSubscriptionByGIDAndType(
+      c.session.g.id,
+      'id-beatsaver-map'
+    )
+    const it = res.find((it) => it.data?.mapperId?.toString() === input)
+    if (!it) {
+      throw new BSMapperSubscriptionNotExistError({ id: input })
+    }
+
+    await c.db.removeIDSubscriptionByID(it.id)
+    c.session.sendQuote(
+      c.session.text('commands.bsbot.unsubscribe.success.beatsaver-mapper', {
+        name: it?.data?.mapperName,
+      })
+    )
+    return
+  }
+}
+
+const unsubIDBLScore = async <T, C>(c: CmdContext<T, C>) => {
+  const input = c.input
+  if (input) {
+    const res = await c.db.getIDSubscriptionByGIDAndType(
+      c.session.g.id,
+      'id-beatleader-score'
+    )
+    const it = res.find((it) => it.data?.playerId?.toString() === input)
+    if (!it) {
+      throw new SubscriptionNotExistError(`id-beatleader-score(${input})`)
+    }
+    await c.db.removeIDSubscriptionByID(it.id)
+    c.session.sendQuote(
+      c.session.text('commands.bsbot.unsubscribe.success.beatleader-score', {
+        name: it?.data?.playerId,
+      })
+    )
+    return
+  }
+}

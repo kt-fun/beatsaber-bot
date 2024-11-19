@@ -19,7 +19,10 @@ export class BeatSaverClient {
       .extend({
         ignoreResponseError: false,
         onResponseError: (context) => {
-          if (context.response.status === 404) {
+          if (
+            context.response.status === 404 ||
+            context.response.status === 400
+          ) {
             throw new NotFoundError()
           }
         },

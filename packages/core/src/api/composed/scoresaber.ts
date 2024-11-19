@@ -49,7 +49,7 @@ export class ScoreSaberService {
     const userInfo = this.getScoreUserById(uid)
     const scores = await this.scClient
       .getScoreItemsById(uid, 1, 24)
-      .then((res) => res.playerScores)
+      .then((res) => res?.playerScores)
     const awaitedUserInfo = await userInfo
     if (!scores || !awaitedUserInfo) {
       throw new SSIDNotFoundError({ accountId: uid })

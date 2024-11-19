@@ -184,12 +184,16 @@ commands:
       beatleader:
         exist: 当前群聊/频道已订阅 BeatLeader 打分更新事件
         success: 成功订阅 BeatLeader 打分更新事件，当参与群员出现满足条件的打分事件时，会主动推送
+      beatsaver-mapper:
+        exist: 当前群聊/频道已订阅 BeatSaver 谱面更新事件
+        success: 成功订阅 BeatSaver 谱面更新事件，当「{{name}}」发布新谱面时，会主动推送
       beatsaver:
         exist: 当前群聊/频道已订阅 BeatSaver 谱面更新事件
         success: 成功订阅 BeatSaver 谱面更新事件，当参与群员发布新谱面时，会主动推送
       info:
         none: 当前群聊/频道没有任何 BeatSaber 事件订阅。
         header: 当前群聊/频道 BeatSaber 订阅如下：
+        group-body-item: "订阅类型「{{type}}」"
         body-item: "订阅类型「{{type}}」{{enable ? '' : '（已禁用）' }}, 共 {{cnt}} 名参与成员"
         body-item-include-you: (包括你哦)
       join:
@@ -244,10 +248,12 @@ commands:
         bbunsub
       nosub:
         beatleader: 当前群组/频道未启用 beatleader 打分订阅
+        beatsaver-mapper: 当前群组/频道未订阅 谱师「{{name}}」的更新，无需取消
         beatsaver: 当前群组/频道未启用 beatsaver 谱师订阅
       success:
         beatleader: 成功禁用 beatleader 打分订阅
         beatsaver: 成功禁用 beatsaver 谱师订阅
+        beatsaver-mapper: 成功禁用谱师「{{name}}」的更新订阅
       cancel-all: 已成功取消所有更新订阅
       cancel: 已取消对谱师「{id}」的更新订阅
 
