@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-rc.2
+
+### Patch Changes
+
+- fix(core): reset preference when input account id && user preference undefined error
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-rc.2
+
 ## 0.2.0-rc.1
 
 ### Patch Changes
