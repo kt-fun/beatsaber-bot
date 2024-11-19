@@ -1,9 +1,9 @@
 {
   "mode": "pre",
-  "tag": "dev",
+  "tag": "rc",
   "initialVersions": {
-    "beatsaber-bot-core": "0.2.0-dev.0",
-    "koishi-plugin-beatsaber-bot": "0.2.0-dev.0"
+    "beatsaber-bot-core": "0.2.0-dev.38",
+    "koishi-plugin-beatsaber-bot": "0.2.0-dev.38"
   },
   "changesets": [
     "big-buttons-live",
