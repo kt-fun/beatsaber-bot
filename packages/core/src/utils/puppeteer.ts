@@ -100,7 +100,7 @@ export class PuppeteerRender {
 
     const elm = await page.waitForSelector(selector, { timeout: 10000 })
     // wait for potential animation
-    await sleep(3000)
+    await sleep(8000)
     // const clip = await elm.boundingBox()
     const buffer = await elm!
       .screenshot
