@@ -62,11 +62,11 @@ export class PuppeteerRender {
     const browser = await this.browser
     const page = await browser.newPage()
     await page.setContent(html)
-    // await page.setViewport({
-    //   width: 3840,
-    //   height: 2160,
-    //   deviceScaleFactor: 1,
-    // })
+    await page.setViewport({
+      width: 3840,
+      height: 2160,
+      deviceScaleFactor: 1,
+    })
     const elm = await page.waitForSelector(selector, { timeout: 5000 })
     const clip = await elm.boundingBox()
     const u8Arr = await elm!.screenshot(
@@ -91,11 +91,11 @@ export class PuppeteerRender {
 
     const browser = await this.browser
     const page = await browser.newPage()
-    // await page.setViewport({
-    //   width: 3840,
-    //   height: 2160,
-    //   deviceScaleFactor: 1,
-    // })
+    await page.setViewport({
+      width: 3840,
+      height: 2160,
+      deviceScaleFactor: 1,
+    })
     await page.goto(url, { timeout: 0, waitUntil: 'domcontentloaded' })
 
     const elm = await page.waitForSelector(selector, { timeout: 10000 })
