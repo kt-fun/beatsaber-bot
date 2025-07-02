@@ -33,6 +33,7 @@ export class S3Service {
   async uploadImgWithUrl(url: string, mimeType?: string): Promise<string> {
     const res = await fetch(url).then((it) => it.arrayBuffer())
     const buf = Buffer.from(res)
+    // @ts-ignore
     const md5 = crypto.createHash('md5').update(buf).digest('hex')
     const key = this.keyPrefix ? `${this.keyPrefix}-${md5}` : md5
     const params = {
@@ -47,6 +48,7 @@ export class S3Service {
   }
   async uploadImg(buffer: Buffer, mimeType?: string): Promise<string> {
     // md5 digest
+    // @ts-ignore
     const md5 = crypto.createHash('md5').update(buffer).digest('hex')
     const key = this.keyPrefix ? `${this.keyPrefix}-${md5}` : md5
     const params = {
