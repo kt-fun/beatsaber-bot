@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-rc.9
+
+### Patch Changes
+
+- fix(i18n): add import assertions
+
 ## 0.2.0-rc.8
 
 ### Patch Changes
