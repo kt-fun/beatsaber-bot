@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-rc.5
+
+### Patch Changes
+
+- bump: update dev deps
+
 ## 0.2.0-rc.4
 
 ### Patch Changes
