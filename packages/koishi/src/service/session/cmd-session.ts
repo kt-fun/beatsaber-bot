@@ -2,8 +2,7 @@ import {
   RelateChannelInfo,
   Session,
 } from 'beatsaber-bot-core'
-import { S3Service } from 'beatsaber-bot-core/infra/s3'
-import { tran } from 'beatsaber-bot-core/infra'
+import { I18nService, S3Service } from "beatsaber-bot-core/infra";
 import { h, Session as KoiSession } from 'koishi'
 import { ChannelInfo, KoiRelateChannelInfo } from '@/types'
 
@@ -13,13 +12,15 @@ export class KSession implements Session<ChannelInfo> {
   mentions: RelateChannelInfo<ChannelInfo>[] = []
   u: KoiRelateChannelInfo
   g: KoiRelateChannelInfo
-  s3?: S3Service | undefined
+  s3?: S3Service
+  i18n?: I18nService
   constructor(
     session: KoiSession,
     u,
     g,
     locale,
     mentions,
+    i18n?: I18nService,
     s3?: S3Service | undefined
   ) {
     this.session = session
@@ -28,6 +29,7 @@ export class KSession implements Session<ChannelInfo> {
     this.lang = locale
     this.mentions = mentions
     this.s3 = s3
+    this.i18n = i18n
   }
 
   getSessionInfo(): ChannelInfo {
@@ -65,8 +67,12 @@ export class KSession implements Session<ChannelInfo> {
   }
 
   text(path: string, params: object = {}): string {
-    const res = tran(path, params, this.lang)
-    return res ?? path
+    try {
+      return this.i18n?.tran(path, params, this.lang) ?? path
+    }catch (e) {
+      console.log("i18n tran error", e)
+      return path
+    }
   }
 
   async prompt(timeout: number): Promise<string | undefined> {

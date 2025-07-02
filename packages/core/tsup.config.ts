@@ -29,6 +29,7 @@ export default defineConfig((options) => {
       format: ['cjs'],
       dts: {
         only: true,
+        entry: "src/index.ts"
       },
 
     },

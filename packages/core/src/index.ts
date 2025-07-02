@@ -1,6 +1,6 @@
-import {botCommands} from "@/cmd";
-import {getScheduleTasks} from "@/schedules";
-import {Config} from "@/config";
+import {botCommands} from "./cmd";
+import {getScheduleTasks} from "./schedules";
+import {Config} from "./config";
 
 export * from './interface'
 export * from './schedules'

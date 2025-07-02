@@ -1,4 +1,4 @@
-import { ScheduleTaskCtx } from '@/schedules/interface'
+import { ScheduleTaskCtx } from './interface'
 
 export const LBScoreMonitor = async <T>(c: ScheduleTaskCtx<T>) => {
   const channels = await c.services.db.getSubscriptionsByType('lb-rank')

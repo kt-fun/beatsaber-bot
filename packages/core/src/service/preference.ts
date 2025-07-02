@@ -1,8 +1,6 @@
 import { DB } from '@/interface'
 import { LRUCache } from 'lru-cache'
 
-// uid is key currently
-
 const cache = new LRUCache({
   max: 500,
   maxSize: 500,

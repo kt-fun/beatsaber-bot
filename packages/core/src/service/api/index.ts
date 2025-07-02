@@ -2,11 +2,11 @@ import {AIOSaberClient, BeatLeaderClient, BeatSaverClient, ScoreSaberClient} fro
 import {Config} from "@/config";
 import {Logger} from "@/interface";
 import {BLIDNotFoundError, MapIdNotFoundError, SSIDNotFoundError} from "@/infra/errors";
-import {BSMap, HashResponse} from "@/service/api/interfaces/beatsaver";
-import {ScoreSaberItem} from "@/service/api/interfaces/scoresaber";
-import {Leaderboard} from "@/service/api/interfaces/beatleader";
+import {BSMap, HashResponse} from "./interfaces/beatsaver";
+import {ScoreSaberItem} from "./interfaces/scoresaber";
+import {Leaderboard} from "./interfaces/beatleader";
 import {NotFoundError} from "@/infra/support/fetch/error";
-import {sortScore} from "@/service/api/sortScore";
+import {sortScore} from "./sortScore";
 import {decode} from "@/components/utils/bl/bsorDecoder";
 
 type MapDiffOption = {

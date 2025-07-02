@@ -68,6 +68,9 @@ importers:
       react-jsx:
         specifier: ^1.0.0
         version: 1.0.0
+      ts-node:
+        specifier: ^10.9.2
+        version: 10.9.2(@types/node@20.14.2)(typescript@5.8.3)
       tsc-alias:
         specifier: ^1.8.10
         version: 1.8.10
@@ -130,46 +133,46 @@ importers:
     devDependencies:
       '@koishijs/plugin-adapter-qq':
         specifier: 4.6.2
-        version: 4.6.2(@satorijs/satori@3.7.0)(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
+        version: 4.6.2(@satorijs/core@4.5.2(cordis@3.16.2))(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
       '@koishijs/plugin-console':
-        specifier: ^5.29.1
-        version: 5.29.1(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
+        specifier: ^5.30.9
+        version: 5.30.9(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
       '@koishijs/plugin-database-sqlite':
-        specifier: ^4.4.1
-        version: 4.4.1(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))(minato@3.4.0(cordis@3.16.2))
+        specifier: ^4.6.0
+        version: 4.6.0(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))(minato@3.4.0(cordis@3.16.2))
       '@koishijs/plugin-echo':
         specifier: ^2.2.5
         version: 2.2.5(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
       '@koishijs/plugin-http':
-        specifier: ^0.5.3
-        version: 0.5.3(cordis@3.16.2)(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
+        specifier: ^0.6.3
+        version: 0.6.3(cordis@3.16.2)(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
       '@koishijs/plugin-logger':
-        specifier: ^2.6.8
-        version: 2.6.8(@koishijs/plugin-console@5.29.1(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)))(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
+        specifier: ^2.6.9
+        version: 2.6.9(@koishijs/plugin-console@5.30.9(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)))(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
       '@koishijs/plugin-mock':
         specifier: ^2.6.6
         version: 2.6.6(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
       '@koishijs/plugin-sandbox':
-        specifier: ^3.3.1
-        version: 3.3.1(@koishijs/plugin-console@5.29.1(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)))(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
+        specifier: ^3.4.2
+        version: 3.4.2(@koishijs/plugin-console@5.30.9(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)))(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
       '@satorijs/adapter-qq':
-        specifier: 4.6.2
-        version: 4.6.2(@satorijs/satori@3.7.0)
+        specifier: 4.10.1
+        version: 4.10.1(@satorijs/core@4.5.2(cordis@3.16.2))
       '@types/node':
-        specifier: ^20.14.2
-        version: 20.14.2
+        specifier: ^24.0.10
+        version: 24.0.10
       beatsaber-bot-core:
         specifier: workspace:*
         version: link:../core
       esbuild-register:
-        specifier: ^3.5.0
-        version: 3.5.0(esbuild@0.25.5)
+        specifier: ^3.6.0
+        version: 3.6.0(esbuild@0.25.5)
       koishi:
         specifier: 4.17.7
         version: 4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)
       koishi-plugin-adapter-onebot:
-        specifier: 6.5.3
-        version: 6.5.3(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
+        specifier: 6.8.0
+        version: 6.8.0(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
       koishi-plugin-cron:
         specifier: ^3.1.0
         version: 3.1.0(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
@@ -501,11 +504,6 @@ packages:
     peerDependencies:
       '@cordisjs/core': ^3.12.0
 
-  '@cordisjs/plugin-http@0.4.2':
-    resolution: {integrity: sha512-6HQlI0dLkHbKCH+qZUFH+ehin+1wxy8oR+C2Wx388L7lbFbQNLw21aaOknYuZX/8hKTRejTopjnCB705FGqHKQ==}
-    peerDependencies:
-      cordis: ^3.14.0
-
   '@cordisjs/plugin-http@0.5.3':
     resolution: {integrity: sha512-LsxPeDhYBGY4JkgZ3wwFghvq/bZFEXzl+/Fq72rGXp2HA1fUqNA9hE12mHr8cAxKJcIYXzHMANhaSrKQfczbTQ==}
     peerDependencies:
@@ -536,6 +534,10 @@ packages:
     resolution: {integrity: sha512-frdIvc+1AqKVHMWnNacqqZ2Cm52FfoYKPpBQ+kZgr/cFs7HXDKqetL35CLy/EZAF22l/6VTvpQOYUwS6tvVJZA==}
     peerDependencies:
       '@cordisjs/core': ^3.12.0
+
+  '@cspotcode/source-map-support@0.8.1':
+    resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
+    engines: {node: '>=12'}
 
   '@docsearch/css@3.6.0':
     resolution: {integrity: sha512-+sbxb71sWre+PwDK7X2T8+bhS6clcVMLwBPznX45Qu6opJcgRjAp7gYSDzVFp187J+feSj5dNBN1mJoi6ckkUQ==}
@@ -911,6 +913,9 @@ packages:
   '@jridgewell/trace-mapping@0.3.27':
     resolution: {integrity: sha512-VO95AxtSFMelbg3ouljAYnfvTEwSWVt/2YLf+U5Ejd8iT5mXE2Sa/1LGyvySMne2CGsepGLI7KpF3EzE3Aq9Mg==}
 
+  '@jridgewell/trace-mapping@0.3.9':
+    resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
+
   '@koa/router@10.1.1':
     resolution: {integrity: sha512-ORNjq5z4EmQPriKbR0ER3k4Gh7YGNhWDL7JBW+8wXDrHLbWYKYSJaOJ9aN06npF5tbTxe2JBOsurpJDAvjiXKw==}
     engines: {node: '>= 8.0.0'}
@@ -921,10 +926,10 @@ packages:
     peerDependencies:
       koishi: ^4.15.0
 
-  '@koishijs/console@5.29.1':
-    resolution: {integrity: sha512-NOsKpcjHiikTbnNBSiRbGdlzEcOvDHF12DFtJaDxZk/HM5cT/vWDhBuD6F+t8nOhN+3UUS0/RhrkuMISEhxkCA==}
+  '@koishijs/console@5.30.9':
+    resolution: {integrity: sha512-dJdZYtqsZcoFmsa1hVGmhg/hdIk+iL3d3yMfjnAjSsSy0yigFyXAJxQC1HNsn++vx+H7dRYGMbfFjelkpk7i/Q==}
     peerDependencies:
-      koishi: ^4.17.8
+      koishi: ^4.18.8
 
   '@koishijs/core@4.17.7':
     resolution: {integrity: sha512-pymgJBZZPLbz+acTQGYc1AuWm8vZ6jsqAqF/xue4zNquJnTG/M6rcLZVltY6r7WttlsJmg5yb0OY0LpLLPaNHg==}
@@ -942,19 +947,19 @@ packages:
     peerDependencies:
       koishi: ^4.17.3
 
-  '@koishijs/plugin-console@5.29.1':
-    resolution: {integrity: sha512-oio5txymTs9X0Vd6K88wCPKPvXVBcINV018tFYBpAOeCkl5LQKtxghxO5YgUqstc2pep6Un2ZBFCWTbFAKyI+g==}
+  '@koishijs/plugin-console@5.30.9':
+    resolution: {integrity: sha512-cIio1XNVBi/aGluIVCLFShT87uv3G64HzUm8wcVPgFJj5YQ/BMQKxE4Iq+xJwkDFKt5LMnRXb/iWzn+Xsu413w==}
     peerDependencies:
-      '@koishijs/client': ^5.29.1
-      koishi: ^4.17.8
+      '@koishijs/client': ^5.30.9
+      koishi: ^4.18.8
     peerDependenciesMeta:
       '@koishijs/client':
         optional: true
 
-  '@koishijs/plugin-database-sqlite@4.4.1':
-    resolution: {integrity: sha512-3Abpr2xH8f7dQrYNL6ZpijqIl5H865iPMhewC1ZqpVdkJ9q3u/ecjz4hnNwmF1PhX62XYGxDIl1SGha/0BAMdA==}
+  '@koishijs/plugin-database-sqlite@4.6.0':
+    resolution: {integrity: sha512-lY4zHzBTpittdC7Ms8zhfRORzdoG6N5yKEORIMItod3XJbwJwkcrAZdmwQ9s2oKwjlT9dgF72ibKIqebegBzYg==}
     peerDependencies:
-      koishi: ^4.17.8
+      koishi: ^4.17.12
 
   '@koishijs/plugin-echo@2.2.5':
     resolution: {integrity: sha512-VF11IyWMZ8hdcrLoMeLi6fPBT1EVjeD1Y1+mB6UZq+DzgpzxBclW/i5bg0Ouqudm047QGYCE9j1v7fvR+4Vtsw==}
@@ -966,11 +971,16 @@ packages:
     peerDependencies:
       koishi: ^4.17.8
 
-  '@koishijs/plugin-logger@2.6.8':
-    resolution: {integrity: sha512-hlTjd3BNAZLpvXcyeuYsnML1Y557v6Bdbs/1ibJhaqSjG08gOw06BDQH+iuVUNhvwpFEBkw1izDRzUFaPY2s7A==}
+  '@koishijs/plugin-http@0.6.3':
+    resolution: {integrity: sha512-alw51yjc6bykgZD2EsbTn03Yjwp9Mkidb1BsQn25SDwaBQqla0bZAVivFxNW1J60lneP9uymu3EUnPspvBuxog==}
     peerDependencies:
-      '@koishijs/plugin-console': ^5.28.4
-      koishi: ^4.17.5
+      koishi: ^4.18.0
+
+  '@koishijs/plugin-logger@2.6.9':
+    resolution: {integrity: sha512-5+xkT67symDXnwC+i8ZFKL+3E6GvLZ6ga6cPxwaqXYyhW9CtV+FbeulCScZgMDpGOiaxSCGIjjUorAln8Q94/g==}
+    peerDependencies:
+      '@koishijs/plugin-console': ^5.30.2
+      koishi: ^4.18.3
     peerDependenciesMeta:
       '@koishijs/plugin-console':
         optional: true
@@ -985,11 +995,11 @@ packages:
     peerDependencies:
       koishi: ^4.17.9
 
-  '@koishijs/plugin-sandbox@3.3.1':
-    resolution: {integrity: sha512-mSKzLeOSs5Ch5Q9mpDE1RnOv2R0vdRbmM0B5mwYG5ENXWTbDBcOi2AtgVF6XcZszFVo3U198KPTINKxfzrQYsg==}
+  '@koishijs/plugin-sandbox@3.4.2':
+    resolution: {integrity: sha512-uD5k42g/l/N4ByzErykIWOuxcWMMjzTn2BDiitDkGm6Q9uPtrDnqnQ2e6eN6+w7R1j4a8D4jKJipkCu9CapeGQ==}
     peerDependencies:
-      '@koishijs/plugin-console': ^5.28.4
-      koishi: ^4.17.6
+      '@koishijs/plugin-console': ^5.30.7
+      koishi: ^4.18.7
 
   '@koishijs/plugin-server@3.2.3':
     resolution: {integrity: sha512-mvU+yKfp0orrI76e79um+b0eF0DO4EpoyYqOqED2PyYiZ9MIVjtDzbE7wWSIYMJ+iiLsUgf4rr/t4yYQ1r16MA==}
@@ -1015,15 +1025,15 @@ packages:
     resolution: {integrity: sha512-Yhlar6v9WQgUp/He7BdgzOz8lqMQ8sU+jkCq7Wx8Myc5YFJLbEe7lgui/V7G1qB1DJykHSGwreceSaD60Y0PUQ==}
     hasBin: true
 
-  '@minatojs/driver-sqlite@4.4.1':
-    resolution: {integrity: sha512-tf0XhYNMKt+crjKCzvnvvwreYX6/ctEIHILpmyR1vQxn14RV4XVqRwCcUvao1X3qD/rTZXV+wdI7E5gZIgw9eA==}
+  '@minatojs/driver-sqlite@4.6.0':
+    resolution: {integrity: sha512-8o1GUjfOjSKVvyJxPZyxg/0M4VE8CmIlxBKb43+BGGWDfqFFaWky6JDny/GwTLKHGtDV9FCOrwkACfrWBtg3Lw==}
     peerDependencies:
-      minato: ^3.4.1
+      minato: ^3.6.0
 
-  '@minatojs/sql-utils@5.4.1':
-    resolution: {integrity: sha512-EYU9rIJ3Ro9eZ3Z8ItMxoZiMHiozcn8+GLyr/kqopRFQ+kpcl3ywVXVkQLCkDVj0BsjCH+gmGNFng6IzaIrCrw==}
+  '@minatojs/sql-utils@5.5.0':
+    resolution: {integrity: sha512-mukqSsv/nYSPGYE+iWg7UJx5LcNFCofziyQeGRGPz6ZJWCu674zHx1r7cDl5iYtG94eXJQb5WiOgT7EJdGElqw==}
     peerDependencies:
-      minato: ^3.4.1
+      minato: ^3.6.0
 
   '@minatojs/sql.js@3.1.0':
     resolution: {integrity: sha512-jaEFlM03k+maWc4JHv5DgEPq6r5bcg5OmXUZ6klWbYUi7tfRySGxLjwh70v4+p8A9qxdyL9yX3D2YQiXwl1HKw==}
@@ -1297,13 +1307,10 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@satorijs/adapter-qq@4.6.2':
-    resolution: {integrity: sha512-HkJyXMn+pwae8ZSnXAQD2docMhg7Vq8B5dkfEIhf19PcEW6cdaPkQMhz04Jn0LVtVdTzIx8ILY7UlqZzKoZe3g==}
+  '@satorijs/adapter-qq@4.10.1':
+    resolution: {integrity: sha512-2se6B2PwsJNtLWOUKXZcyXTowtWD9v5EkxYrIrSy3NOoRvxFqR0c9UMOILX33XFItLvV2mcOnsDtojhpfKFdjg==}
     peerDependencies:
-      '@satorijs/satori': ^3.6.5
-
-  '@satorijs/core@3.7.0':
-    resolution: {integrity: sha512-aNDt0E0DEW/jqQuQGKzW68w5uu/ZUkjgr+VyOrctOdfd4+HCTgnsFYDjJmKfN4GzahaxuFzm19KYMCD6tHdNVA==}
+      '@satorijs/core': ^4.5.2
 
   '@satorijs/core@4.5.2':
     resolution: {integrity: sha512-lW5gqt6z1h56GGkyXKEFn212JstDcVN2rUxb+FBvT9i6OKLdB2055QgynrkbLqzDN+Zq8hbW+9T6lpS/fpyMSw==}
@@ -1315,9 +1322,6 @@ packages:
 
   '@satorijs/protocol@1.6.1':
     resolution: {integrity: sha512-A/G/S5PWXGXg9B4aMAmvt8+wP2BnV6uNEzkd1MH1ZkqWfgJ2TX9L4ghR311mbde57MJOoSbX51lnO4J9XjeNKQ==}
-
-  '@satorijs/satori@3.7.0':
-    resolution: {integrity: sha512-QcgIw2DyO2eu0ozSyBd2kGZQ0y61xwzrDRX3VdtQPksgU0/ycjunfVuujZ0rz8itbh6GxdP5J5F+5wHrhoR4NA==}
 
   '@shikijs/core@1.6.5':
     resolution: {integrity: sha512-XcQYt6e4L61ruAxHiL3Xg1DL/XkWWjzDdeckB/DtN8jAxoAU+bcxsV6DetC8NafHpL4YpGhxy9iXF0ND/u6HmA==}
@@ -1551,6 +1555,18 @@ packages:
   '@tootallnate/quickjs-emscripten@0.23.0':
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
 
+  '@tsconfig/node10@1.0.11':
+    resolution: {integrity: sha512-DcRjDCujK/kCk/cUe8Xz8ZSpm8mS3mNNpta+jGCA6USEDfktlNvm1+IuZ9eTcDbNk41BHwpHHeW+N1lKCz4zOw==}
+
+  '@tsconfig/node12@1.0.11':
+    resolution: {integrity: sha512-cqefuRsh12pWyGsIoBKJA9luFu3mRxCA+ORZvA4ktLSzIuCUtWVxGIuXigEwO5/ywWFMZ2QEGKWvkZG1zDMTag==}
+
+  '@tsconfig/node14@1.0.3':
+    resolution: {integrity: sha512-ysT8mhdixWK6Hw3i1V2AeRqZ5WfXg1G43mqoYlM2nc6388Fq5jcXyr5mRsqViLx/GJYdoL0bfXD8nmF+Zn/Iow==}
+
+  '@tsconfig/node16@1.0.4':
+    resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
+
   '@types/accepts@1.3.7':
     resolution: {integrity: sha512-Pay9fq2lM2wXPWbteBsRAGiWH2hig4ZE2asK+mm7kUzlxRTfL961rj89I6zV/E3PcIkDqyuBEcMxFT7rccugeQ==}
 
@@ -1631,6 +1647,9 @@ packages:
 
   '@types/node@20.14.2':
     resolution: {integrity: sha512-xyu6WAMVwv6AKFLB+e/7ySZVr/0zLCzOa7rSpq6jNwpqOrUbcACDWC+53d4n2QHOnDou0fbIsg8wZu/sxrnI4Q==}
+
+  '@types/node@24.0.10':
+    resolution: {integrity: sha512-ENHwaH+JIRTDIEEbDK6QSQntAYGtbvdDXnMXnZaZ6k13Du1dPMmprkEHIL7ok2Wl2aZevetwTAb5S+7yIF+enA==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -1839,6 +1858,10 @@ packages:
     peerDependencies:
       acorn: ^6.0.0 || ^7.0.0 || ^8.0.0
 
+  acorn-walk@8.3.4:
+    resolution: {integrity: sha512-ueEepnujpqee2o5aIYnvHU6C0A42MNdsIDeqy5BydrkuC5R1ZuUFnm27EeFJGoEHJQgn3uleRvmTXaJgfXbt4g==}
+    engines: {node: '>=0.4.0'}
+
   acorn@5.7.4:
     resolution: {integrity: sha512-1D++VG7BhrtvQpNbBzovKNc1FLGGEE/oGe7b9xJm/RFHMBeUaUGpluV9RLjZa47YFdPcDAenEYuq9pQPcMdLJg==}
     engines: {node: '>=0.4.0'}
@@ -1922,6 +1945,9 @@ packages:
     resolution: {integrity: sha512-Ci/qENmwHnsYo9xKIcUJN5LeDKdJ6R1Z1j9V/J5wyq8nh/mYPEpIKJbBZXtZjG04HiK7zV/p6Vs9952MrMeUIw==}
     engines: {node: '>=10'}
     deprecated: This package is no longer supported.
+
+  arg@4.1.3:
+    resolution: {integrity: sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==}
 
   argparse@1.0.10:
     resolution: {integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==}
@@ -2306,6 +2332,9 @@ packages:
   country-flag-icons@1.5.19:
     resolution: {integrity: sha512-D/ZkRyj+ywJC6b2IrAN3/tpbReMUqmuRLlcKFoY/o0+EPQN9Ev/e8tV+D3+9scvu/tarxwLErNwS73C3yzxs/g==}
 
+  create-require@1.1.1:
+    resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
+
   cron-parser@4.9.0:
     resolution: {integrity: sha512-p0SaNjrHOnQeR8/VnfGbmg9te2kfyYSQ7Sc/j/6DtPL3JQvKxmjO9TSjNFpujqV3vEYYBvNNvXSxzyksBWAx1Q==}
     engines: {node: '>=12.0.0'}
@@ -2479,6 +2508,10 @@ packages:
   dezalgo@1.0.4:
     resolution: {integrity: sha512-rXSP0bf+5n0Qonsb+SVVfNfIsimO4HEtmnIpPHY8Q1UCzKlQrDMfdobr8nJOOsRgWCyMRqeSBQzmWUMq7zvVig==}
 
+  diff@4.0.2:
+    resolution: {integrity: sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==}
+    engines: {node: '>=0.3.1'}
+
   diff@5.0.0:
     resolution: {integrity: sha512-/VTCrvm5Z0JGty/BWHljh+BAiw3IK+2j87NGMu8Nwc/f48WoDAC395uomO9ZD117ZOBaHmkX1oyLvkVM/aIT3w==}
     engines: {node: '>=0.3.1'}
@@ -2555,8 +2588,8 @@ packages:
     resolution: {integrity: sha512-QCOllgZJtaUo9miYBcLChTUaHNjJF3PYs1VidD7AwiEj1kYxKeQTctLAezAOH5ZKRH0g2IgPn6KwB4IT8iRpvA==}
     engines: {node: '>= 0.4'}
 
-  esbuild-register@3.5.0:
-    resolution: {integrity: sha512-+4G/XmakeBAsvJuDugJvtyF1x+XJT4FMocynNpxrvEBViirpfUn2PgNpCHedfWhF4WokNsO/OvMKrmJOIJsI5A==}
+  esbuild-register@3.6.0:
+    resolution: {integrity: sha512-H2/S7Pm8a9CL1uhp9OvjwrBh5Pvx0H8qVOxNu8Wed9Y7qv56MPtq+GGM8RJpq6glYJn9Wspr8uw7l55uyinNeg==}
     peerDependencies:
       esbuild: '>=0.12 <1'
 
@@ -3282,10 +3315,10 @@ packages:
     resolution: {integrity: sha512-j/8tY9j5t+GVMLeioLaxweJiKUayFhlGqNTzf2ZGwL0ZCQijd2RLHK0SLW5Tsko8YyyqCZC2cojIb0/s62qTAg==}
     engines: {node: ^4.8.4 || ^6.10.1 || ^7.10.1 || >= 8.1.4}
 
-  koishi-plugin-adapter-onebot@6.5.3:
-    resolution: {integrity: sha512-wV2tYPKcLVAUKEDPIESDuCwAS9ua6UIFhAua+MGMPu+DAYBEInxkhQck4Ej8mQAVmVXCypeRGiubbDlNWQMdHA==}
+  koishi-plugin-adapter-onebot@6.8.0:
+    resolution: {integrity: sha512-jFPZcINZSlWyKab3xcN7YGUCjyhVfeswgfdmUllvTA4nHO3udPRs9VNmaR7wLfcFSFZYrrJwZvM/t0Aak991sw==}
     peerDependencies:
-      koishi: ^4.17.4
+      koishi: ^4.18.6
 
   koishi-plugin-cron@3.1.0:
     resolution: {integrity: sha512-otBrjpLnYXyWRr2PxPEuwyyoQvIqP6HbCa1Ql/dIM69cPApPMtJdVFqUf9EGnyijZtbDzM4NBpZcghcvbkpl1g==}
@@ -3411,6 +3444,9 @@ packages:
   make-dir@3.1.0:
     resolution: {integrity: sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==}
     engines: {node: '>=8'}
+
+  make-error@1.3.6:
+    resolution: {integrity: sha512-s8UhlNe7vPKomQhC1qFelMokr/Sc3AgNbso3n74mVPA5LTZwkB9NlXf4XPamLxJE8h0gh73rM94xvwRT2CVInw==}
 
   map-obj@1.0.1:
     resolution: {integrity: sha512-7N/q3lyZ+LVCp7PzuxrJr4KMbBE2hW7BT7YNia330OFxIf4d3r5zVpicP2650l7CPN6RM9zOJRl3NGpqSiw3Eg==}
@@ -4452,6 +4488,20 @@ packages:
   ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
 
+  ts-node@10.9.2:
+    resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
+    hasBin: true
+    peerDependencies:
+      '@swc/core': '>=1.2.50'
+      '@swc/wasm': '>=1.2.50'
+      '@types/node': '*'
+      typescript: '>=2.7'
+    peerDependenciesMeta:
+      '@swc/core':
+        optional: true
+      '@swc/wasm':
+        optional: true
+
   tsc-alias@1.8.10:
     resolution: {integrity: sha512-Ibv4KAWfFkFdKJxnWfVtdOmB0Zi1RJVxcbPGiCDsFpCQSsmpWyuzHG3rQyI5YkobWwxFPEyQfu1hdo4qLG2zPw==}
     hasBin: true
@@ -4555,6 +4605,9 @@ packages:
   undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
 
+  undici-types@7.8.0:
+    resolution: {integrity: sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw==}
+
   undici@6.19.0:
     resolution: {integrity: sha512-9gGwbSLgYMjp4r6M5P9bhqhx1E+RyUIHqZE0r7BmrRoqroJUG6xlVu5TXH9DnwmCPLkcaVNrcYtxUE9d3InnyQ==}
     engines: {node: '>=18.17'}
@@ -4588,6 +4641,9 @@ packages:
   uuid@9.0.1:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
+
+  v8-compile-cache-lib@3.0.1:
+    resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
 
   validate-npm-package-license@3.0.4:
     resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}
@@ -4729,18 +4785,6 @@ packages:
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
 
-  ws@8.17.0:
-    resolution: {integrity: sha512-uJq6108EgZMAl20KagGkzCKfMEjxmKvZHG7Tlq0Z6nOky7YF7aq4mOx6xK8TJ/i1LeK4Qus7INktacctDgY8Ow==}
-    engines: {node: '>=10.0.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: '>=5.0.2'
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
-        optional: true
-
   ws@8.18.0:
     resolution: {integrity: sha512-8VbfWfHLbbwu3+N6OKsOMpBdT4kXPDDB9cJk2bJ6mh9ucxdlnNvH1e+roYkKmN9Nxw2yjz7VzeO9oOz2zJ04Pw==}
     engines: {node: '>=10.0.0'}
@@ -4817,6 +4861,10 @@ packages:
   ylru@1.4.0:
     resolution: {integrity: sha512-2OQsPNEmBCvXuFlIni/a+Rn+R2pHW9INm0BxXJ4hVDA8TirqMj+J/Rp9ItLatT/5pZqWwefVrTQcHpixsxnVlA==}
     engines: {node: '>= 4.0.0'}
+
+  yn@3.1.1:
+    resolution: {integrity: sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==}
+    engines: {node: '>=6'}
 
   yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
@@ -5602,17 +5650,6 @@ snapshots:
       '@cordisjs/core': 3.16.2
       reggol: 1.6.3
 
-  '@cordisjs/plugin-http@0.4.2(cordis@3.16.2)':
-    dependencies:
-      cordis: 3.16.2
-      cosmokit: 1.8.0
-      file-type: 16.5.4
-      mime-db: 1.52.0
-      ws: 8.18.3
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-
   '@cordisjs/plugin-http@0.5.3(cordis@3.16.2)':
     dependencies:
       cordis: 3.16.2
@@ -5677,6 +5714,10 @@ snapshots:
     dependencies:
       '@cordisjs/core': 3.16.2
       cosmokit: 1.6.2
+
+  '@cspotcode/source-map-support@0.8.1':
+    dependencies:
+      '@jridgewell/trace-mapping': 0.3.9
 
   '@docsearch/css@3.6.0': {}
 
@@ -5918,6 +5959,11 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.2
 
+  '@jridgewell/trace-mapping@0.3.9':
+    dependencies:
+      '@jridgewell/resolve-uri': 3.1.2
+      '@jridgewell/sourcemap-codec': 1.5.2
+
   '@koa/router@10.1.1':
     dependencies:
       debug: 4.3.7
@@ -5932,7 +5978,7 @@ snapshots:
     dependencies:
       koishi: 4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)
 
-  '@koishijs/console@5.29.1(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))':
+  '@koishijs/console@5.30.9(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))':
     dependencies:
       koishi: 4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)
 
@@ -5960,27 +6006,27 @@ snapshots:
       js-yaml: 4.1.0
       ns-require: 1.1.4
 
-  '@koishijs/plugin-adapter-qq@4.6.2(@satorijs/satori@3.7.0)(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))':
+  '@koishijs/plugin-adapter-qq@4.6.2(@satorijs/core@4.5.2(cordis@3.16.2))(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))':
     dependencies:
-      '@satorijs/adapter-qq': 4.6.2(@satorijs/satori@3.7.0)
+      '@satorijs/adapter-qq': 4.10.1(@satorijs/core@4.5.2(cordis@3.16.2))
       koishi: 4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)
     transitivePeerDependencies:
-      - '@satorijs/satori'
+      - '@satorijs/core'
 
-  '@koishijs/plugin-console@5.29.1(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))':
+  '@koishijs/plugin-console@5.30.9(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))':
     dependencies:
-      '@koishijs/console': 5.29.1(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
+      '@koishijs/console': 5.30.9(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
       koishi: 4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)
       open: 8.4.2
       uuid: 8.3.2
-      ws: 8.17.0
+      ws: 8.18.3
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
 
-  '@koishijs/plugin-database-sqlite@4.4.1(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))(minato@3.4.0(cordis@3.16.2))':
+  '@koishijs/plugin-database-sqlite@4.6.0(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))(minato@3.4.0(cordis@3.16.2))':
     dependencies:
-      '@minatojs/driver-sqlite': 4.4.1(minato@3.4.0(cordis@3.16.2))
+      '@minatojs/driver-sqlite': 4.6.0(minato@3.4.0(cordis@3.16.2))
       koishi: 4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)
     transitivePeerDependencies:
       - minato
@@ -5998,12 +6044,21 @@ snapshots:
       - cordis
       - utf-8-validate
 
-  '@koishijs/plugin-logger@2.6.8(@koishijs/plugin-console@5.29.1(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)))(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))':
+  '@koishijs/plugin-http@0.6.3(cordis@3.16.2)(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))':
     dependencies:
-      '@koishijs/console': 5.29.1(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
+      '@cordisjs/plugin-http': 0.6.3(cordis@3.16.2)
+      koishi: 4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)
+    transitivePeerDependencies:
+      - bufferutil
+      - cordis
+      - utf-8-validate
+
+  '@koishijs/plugin-logger@2.6.9(@koishijs/plugin-console@5.30.9(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)))(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))':
+    dependencies:
+      '@koishijs/console': 5.30.9(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
       koishi: 4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)
     optionalDependencies:
-      '@koishijs/plugin-console': 5.29.1(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
+      '@koishijs/plugin-console': 5.30.9(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
 
   '@koishijs/plugin-mock@2.6.6(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))':
     dependencies:
@@ -6018,10 +6073,10 @@ snapshots:
       - cordis
       - supports-color
 
-  '@koishijs/plugin-sandbox@3.3.1(@koishijs/plugin-console@5.29.1(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)))(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))':
+  '@koishijs/plugin-sandbox@3.4.2(@koishijs/plugin-console@5.30.9(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)))(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))':
     dependencies:
-      '@koishijs/console': 5.29.1(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
-      '@koishijs/plugin-console': 5.29.1(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
+      '@koishijs/console': 5.30.9(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
+      '@koishijs/plugin-console': 5.30.9(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
       koishi: 4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)
 
   '@koishijs/plugin-server@3.2.3(cordis@3.16.2)(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))':
@@ -6083,16 +6138,16 @@ snapshots:
       - supports-color
     optional: true
 
-  '@minatojs/driver-sqlite@4.4.1(minato@3.4.0(cordis@3.16.2))':
+  '@minatojs/driver-sqlite@4.6.0(minato@3.4.0(cordis@3.16.2))':
     dependencies:
-      '@minatojs/sql-utils': 5.4.1(minato@3.4.0(cordis@3.16.2))
+      '@minatojs/sql-utils': 5.5.0(minato@3.4.0(cordis@3.16.2))
       '@minatojs/sql.js': 3.1.0
-      cosmokit: 1.6.2
+      cosmokit: 1.8.0
       minato: 3.4.0(cordis@3.16.2)
 
-  '@minatojs/sql-utils@5.4.1(minato@3.4.0(cordis@3.16.2))':
+  '@minatojs/sql-utils@5.5.0(minato@3.4.0(cordis@3.16.2))':
     dependencies:
-      cosmokit: 1.6.2
+      cosmokit: 1.8.0
       minato: 3.4.0(cordis@3.16.2)
 
   '@minatojs/sql.js@3.1.0': {}
@@ -6278,21 +6333,9 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.44.1':
     optional: true
 
-  '@satorijs/adapter-qq@4.6.2(@satorijs/satori@3.7.0)':
+  '@satorijs/adapter-qq@4.10.1(@satorijs/core@4.5.2(cordis@3.16.2))':
     dependencies:
-      '@satorijs/satori': 3.7.0
-
-  '@satorijs/core@3.7.0':
-    dependencies:
-      '@cordisjs/plugin-http': 0.4.2(cordis@3.16.2)
-      '@satorijs/element': 3.1.8
-      '@satorijs/protocol': 1.6.1
-      cordis: 3.16.2
-      cosmokit: 1.8.0
-      ws: 8.18.3
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
+      '@satorijs/core': 4.5.2(cordis@3.16.2)
 
   '@satorijs/core@4.5.2(cordis@3.16.2)':
     dependencies:
@@ -6314,14 +6357,6 @@ snapshots:
     dependencies:
       '@satorijs/element': 3.1.8
       cosmokit: 1.8.0
-
-  '@satorijs/satori@3.7.0':
-    dependencies:
-      '@satorijs/core': 3.7.0
-      cosmokit: 1.8.0
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
 
   '@shikijs/core@1.6.5': {}
 
@@ -6670,25 +6705,33 @@ snapshots:
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
+  '@tsconfig/node10@1.0.11': {}
+
+  '@tsconfig/node12@1.0.11': {}
+
+  '@tsconfig/node14@1.0.3': {}
+
+  '@tsconfig/node16@1.0.4': {}
+
   '@types/accepts@1.3.7':
     dependencies:
-      '@types/node': 20.14.2
+      '@types/node': 24.0.10
 
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 20.14.2
+      '@types/node': 24.0.10
 
   '@types/chai@4.3.16': {}
 
   '@types/co-body@6.1.3':
     dependencies:
-      '@types/node': 20.14.2
+      '@types/node': 24.0.10
       '@types/qs': 6.9.15
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 20.14.2
+      '@types/node': 24.0.10
 
   '@types/content-disposition@0.5.8': {}
 
@@ -6697,7 +6740,7 @@ snapshots:
       '@types/connect': 3.4.38
       '@types/express': 4.17.21
       '@types/keygrip': 1.0.6
-      '@types/node': 20.14.2
+      '@types/node': 24.0.10
 
   '@types/estree@1.0.5': {}
 
@@ -6705,7 +6748,7 @@ snapshots:
 
   '@types/express-serve-static-core@4.19.3':
     dependencies:
-      '@types/node': 20.14.2
+      '@types/node': 24.0.10
       '@types/qs': 6.9.15
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -6719,7 +6762,7 @@ snapshots:
 
   '@types/formidable@2.0.6':
     dependencies:
-      '@types/node': 20.14.2
+      '@types/node': 24.0.10
 
   '@types/http-assert@1.5.5': {}
 
@@ -6742,7 +6785,7 @@ snapshots:
       '@types/http-errors': 2.0.4
       '@types/keygrip': 1.0.6
       '@types/koa-compose': 3.2.8
-      '@types/node': 20.14.2
+      '@types/node': 24.0.10
 
   '@types/koa__router@12.0.4':
     dependencies:
@@ -6769,6 +6812,10 @@ snapshots:
     dependencies:
       undici-types: 5.26.5
 
+  '@types/node@24.0.10':
+    dependencies:
+      undici-types: 7.8.0
+
   '@types/normalize-package-data@2.4.4': {}
 
   '@types/prop-types@15.7.12': {}
@@ -6791,12 +6838,12 @@ snapshots:
   '@types/send@0.17.4':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 20.14.2
+      '@types/node': 24.0.10
 
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
-      '@types/node': 20.14.2
+      '@types/node': 24.0.10
       '@types/send': 0.17.4
 
   '@types/uuid@9.0.8': {}
@@ -6805,7 +6852,7 @@ snapshots:
 
   '@types/ws@8.5.10':
     dependencies:
-      '@types/node': 20.14.2
+      '@types/node': 24.0.10
 
   '@types/yauzl@2.10.3':
     dependencies:
@@ -7025,6 +7072,10 @@ snapshots:
     dependencies:
       acorn: 8.12.0
 
+  acorn-walk@8.3.4:
+    dependencies:
+      acorn: 8.15.0
+
   acorn@5.7.4: {}
 
   acorn@8.12.0: {}
@@ -7108,6 +7159,8 @@ snapshots:
       delegates: 1.0.0
       readable-stream: 3.6.2
     optional: true
+
+  arg@4.1.3: {}
 
   argparse@1.0.10:
     dependencies:
@@ -7521,6 +7574,8 @@ snapshots:
 
   country-flag-icons@1.5.19: {}
 
+  create-require@1.1.1: {}
+
   cron-parser@4.9.0:
     dependencies:
       luxon: 3.4.4
@@ -7673,6 +7728,8 @@ snapshots:
       asap: 2.0.6
       wrappy: 1.0.2
 
+  diff@4.0.2: {}
+
   diff@5.0.0: {}
 
   dir-glob@3.0.1:
@@ -7788,9 +7845,9 @@ snapshots:
       is-date-object: 1.0.5
       is-symbol: 1.0.4
 
-  esbuild-register@3.5.0(esbuild@0.25.5):
+  esbuild-register@3.6.0(esbuild@0.25.5):
     dependencies:
-      debug: 4.3.5
+      debug: 4.4.1
       esbuild: 0.25.5
     transitivePeerDependencies:
       - supports-color
@@ -8625,7 +8682,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  koishi-plugin-adapter-onebot@6.5.3(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)):
+  koishi-plugin-adapter-onebot@6.8.0(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)):
     dependencies:
       koishi: 4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2)
       qface: 1.4.1
@@ -8793,6 +8850,8 @@ snapshots:
     dependencies:
       semver: 6.3.1
     optional: true
+
+  make-error@1.3.6: {}
 
   map-obj@1.0.1: {}
 
@@ -9887,6 +9946,24 @@ snapshots:
 
   ts-interface-checker@0.1.13: {}
 
+  ts-node@10.9.2(@types/node@20.14.2)(typescript@5.8.3):
+    dependencies:
+      '@cspotcode/source-map-support': 0.8.1
+      '@tsconfig/node10': 1.0.11
+      '@tsconfig/node12': 1.0.11
+      '@tsconfig/node14': 1.0.3
+      '@tsconfig/node16': 1.0.4
+      '@types/node': 20.14.2
+      acorn: 8.15.0
+      acorn-walk: 8.3.4
+      arg: 4.1.3
+      create-require: 1.1.1
+      diff: 4.0.2
+      make-error: 1.3.6
+      typescript: 5.8.3
+      v8-compile-cache-lib: 3.0.1
+      yn: 3.1.1
+
   tsc-alias@1.8.10:
     dependencies:
       chokidar: 3.6.0
@@ -10019,6 +10096,8 @@ snapshots:
 
   undici-types@5.26.5: {}
 
+  undici-types@7.8.0: {}
+
   undici@6.19.0: {}
 
   unicorn-magic@0.1.0: {}
@@ -10038,6 +10117,8 @@ snapshots:
   uuid@8.3.2: {}
 
   uuid@9.0.1: {}
+
+  v8-compile-cache-lib@3.0.1: {}
 
   validate-npm-package-license@3.0.4:
     dependencies:
@@ -10207,8 +10288,6 @@ snapshots:
 
   wrappy@1.0.2: {}
 
-  ws@8.17.0: {}
-
   ws@8.18.0: {}
 
   ws@8.18.3: {}
@@ -10280,6 +10359,8 @@ snapshots:
       fd-slicer: 1.1.0
 
   ylru@1.4.0: {}
+
+  yn@3.1.1: {}
 
   yocto-queue@0.1.0: {}
 

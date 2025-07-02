@@ -4,8 +4,7 @@ import {
 } from 'beatsaber-bot-core'
 import { ChannelInfo } from '@/types'
 import { Bot, h } from 'koishi'
-import { S3Service } from 'beatsaber-bot-core/infra/s3'
-import { tran } from 'beatsaber-bot-core/infra'
+import { I18nService, S3Service } from "beatsaber-bot-core/infra";
 export class KoishiSession implements Session<ChannelInfo> {
   bot: Bot
   channelInfo: ChannelInfo
@@ -13,18 +12,20 @@ export class KoishiSession implements Session<ChannelInfo> {
   g: RelateChannelInfo<ChannelInfo>
   u: RelateChannelInfo<ChannelInfo>
   lang: string
-  s3: S3Service | undefined
+  s3?: S3Service
+  i18n?: I18nService
   constructor(
     bot: Bot,
     channelInfo: ChannelInfo,
-    s3?: S3Service | undefined
+    i18n?: I18nService,
+    s3?: S3Service
   ) {
     this.lang = 'zh-cn'
     this.bot = bot
-    // @ts-ignore
-    this.uid = channelInfo.uid
+    // this.uid = channelInfo.uid
     this.channelInfo = channelInfo
     this.s3 = s3
+    this.i18n = i18n
   }
 
   async sendImgByUrl(url: string): Promise<void> {
@@ -64,11 +65,15 @@ export class KoishiSession implements Session<ChannelInfo> {
   }
 
   text(path: string, params: object = {}): string {
-    const res = tran(path, params, 'zh-cn')
-    return res ?? path
+    try {
+      return this.i18n?.tran(path, params, this.lang) ?? path
+    }catch (e) {
+      console.log("i18n tran error", e)
+      return path
+    }
   }
 
   async prompt(timeout: number): Promise<string | undefined> {
-    return Promise.reject(new Error('prompt not implemented'))
+    throw new Error('prompt not implemented')
   }
 }

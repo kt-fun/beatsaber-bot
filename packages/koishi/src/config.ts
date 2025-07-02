@@ -35,7 +35,7 @@ export const Config = Schema.object({
     })
   ).default([]),
   s3: Schema.object({
-    enable: Schema.boolean().default(false),
+    enabled: Schema.boolean().default(false),
     s3AccessKey: Schema.string().default(''),
     s3SecretKey: Schema.string().default(''),
     bucketName: Schema.string().default(''),
@@ -45,8 +45,6 @@ export const Config = Schema.object({
     region: Schema.string().default(''),
   }),
 }).i18n({
-  // eslint--disable-next-line
   'zh-CN': require('./locales/zh-CN')._config,
-  // eslint--disable-next-line
   'en-US': require('./locales/en-US')._config,
 })

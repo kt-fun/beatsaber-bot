@@ -8,7 +8,7 @@ export interface ImageRender {
 }
 
 export type RenderConfig = {
-  mode: 'cf' | 'puppeteer'
+  mode: 'cf' | 'puppeteer' | 'custom'
   puppeteerURL?: string
   defaultWaitTimeout?: number
   waitTimeout?: number
@@ -18,7 +18,7 @@ export type RenderConfig = {
 
 export class CFBrowserRendering implements ImageRender {
   f: Fetch
-  constructor(private accountId: string, private cfAPIKey: string) {
+  constructor(accountId: string, cfAPIKey: string) {
     this.f = new Fetch()
       .baseUrl(`https://api.cloudflare.com/client/v4/accounts/${accountId}`)
       .extend({
@@ -81,9 +81,14 @@ export const RemoteBrowserGetter = (addr: string) => {
 }
 
 
-export const getImageRender = (cfg: RenderConfig & {browserGetter?: () => Promise<Browser>}) => {
+
+export const getImageRender = (cfg: RenderConfig & {render?: ImageRender,browserGetter?: () => Promise<Browser>}) => {
   if(cfg.mode === 'cf') {
     return new CFBrowserRendering(cfg.cfAccountId, cfg.cfAPIKey)
+  }
+  if(cfg.mode === 'custom') {
+    if(!cfg.render) throw new Error("please provide custom img render")
+    return  cfg.render
   }
   if(cfg.puppeteerURL) {
     return new PuppeteerRendering(RemoteBrowserGetter(cfg.puppeteerURL))
@@ -92,3 +97,5 @@ export const getImageRender = (cfg: RenderConfig & {browserGetter?: () => Promis
     return new PuppeteerRendering(cfg.browserGetter)
   }
 }
+
+export type CreateImageRenderOption = Parameters<typeof getImageRender>[0]

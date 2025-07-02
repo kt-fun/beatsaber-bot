@@ -1,6 +1,5 @@
 import { Config } from '@/config'
-import {BotService, DB, Logger, Session} from '@/interface'
-import {Services} from "@/service";
+import {Services, BotService, Logger, Session} from '@/interface'
 
 export type ScheduleTaskCtx<T> = {
   config: Config
@@ -13,5 +12,5 @@ export type ScheduleTask = {
   name: string
   cron: string
   handler: <T>(c: ScheduleTaskCtx<T>) => Promise<void>
-  enable: boolean
+  enabled: boolean
 }

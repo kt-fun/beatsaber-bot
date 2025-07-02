@@ -1,11 +1,17 @@
-import {
+import type {
   RelateAccount,
   RelateChannelInfo,
   Subscribe,
   SubscribeMember,
 } from './models'
 
-export * from './models'
+export type {
+  RelateAccount,
+  RelateChannelInfo,
+  Subscribe,
+  SubscribeMember,
+  UserPreference
+} from './models'
 
 export interface SubInfoRes {
   subscribe: Subscribe

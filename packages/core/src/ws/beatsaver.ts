@@ -5,7 +5,7 @@ import { DB } from '@/interface/db'
 import { BotService, Session } from '@/interface'
 import { handleWSEventWithCache } from '@/utils'
 import {BeatSaverWSEvent, BSMap} from "@/service/api/interfaces/beatsaver";
-import {RenderService} from "@/service/render";
+import {RenderService} from "@/service";
 
 export class BeatSaverWSHandler<T> implements WSHandler {
   private readonly logger: Logger

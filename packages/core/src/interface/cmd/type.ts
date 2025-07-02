@@ -1,10 +1,6 @@
-// import { ImgRender } from './render'
-// import { Session } from './bot'
-
-import { DB } from '@/interface/db'
 import { Config } from '@/config'
 import {Logger, Session} from "@/interface";
-import {Services} from "@/service";
+import {Services} from "@/interface";
 
 export interface CmdContext<CHANNEL, OPT> {
   logger: Logger

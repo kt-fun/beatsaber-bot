@@ -40,7 +40,6 @@ class WS {
 }
 
 const getWS = (ctx: Context, handler: WSHandler) => {
-  // @ts-ignore
   const ws = ctx.http.ws(handler.wsUrl)
   ws.addEventListener('open', () => handler.onOpen?.())
   ws.addEventListener('close', () => handler.onClose?.())

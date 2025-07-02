@@ -1,7 +1,7 @@
 {
   "name": "beatsaber-bot-core",
   "description": "Beatsaber bot",
-  "version": "0.2.0-rc.9",
+  "version": "0.2.0-rc.11",
   "files": [
     "dist"
   ],
@@ -17,27 +17,27 @@
     },
     "./interface": {
       "require": "./dist/cjs/interface/index.js",
-      "types": "./dist/types/interface/index.d.ts"
+      "types": "./dist/types/index.d.ts"
     },
     "./interface/*": {
       "require": "./dist/cjs/interface/**/*.js",
-      "types": "./dist/types/interface/**/*.d.ts"
+      "types": "./dist/types/index.d.ts"
     },
     "./service": {
       "require": "./dist/cjs/service/*.js",
-      "types": "./dist/types/service/*.d.ts"
+      "types": "./dist/types/index.d.ts"
     },
     "./service/*": {
       "require": "./dist/cjs/service/*/index.js",
-      "types": "./dist/types/service/*/index.d.ts"
+      "types": "./dist/types/index.d.ts"
     },
     "./infra": {
       "require": "./dist/cjs/infra/index.js",
-      "types": "./dist/types/infra/index.d.ts"
+      "types": "./dist/types/index.d.ts"
     },
     "./infra/*": {
       "require": "./dist/cjs/infra/*/index.js",
-      "types": "./dist/types/infra/*/index.d.ts"
+      "types": "./dist/types/index.d.ts"
     }
   },
   "keywords": [

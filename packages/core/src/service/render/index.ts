@@ -3,12 +3,12 @@ import { getHtml } from '@/components'
 import { PuppeteerError, TimeoutError } from 'puppeteer-core'
 import { Platform } from '@/interface'
 import {getBLPlayerComp, getBLRankScoreComp, getBSMapComp, getSSPlayerComp} from '@/components/pages'
-import {preferenceKey} from "@/service/preference";
+import {preferenceKey} from "../preference";
 import {ImageRenderError, RequestError} from "@/infra/errors";
 import createQrcode from "@/components/utils/qrcode";
-import {APIService} from "@/service/api";
-import {BSMap} from "@/service/api/interfaces/beatsaver";
-import {ImageRender} from "@/infra/support/render";
+import {APIService} from "../api";
+import {BSMap} from "../api/interfaces/beatsaver";
+import {CreateImageRenderOption, getImageRender, ImageRender} from "@/infra/support/render";
 
 
 const getPreferenceKey = (platform: string) => {
@@ -22,6 +22,11 @@ export class RenderService implements IRenderService {
     private api: APIService,
     private imageRender: ImageRender
   ) {}
+
+  static create(imgRenderConfig: CreateImageRenderOption, api: APIService) {
+    return new RenderService(api, getImageRender(imgRenderConfig))
+  }
+
   async renderRank(
     accountId: string,
     platform: Platform,
@@ -95,6 +100,11 @@ export class RenderService implements IRenderService {
   }
 
   async renderUrl(url: string, renderOption?: RenderOption) {
-    return this.imageRender.url2img(url, renderOption)
+    renderOption.onRenderStart?.()
+    try {
+      return this.imageRender.url2img(url, renderOption)
+    }catch (e) {
+      renderOption?.onRenderError?.(e)
+    }
   }
 }

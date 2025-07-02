@@ -8,8 +8,7 @@ import {
 import {NotFoundError} from "@/infra/support/fetch/error";
 export default () =>
   new CommandBuilder()
-    .setName('score') // <uid:text>
-    // .addOption('p', 'platform:string')
+    .setName('score')
     .addOption('d', 'difficulty:string')
     .addOption('m', 'mode:string')
     .addAlias('bbscore')
@@ -52,7 +51,6 @@ export default () =>
         }
         throw e
       })
-      // const platform = parsePlatform(c.options.p)
       const img = await c.services.render.renderScore(score.id?.toString())
       await c.session.sendImgBuffer(img)
     })

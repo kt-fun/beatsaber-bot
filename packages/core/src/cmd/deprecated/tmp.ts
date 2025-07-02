@@ -12,13 +12,13 @@ export default () =>
         c.services.render.renderUrl('https://aiobs.ktlab.io/tmp/lb/hitcnt', {
           selector: '#render-result',
           onRenderStart:() => {
-            c.session.sendQueued('开始渲染砍击榜了，请耐心等待 10s')
+            c.session.sendQueued('开始渲染砍击榜了，请耐心等待')
           },
         }),
         c.services.render.renderUrl('https://aiobs.ktlab.io/tmp/lb/score', {
           selector: '#render-result',
           onRenderStart: () => {
-            c.session.sendQueued('开始渲染分数榜了，请耐心等待 10s')
+            c.session.sendQueued('开始渲染分数榜了，请耐心等待')
           }
         }),
       ])

@@ -1,5 +1,5 @@
 import { Config } from '@/config'
-import { LBScoreMonitor } from '@/schedules/temp'
+import { LBScoreMonitor } from './temp'
 
 
 export const getScheduleTasks = (config: Config) => {
@@ -8,7 +8,7 @@ export const getScheduleTasks = (config: Config) => {
       name: 'lb-rank-notifier',
       handler: LBScoreMonitor,
       cron: config.tempCron.cron,
-      enable: config.tempCron.enable,
+      enabled: config.tempCron.enabled,
     },
   ]
 }

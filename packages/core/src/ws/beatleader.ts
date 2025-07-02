@@ -3,7 +3,7 @@ import { Logger } from '@/interface/logger'
 import { Config } from '@/config'
 import { DB } from '@/interface/db'
 import { BotService, Session } from '@/interface'
-import {RenderService} from "@/service/render";
+import {RenderService} from "@/service";
 import {BeatLeaderWSEvent} from "@/service/api/interfaces/beatleader";
 
 export class BeatleaderWSHandler<T> implements WSHandler {

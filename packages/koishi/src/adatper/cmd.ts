@@ -1,9 +1,8 @@
 import {Context, Session} from "koishi";
-import {ChannelInfo, KoiRelateChannelInfo} from "@/types";
-import {KoishiDB, KSession} from "@/service";
-import {Command} from "beatsaber-bot-core";
-import {Config, getBot} from "beatsaber-bot-core";
-import {createServices} from "@/adatper/services";
+import { ChannelInfo, KoiRelateChannelInfo } from "@/types";
+import { KoishiDB, KSession } from "@/service";
+import { Config, getBot, Command } from "beatsaber-bot-core";
+import { createServices } from "@/adatper/services";
 export function loadCmd(ctx: Context, config: Config) {
   const registerCmd = registerFn(ctx, config)
   getBot(config).commands.map(registerCmd)
@@ -16,7 +15,6 @@ export function loadCmd(ctx: Context, config: Config) {
 }
 
 const registerFn = (ctx: Context, config: Config) => {
-  // @ts-ignore
   const logger = ctx.logger('beats-bot.cmd')
   const services = createServices(ctx, config, logger)
   return (c: Command<ChannelInfo>) => {
@@ -37,12 +35,12 @@ const registerFn = (ctx: Context, config: Config) => {
 
     cmd.action(async ({ session, options }, input) => {
       // @ts-ignore
-      const [u, g] = await db.getUAndGBySessionInfo(session)
+      const [u, g] = await services.db.getUAndGBySessionInfo(session)
       // 2. get mentioned uids(exclude self & cur uid) and rest input
       const exclude = [session.uid, session.selfId]
       const [rest, mentions] = await transformInput(session, services.db, input, exclude)
       const lang = session.locales[0]
-      const kSession = new KSession(session, u, g, lang, mentions, services.s3)
+      const kSession = new KSession(session, u, g, lang, mentions, services.i18n, services.s3)
       // const userPreference = new UserPreferenceStore(db, u.id)
       const ctx = {
         logger: logger,
