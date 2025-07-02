@@ -31,6 +31,9 @@ export class CFBrowserRendering implements ImageRender {
     return this.f.post('/browser-rendering/screenshot', {
       responseType: 'arrayBuffer',
       body: {
+        "screenshotOptions": {
+          quality: 90
+        },
         ...body,
         "viewport": {
           "width": 3840,
