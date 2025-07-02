@@ -3,10 +3,11 @@ import { interpolate } from './parser'
 const i18nObj = {}
 
 init().then((_) => console.log('i18n loaded'))
+  .catch((err) => console.error(err))
 
 async function init() {
-  // @ts-expect-error
-  const zh = await import('./zh-cn.json')
+  // @ts-ignore
+  const zh = await import('./zh-cn.json',  { with: { type: 'json' } })
   i18nObj['zh-cn'] = zh
 }
 
