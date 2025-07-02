@@ -49,18 +49,18 @@
     "access": "public"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.658.1",
+    "@aws-sdk/client-s3": "^3.840.0",
     "@ktfun/styled-qr-code-node": "^1.6.5",
-    "chart.js": "^4.4.3",
-    "country-flag-icons": "^1.5.11",
-    "dayjs": "^1.11.3",
-    "lru-cache": "^11.0.1",
-    "lucide-react": "^0.379.0",
+    "chart.js": "^4.5.0",
+    "country-flag-icons": "^1.5.19",
+    "dayjs": "^1.11.13",
+    "lru-cache": "^11.1.0",
+    "lucide-react": "^0.525.0",
     "ofetch": "^1.4.1",
-    "puppeteer-core": "^24.11.1",
+    "puppeteer-core": "^24.11.2",
     "react": "^19",
     "react-dom": "^19",
-    "@napi-rs/canvas": "^0.1.72"
+    "@napi-rs/canvas": "^0.1.73"
   },
   "scripts": {
     "copy-yml-resource": "node scripts/build.mjs",
