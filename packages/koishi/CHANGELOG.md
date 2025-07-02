@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-rc.3
+
+### Patch Changes
+
+- refactor: reorganize file structure
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-rc.3
+
 ## 0.2.0-rc.2
 
 ### Patch Changes
