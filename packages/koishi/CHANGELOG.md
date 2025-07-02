@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-rc.6
+
+### Patch Changes
+
+- fix: ignore type error & update build script
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-rc.6
+
 ## 0.2.0-rc.5
 
 ### Patch Changes
