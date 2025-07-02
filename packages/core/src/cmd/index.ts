@@ -1,5 +1,4 @@
-import { Command } from '@/interface/cmd'
-import Help from '@/cmd/help'
+
 import IdSearch from '@/cmd/bsmap/id-search'
 import KeySearch from '@/cmd/bsmap/key-search'
 import Latest from '@/cmd/bsmap/latest'
@@ -11,7 +10,7 @@ import Subleave from '@/cmd/subscribe/subleave'
 import Unsubscribe from '@/cmd/subscribe/unsubscribe'
 import Bind from '@/cmd/bind'
 import Tmp from '@/cmd/deprecated/tmp'
-import Config from '@/cmd/config'
+import {Command} from "@/interface";
 
 function applyCommand<CHANNEL>(...fns: (() => Command<CHANNEL>)[]) {
   return fns.map((fn) => fn())
@@ -19,7 +18,6 @@ function applyCommand<CHANNEL>(...fns: (() => Command<CHANNEL>)[]) {
 
 export const botCommands = <CHANNEL>() =>
   applyCommand<CHANNEL>(
-    Help,
     IdSearch,
     KeySearch,
     Latest,
@@ -31,5 +29,7 @@ export const botCommands = <CHANNEL>() =>
     Subleave,
     Unsubscribe,
     Tmp,
-    Config
+    // Config
   )
+
+//transport

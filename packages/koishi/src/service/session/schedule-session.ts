@@ -1,12 +1,11 @@
 import {
   RelateChannelInfo,
   Session,
-  TmpFileStorage,
-  tran,
 } from 'beatsaber-bot-core'
 import { ChannelInfo } from '@/types'
 import { Bot, h } from 'koishi'
-
+import { S3Service } from 'beatsaber-bot-core/infra/s3'
+import { tran } from 'beatsaber-bot-core/infra'
 export class KoishiSession implements Session<ChannelInfo> {
   bot: Bot
   channelInfo: ChannelInfo
@@ -14,18 +13,18 @@ export class KoishiSession implements Session<ChannelInfo> {
   g: RelateChannelInfo<ChannelInfo>
   u: RelateChannelInfo<ChannelInfo>
   lang: string
-  tmpStorage: TmpFileStorage | undefined
+  s3: S3Service | undefined
   constructor(
     bot: Bot,
     channelInfo: ChannelInfo,
-    tmpFileStorage?: TmpFileStorage | undefined
+    s3?: S3Service | undefined
   ) {
     this.lang = 'zh-cn'
     this.bot = bot
     // @ts-ignore
     this.uid = channelInfo.uid
     this.channelInfo = channelInfo
-    this.tmpStorage = tmpFileStorage
+    this.s3 = s3
   }
 
   async sendImgByUrl(url: string): Promise<void> {
@@ -39,8 +38,8 @@ export class KoishiSession implements Session<ChannelInfo> {
   }
 
   async sendImgBuffer(content: Buffer, mimeType?: string): Promise<void> {
-    if (this.tmpStorage) {
-      const url = await this.tmpStorage.uploadImg(content, mimeType)
+    if (this.s3) {
+      const url = await this.s3.uploadImg(content, mimeType)
       return await this.sendImgByUrl(url)
     }
     await this.bot.sendMessage(

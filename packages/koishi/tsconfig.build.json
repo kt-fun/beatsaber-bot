@@ -2,17 +2,19 @@
   "extends": "../../tsconfig.build.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "lib",
+    "outDir": "dist",
     "jsx": "react-jsx",
     "jsxImportSource": "@satorijs/element",
     "sourceMap": true,
+    "module": "NodeNext",
     "types": [
       "node",
       "react"
     ],
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "moduleResolution": "nodenext"
   },
   "include": ["src/**/*"],
   "exclude": ["**/*.spec.ts"],

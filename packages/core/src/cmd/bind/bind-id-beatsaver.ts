@@ -4,16 +4,16 @@ import {
   BSIDNotFoundError,
   SessionPromotionCancelError,
   SessionPromotionTimeoutError,
-} from '@/errors'
+} from '@/infra/errors'
 
 export const handleBeatSaverIDBind = async <T, C>(c: CmdContext<T, C>) => {
-  const mapper = await c.api.BeatSaver.getBSMapperById(c.input)
+  const mapper = await c.services.api.BeatSaver.getBSMapperById(c.input)
   if (!mapper) {
     throw new BSIDNotFoundError({ accountId: c.input })
   }
   // 如果当前bind 是 oauth？改为 id？
   const now = new Date()
-  const { bsAccount } = await c.db.getUserAccountsByUid(c.session.u.id)
+  const { bsAccount } = await c.services.db.getUserAccountsByUid(c.session.u.id)
 
   const text =
     c.session.text('commands.bsbot.bind.ack-prompt', {
@@ -34,10 +34,6 @@ export const handleBeatSaverIDBind = async <T, C>(c: CmdContext<T, C>) => {
       ? new SessionPromotionCancelError()
       : new SessionPromotionTimeoutError()
   }
-
-  // const binds = c.db.getAccountsByPlatformAndUid()
-  // const u = c.session.u
-  // 如果当前 u为...，已绑定就进行替换
   const account: Partial<RelateAccount> = {
     uid: c.session.u.id,
     platform: 'beatsaver',
@@ -52,7 +48,7 @@ export const handleBeatSaverIDBind = async <T, C>(c: CmdContext<T, C>) => {
   if (bsAccount) {
     account.id = bsAccount.id
   }
-  await c.db.addUserBindingInfo(account)
+  await c.services.db.addUserBindingInfo(account)
   c.session.sendQuote(
     c.session.text('commands.bsbot.bind.bs.success', {
       name: mapper.name,

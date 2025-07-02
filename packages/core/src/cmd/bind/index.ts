@@ -1,15 +1,12 @@
 import { handleScoreSaberBind } from './bind-scoresaber'
-import { CommandBuilder } from '@/cmd/builder'
 import { Platform } from '@/interface'
-import { handleBeatLeaderBind } from '@/cmd/bind/bind-beatleader'
-import { handleBeatSaverBind } from '@/cmd/bind/bind-beatsaver'
 import { handleBeatLeaderIDBind } from '@/cmd/bind/bind-id-beatleader'
 import { handleBeatSaverIDBind } from '@/cmd/bind/bind-id-beatsaver'
+import {CommandBuilder} from "@/interface/cmd/builder";
 
 export default () =>
   new CommandBuilder()
     .setName('bind')
-    // <scoresaberId:string>
     .addOption('p', 'platform:string')
     .addAlias('bbbind')
     .addAlias('bindbs', { options: { p: 'bs' } })

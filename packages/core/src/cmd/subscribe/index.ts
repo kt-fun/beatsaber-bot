@@ -1,7 +1,7 @@
-import { CommandBuilder } from '@/cmd/builder'
+import {CommandBuilder} from "@/interface/cmd/builder";
 import { beatleader } from '@/cmd/subscribe/beatleader'
 import { beatsaver } from '@/cmd/subscribe/beatsaver'
-import { NoneSubscriptionExistError } from '@/errors'
+import { NoneSubscriptionExistError } from '@/infra/errors'
 import { idBeatsaverMapper } from '@/cmd/subscribe/id-beatsaver-mapper'
 
 export default () =>
@@ -34,7 +34,7 @@ export default () =>
       }
 
       // return subscription info
-      const rows = await c.db.getSubscriptionInfoByUGID(
+      const rows = await c.services.db.getSubscriptionInfoByUGID(
         c.session.g.id,
         c.session.u.id
       )

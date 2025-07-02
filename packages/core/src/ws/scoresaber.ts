@@ -1,9 +1,9 @@
 import { WSHandler } from '@/ws/handler'
 import { Logger } from '@/interface/logger'
-import { RenderService } from '@/img-render'
 import { Config } from '@/config'
 import { DB } from '@/interface/db'
 import { BotService, Session } from '@/interface'
+import {RenderService} from "@/service/render";
 
 export class ScoresaberWSHandler<T> implements WSHandler {
   private readonly logger: Logger

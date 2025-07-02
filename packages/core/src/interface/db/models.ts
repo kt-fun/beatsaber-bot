@@ -14,7 +14,6 @@ export interface RelateAccount {
   status: string
 }
 
-// primaryKey subscribeId + memberUid
 export interface SubscribeMember {
   subscribeId: number
   memberUid: number
@@ -31,11 +30,6 @@ export interface Subscribe {
   data: any
 }
 
-// export type UserPreference = {
-//   uid: number
-//   key: string
-//   value: any
-// }
 export type RelateChannelInfo<CHANNEL> = {
   id: number
   name: string

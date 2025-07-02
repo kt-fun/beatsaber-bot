@@ -1,5 +1,5 @@
 // @ts-ignore
-import SSPlayerPage from '../../src/img-render/result/ss-player'
+import SSPlayerPage from '../../src/components/pages/ss-player'
 import { ssScores } from '../ss-score'
 import { ssUser } from '../ss-user'
 

@@ -1,5 +1,5 @@
-import { CommandBuilder } from '@/cmd/builder'
-import { SubscriptionNotExistError } from '@/errors'
+import {CommandBuilder} from "@/interface/cmd/builder";
+import { SubscriptionNotExistError } from '@/infra/errors'
 export default () =>
   new CommandBuilder()
     .setName('subjoin')
@@ -11,7 +11,7 @@ export default () =>
     .addOption('type', 'type:string')
     .setDescription('')
     .setExecutor(async (c) => {
-      const { blSub, bsMapSub } = await c.db.getSubscriptionsByGID(
+      const { blSub, bsMapSub } = await c.services.db.getSubscriptionsByGID(
         c.session.g.id
       )
       if (c.options.type === 'beatleader') {
@@ -24,7 +24,7 @@ export default () =>
           memberUid: c.session.u.id,
           joinedAt: new Date(),
         }
-        await c.db.addSubscribeMember(data)
+        await c.services.db.addSubscribeMember(data)
         await c.session.sendQuote(
           c.session.text('commands.bsbot.subscribe.join.success.beatleader')
         )
@@ -37,7 +37,7 @@ export default () =>
           memberUid: c.session.u.id,
           joinedAt: new Date(),
         }
-        await c.db.addSubscribeMember(data)
+        await c.services.db.addSubscribeMember(data)
         c.session.sendQuote(
           c.session.text('commands.bsbot.subscribe.join.success.beatsaver')
         )

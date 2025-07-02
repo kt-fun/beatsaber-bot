@@ -1,5 +1,5 @@
 // @ts-ignore
-import BLRankScore from '../../src/img-render/result/bl-score-with-rank'
+import BLRankScore from '../../src/components/pages/bl-score-with-rank'
 
 import { bsmap } from '../bsmap'
 import { bsor } from '../bsor'

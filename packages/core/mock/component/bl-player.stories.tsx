@@ -1,5 +1,5 @@
 // @ts-ignore
-import BLPlayerPage from '../../src/img-render/result/bl-player'
+import BLPlayerPage from '../../src/components/pages/bl-player'
 import { beatleaderScores } from '../bl-score'
 import { blUser } from '../bl-user'
 

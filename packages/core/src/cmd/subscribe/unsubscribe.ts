@@ -1,10 +1,8 @@
-import { CommandBuilder } from '@/cmd/builder'
+import {CommandBuilder} from "@/interface/cmd/builder";
 import {
   BSMapperSubscriptionNotExistError,
-  NoneSubscriptionExistError,
   SubscriptionNotExistError,
-} from '@/errors'
-import { data } from 'autoprefixer'
+} from '@/infra/errors'
 import { CmdContext } from '@/interface'
 
 export default () =>
@@ -18,19 +16,15 @@ export default () =>
     .addOption('type', 'type:string')
     .setDescription('')
     .setExecutor(async (c) => {
-      const { blSub, bsMapSub, bsAlertSub } = await c.db.getSubscriptionsByGID(
+      const { blSub, bsMapSub, bsAlertSub } = await c.services.db.getSubscriptionsByGID(
         c.session.g.id
       )
       if (c.options.type === 'beatleader') {
-        // if (c.input) {
-        //   await unsubGroupBLScore(c)
-        //   return
-        // }
         if (!blSub) {
           throw new SubscriptionNotExistError('beatleader-score')
         }
         const data = { ...blSub, enable: false }
-        await c.db.upsertSubscription(data)
+        await c.services.db.upsertSubscription(data)
         await c.session.sendQuote(
           c.session.text('commands.bsbot.unsubscribe.success.beatleader')
         )
@@ -46,7 +40,7 @@ export default () =>
           throw new SubscriptionNotExistError('beatsaver-map')
         }
         const data = { ...bsMapSub, enable: false }
-        await c.db.upsertSubscription(data)
+        await c.services.db.upsertSubscription(data)
         c.session.sendQuote(
           c.session.text('commands.bsbot.unsubscribe.success.beatsaver')
         )
@@ -57,7 +51,7 @@ export default () =>
           throw new SubscriptionNotExistError('beatsaver-alert')
         }
         const data = { ...bsAlertSub, enable: false }
-        await c.db.upsertSubscription(data)
+        await c.services.db.upsertSubscription(data)
         await c.session.sendQuote(
           c.session.text('commands.bsbot.unsubscribe.success.alert')
         )
@@ -67,7 +61,7 @@ export default () =>
 const unsubIDBSMapper = async <T, C>(c: CmdContext<T, C>) => {
   const input = c.input
   if (input) {
-    const res = await c.db.getIDSubscriptionByGIDAndType(
+    const res = await c.services.db.getIDSubscriptionByGIDAndType(
       c.session.g.id,
       'id-beatsaver-map'
     )
@@ -76,7 +70,7 @@ const unsubIDBSMapper = async <T, C>(c: CmdContext<T, C>) => {
       throw new BSMapperSubscriptionNotExistError({ id: input })
     }
 
-    await c.db.removeIDSubscriptionByID(it.id)
+    await c.services.db.removeIDSubscriptionByID(it.id)
     c.session.sendQuote(
       c.session.text('commands.bsbot.unsubscribe.success.beatsaver-mapper', {
         name: it?.data?.mapperName,
@@ -89,7 +83,7 @@ const unsubIDBSMapper = async <T, C>(c: CmdContext<T, C>) => {
 const unsubIDBLScore = async <T, C>(c: CmdContext<T, C>) => {
   const input = c.input
   if (input) {
-    const res = await c.db.getIDSubscriptionByGIDAndType(
+    const res = await c.services.db.getIDSubscriptionByGIDAndType(
       c.session.g.id,
       'id-beatleader-score'
     )
@@ -97,7 +91,7 @@ const unsubIDBLScore = async <T, C>(c: CmdContext<T, C>) => {
     if (!it) {
       throw new SubscriptionNotExistError(`id-beatleader-score(${input})`)
     }
-    await c.db.removeIDSubscriptionByID(it.id)
+    await c.services.db.removeIDSubscriptionByID(it.id)
     c.session.sendQuote(
       c.session.text('commands.bsbot.unsubscribe.success.beatleader-score', {
         name: it?.data?.playerId,

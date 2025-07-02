@@ -1,7 +1,5 @@
 export * from './db'
 export * from './logger'
-export * from './cmd'
-export * from './render'
 export * from './bot'
 export enum Platform {
   SS = 'scoresaber',
@@ -9,7 +7,8 @@ export enum Platform {
   BL = 'beatleader',
 }
 
-export enum ImgRenderMode {
-  Local = 'local',
-  Remote = 'remote',
+export const parsePlatform = (p: string) => {
+  return p == 'ss' ? Platform.SS : Platform.BL
 }
+
+export * from './cmd/type'

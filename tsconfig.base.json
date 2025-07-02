@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     /* Basic Options */
-    "incremental": true,
+    "incremental": false,
     "declaration": true,
     "allowJs": true,
     "noEmit": true,
@@ -10,7 +10,7 @@
     "sourceMap": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "moduleResolution": "node",
+//    "moduleResolution": "node16",
     "strictPropertyInitialization": false,
     "noImplicitThis": false,
     "resolveJsonModule": true,

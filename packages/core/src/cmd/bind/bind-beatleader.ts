@@ -1,15 +1,15 @@
-import { CmdContext, RelateAccount } from '@/interface'
+import {CmdContext, RelateAccount} from '@/interface'
 
 export const handleBeatLeaderBind = async <T, C>(c: CmdContext<T, C>) => {
-  const tokenInfo = await c.api.AIOSaber.getBLOAuthToken(c.input)
+  const tokenInfo = await c.services.api.AIOSaber.getBLOAuthToken(c.input)
   if (!tokenInfo) {
     c.session.sendQuote(c.session.text('commands.bsbot.bl.account.not-found'))
     return
   }
   let token = tokenInfo
-  let self = await c.api.BeatLeader.getTokenInfo(token.access_token)
+  let self = await c.services.api.BeatLeader.getTokenInfo(token.access_token)
   if (!self) {
-    const refreshToken = await c.api.BeatLeader.refreshOAuthToken(
+    const refreshToken = await c.services.api.BeatLeader.refreshOAuthToken(
       token.refresh_token
     )
     if (!refreshToken) {
@@ -19,7 +19,7 @@ export const handleBeatLeaderBind = async <T, C>(c: CmdContext<T, C>) => {
       return
     }
     token = refreshToken
-    self = await c.api.BeatLeader.getTokenInfo(token.access_token)
+    self = await c.services.api.BeatLeader.getTokenInfo(token.access_token)
     if (!self) {
       c.session.sendQuote(
         c.session.text('commands.bsbot.bind.bl.unknown-error')
@@ -28,7 +28,7 @@ export const handleBeatLeaderBind = async <T, C>(c: CmdContext<T, C>) => {
     }
   }
   const now = new Date()
-  const { blAccount } = await c.db.getUserAccountsByUid(c.session.u.id)
+  const { blAccount } = await c.services.db.getUserAccountsByUid(c.session.u.id)
   const account: Partial<RelateAccount> = {
     uid: c.session.u.id,
     platform: 'beatleader',
@@ -47,7 +47,7 @@ export const handleBeatLeaderBind = async <T, C>(c: CmdContext<T, C>) => {
     account.id = blAccount.id
   }
 
-  await c.db.addUserBindingInfo(account)
+  await c.services.db.addUserBindingInfo(account)
   c.session.sendQuote(
     c.session.text('commands.bsbot.bind.bl.success', {
       name: self.name,

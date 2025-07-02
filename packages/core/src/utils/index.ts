@@ -1,23 +1,4 @@
-import { cache } from '@/utils/cache'
 import { LRUCache } from 'lru-cache'
-
-export * from './cache'
-export * from './s3'
-
-export * from './preference'
-export * from './puppeteer'
-
-export const fetchWithCache = async <T>(...args): Promise<T> => {
-  const res = cache.get(args)
-  if (res) {
-    return res as T
-  }
-  const result = await fetch(args as any).then((res) => res.json() as T)
-  cache.set(args, result)
-  return result as T
-}
-
-// export const fetch = async (...args) => {}
 
 export const handleWSEventWithCache = (
   fnThat,
@@ -27,6 +8,7 @@ export const handleWSEventWithCache = (
   eventFilter,
   eventIdSelector
 ) => {
+
   const WSCache = new LRUCache({
     max: 500,
     size: 50,
@@ -38,12 +20,10 @@ export const handleWSEventWithCache = (
     noUpdateTTL: true,
     ttl: ttl,
   })
-
   return async function (event: any) {
     const data = eventParser(event)
     const key = eventIdSelector(data)
     if (!eventFilter(data) || WSCache.get(key)) {
-      // console.log(`${key} hit cache, skip it, remainingTTL: `, WSCache.getRemainingTTL(key))
       return
     }
     WSCache.set(key, true)

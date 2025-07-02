@@ -1,16 +1,16 @@
 import { CmdContext } from '@/interface'
-import { BLIDNotFoundError, SubscriptionExistError } from '@/errors'
+import { BLIDNotFoundError, SubscriptionExistError } from '@/infra/errors'
 
 export const idBeatleaderScore = async <T, C>(c: CmdContext<T, C>) => {
   if (!c.input) {
     return
   }
-  const bluser = await c.api.BeatLeader.getPlayerInfoById(c.input)
+  const bluser = await c.services.api.BeatLeader.getPlayerInfo(c.input)
   if (!bluser) {
     throw new BLIDNotFoundError({ accountId: c.input })
   }
 
-  const subscribes = await c.db.getIDSubscriptionByGIDAndType(
+  const subscribes = await c.services.db.getIDSubscriptionByGIDAndType(
     c.session.g.id,
     'id-beatleader-score'
   )
@@ -21,7 +21,7 @@ export const idBeatleaderScore = async <T, C>(c: CmdContext<T, C>) => {
     }
 
     const data = { ...it, enable: true }
-    await c.db.upsertSubscription(data)
+    await c.services.db.upsertSubscription(data)
     await c.session.sendQuote(
       c.session.text('commands.bsbot.subscribe.beatsaver-mapper.success', {
         name: bluser.name,
@@ -38,7 +38,7 @@ export const idBeatleaderScore = async <T, C>(c: CmdContext<T, C>) => {
       playerId: bluser.id,
     },
   }
-  await c.db.upsertSubscription(data)
+  await c.services.db.upsertSubscription(data)
   await c.session.sendQuote(
     c.session.text('commands.bsbot.subscribe.beatsaver-mapper.success', {
       name: bluser.name,

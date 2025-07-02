@@ -1,10 +1,10 @@
 import { WSHandler } from '@/ws/handler'
 import { Logger } from '@/interface/logger'
-import { RenderService } from '@/img-render'
 import { Config } from '@/config'
 import { DB } from '@/interface/db'
-import { BotService, Platform, Session } from '@/interface'
-import { BeatLeaderWSEvent } from '@/api/interfaces/beatleader'
+import { BotService, Session } from '@/interface'
+import {RenderService} from "@/service/render";
+import {BeatLeaderWSEvent} from "@/service/api/interfaces/beatleader";
 
 export class BeatleaderWSHandler<T> implements WSHandler {
   private readonly logger: Logger
@@ -44,32 +44,27 @@ export class BeatleaderWSHandler<T> implements WSHandler {
     // }
     // logger.info('Received beatleader message',data.id, data.player.id);
     // cache all playerId
-    const subscriptions = await this.db.getAllSubScriptionByUIDAndPlatform(
-      playerId,
-      'beatleader'
-    )
+    const subscriptions = await this.db.getAllSubscriptionByUIDAndPlatform(playerId, 'beatleader')
     // .filter(item=> {
     //   const channelFilters = item.sub.data as BLScoreFilter[]
     //   const memberFilters = item.member.subscribeData
     //   return BeatLeaderFilter(data, ...channelFilters, ...memberFilters)
     // })
-    const restSub = subscriptions.filter(
-      (it) =>
-        it.subscribe.type == 'beatleader-score' && it.subscribe.enable == true
+    const restSub = subscriptions.filter((it) =>
+      it.subscribe.type == 'beatleader-score' && it.subscribe.enable == true
     )
     // cacheService
     if (restSub.length === 0) return
-    const img = await this.render.renderScore(data.id.toString(), Platform.BL)
-
+    const img = await this.render.renderScore(data.id.toString())
     for (const item of restSub) {
       const session = this.botService.getSessionByChannelInfo(item.groupChannel)
       if (!session) {
         continue
       }
-      session.send(
+      await session.send(
         `恭喜 <at id="${item.account.uid}"/> 刚刚在谱面「${data.leaderboard.song.name}」中打出了 ${(data.accuracy * 100).toFixed(2)}% 的好成绩`
       )
-      await session.sendImgBuffer(await img)
+      await session.sendImgBuffer(img)
     }
   }
 }

@@ -218,4 +218,3 @@ commands:
 _config:
   beatSaverHost: BeatSaverOrigin，例如:https://api.beatsaver.com
   beatSaverWSHost: BeatSaverWebSocketOrigin，用于实时监听谱面更新，例如wss://ws.beatsaver.com/maps
-  renderMode: 谱面图是由插件本地生成/远程获取

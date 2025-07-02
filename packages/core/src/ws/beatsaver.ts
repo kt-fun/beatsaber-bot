@@ -1,11 +1,11 @@
 import { WSHandler } from '@/ws/handler'
 import { Logger } from '@/interface/logger'
-import { RenderService } from '@/img-render'
 import { Config } from '@/config'
 import { DB } from '@/interface/db'
-import { BeatSaverWSEvent, BSMap } from '@/api/interfaces/beatsaver'
 import { BotService, Session } from '@/interface'
-import { cache, handleWSEventWithCache } from '@/utils'
+import { handleWSEventWithCache } from '@/utils'
+import {BeatSaverWSEvent, BSMap} from "@/service/api/interfaces/beatsaver";
+import {RenderService} from "@/service/render";
 
 export class BeatSaverWSHandler<T> implements WSHandler {
   private readonly logger: Logger
@@ -55,7 +55,7 @@ export class BeatSaverWSHandler<T> implements WSHandler {
 
     const bsmap = data.msg as BSMap
     const userId = bsmap.uploader.id
-    const subscriptions = await this.db.getAllSubScriptionByUIDAndPlatform(
+    const subscriptions = await this.db.getAllSubscriptionByUIDAndPlatform(
       userId,
       'beatsaver'
     )

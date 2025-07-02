@@ -2,9 +2,8 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "lib",
+    "outDir": "dist",
     "jsx": "react-jsx",
-    "jsxImportSource": "@satorijs/element",
     "sourceMap": true,
     "types": [
       "node",
@@ -12,7 +11,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "moduleResolution": "nodenext"
   },
   "include": ["src/**/*"],
   "exclude": ["**/*.spec.ts"],

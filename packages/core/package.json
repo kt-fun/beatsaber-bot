@@ -1,10 +1,9 @@
 {
   "name": "beatsaber-bot-core",
-  "description": "一个用于新版 Steam 家庭的库存监控 Bot 插件",
+  "description": "Beatsaber bot",
   "version": "0.2.0-rc.2",
-  "types": "lib/index.d.ts",
   "files": [
-    "lib"
+    "dist"
   ],
   "license": "MIT",
   "author": {
@@ -13,34 +12,32 @@
   },
   "exports": {
     ".": {
-      "require": "./lib/index.js",
-      "default": "./lib/index.js",
-      "types": "./src/index.ts",
-      "development": "./src/index.ts"
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
     },
     "./interface": {
-      "require": "./lib/interface/index.js",
-      "default": "./lib/interface/index.js",
-      "types": "./src/interface/index.ts",
-      "development": "./src/interface/index.ts"
+      "require": "./dist/cjs/interface/index.js",
+      "types": "./dist/types/interface/index.d.ts"
     },
-    "./schedules": {
-      "require": "./lib/schedules/index.js",
-      "default": "./lib/schedules/index.js",
-      "types": "./src/schedules/index.ts",
-      "development": "./src/schedules/index.ts"
+    "./interface/*": {
+      "require": "./dist/cjs/interface/**/*.js",
+      "types": "./dist/types/interface/**/*.d.ts"
     },
-    "./img-render": {
-      "require": "./lib/img-render/index.js",
-      "default": "./lib/img-render/index.js",
-      "types": "./src/img-render/index.ts",
-      "development": "./src/img-render/index.ts"
+    "./service": {
+      "require": "./dist/cjs/service/*.js",
+      "types": "./dist/types/service/*.d.ts"
     },
-    "./cmd": {
-      "require": "./lib/cmd/index.js",
-      "default": "./lib/cmd/index.js",
-      "types": "./src/cmd/index.ts",
-      "development": "./src/cmd/index.ts"
+    "./service/*": {
+      "require": "./dist/cjs/service/*/index.js",
+      "types": "./dist/types/service/*/index.d.ts"
+    },
+    "./infra": {
+      "require": "./dist/cjs/infra/index.js",
+      "types": "./dist/types/infra/index.d.ts"
+    },
+    "./infra/*": {
+      "require": "./dist/cjs/infra/*/index.js",
+      "types": "./dist/types/infra/*/index.d.ts"
     }
   },
   "keywords": [
@@ -60,40 +57,14 @@
     "lru-cache": "^11.0.1",
     "lucide-react": "^0.379.0",
     "ofetch": "^1.4.1",
-    "puppeteer-core": "^23.8.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
-  },
-  "devDependencies": {
-    "tailwindcss": "^3.4.15",
-    "autoprefixer": "^10.4.20"
-  },
-  "optionalDependencies": {
-    "canvas": "^2.11.2",
-    "skia-canvas": "^1.0.2",
-    "@napi-rs/canvas": "^0.1.62"
+    "puppeteer-core": "^24.11.1",
+    "react": "^19",
+    "react-dom": "^19",
+    "@napi-rs/canvas": "^0.1.72"
   },
   "scripts": {
     "copy-yml-resource": "node scripts/build.mjs",
-    "clean": "rm -rf lib tsconfig.tsbuildinfo",
-    "compile": "tsc -p tsconfig.build.json && tsc-alias",
-    "build": "pnpm run copy-yml-resource && pnpm run compile",
+    "build": "tsup && pnpm run copy-yml-resource",
     "pub": "pnpm run build && pnpm publish"
-  },
-  "typesVersions": {
-    "*": {
-      "index": [
-        "lib/index.d.ts"
-      ],
-      "schedules": [
-        "lib/schedules/index.d.ts"
-      ],
-      "img-render": [
-        "lib/img-render/index.d.ts"
-      ],
-      "interface": [
-        "lib/interface/index.d.ts"
-      ]
-    }
   }
 }

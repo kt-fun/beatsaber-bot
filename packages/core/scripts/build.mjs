@@ -6,7 +6,7 @@ import { globby } from 'globby'
 const paths = await globby('./src/**/*.yml')
 
 paths.map((p) => {
-  const dest = path.normalize(p).replace('src', 'lib')
+  const dest = path.normalize(p).replace('src', 'dist/cjs')
   const dir = path.dirname(dest)
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, {

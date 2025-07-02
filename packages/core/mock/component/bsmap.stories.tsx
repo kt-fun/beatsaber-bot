@@ -1,5 +1,5 @@
 // @ts-ignore
-import BSMap from '../../src/img-render/result/bs-map'
+import BSMap from '../../src/components/pages/bs-map'
 import { bsmap } from '../bsmap'
 import { bsMapQrUrl, previewQrUrl } from '../qr'
 export default {

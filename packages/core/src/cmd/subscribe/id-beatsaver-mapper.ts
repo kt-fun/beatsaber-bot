@@ -1,15 +1,14 @@
 import { CmdContext } from '@/interface'
-import { BSIDNotFoundError, SubscriptionExistError } from '@/errors'
+import { BSIDNotFoundError, SubscriptionExistError } from '@/infra/errors'
 export const idBeatsaverMapper = async <T, C>(c: CmdContext<T, C>) => {
   if (!c.input) {
     return
   }
-  const mapper = await c.api.BeatSaver.getBSMapperById(c.input)
+  const mapper = await c.services.api.BeatSaver.getBSMapperById(c.input)
   if (!mapper) {
     throw new BSIDNotFoundError({ accountId: c.input })
   }
-
-  const subscribes = await c.db.getIDSubscriptionByGIDAndType(
+  const subscribes = await c.services.db.getIDSubscriptionByGIDAndType(
     c.session.g.id,
     'id-beatsaver-map'
   )
@@ -20,7 +19,7 @@ export const idBeatsaverMapper = async <T, C>(c: CmdContext<T, C>) => {
     }
 
     const data = { ...it, enable: true }
-    await c.db.upsertSubscription(data)
+    await c.services.db.upsertSubscription(data)
     await c.session.sendQuote(
       c.session.text('commands.bsbot.subscribe.beatsaver-mapper.success', {
         name: mapper.name,
@@ -38,7 +37,7 @@ export const idBeatsaverMapper = async <T, C>(c: CmdContext<T, C>) => {
       mapperName: mapper.name,
     },
   }
-  await c.db.upsertSubscription(data)
+  await c.services.db.upsertSubscription(data)
   await c.session.sendQuote(
     c.session.text('commands.bsbot.subscribe.beatsaver-mapper.success', {
       name: mapper.name,

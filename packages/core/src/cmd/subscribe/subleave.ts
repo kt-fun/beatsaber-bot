@@ -1,4 +1,4 @@
-import { CommandBuilder } from '@/cmd/builder'
+import {CommandBuilder} from "@/interface/cmd/builder";
 
 export default () =>
   new CommandBuilder()
@@ -12,25 +12,24 @@ export default () =>
     .setDescription('')
     .setExecutor(async (c) => {
       // getUserJoinedGroupMember
-      const subs = await c.db.getSubscriptionInfoByUGID(
+      const subs = await c.services.db.getSubscriptionInfoByUGID(
         c.session.g.id,
         c.session.u.id
       )
       if (c.options.type === 'beatleader') {
         const blSub = subs.find((it) => it.subscribe.type == 'beatleader-score')
         if (!blSub?.me) {
-          c.session.sendQuote(
+          return c.session.sendQuote(
             c.session.text(
               'commands.bsbot.subscribe.leave.not-exist.beatleader'
             )
           )
-          return
         }
-        await c.db.removeFromSubGroupBySubAndUid(
+        await c.services.db.removeFromSubGroupBySubAndUid(
           blSub.subscribe.id,
           c.session.u.id
         )
-        c.session.sendQuote(
+        await c.session.sendQuote(
           c.session.text('commands.bsbot.subscribe.leave.success.beatleader')
         )
       } else if (c.options.type === 'beatsaver') {
@@ -42,7 +41,7 @@ export default () =>
           return
         }
 
-        await c.db.removeFromSubGroupBySubAndUid(
+        await c.services.db.removeFromSubGroupBySubAndUid(
           bsSub.subscribe.id,
           c.session.u.id
         )

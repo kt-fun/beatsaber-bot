@@ -1,30 +1,23 @@
-import { RelateAccount, CmdContext } from '@/interface'
+import {RelateAccount, CmdContext} from '@/interface'
 import {
   SessionPromotionCancelError,
   SessionPromotionTimeoutError,
   SSIDNotFoundError,
-} from '@/errors'
+} from '@/infra/errors'
 
 export const handleScoreSaberBind = async <T, C>(c: CmdContext<T, C>) => {
-  const scoreSaberUser = await c.api.ScoreSaber.getScoreUserById(c.input)
-
+  const scoreSaberUser = await c.services.api.ScoreSaber.getScoreUserById(c.input)
   if (!scoreSaberUser) {
-    throw new SSIDNotFoundError({ accountId: c.input })
+    throw new SSIDNotFoundError({accountId: c.input})
   }
-
-  const { ssAccount, blAccount } = await c.db.getUserAccountsByUid(
+  const {ssAccount, blAccount} = await c.services.db.getUserAccountsByUid(
     c.session.u.id
   )
   const text =
     c.session.text('commands.bsbot.bind.ack-prompt', {
       user: `${scoreSaberUser.name}(${scoreSaberUser.id})`,
     }) +
-    (ssAccount
-      ? ',' +
-        c.session.text('commands.bsbot.bind.exist', {
-          id: ssAccount.platformUid,
-        })
-      : '')
+    (ssAccount ? ',' + c.session.text('commands.bsbot.bind.exist', {id: ssAccount.platformUid,}) : '')
 
   await c.session.sendQuote(text)
 
@@ -45,22 +38,10 @@ export const handleScoreSaberBind = async <T, C>(c: CmdContext<T, C>) => {
     type: 'id',
     status: 'ok',
   }
-  // if (!blAccount) {
-  //   const account: Partial<RelateAccount> = {
-  //     uid: c.session.u.id,
-  //     platform: 'beatleader',
-  //     platformUid: scoreSaberUser.data.id,
-  //     lastModifiedAt: now,
-  //     lastRefreshAt: now,
-  //     platformUname: scoreSaberUser.data.name,
-  //     type: 'id',
-  //   }
-  //   await c.db.addUserBindingInfo(account)
-  // }
   if (ssAccount) {
     account.id = ssAccount.id
   }
-  await c.db.addUserBindingInfo(account)
+  await c.services.db.addUserBindingInfo(account)
   c.session.sendQuote(
     c.session.text('commands.bsbot.bind.success', {
       user: `${scoreSaberUser.name}(${scoreSaberUser.id})`,

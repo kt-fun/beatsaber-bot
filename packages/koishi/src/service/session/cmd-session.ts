@@ -1,35 +1,33 @@
 import {
   RelateChannelInfo,
   Session,
-  tran,
-  TmpFileStorage,
 } from 'beatsaber-bot-core'
-
+import { S3Service } from 'beatsaber-bot-core/infra/s3'
+import { tran } from 'beatsaber-bot-core/infra'
 import { h, Session as KoiSession } from 'koishi'
 import { ChannelInfo, KoiRelateChannelInfo } from '@/types'
 
 export class KSession implements Session<ChannelInfo> {
-  // create a session Object?
   private readonly session: KoiSession
   lang: string
   mentions: RelateChannelInfo<ChannelInfo>[] = []
   u: KoiRelateChannelInfo
   g: KoiRelateChannelInfo
-  tmpStorage?: TmpFileStorage | undefined
+  s3?: S3Service | undefined
   constructor(
     session: KoiSession,
     u,
     g,
     locale,
     mentions,
-    tmpStorage?: TmpFileStorage | undefined
+    s3?: S3Service | undefined
   ) {
     this.session = session
     this.u = u
     this.g = g
     this.lang = locale
     this.mentions = mentions
-    this.tmpStorage = tmpStorage
+    this.s3 = s3
   }
 
   getSessionInfo(): ChannelInfo {
@@ -52,8 +50,8 @@ export class KSession implements Session<ChannelInfo> {
   }
 
   async sendImgBuffer(content: Buffer, mimeType?: string): Promise<void> {
-    if (this.tmpStorage) {
-      const url = await this.tmpStorage.uploadImg(content, mimeType)
+    if (this.s3) {
+      const url = await this.s3.uploadImg(content, mimeType)
       return await this.sendImgByUrl(url)
     }
     await this.session.send(h.image(content, mimeType ?? 'image/png'))
@@ -73,9 +71,7 @@ export class KSession implements Session<ChannelInfo> {
 
   async prompt(timeout: number): Promise<string | undefined> {
     const res = await this.session.prompt(timeout)
-    const transformedResult = tryToTransform(res)
-
-    return transformedResult
+    return tryToTransform(res)
   }
 }
 
@@ -89,17 +85,3 @@ const tryToTransform = (t: string | undefined) => {
   }
   return t
 }
-
-// convert sessionInfo
-// mentionReg = /<at\s+id="(\w+)"\/>/
-// transformMention(session: KoiSession): void {
-//   let content = session.content
-//   const ids = []
-//   let match
-//   while ((match = this.mentionReg.exec(content)) !== null) {
-//     ids.push(match[1])
-//     content = content.replace(match[0], '')
-//   }
-//   //channel info to uid
-//   this.mentions = ids
-// }

@@ -3,16 +3,16 @@ import {
   BLIDNotFoundError,
   SessionPromotionCancelError,
   SessionPromotionTimeoutError,
-} from '@/errors'
+} from '@/infra/errors'
 
 export const handleBeatLeaderIDBind = async <T, C>(c: CmdContext<T, C>) => {
-  const player = await c.api.BeatLeader.getPlayerInfoById(c.input)
+  const player = await c.services.api.BeatLeader.getPlayerInfo(c.input)
   if (!player) {
     throw new BLIDNotFoundError({ accountId: c.input })
   }
-  // 如果当前bind 是 oauth？改为 id？
+
   const now = new Date()
-  const { blAccount } = await c.db.getUserAccountsByUid(c.session.u.id)
+  const { blAccount } = await c.services.db.getUserAccountsByUid(c.session.u.id)
 
   const text =
     c.session.text('commands.bsbot.bind.ack-prompt', {
@@ -33,6 +33,7 @@ export const handleBeatLeaderIDBind = async <T, C>(c: CmdContext<T, C>) => {
       ? new SessionPromotionCancelError()
       : new SessionPromotionTimeoutError()
   }
+  // discord bot
 
   // const binds = c.db.getAccountsByPlatformAndUid()
   // const u = c.session.u
@@ -51,8 +52,8 @@ export const handleBeatLeaderIDBind = async <T, C>(c: CmdContext<T, C>) => {
   if (blAccount) {
     account.id = blAccount.id
   }
-  await c.db.addUserBindingInfo(account)
-  c.session.sendQuote(
+  await c.services.db.addUserBindingInfo(account)
+  await c.session.sendQuote(
     c.session.text('commands.bsbot.bind.bl.success', {
       name: player.name,
       id: player.id,

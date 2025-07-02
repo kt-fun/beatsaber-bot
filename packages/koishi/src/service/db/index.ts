@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { Context } from 'koishi'
 import { ChannelInfo } from '@/types'
 export * from './db'
@@ -18,11 +17,9 @@ declare module 'koishi' {
     BSSubscribe: Subscribe
     BSSubscribeMember: SubscribeMember
     BSUserPreference: UserPreference
-    // BSUserAndUGroupRel: UserAndUGroupRel
   }
 }
 
-// check beats-bot-core/db/index.ts
 export function InitDBModel(ctx: Context) {
   ctx.model.extend(
     'BSRelateAccount',
@@ -70,18 +67,6 @@ export function InitDBModel(ctx: Context) {
     },
     { autoInc: true }
   )
-
-  // ctx.model.extend(
-  //   'BSUserAndUGroupRel',
-  //   {
-  //     uid: 'unsigned',
-  //     gid: 'unsigned',
-  //     nickname: 'string',
-  //   },
-  //   {
-  //     primary: ['uid', 'gid'],
-  //   }
-  // )
 
   ctx.model.extend(
     'BSRelateChannelInfo',

@@ -1,16 +1,16 @@
-import { CommandBuilder } from '@/cmd/builder'
-import { InvalidMapIdError, MapIdNotFoundError } from '@/errors'
+
+import { InvalidMapIdError, MapIdNotFoundError } from '@/infra/errors'
+import {CommandBuilder} from "@/interface/cmd/builder";
 
 const mapIdReg = /^[a-fA-F0-9]{1,6}$/
 
 export default () =>
   new CommandBuilder()
-    .setName('id') // <mapId:string>
+    .setName('id')
     .addAlias('/id')
     .addAlias('bbid')
     .addAlias('/bbid')
     .addAlias('!bsr')
-    // .shortcut(/(^[0-9a-fA-F]{3,5}$)/, { args: ['$1'] })
     .setDescription('clear an auth account relate info')
     .setExecutor(async (c) => {
       if (!c.input || (c.input && c.input.length < 1)) {
@@ -19,24 +19,22 @@ export default () =>
       if (!mapIdReg.test(c.input)) {
         throw new InvalidMapIdError({ input: c.input })
       }
-      const res = await c.api.BeatSaver.searchMapById(c.input)
+      const res = await c.services.api.BeatSaver.searchMapById(c.input)
 
       if (!res) {
         throw new MapIdNotFoundError({ input: c.input })
       }
 
-      const onStartRender = () => {
+      const onRenderStart = () => {
         c.session.send(
           c.session.text('common.render.wait', {
-            sec: c.config.rankWaitTimeout / 1000,
+            sec: c.config.render.waitTimeout / 1000,
           })
         )
       }
-      const image = await c.render.renderMap(
-        res,
-        c.userPreference,
-        onStartRender
-      )
+      const image = await c.services.render.renderMap(res, {
+        onRenderStart
+      })
       await c.session.sendImgBuffer(image)
       await c.session.sendAudioByUrl(res.versions[0].previewURL)
     })

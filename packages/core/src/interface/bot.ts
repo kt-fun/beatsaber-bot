@@ -1,4 +1,4 @@
-import { RelateChannelInfo } from '@/interface/db'
+import {RelateChannelInfo, UserPreference} from '@/interface/db'
 
 type ChannelInfo = any
 

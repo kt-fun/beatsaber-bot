@@ -1,14 +1,11 @@
 import { Config } from '@/config'
-import { BotService, DB, Logger, Session } from '@/interface'
-import { RenderService } from '@/img-render'
-import { APIService } from '@/api'
+import {BotService, DB, Logger, Session} from '@/interface'
+import {Services} from "@/service";
 
 export type ScheduleTaskCtx<T> = {
   config: Config
-  db: DB<T>
-  render: RenderService
-  api: APIService
   logger: Logger
+  services: Services<T>
   botService: BotService<T, Session<T>>
 }
 

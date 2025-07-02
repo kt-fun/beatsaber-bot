@@ -296,7 +296,7 @@ export class KoishiDB implements DB<ChannelInfo> {
       .execute()
     return res
   }
-  async getAllSubScriptionByUIDAndPlatform(
+  async getAllSubscriptionByUIDAndPlatform(
     id: string | number,
     platform: string
   ): Promise<SubDetailWithGroupRes<ChannelInfo>[]> {

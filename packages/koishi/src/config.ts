@@ -1,13 +1,17 @@
 import { Schema } from 'koishi'
 
 export const Config = Schema.object({
+  render: Schema.object({
+    mode: Schema.string().default('puppeteer'),
+    puppeteerURL: Schema.string().default(''),
+    cfAccountId: Schema.string(),
+    cfAPIKey: Schema.string(),
+    defaultWaitTimeout: Schema.number().default(3000),
+    rankWaitTimeout: Schema.number().default(8000),
+  }),
   beatSaverHost: Schema.string().default('https://api.beatsaver.com'),
   beatSaverWSHost: Schema.string().default('wss://ws.beatsaver.com/maps'),
-  remoteRenderURL: Schema.string().default('https://aiobs.ktlab.io'),
   minRawMatchMapIdLength: Schema.number().default(3),
-  renderMode: Schema.string().default('local'),
-  defaultWaitTimeout: Schema.number().default(3000),
-  rankWaitTimeout: Schema.number().default(8000),
   bsOauthClientId: Schema.string().default('bs-oauth-client-id'),
   bsOauthClientSecret: Schema.string().default('bs-oauth-client-secret'),
   blOauthClientId: Schema.string().default('bl-oauth-client-id'),
@@ -30,9 +34,7 @@ export const Config = Schema.object({
       filterParams: Schema.array(Schema.any()),
     })
   ).default([]),
-  preferPuppeteerMode: Schema.string().default('local-plugin'),
-  broswerlessWSEndpoint: Schema.string().default(''),
-  uploadImageToS3: Schema.object({
+  s3: Schema.object({
     enable: Schema.boolean().default(false),
     s3AccessKey: Schema.string().default(''),
     s3SecretKey: Schema.string().default(''),
