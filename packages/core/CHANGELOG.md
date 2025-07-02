@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-rc.12
+
+### Patch Changes
+
+- feat(i18n): add initial i18n configuration and service integration
+
 ## 0.2.0-rc.9
 
 ### Patch Changes
