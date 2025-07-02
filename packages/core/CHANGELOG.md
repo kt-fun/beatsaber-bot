@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-rc.13
+
+### Patch Changes
+
+- feat(screenshot): set default screenshot quality
+
 ## 0.2.0-rc.12
 
 ### Patch Changes
