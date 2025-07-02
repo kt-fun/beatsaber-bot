@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-rc.4
+
+### Patch Changes
+
+- bump: update dev deps (ts & eslint)
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-rc.4
+
 ## 0.2.0-rc.3
 
 ### Patch Changes
