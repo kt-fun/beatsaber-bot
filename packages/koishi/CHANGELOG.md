@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-rc.7
+
+### Patch Changes
+
+- fix(build): fix ts path alias
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-rc.7
+
 ## 0.2.0-rc.6
 
 ### Patch Changes
