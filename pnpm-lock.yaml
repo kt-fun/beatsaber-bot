@@ -5608,7 +5608,7 @@ snapshots:
       cosmokit: 1.8.0
       file-type: 16.5.4
       mime-db: 1.52.0
-      ws: 8.18.0
+      ws: 8.18.3
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -6289,7 +6289,7 @@ snapshots:
       '@satorijs/protocol': 1.6.1
       cordis: 3.16.2
       cosmokit: 1.8.0
-      ws: 8.18.0
+      ws: 8.18.3
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate

@@ -63,8 +63,9 @@
     "@napi-rs/canvas": "^0.1.73"
   },
   "scripts": {
+    "fix-path-alias": "tsc-alias --outDir dist/cjs && tsc-alias --outDir dist/esm",
     "copy-yml-resource": "node scripts/build.mjs",
-    "build": "tsup && pnpm run copy-yml-resource",
+    "build": "tsup && pnpm run copy-yml-resource && pnpm run fix-path-alias",
     "pub": "pnpm run build && pnpm publish"
   }
 }
