@@ -1,7 +1,7 @@
-import {html2imgBuffer, RenderOptions} from "./puppeteer";
+import {html2imgBuffer, RenderOptions, url2imgBuffer} from "./puppeteer";
 import {Browser, Puppeteer} from "puppeteer-core";
 import {Fetch} from "@/infra/support/fetch";
-
+export {RenderOptions as PuppeteerOptions}
 export interface ImageRender {
   html2img: (html: string, opt: RenderOptions) => Promise<Buffer>
   url2img:  (url: string, opt: RenderOptions) => Promise<Buffer>
@@ -10,7 +10,6 @@ export interface ImageRender {
 export type RenderConfig = {
   mode: 'cf' | 'puppeteer'
   puppeteerURL?: string
-  // broswerlessWSEndpoint: string
   defaultWaitTimeout?: number
   waitTimeout?: number
   cfAccountId?: string,
@@ -33,12 +32,9 @@ export class CFBrowserRendering implements ImageRender {
       responseType: 'arrayBuffer',
       body: {
         ...body,
-        "screenshotOptions": {
-          "omitBackground": true
-        },
         "viewport": {
-          "width": 1280,
-          "height": 720,
+          "width": 3840,
+          "height": 2160,
           "deviceScaleFactor": 2,
         },
         "gotoOptions": {
@@ -68,7 +64,7 @@ export class PuppeteerRendering implements ImageRender {
     return html2imgBuffer(this.browserGetter, html, opt)
   }
   async url2img (html: string, opt: RenderOptions) {
-    return html2imgBuffer(this.browserGetter, html, opt)
+    return url2imgBuffer(this.browserGetter, html, opt)
   }
 }
 
@@ -85,7 +81,7 @@ export const RemoteBrowserGetter = (addr: string) => {
 }
 
 
-export const getImageRender= (cfg: RenderConfig & {browserGetter?: () => Promise<Browser>}) => {
+export const getImageRender = (cfg: RenderConfig & {browserGetter?: () => Promise<Browser>}) => {
   if(cfg.mode === 'cf') {
     return new CFBrowserRendering(cfg.cfAccountId, cfg.cfAPIKey)
   }

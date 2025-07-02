@@ -90,7 +90,7 @@ export async function html2imgBuffer(
     options,
     (page) => page.setContent(html, {waitUntil: 'networkidle0'}),
     {fullPage: true},
-    {width: 800, height: 600, deviceScaleFactor: 2},
+    {width: 3840, height: 2160, deviceScaleFactor: 2},
   );
 }
 
@@ -112,7 +112,7 @@ export async function url2imgBuffer(
     options,
     (page) => page.goto(url, {waitUntil: 'networkidle0'}),
     {fullPage: false},
-    {width: 1280, height: 720, deviceScaleFactor: 2},
+    {width: 3840, height: 2160, deviceScaleFactor: 2},
     `page: ${url}`,
   );
 }

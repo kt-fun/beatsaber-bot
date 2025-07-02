@@ -95,6 +95,6 @@ export class RenderService implements IRenderService {
   }
 
   async renderUrl(url: string, renderOption?: RenderOption) {
-    return this.imageRender.url2img(url, {selector: '#render-result', ...renderOption})
+    return this.imageRender.url2img(url, renderOption)
   }
 }
