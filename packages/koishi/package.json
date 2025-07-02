@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-beatsaber-bot",
   "description": "一个 用于 BeatSaber 的 koishi Bot 插件",
-  "version": "0.2.0-rc.7",
+  "version": "0.2.0-rc.8",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [

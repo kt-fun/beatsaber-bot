@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-rc.8
+
+### Patch Changes
+
+- feat(render): enhance rendering options and improve image resolution
+
 ## 0.2.0-rc.7
 
 ### Patch Changes
