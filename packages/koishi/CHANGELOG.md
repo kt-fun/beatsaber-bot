@@ -1,5 +1,13 @@
 # koishi-plugin-beatsaber-bot
 
+## 0.2.0-rc.14
+
+### Patch Changes
+
+- chore: config update and improve error handling in fetch operations
+- Updated dependencies
+  - beatsaber-bot-core@0.2.0-rc.14
+
 ## 0.2.0-rc.13
 
 ### Patch Changes

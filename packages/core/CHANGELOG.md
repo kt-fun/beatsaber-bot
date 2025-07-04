@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.2.0-rc.14
+
+### Patch Changes
+
+- chore: config update and improve error handling in fetch operations
+
 ## 0.2.0-rc.13
 
 ### Patch Changes
