@@ -1,4 +1,5 @@
 import { defineConfig, Options } from 'tsup'
+
 export default defineConfig((options) => {
   const commonOptions: Partial<Options> = {
     entry: [
@@ -26,7 +27,7 @@ export default defineConfig((options) => {
     {
       ...commonOptions,
       outDir: './dist/types/',
-      format: ['cjs'],
+      format: ['esm'],
       dts: {
         only: true,
         entry: "src/index.ts"

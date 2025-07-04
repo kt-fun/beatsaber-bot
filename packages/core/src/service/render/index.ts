@@ -18,13 +18,14 @@ const getPreferenceKey = (platform: string) => {
 }
 
 export class RenderService implements IRenderService {
-  constructor(
+  private constructor(
     private api: APIService,
     private imageRender: ImageRender
   ) {}
 
-  static create(imgRenderConfig: CreateImageRenderOption, api: APIService) {
-    return new RenderService(api, getImageRender(imgRenderConfig))
+  static create(imgRenderConfig: CreateImageRenderOption & { api: APIService }) {
+    const { api, ...config} = imgRenderConfig
+    return new RenderService(api, getImageRender(config))
   }
 
   async renderRank(

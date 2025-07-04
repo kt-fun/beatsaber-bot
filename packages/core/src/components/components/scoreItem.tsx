@@ -26,7 +26,7 @@ export default function ScoreItem({
     <div className={'relative'}>
       <div
         className={
-          'rounded-lg flex bg-black/[.4] space-x-2  backdrop-blur-md overflow-hidden'
+          'rounded-lg flex bg-black/[.4] space-x-2  backdrop-blur-none overflow-hidden'
         }
       >
         <img

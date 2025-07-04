@@ -1,7 +1,7 @@
 import {Context} from "koishi";
 import {KoishiDB} from "@/service";
 import { Config, Logger } from "beatsaber-bot-core";
-import { RenderService, APIService } from "beatsaber-bot-core/service";
+import { RenderService, APIService } from "beatsaber-bot-core";
 import { I18nService, S3Service } from "beatsaber-bot-core/infra";
 
 export const createServices = (ctx: Context, cfg: Config, logger: Logger) => {
@@ -12,7 +12,7 @@ export const createServices = (ctx: Context, cfg: Config, logger: Logger) => {
     // @ts-ignore
     browserGetter = () => ctx?.puppeteer?.browser
   }
-  const render = RenderService.create({...cfg.render, browserGetter}, api)
+  const render = RenderService.create({...cfg.render, browserGetter, logger, api})
   const db = new KoishiDB(ctx)
   let s3
   if (cfg.s3.enabled) {

@@ -1,15 +1,33 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 import crypto from 'crypto'
+import {z} from "zod/v4";
 
 export interface S3Config {
   s3AccessKey: string
   s3SecretKey: string
   endpoint: string
-  region: string | undefined
+  region?: string
   bucketName: string
-  keyPrefix: string
+  keyPrefix?: string
   baseURL: string
 }
+
+
+
+export const strictS3ConfigSchema = z.object({
+  s3AccessKey: z.string(),
+  s3SecretKey: z.string(),
+  endpoint: z.string(),
+  baseURL: z.string(),
+  bucketName: z.string(),
+  region: z.string().optional(),
+  keyPrefix: z.string().optional(),
+})
+
+export const s3ConfigSchema = z.discriminatedUnion('enabled', [
+  z.object({ enabled: z.literal(true), ...strictS3ConfigSchema.shape }),
+  z.object({ enabled: z.literal(false),}),
+])
 
 export class S3Service {
   private s3Client: S3Client

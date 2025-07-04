@@ -16,7 +16,7 @@ export default function BeatLeaderItem({
   return (
     <div className="relative  overflow-hidden">
       <div
-        className={'rounded-lg flex bg-black/[.4] space-x-2 backdrop-blur-md'}
+        className={'rounded-lg flex bg-black/[.4] space-x-2 backdrop-blur-none'}
       >
         <img
           loading={'eager'}

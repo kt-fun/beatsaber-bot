@@ -6,37 +6,45 @@
     "dist"
   ],
   "license": "MIT",
+  "type": "module",
   "author": {
     "name": "ktKongTong",
     "email": "kt@ktlab.io"
   },
   "exports": {
     ".": {
+      "types": "./dist/types/index.d.ts",
       "require": "./dist/cjs/index.js",
-      "types": "./dist/types/index.d.ts"
+      "import": "./dist/esm/index.js"
     },
     "./interface": {
+      "types": "./dist/types/index.d.ts",
       "require": "./dist/cjs/interface/index.js",
-      "types": "./dist/types/index.d.ts"
+      "import": "./dist/esm/interface/index.js"
     },
     "./interface/*": {
+      "types": "./dist/types/index.d.ts",
       "require": "./dist/cjs/interface/**/*.js",
-      "types": "./dist/types/index.d.ts"
+      "import": "./dist/esm/interface/**/*.js"
     },
     "./service": {
+      "types": "./dist/types/index.d.ts",
       "require": "./dist/cjs/service/*.js",
-      "types": "./dist/types/index.d.ts"
+      "import": "./dist/esm/service/*.js"
     },
     "./service/*": {
       "require": "./dist/cjs/service/*/index.js",
+      "import": "./dist/esm/service/*/index.js",
       "types": "./dist/types/index.d.ts"
     },
     "./infra": {
       "require": "./dist/cjs/infra/index.js",
+      "import": "./dist/esm/infra/index.js",
       "types": "./dist/types/index.d.ts"
     },
     "./infra/*": {
       "require": "./dist/cjs/infra/*/index.js",
+      "import": "./dist/esm/infra/*/index.js",
       "types": "./dist/types/index.d.ts"
     }
   },
@@ -60,11 +68,13 @@
     "puppeteer-core": "^24.11.2",
     "react": "^19",
     "react-dom": "^19",
-    "@napi-rs/canvas": "^0.1.73"
+    "@napi-rs/canvas": "^0.1.73",
+    "zod": "^3.25.71"
   },
   "scripts": {
-    "fix-path-alias": "tsc-alias --outDir dist/cjs && tsc-alias --outDir dist/esm",
+    "fix-path-alias": " tsc-alias --outDir dist/esm",
     "copy-yml-resource": "node scripts/build.mjs",
+    "up": "tsup",
     "build": "tsup && pnpm run copy-yml-resource && pnpm run fix-path-alias",
     "pub": "pnpm run build && pnpm publish"
   }

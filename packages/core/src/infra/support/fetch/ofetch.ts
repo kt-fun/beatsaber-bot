@@ -1,19 +1,17 @@
 import { $Fetch, createFetch, FetchOptions, ResponseType } from 'ofetch'
-import { NotFoundError } from './error'
 
-export const rofetch = createFetch({
+
+const rofetch = createFetch({
   defaults: {
-    retryStatusCodes: [400, 408, 409, 425, 429, 500, 502, 503, 504],
-    retry: 3,
+    retryStatusCodes: [408, 409, 425, 429, 500, 502, 503, 504],
+    retry: 2,
     retryDelay: 800,
   },
 }).create({
-  onResponseError({ request, response, options }) {
-    if (response.status === 404) {
-      throw new NotFoundError()
-    }
+
+  onRequestError({ request, error }) {
+
   },
-  onRequestError({ request, error }) {},
 })
 
 export type ExtendFetchOptions<R extends ResponseType = ResponseType, T = any> = {
@@ -45,7 +43,7 @@ export class Fetch {
         body: f
       }
     }
-
+    console.debug()
     const res = await this.ofetchInstance<T, R>(request, opt)
     return res
   }

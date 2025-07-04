@@ -21,8 +21,17 @@ export class APIService {
   BeatSaver: BeatSaverClient
   AIOSaber: AIOSaberClient
   constructor(cfg: Config, logger: Logger) {
-    this.BeatSaver = new BeatSaverClient({logger})
-    this.BeatLeader = new BeatLeaderClient({logger})
+    this.BeatSaver = new BeatSaverClient({
+      logger,
+      host: cfg.beatsaver.host,
+      client_id: cfg.beatsaver.oauthClientId,
+      client_secret: cfg.beatsaver.oauthClientSecret
+    })
+    this.BeatLeader = new BeatLeaderClient({
+      logger,
+      client_id: cfg.beatleader.oauthClientId,
+      client_secret: cfg.beatleader.oauthClientSecret
+    })
     this.ScoreSaber = new ScoreSaberClient(logger)
     this.AIOSaber = new AIOSaberClient(logger)
   }

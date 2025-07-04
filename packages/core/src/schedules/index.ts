@@ -7,8 +7,8 @@ export const getScheduleTasks = (config: Config) => {
     {
       name: 'lb-rank-notifier',
       handler: LBScoreMonitor,
-      cron: config.tempCron.cron,
-      enabled: config.tempCron.enabled,
+      cron: config.cron?.temp?.cron,
+      enabled: config.cron?.temp?.enabled ?? false,
     },
   ]
 }

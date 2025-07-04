@@ -23,7 +23,7 @@ export class KoishiBotService
   constructor(ctx: Context, config: Config) {
     this.ctx = ctx
     this.config = config
-    if (config.s3.enabled) {
+    if (config.s3?.enabled) {
       this.s3 = new S3Service(config.s3)
     }
   }

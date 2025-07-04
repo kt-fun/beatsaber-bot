@@ -1,15 +1,15 @@
 
-import IdSearch from '@/cmd/bsmap/id-search'
-import KeySearch from '@/cmd/bsmap/key-search'
-import Latest from '@/cmd/bsmap/latest'
-import Rank from '@/cmd/rank'
-import Score from '@/cmd/score'
-import Subscribe from '@/cmd/subscribe'
-import Subjoin from '@/cmd/subscribe/subjoin'
-import Subleave from '@/cmd/subscribe/subleave'
-import Unsubscribe from '@/cmd/subscribe/unsubscribe'
-import Bind from '@/cmd/bind'
-import Tmp from '@/cmd/deprecated/tmp'
+import IdSearch from './bsmap/id-search'
+import KeySearch from './bsmap/key-search'
+import Latest from './bsmap/latest'
+import Rank from './rank'
+import Score from './score'
+import Subscribe from './subscribe'
+import Subjoin from './subscribe/subjoin'
+import Subleave from './subscribe/subleave'
+import Unsubscribe from './subscribe/unsubscribe'
+import Bind from './bind'
+import Tmp from './deprecated/tmp'
 import {Command} from "@/interface";
 
 function applyCommand<CHANNEL>(...fns: (() => Command<CHANNEL>)[]) {

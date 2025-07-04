@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
-import duration from 'dayjs/plugin/duration'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import zh from 'dayjs/locale/zh-cn'
+import duration from 'dayjs/plugin/duration.js'
+import relativeTime from 'dayjs/plugin/relativeTime.js'
+import zh from 'dayjs/locale/zh-cn.js'
 dayjs.extend(duration)
 dayjs.extend(relativeTime)
 export const formatDuration = (duration: number) => {
