@@ -6,8 +6,12 @@ export const LBScoreMonitor = async <T>(c: ScheduleTaskCtx<T>) => {
     return
   }
   const [hitbuf, scorebuf] = await Promise.all([
-    c.services.render.renderUrl('https://aiobs.ktlab.io/tmp/lb/hitcnt'),
-    c.services.render.renderUrl('https://aiobs.ktlab.io/tmp/lb/score'),
+    c.services.render.renderUrl('https://aiobs.ktlab.io/tmp/lb/hitcnt', {
+      selector: '#render-result',
+    }),
+    c.services.render.renderUrl('https://aiobs.ktlab.io/tmp/lb/score', {
+      selector: '#render-result',
+    }),
   ])
   for (const group of channels) {
     const session = c.botService.getSessionByChannelInfo(group.groupChannel)

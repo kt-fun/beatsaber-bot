@@ -27,7 +27,6 @@ export default defineConfig((options) => {
     {
       ...commonOptions,
       outDir: './dist/types/',
-      format: ['esm'],
       dts: {
         only: true,
         entry: "src/index.ts"

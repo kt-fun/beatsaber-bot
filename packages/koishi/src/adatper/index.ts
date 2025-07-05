@@ -1,9 +1,9 @@
-import {Config, getBot} from "beatsaber-bot-core";
+import { Config } from "beatsaber-bot-core";
 import {Context} from "koishi";
 import {InitDBModel} from "@/service";
-import {loadCmd} from "@/adatper/cmd";
-import {loadWS} from "@/adatper/ws";
-import {loadSchedule} from "@/adatper/schedule";
+import {loadCmd} from "./cmd";
+import {loadWS} from "./ws";
+import {loadSchedule} from "./schedule";
 
 
 export const koishiAdapter = (ctx: Context, config: Config) => {

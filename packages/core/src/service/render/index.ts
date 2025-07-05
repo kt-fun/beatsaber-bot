@@ -101,7 +101,7 @@ export class RenderService implements IRenderService {
   }
 
   async renderUrl(url: string, renderOption?: RenderOption) {
-    renderOption.onRenderStart?.()
+    renderOption?.onRenderStart?.()
     try {
       return this.imageRender.url2img(url, renderOption)
     }catch (e) {

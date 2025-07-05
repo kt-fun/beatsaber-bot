@@ -1,7 +1,7 @@
 import {Context} from "koishi";
 import { KoishiBotService } from "@/service";
 import {Config, getBot} from "beatsaber-bot-core";
-import {createServices} from "@/adatper/services";
+import {createServices} from "./services";
 
 export const loadSchedule = (ctx: Context, config: Config) => {
   const botService = new KoishiBotService(ctx, config)

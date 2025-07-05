@@ -1,12 +1,11 @@
 {
   "name": "beatsaber-bot-core",
   "description": "Beatsaber bot",
-  "version": "0.2.0-rc.14",
+  "version": "0.2.0-rc.17",
   "files": [
     "dist"
   ],
   "license": "MIT",
-  "type": "module",
   "author": {
     "name": "ktKongTong",
     "email": "kt@ktlab.io"
@@ -33,19 +32,19 @@
       "import": "./dist/esm/service/*.js"
     },
     "./service/*": {
+      "types": "./dist/types/index.d.ts",
       "require": "./dist/cjs/service/*/index.js",
-      "import": "./dist/esm/service/*/index.js",
-      "types": "./dist/types/index.d.ts"
+      "import": "./dist/esm/service/*/index.js"
     },
     "./infra": {
+      "types": "./dist/types/index.d.ts",
       "require": "./dist/cjs/infra/index.js",
-      "import": "./dist/esm/infra/index.js",
-      "types": "./dist/types/index.d.ts"
+      "import": "./dist/esm/infra/index.js"
     },
     "./infra/*": {
+      "types": "./dist/types/index.d.ts",
       "require": "./dist/cjs/infra/*/index.js",
-      "import": "./dist/esm/infra/*/index.js",
-      "types": "./dist/types/index.d.ts"
+      "import": "./dist/esm/infra/*/index.js"
     }
   },
   "keywords": [
@@ -72,7 +71,7 @@
     "zod": "^3.25.71"
   },
   "scripts": {
-    "fix-path-alias": " tsc-alias --outDir dist/esm",
+    "fix-path-alias": " tsc-alias --outDir dist/cjs && tsc-alias --outDir dist/esm",
     "copy-yml-resource": "node scripts/build.mjs",
     "up": "tsup",
     "build": "tsup && pnpm run copy-yml-resource && pnpm run fix-path-alias",

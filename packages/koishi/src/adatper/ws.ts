@@ -6,7 +6,7 @@ import {
   WSHandler,
 } from 'beatsaber-bot-core'
 import { KoishiBotService } from '@/service/session'
-import {createServices} from "@/adatper/services";
+import {createServices} from "./services";
 class WS {
   closed: boolean
   closedTime: number
