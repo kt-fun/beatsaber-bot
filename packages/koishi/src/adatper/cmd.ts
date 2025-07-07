@@ -1,10 +1,13 @@
-import {Context, Session} from "koishi";
-import { ChannelInfo, KoiRelateChannelInfo } from "@/types";
-import { KoishiDB, KSession } from "@/service";
-import { Config, getBot, Command } from "beatsaber-bot-core";
-import { createServices } from "@/adatper/services";
-export function loadCmd(ctx: Context, config: Config) {
-  const registerCmd = registerFn(ctx, config)
+import {Context, Session, } from "koishi";
+import { KoishiDB, } from "./db";
+import { KSession } from './session'
+import { Config, getBot, Command, User } from "beatsaber-bot-core";
+import { createServices } from "./services";
+import {AgentHolder} from "@/adatper/agent";
+
+
+export function loadCmd(ctx: Context, agentHolder: AgentHolder, config: Config) {
+  const registerCmd = registerFn(ctx, agentHolder, config)
   getBot(config).commands.map(registerCmd)
   ctx
     .command('bsbot <prompt:string>')
@@ -14,10 +17,10 @@ export function loadCmd(ctx: Context, config: Config) {
     })
 }
 
-const registerFn = (ctx: Context, config: Config) => {
+const registerFn = (ctx: Context, agentHolder: AgentHolder, config: Config) => {
   const logger = ctx.logger('beats-bot.cmd')
   const services = createServices(ctx, config, logger)
-  return (c: Command<ChannelInfo>) => {
+  return (c: Command) => {
     let cmd = ctx.command(`bsbot.${c.name}`)
     cmd = c.aliases.reduce(
       (acc, alias) =>
@@ -34,13 +37,12 @@ const registerFn = (ctx: Context, config: Config) => {
     )
 
     cmd.action(async ({ session, options }, input) => {
-      // @ts-ignore
-      const [u, g] = await services.db.getUAndGBySessionInfo(session)
-      // 2. get mentioned uids(exclude self & cur uid) and rest input
+      const {user, channel} = await services.db.getUAndGBySessionInfo(session)
+      agentHolder.registerAgentAndChannel(session, channel)
       const exclude = [session.uid, session.selfId]
       const [rest, mentions] = await transformInput(session, services.db, input, exclude)
       const lang = session.locales[0]
-      const kSession = new KSession(session, u, g, lang, mentions, services.i18n, services.s3)
+      const kSession = new KSession(session, user, channel, mentions, lang, services.i18n, services.s3)
       // const userPreference = new UserPreferenceStore(db, u.id)
       const ctx = {
         logger: logger,
@@ -73,7 +75,7 @@ async function transformInput(
   db: KoishiDB,
   input: string,
   exclude: string[]
-): Promise<[string, KoiRelateChannelInfo[]]> {
+): Promise<[string, User[]]> {
   if (!input) {
     return ['', []]
   }
@@ -84,15 +86,10 @@ async function transformInput(
       ?.map((it) => mentionRegex?.exec(it))
       ?.map((it) => it?.[1])
       ?.filter((it) => !exclude.includes(it)) ?? []
-  // db: batch get uid by strings and sessions info
-  // if user not exist, then create it
-  // query db and convert it to uid
   const sessions = mentionsStr.map((it) => ({
     ...session,
     uid: `${session.platform}:${it}`,
   }))
-  // 得到所有 mention
-  // @ts-ignore
   const mentions = await db.batchGetOrCreateUBySessionInfo(sessions)
   return [rest.trim(), mentions]
 }

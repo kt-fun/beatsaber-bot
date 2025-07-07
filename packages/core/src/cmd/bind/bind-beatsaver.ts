@@ -1,6 +1,6 @@
-import { CmdContext, RelateAccount } from '@/interface'
+import { CmdContext, Account } from '@/interface'
 
-export const handleBeatSaverBind = async <T, C>(c: CmdContext<T, C>) => {
+export const handleBeatSaverBind = async (c: CmdContext) => {
   const tokenInfo = await c.services.api.AIOSaber.getBSOAuthToken(c.input)
   if (!tokenInfo) {
     c.session.sendQuote(c.session.text('commands.bsbot.bind.bs.not-found'))
@@ -22,23 +22,18 @@ export const handleBeatSaverBind = async <T, C>(c: CmdContext<T, C>) => {
     self = await c.services.api.BeatSaver.getTokenInfo(token.access_token)
   }
   const now = new Date()
-  const { bsAccount } = await c.services.db.getUserAccountsByUid(c.session.u.id)
-  const account: Partial<RelateAccount> = {
-    uid: c.session.u.id,
-    platform: 'beatsaver',
-    platformUid: self.id,
-    platformUname: self.name,
-    otherPlatformInfo: {},
-    platformScope: 'identity,alerts',
+  const account: Partial<Account> = {
+    userId: c.session.user.id,
+    providerId: 'beatsaver',
+    accountId: self.id,
+    providerUsername: self.name,
+    metadata: {},
+    scope: 'identity,alerts',
     accessToken: token.access_token,
     refreshToken: token.refresh_token,
     lastModifiedAt: now,
     lastRefreshAt: now,
     type: 'oauth',
-    status: 'ok',
-  }
-  if (bsAccount) {
-    account.id = bsAccount.id
   }
   await c.services.db.addUserBindingInfo(account)
   c.session.sendQuote(

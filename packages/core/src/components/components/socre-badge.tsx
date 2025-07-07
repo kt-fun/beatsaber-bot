@@ -1,4 +1,4 @@
-/** @jsxImportSource react */
+import React from 'react'
 import { twJoin } from '../utils/tw-join'
 
 export default function ScoreBadge({

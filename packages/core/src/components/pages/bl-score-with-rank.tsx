@@ -1,3 +1,4 @@
+import React from 'react'
 import {
   Check,
   Key,
@@ -8,9 +9,8 @@ import {
   HeartPulse,
 } from 'lucide-react'
 import ScoreGraph from '../components/scoregraph'
-import React from 'react'
-import { BSOR, Score } from '@/service/api/interfaces/beatleader'
-import { BSMap } from '@/service/api/interfaces/beatsaver'
+import { BSOR, Score } from '@/services/api/interfaces/beatleader'
+import { BSMap } from '@/services/api/interfaces/beatsaver'
 import {
   BlRankScoreItem,
   ScoreItemSkeleton,

@@ -1,6 +1,6 @@
 import { CmdContext } from '@/interface'
-import { BSIDNotFoundError, SubscriptionExistError } from '@/infra/errors'
-export const idBeatsaverMapper = async <T, C>(c: CmdContext<T, C>) => {
+import { BSIDNotFoundError, SubscriptionExistError } from '@/services/errors'
+export const idBeatsaverMapper = async (c: CmdContext) => {
   if (!c.input) {
     return
   }
@@ -8,13 +8,13 @@ export const idBeatsaverMapper = async <T, C>(c: CmdContext<T, C>) => {
   if (!mapper) {
     throw new BSIDNotFoundError({ accountId: c.input })
   }
-  const subscribes = await c.services.db.getIDSubscriptionByGIDAndType(
-    c.session.g.id,
+  const subscribes = await c.services.db.getIDSubscriptionByChannelIDAndType(
+    c.session.channel.id,
     'id-beatsaver-map'
   )
   const it = subscribes.find((it) => it.data?.mapperId === mapper.id)
   if (it) {
-    if (it.enable) {
+    if (it.enabled) {
       throw new SubscriptionExistError()
     }
 
@@ -28,7 +28,7 @@ export const idBeatsaverMapper = async <T, C>(c: CmdContext<T, C>) => {
     return
   }
   const data = {
-    gid: c.session.g.id,
+    gid: c.session.channel.id,
     type: 'id-beatsaver-map',
     time: new Date(),
     enable: true,

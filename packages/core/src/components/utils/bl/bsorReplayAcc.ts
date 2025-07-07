@@ -1,4 +1,4 @@
-import { BSOR, BSORNote, NoteCutInfo } from "@/service/api/interfaces/beatleader";
+import { BSOR, BSORNote, NoteCutInfo } from "@/services/api/interfaces/beatleader";
 import { NoteEventType } from "./bsorDecoder";
 import { createDistanceWeightFunction } from "./beatleader";
 

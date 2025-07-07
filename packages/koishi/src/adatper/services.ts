@@ -1,8 +1,8 @@
 import {Context} from "koishi";
-import {KoishiDB} from "@/service";
-import { Config, Logger } from "beatsaber-bot-core";
-import { RenderService, APIService } from "beatsaber-bot-core";
-import { I18nService, S3Service } from "beatsaber-bot-core/infra";
+import {KoishiDB} from "./db";
+import { Config, Logger, I18nService, S3Service, RenderService, APIService } from "beatsaber-bot-core";
+
+import zhCN from 'beatsaber-bot-core/services/i18n/zh-cn.json'
 
 export const createServices = (ctx: Context, cfg: Config, logger: Logger) => {
   const api = new APIService(cfg, logger)
@@ -18,7 +18,10 @@ export const createServices = (ctx: Context, cfg: Config, logger: Logger) => {
   if (cfg.s3.enabled) {
     s3 = new S3Service(cfg.s3)
   }
-  const i18n = new I18nService()
+  const i18n = new I18nService({
+    'zh-CN': zhCN,
+  })
+  // load local service
   return {
     api,
     render,

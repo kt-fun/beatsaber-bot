@@ -1,10 +1,10 @@
 import { CmdContext } from '@/interface'
-import { SubscriptionExistError } from '@/infra/errors'
+import { SubscriptionExistError } from '@/services/errors'
 
-export const beatleader = async <T, C>(c: CmdContext<T, C>) => {
-  const { blSub } = await c.services.db.getSubscriptionsByGID(c.session.g.id)
+export const beatleader = async (c: CmdContext) => {
+  const { blSub } = await c.services.db.getSubscriptionsByGID(c.session.channel.id)
   if (blSub) {
-    if (blSub.enable) {
+    if (blSub.enabled) {
       throw new SubscriptionExistError()
     }
     const data = { ...blSub, enable: true }
@@ -16,7 +16,7 @@ export const beatleader = async <T, C>(c: CmdContext<T, C>) => {
   }
 
   const data = {
-    gid: c.session.g.id,
+    gid: c.session.channel.id,
     type: 'beatleader-score',
     time: new Date(),
     enable: true,

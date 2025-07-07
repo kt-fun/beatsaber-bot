@@ -1,7 +1,7 @@
 import { BarChart, Key, Star, Wrench } from 'lucide-react'
 import { diffConv, formatRelativeTimeByDay } from '../utils'
 import React from 'react'
-import { ScoreSaberItem } from '@/service/api/interfaces/scoresaber'
+import type { ScoreSaberItem } from '@/services/api/interfaces/scoresaber'
 
 const getModifiers = (modifiers: string) => {
   return modifiers ? modifiers.split(',') : []

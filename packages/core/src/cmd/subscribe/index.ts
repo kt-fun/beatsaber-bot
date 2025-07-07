@@ -1,8 +1,8 @@
-import {CommandBuilder} from "@/interface/cmd/builder";
-import { beatleader } from '@/cmd/subscribe/beatleader'
-import { beatsaver } from '@/cmd/subscribe/beatsaver'
-import { NoneSubscriptionExistError } from '@/infra/errors'
-import { idBeatsaverMapper } from '@/cmd/subscribe/id-beatsaver-mapper'
+import {CommandBuilder} from "@/interface";
+import { beatleader } from './beatleader'
+import { beatsaver } from './beatsaver'
+import { NoneSubscriptionExistError } from '@/services/errors'
+import { idBeatsaverMapper } from './id-beatsaver-mapper'
 
 export default () =>
   new CommandBuilder()
@@ -35,8 +35,8 @@ export default () =>
 
       // return subscription info
       const rows = await c.services.db.getSubscriptionInfoByUGID(
-        c.session.g.id,
-        c.session.u.id
+        c.session.channel.id,
+        c.session.user.id
       )
 
       if (rows.length < 1) {
@@ -44,20 +44,20 @@ export default () =>
       }
       let text = c.session.text('commands.bsbot.subscribe.info.header') + '\n'
       for (const row of rows) {
-        if (row.subscribe.type.startsWith('group')) {
+        if (row.subscription.type.startsWith('group')) {
           text += c.session.text(
             'commands.bsbot.subscribe.info.group-body-item',
             {
               type:
-                row.subscribe.type +
-                `(${row.subscribe.data?.mapperName} ${row.subscribe.data?.mapperId})`,
+                row.subscription.type +
+                `(${row.subscription.data?.mapperName} ${row.subscription.data?.mapperId})`,
             }
           )
         } else {
           text += c.session.text('commands.bsbot.subscribe.info.body-item', {
-            type: row.subscribe.type,
+            type: row.subscription.type,
             cnt: row.memberCount,
-            enable: row.subscribe.enable,
+            enable: row.subscription.enabled,
           })
           if (row.me) {
             text += c.session.text(

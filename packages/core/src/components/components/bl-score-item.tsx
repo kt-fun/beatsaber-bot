@@ -1,6 +1,7 @@
 import { BarChart, Key, Pin, Star, Wrench } from 'lucide-react'
 import { diffConv, formatRelativeTimeByDay } from '../utils'
-import {Score} from "@/service/api/interfaces/beatleader";
+import {Score} from "@/services/api/interfaces/beatleader";
+import React from 'react'
 
 const getModifiers = (modifiers: string) => {
   return modifiers ? modifiers.split(',') : []

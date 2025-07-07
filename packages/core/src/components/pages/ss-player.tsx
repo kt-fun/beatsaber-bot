@@ -1,8 +1,8 @@
-/** @jsxImportSource react */
+import React from 'react'
 import Flags, { EarchIcon } from '../components/flag'
 import { twJoin } from '../utils/tw-join'
 import ScoreItem from '../components/ss-score-item'
-import { ScoreSaberItem, ScoreSaberUser } from '@/service/api/interfaces/scoresaber'
+import { ScoreSaberItem, ScoreSaberUser } from '@/services/api/interfaces/scoresaber'
 
 interface SSPlayerProps {
   leaderItems: ScoreSaberItem[]

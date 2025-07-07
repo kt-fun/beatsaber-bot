@@ -1,7 +1,7 @@
 import { CmdContext } from '@/interface'
-import { BLIDNotFoundError, SubscriptionExistError } from '@/infra/errors'
+import { BLIDNotFoundError, SubscriptionExistError } from '@/services/errors'
 
-export const idBeatleaderScore = async <T, C>(c: CmdContext<T, C>) => {
+export const idBeatleaderScore = async (c: CmdContext) => {
   if (!c.input) {
     return
   }
@@ -10,13 +10,13 @@ export const idBeatleaderScore = async <T, C>(c: CmdContext<T, C>) => {
     throw new BLIDNotFoundError({ accountId: c.input })
   }
 
-  const subscribes = await c.services.db.getIDSubscriptionByGIDAndType(
-    c.session.g.id,
+  const subscribes = await c.services.db.getIDSubscriptionByChannelIDAndType(
+    c.session.channel.id,
     'id-beatleader-score'
   )
   const it = subscribes.find((it) => it.data?.playerId === bluser.id)
   if (it) {
-    if (it.enable) {
+    if (it.enabled) {
       throw new SubscriptionExistError()
     }
 
@@ -30,7 +30,7 @@ export const idBeatleaderScore = async <T, C>(c: CmdContext<T, C>) => {
     return
   }
   const data = {
-    gid: c.session.g.id,
+    gid: c.session.channel.id,
     type: 'id-beatsaver-map',
     time: new Date(),
     enable: true,

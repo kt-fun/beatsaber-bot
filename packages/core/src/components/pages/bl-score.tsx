@@ -1,4 +1,4 @@
-/** @jsxImportSource react */
+import React from 'react'
 import {
   BarChart,
   Check,
@@ -12,9 +12,8 @@ import {
 import { diffConv, formatDuration, formatTime } from '../utils'
 import Progressbar from '../components/progressbar'
 import ScoreGraph from '../components/scoregraph'
-import React from 'react'
-import { BSOR, Score } from '@/service/api/interfaces/beatleader'
-import { BSMap } from '@/service/api/interfaces/beatsaver'
+import { BSOR, Score } from '@/services/api/interfaces/beatleader'
+import { BSMap } from '@/services/api/interfaces/beatsaver'
 
 interface BLScoreProps {
   score: Score

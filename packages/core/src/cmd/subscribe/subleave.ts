@@ -1,4 +1,4 @@
-import {CommandBuilder} from "@/interface/cmd/builder";
+import {CommandBuilder} from "@/interface";
 
 export default () =>
   new CommandBuilder()
@@ -13,11 +13,11 @@ export default () =>
     .setExecutor(async (c) => {
       // getUserJoinedGroupMember
       const subs = await c.services.db.getSubscriptionInfoByUGID(
-        c.session.g.id,
-        c.session.u.id
+        c.session.channel.id,
+        c.session.user.id
       )
       if (c.options.type === 'beatleader') {
-        const blSub = subs.find((it) => it.subscribe.type == 'beatleader-score')
+        const blSub = subs.find((it) => it.subscription.type == 'beatleader-score')
         if (!blSub?.me) {
           return c.session.sendQuote(
             c.session.text(
@@ -26,14 +26,14 @@ export default () =>
           )
         }
         await c.services.db.removeFromSubGroupBySubAndUid(
-          blSub.subscribe.id,
-          c.session.u.id
+          blSub.subscription.id,
+          c.session.user.id
         )
         await c.session.sendQuote(
           c.session.text('commands.bsbot.subscribe.leave.success.beatleader')
         )
       } else if (c.options.type === 'beatsaver') {
-        const bsSub = subs.find((it) => it.subscribe.type == 'beatsaver-map')
+        const bsSub = subs.find((it) => it.subscription.type == 'beatsaver-map')
         if (!bsSub?.me) {
           await c.session.sendQuote(
             c.session.text('commands.bsbot.subscribe.leave.not-exist.beatsaver')
@@ -42,8 +42,8 @@ export default () =>
         }
 
         await c.services.db.removeFromSubGroupBySubAndUid(
-          bsSub.subscribe.id,
-          c.session.u.id
+          bsSub.subscription.id,
+          c.session.user.id
         )
         await c.session.sendQuote(
           c.session.text('commands.bsbot.subscribe.leave.success.beatsaver')

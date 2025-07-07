@@ -1,4 +1,4 @@
-/** @jsxImportSource react */
+import React from 'react'
 import getPart from '../utils/bl/getPart'
 import ScoreBadge from '../components/socre-badge'
 import SkillGraph from '../components/skill-graph'

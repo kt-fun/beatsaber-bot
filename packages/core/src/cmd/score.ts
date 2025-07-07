@@ -1,11 +1,9 @@
-import {CommandBuilder} from "@/interface/cmd/builder";
-import {parsePlatform, Platform} from '@/interface'
-import { convertDiff } from '@/utils'
+import { CommandBuilder } from "@/interface";
+import { Platform, convertDiff } from '@/utils'
 import {
   AccountBindingNotFoundError,
   ScoreNotFoundError,
-} from '@/infra/errors'
-import {NotFoundError} from "@/infra/support/fetch/error";
+} from '@/services/errors'
 export default () =>
   new CommandBuilder()
     .setName('score')
@@ -14,7 +12,7 @@ export default () =>
     .addAlias('bbscore')
     .addAlias('/score')
     .setExecutor(async (c) => {
-      let uid = c.session.u.id
+      let uid = c.session.user.id
       // let preference = c.userPreference
       if (c.session.mentions && c.session.mentions.length > 0) {
         uid = c.session.mentions[0].id
@@ -37,20 +35,16 @@ export default () =>
       }
       const mapId = c.input
       const score = await c.services.api.getScoreByPlayerIdAndMapId(
-        account.platformUid,
+        account.accountId,
         mapId,
         diffOption
-      ).catch((e) => {
-        if (e instanceof NotFoundError) {
-          throw new ScoreNotFoundError({
-            user: account.platformUname,
-            id: mapId,
-            diff: diffOption?.difficulty,
-            mode: c.options.m,
-          })
-        }
-        throw e
-      })
+      )
+      if(!score) {
+        throw new ScoreNotFoundError({
+          user: account.providerUsername, id: mapId,
+          diff: diffOption?.difficulty, mode: c.options.m,
+        })
+      }
       const img = await c.services.render.renderScore(score.id?.toString())
       await c.session.sendImgBuffer(img)
     })

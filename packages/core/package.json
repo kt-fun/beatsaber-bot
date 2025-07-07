@@ -1,7 +1,7 @@
 {
   "name": "beatsaber-bot-core",
   "description": "Beatsaber bot",
-  "version": "0.2.0-rc.17",
+  "version": "0.3.0-rc.13",
   "files": [
     "dist"
   ],
@@ -26,25 +26,15 @@
       "require": "./dist/cjs/interface/**/*.js",
       "import": "./dist/esm/interface/**/*.js"
     },
-    "./service": {
+    "./services": {
       "types": "./dist/types/index.d.ts",
-      "require": "./dist/cjs/service/*.js",
-      "import": "./dist/esm/service/*.js"
+      "require": "./dist/cjs/services/*.js",
+      "import": "./dist/esm/services/*.js"
     },
-    "./service/*": {
+    "./services/*": {
       "types": "./dist/types/index.d.ts",
-      "require": "./dist/cjs/service/*/index.js",
-      "import": "./dist/esm/service/*/index.js"
-    },
-    "./infra": {
-      "types": "./dist/types/index.d.ts",
-      "require": "./dist/cjs/infra/index.js",
-      "import": "./dist/esm/infra/index.js"
-    },
-    "./infra/*": {
-      "types": "./dist/types/index.d.ts",
-      "require": "./dist/cjs/infra/*/index.js",
-      "import": "./dist/esm/infra/*/index.js"
+      "require": "./dist/cjs/services/*",
+      "import": "./dist/esm/services/*"
     }
   },
   "keywords": [
@@ -56,6 +46,7 @@
     "access": "public"
   },
   "dependencies": {
+    "typeid-js": "1.2.0",
     "@aws-sdk/client-s3": "^3.840.0",
     "@ktfun/styled-qr-code-node": "^1.6.5",
     "chart.js": "^4.5.0",

@@ -1,23 +1,21 @@
-import {RelateAccount, CmdContext} from '@/interface'
+import {Account, CmdContext} from '@/interface'
 import {
   SessionPromotionCancelError,
   SessionPromotionTimeoutError,
   SSIDNotFoundError,
-} from '@/infra/errors'
+} from '@/services/errors'
 
-export const handleScoreSaberBind = async <T, C>(c: CmdContext<T, C>) => {
+export const handleScoreSaberBind = async (c: CmdContext) => {
   const scoreSaberUser = await c.services.api.ScoreSaber.getScoreUserById(c.input)
   if (!scoreSaberUser) {
     throw new SSIDNotFoundError({accountId: c.input})
   }
-  const {ssAccount, blAccount} = await c.services.db.getUserAccountsByUid(
-    c.session.u.id
-  )
+  const {ssAccount} = await c.services.db.getUserAccountsByUid(c.session.user.id)
   const text =
     c.session.text('commands.bsbot.bind.ack-prompt', {
       user: `${scoreSaberUser.name}(${scoreSaberUser.id})`,
     }) +
-    (ssAccount ? ',' + c.session.text('commands.bsbot.bind.exist', {id: ssAccount.platformUid,}) : '')
+    (ssAccount ? ',' + c.session.text('commands.bsbot.bind.exist', {id: ssAccount.accountId,}) : '')
 
   await c.session.sendQuote(text)
 
@@ -28,21 +26,18 @@ export const handleScoreSaberBind = async <T, C>(c: CmdContext<T, C>) => {
       : new SessionPromotionTimeoutError()
   }
   const now = new Date()
-  const account: Partial<RelateAccount> = {
-    uid: c.session.u.id,
-    platform: 'scoresaber',
-    platformUid: scoreSaberUser.id,
+  const account: Partial<Account> = {
+    userId: c.session.user.id,
+    accountId: scoreSaberUser.id,
+    providerId: 'scoresaber',
+    providerUsername: scoreSaberUser.name,
     lastModifiedAt: now,
     lastRefreshAt: now,
-    platformUname: scoreSaberUser.name,
+    createdAt: now,
     type: 'id',
-    status: 'ok',
-  }
-  if (ssAccount) {
-    account.id = ssAccount.id
   }
   await c.services.db.addUserBindingInfo(account)
-  c.session.sendQuote(
+  await c.session.sendQuote(
     c.session.text('commands.bsbot.bind.success', {
       user: `${scoreSaberUser.name}(${scoreSaberUser.id})`,
     })

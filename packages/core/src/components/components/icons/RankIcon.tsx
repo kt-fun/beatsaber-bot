@@ -1,4 +1,3 @@
-/** @jsxImportSource react */
 import BeatLeaderIcon from './BeatLeader'
 import ScoreSaberIcon from './ScoreSaberIcon'
 

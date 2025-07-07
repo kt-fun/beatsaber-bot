@@ -1,6 +1,7 @@
-import {CmdContext, RelateAccount} from '@/interface'
+import { Account } from '@/interface'
+import {CmdContext} from "@/interface";
 
-export const handleBeatLeaderBind = async <T, C>(c: CmdContext<T, C>) => {
+export const handleBeatLeaderBind = async (c: CmdContext) => {
   const tokenInfo = await c.services.api.AIOSaber.getBLOAuthToken(c.input)
   if (!tokenInfo) {
     c.session.sendQuote(c.session.text('commands.bsbot.bl.account.not-found'))
@@ -28,25 +29,20 @@ export const handleBeatLeaderBind = async <T, C>(c: CmdContext<T, C>) => {
     }
   }
   const now = new Date()
-  const { blAccount } = await c.services.db.getUserAccountsByUid(c.session.u.id)
-  const account: Partial<RelateAccount> = {
-    uid: c.session.u.id,
-    platform: 'beatleader',
-    platformScope: 'profile clan offline_access',
-    platformUid: self.id,
-    platformUname: self.name,
-    otherPlatformInfo: {},
+  const { blAccount } = await c.services.db.getUserAccountsByUid(c.session.user.id)
+  const account: Partial<Account> = {
+    userId: c.session.user.id,
+    accountId: blAccount?.id ?? '',
+    providerId: 'beatleader',
+    providerUsername: self.name,
+    metadata: {},
     accessToken: token.access_token,
     refreshToken: token.refresh_token,
     lastModifiedAt: now,
     lastRefreshAt: now,
+    createdAt: now,
     type: 'oauth',
-    status: 'ok',
   }
-  if (blAccount) {
-    account.id = blAccount.id
-  }
-
   await c.services.db.addUserBindingInfo(account)
   c.session.sendQuote(
     c.session.text('commands.bsbot.bind.bl.success', {

@@ -1,18 +1,21 @@
 import {botCommands} from "./cmd";
-import {getScheduleTasks} from "./schedules";
 import type {Config} from "./config";
-
+import {getScheduleTasks} from "./events/schedules";
 export * from './interface'
-export * from './schedules'
+export * from './events/schedules'
 export * from './config'
 export * from './cmd'
-export * from './ws'
+export * from './events/ws'
 export * from './utils'
-export * from './service'
-export * from './infra'
+export * from './services'
+export * from '@/common/s3'
+export * from '@/common/render'
+export * from '@/core/session'
+export * from '@/core/logger'
+export { SessionAgent } from '@/core/domain'
 
-export const getBot = <T>(config: Config) => ({
-  commands: botCommands<T>(),
+export const getBot = (config: Config) => ({
+  commands: botCommands(),
   schedule: getScheduleTasks(config),
 })
 

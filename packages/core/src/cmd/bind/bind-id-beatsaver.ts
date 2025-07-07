@@ -1,19 +1,19 @@
-import { CmdContext, RelateAccount } from '@/interface'
+import { CmdContext, Account } from '@/interface'
 
 import {
   BSIDNotFoundError,
   SessionPromotionCancelError,
   SessionPromotionTimeoutError,
-} from '@/infra/errors'
+} from '@/services/errors'
 
-export const handleBeatSaverIDBind = async <T, C>(c: CmdContext<T, C>) => {
+export const handleBeatSaverIDBind = async (c: CmdContext) => {
   const mapper = await c.services.api.BeatSaver.getBSMapperById(c.input)
   if (!mapper) {
     throw new BSIDNotFoundError({ accountId: c.input })
   }
   // 如果当前bind 是 oauth？改为 id？
   const now = new Date()
-  const { bsAccount } = await c.services.db.getUserAccountsByUid(c.session.u.id)
+  const { bsAccount } = await c.services.db.getUserAccountsByUid(c.session.user.id)
 
   const text =
     c.session.text('commands.bsbot.bind.ack-prompt', {
@@ -22,7 +22,7 @@ export const handleBeatSaverIDBind = async <T, C>(c: CmdContext<T, C>) => {
     (bsAccount
       ? ',' +
         c.session.text('commands.bsbot.bind.exist', {
-          id: bsAccount.platformUid,
+          id: bsAccount.accountId,
         })
       : '')
 
@@ -34,19 +34,15 @@ export const handleBeatSaverIDBind = async <T, C>(c: CmdContext<T, C>) => {
       ? new SessionPromotionCancelError()
       : new SessionPromotionTimeoutError()
   }
-  const account: Partial<RelateAccount> = {
-    uid: c.session.u.id,
-    platform: 'beatsaver',
-    platformUid: mapper.id.toString(),
-    platformUname: mapper.name,
-    otherPlatformInfo: {},
+  const account: Partial<Account> = {
+    userId: c.session.user.id,
+    providerId: 'beatsaver',
+    accountId: mapper.id.toString(),
+    providerUsername: mapper.name,
+    metadata: {},
     lastModifiedAt: now,
     lastRefreshAt: now,
     type: 'id',
-    status: 'ok',
-  }
-  if (bsAccount) {
-    account.id = bsAccount.id
   }
   await c.services.db.addUserBindingInfo(account)
   c.session.sendQuote(

@@ -1,6 +1,7 @@
-import { BarChart, Star } from 'lucide-react'
+import { BarChart } from 'lucide-react'
 import { diffConv } from '@/components/utils'
 import { HTMLProps } from 'react'
+import React from 'react'
 
 export function RankDifficulty({
   difficulty,

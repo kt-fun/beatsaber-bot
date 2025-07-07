@@ -1,5 +1,5 @@
-/** @jsxImportSource react */
 import * as countryIcons from 'country-flag-icons/react/3x2'
+import React from 'react'
 
 const Flags = ({ flagNationCode }: { flagNationCode: string }) => {
   const Flag =

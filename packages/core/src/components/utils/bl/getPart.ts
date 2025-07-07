@@ -1,4 +1,4 @@
-import { BeatLeaderUser } from '@/service/api/interfaces/beatleader'
+import { BeatLeaderUser } from '@/services/api/interfaces/beatleader'
 
 const DEFAULT_MAX_TECH_PP = 1300
 const DEFAULT_MAX_ACC_PP = 15000

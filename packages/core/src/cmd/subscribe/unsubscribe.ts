@@ -1,9 +1,9 @@
-import {CommandBuilder} from "@/interface/cmd/builder";
+
 import {
   BSMapperSubscriptionNotExistError,
   SubscriptionNotExistError,
-} from '@/infra/errors'
-import { CmdContext } from '@/interface'
+} from '@/services/errors'
+import {CmdContext, CommandBuilder} from "@/interface";
 
 export default () =>
   new CommandBuilder()
@@ -17,7 +17,7 @@ export default () =>
     .setDescription('')
     .setExecutor(async (c) => {
       const { blSub, bsMapSub, bsAlertSub } = await c.services.db.getSubscriptionsByGID(
-        c.session.g.id
+        c.session.channel.id
       )
       if (c.options.type === 'beatleader') {
         if (!blSub) {
@@ -58,11 +58,11 @@ export default () =>
       }
     })
 
-const unsubIDBSMapper = async <T, C>(c: CmdContext<T, C>) => {
+const unsubIDBSMapper = async (c: CmdContext) => {
   const input = c.input
   if (input) {
-    const res = await c.services.db.getIDSubscriptionByGIDAndType(
-      c.session.g.id,
+    const res = await c.services.db.getIDSubscriptionByChannelIDAndType(
+      c.session.channel.id,
       'id-beatsaver-map'
     )
     const it = res.find((it) => it.data?.mapperId?.toString() === input)
@@ -80,11 +80,11 @@ const unsubIDBSMapper = async <T, C>(c: CmdContext<T, C>) => {
   }
 }
 
-const unsubIDBLScore = async <T, C>(c: CmdContext<T, C>) => {
+const unsubIDBLScore = async (c: CmdContext) => {
   const input = c.input
   if (input) {
-    const res = await c.services.db.getIDSubscriptionByGIDAndType(
-      c.session.g.id,
+    const res = await c.services.db.getIDSubscriptionByChannelIDAndType(
+      c.session.channel.id,
       'id-beatleader-score'
     )
     const it = res.find((it) => it.data?.playerId?.toString() === input)

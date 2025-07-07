@@ -1,4 +1,5 @@
-/** @jsxImportSource react */
+import React from "react";
+
 export default function Progressbar({ value }: { value: number }) {
   return (
     <progress

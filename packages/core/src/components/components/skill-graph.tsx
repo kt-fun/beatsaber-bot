@@ -1,4 +1,4 @@
-/** @jsxImportSource react */
+import React from 'react'
 interface Point {
   x: number
   y: number

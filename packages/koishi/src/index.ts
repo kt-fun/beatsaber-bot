@@ -8,7 +8,7 @@ import {} from 'koishi-plugin-cron'
 export const name = 'beatsaber-bot'
 
 export const inject = {
-  optional: ['assets'],
+  optional: ['assets', 'puppeteer'],
   required: ['database', 'cron'],
 }
 

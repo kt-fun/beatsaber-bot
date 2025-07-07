@@ -1,4 +1,3 @@
-/** @jsxImportSource react */
 import React from 'react'
 import RankIcon from '../components/icons/RankIcon'
 import {
@@ -16,7 +15,7 @@ import { diffConv, formatNumber, formatTime, getTag } from '../utils'
 import { getMods } from '../utils/getMods'
 import Progressbar from '../components/progressbar'
 import { CharacteristicIcon } from '../components/characteristic'
-import { BSMap } from '@/service/api/interfaces/beatsaver'
+import { BSMap } from '@/services/api/interfaces/beatsaver'
 
 interface BSMapProps {
   bsMap: BSMap

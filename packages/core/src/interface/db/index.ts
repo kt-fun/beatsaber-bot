@@ -1,80 +1,61 @@
 import type {
-  RelateAccount,
-  RelateChannelInfo,
-  Subscribe,
-  SubscribeMember,
+  Account,
+  Subscription,
+  SubscriptionMember,
 } from './models'
+import {Channel, User} from "@/core";
 
 export type {
-  RelateAccount,
-  RelateChannelInfo,
-  Subscribe,
-  SubscribeMember,
-  UserPreference
+  User,
+  Channel,
+  Account,
+  Subscription,
+  SubscriptionMember,
+  Preference
 } from './models'
 
 export interface SubInfoRes {
-  subscribe: Subscribe
+  subscription: Subscription
   memberCount: number
   me: any
 }
 
 export interface SubInfoRes {
-  subscribe: Subscribe
+  subscription: Subscription
   memberCount: number
   me: any
 }
 
-export interface SubDetailWithGroupRes<T> {
-  account: RelateAccount
-  accountChannel: RelateChannelInfo<T>
-  subscribeMember: SubscribeMember
-  subscribe: Subscribe
-  groupChannel: RelateChannelInfo<T>
+export interface SubDetailWithGroupRes {
+  account: Account
+  user: User
+  channel: Channel
+  subscriptionMember: SubscriptionMember
+  subscription: Subscription
 }
 
-export interface SubWithGroupRes<T> {
-  subscribe: Subscribe
-  groupChannel: RelateChannelInfo<T>
+export interface SubWithGroupRes {
+  subscription: Subscription
+  channel: Channel
 }
 
-export interface DB<T> {
-  storeUserPreference<V = any>(
-    uid: number,
-    // channelId: string | undefined,
-    value: V
-  ): Promise<boolean>
-  getUserPreference<V = any>(
-    uid: number
-    // channelId: string | undefined,
-    // value: V
-  ): Promise<V>
-  getUserAccountsByUid(id: number): Promise<Record<string, RelateAccount>>
-
-  batchGetOrCreateUBySessionInfo(s: T[]): Promise<RelateChannelInfo<T>[]>
-  getUAndGBySessionInfo(
-    s: T
-  ): Promise<[RelateChannelInfo<T>, RelateChannelInfo<T>]>
-
-  // binding
-  addUserBindingInfo(account: Partial<RelateAccount>): Promise<void>
-
+export interface DB {
+  // preference
+  storeUserPreference<V = any>(uid: string, value: V): Promise<boolean>
+  getUserPreference<V = any>(uid: string): Promise<V>
+  // user account
+  getUserAccountsByUid(id: string): Promise<Record<string, Account>>
+  addUserBindingInfo(account: Partial<Account>): Promise<void>
   // subscription
-  upsertSubscription(data: Partial<Subscribe>): Promise<void>
-
-  getSubscriptionInfoByUGID(gid: number, uid: number): Promise<SubInfoRes[]>
-  getSubscriptionsByGID(gid: number): Promise<Record<string, Subscribe>>
-  // group subscription
-  getIDSubscriptionByGID(gid: number): Promise<Subscribe[]>
-  getIDSubscriptionByType(type: string): Promise<SubWithGroupRes<T>[]>
-  removeIDSubscriptionByID(id: number): Promise<void>
-  getIDSubscriptionByGIDAndType(gid: number, type: string): Promise<Subscribe[]>
-  getAllSubscriptionByUIDAndPlatform(
-    id: string | number,
-    type: string
-  ): Promise<SubDetailWithGroupRes<T>[]>
-
-  getSubscriptionsByType(type: string): Promise<SubDetailWithGroupRes<T>[]>
-  addSubscribeMember(data: Partial<SubscribeMember>): Promise<void>
-  removeFromSubGroupBySubAndUid(subId: number, id: number): Promise<void>
+  upsertSubscription(data: Partial<Subscription>): Promise<void>
+  getSubscriptionInfoByUGID(gid: string, uid: string): Promise<SubInfoRes[]>
+  getSubscriptionsByGID(gid: string): Promise<Record<string, Subscription>>
+  getIDSubscriptionByGID(gid: string): Promise<Subscription[]>
+  getIDSubscriptionByType(type: string): Promise<SubWithGroupRes[]>
+  removeIDSubscriptionByID(id: string): Promise<void>
+  getIDSubscriptionByChannelIDAndType(gid: string, type: string): Promise<Subscription[]>
+  getAllSubscriptionByUIDAndPlatform(id: string, type: string): Promise<SubDetailWithGroupRes[]>
+  getSubscriptionsByType(type: string): Promise<SubWithGroupRes[]>
+  addSubscribeMember(data: Partial<SubscriptionMember>): Promise<void>
+  removeFromSubGroupBySubAndUid(subId: string, id: string): Promise<void>
 }

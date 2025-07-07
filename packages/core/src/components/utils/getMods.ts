@@ -1,4 +1,4 @@
-import { BSMap } from '@/service/api/interfaces/beatsaver'
+import { BSMap } from '@/services/api/interfaces/beatsaver'
 
 export const getMods = (bsMap: BSMap) => {
   const res: string[] = []

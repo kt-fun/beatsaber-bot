@@ -1,3 +1,4 @@
+import React from 'react'
 import dayjs from 'dayjs'
 import Flags, { EarchIcon } from '@/components/components/flag'
 import { formatDate, numberWithCommas } from '@/components/utils'

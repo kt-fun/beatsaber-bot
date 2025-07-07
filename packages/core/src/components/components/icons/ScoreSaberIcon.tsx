@@ -1,4 +1,3 @@
-/** @jsxImportSource react */
 import { SVGProps } from 'react'
 
 export default function ScoreSaberIcon(props: SVGProps<SVGSVGElement>) {

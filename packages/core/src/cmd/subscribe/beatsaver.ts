@@ -1,9 +1,9 @@
 import { CmdContext } from '@/interface'
-import { SubscriptionExistError } from '@/infra/errors'
-export const beatsaver = async <T, C>(c: CmdContext<T, C>) => {
-  const { bsMapSub } = await c.services.db.getSubscriptionsByGID(c.session.g.id)
+import { SubscriptionExistError } from '@/services/errors'
+export const beatsaver = async (c: CmdContext) => {
+  const { bsMapSub } = await c.services.db.getSubscriptionsByGID(c.session.channel.id)
   if (bsMapSub) {
-    if (bsMapSub.enable) {
+    if (bsMapSub.enabled) {
       throw new SubscriptionExistError()
     }
     const data = { ...bsMapSub, enable: true }
@@ -14,7 +14,7 @@ export const beatsaver = async <T, C>(c: CmdContext<T, C>) => {
     return
   }
   const data = {
-    gid: c.session.g.id,
+    gid: c.session.channel.id,
     type: 'beatsaver-map',
     time: new Date(),
     enable: true,

@@ -5,8 +5,9 @@ import {
   Config,
   WSHandler,
 } from 'beatsaber-bot-core'
-import { KoishiBotService } from '@/service/session'
+import { KoishiBotService } from './session'
 import {createServices} from "./services";
+import {AgentHolder} from "@/adatper/agent";
 class WS {
   closed: boolean
   closedTime: number
@@ -48,14 +49,14 @@ const getWS = (ctx: Context, handler: WSHandler) => {
 }
 
 
-export function loadWS(ctx: Context, cfg: Config) {
-  // @ts-ignore
+export function loadWS(ctx: Context, agentHolder: AgentHolder, cfg: Config) {
   const logger = ctx.logger('beatsaber-bot.ws')
   const bllogger = logger.extend('BeatLeaderWS')
   const bslogger = logger.extend('BeatSaverWS')
-  const services = createServices(ctx, cfg, logger)
+  // agent holder
 
-  const botService = new KoishiBotService(ctx, cfg)
+  const services = createServices(ctx, cfg, logger)
+  const botService = new KoishiBotService(ctx, agentHolder, cfg)
   const bsHandler = new BeatSaverWSHandler(
     services.db,
     services.render,
@@ -63,6 +64,7 @@ export function loadWS(ctx: Context, cfg: Config) {
     cfg,
     botService
   )
+
   const blHandler = new BeatleaderWSHandler(
     services.db,
     services.render,
@@ -71,11 +73,11 @@ export function loadWS(ctx: Context, cfg: Config) {
     botService
   )
 
-  const wss = [
-    new WS(ctx, bsHandler),
-    new WS(ctx, blHandler)
-  ]
-  ctx.setInterval(() => {
-    wss.forEach((ws) => ws.keep())
-  }, 30000)
+  // const wss = [
+  //   new WS(ctx, bsHandler),
+  //   new WS(ctx, blHandler)
+  // ]
+  // ctx.setInterval(() => {
+  //   wss.forEach((ws) => ws.keep())
+  // }, 30000)
 }

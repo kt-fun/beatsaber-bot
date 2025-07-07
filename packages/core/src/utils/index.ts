@@ -52,3 +52,6 @@ export const convertDiff = (diff: string | null) => {
   }
   return diffMap[diff.toUpperCase()]
 }
+
+export * from './platform'
+export * from './bsorDecoder.js'

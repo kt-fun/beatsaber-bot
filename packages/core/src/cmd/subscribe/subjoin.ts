@@ -1,5 +1,5 @@
-import {CommandBuilder} from "@/interface/cmd/builder";
-import { SubscriptionNotExistError } from '@/infra/errors'
+import {CommandBuilder} from "@/interface";
+import { SubscriptionNotExistError } from '@/services/errors'
 export default () =>
   new CommandBuilder()
     .setName('subjoin')
@@ -12,7 +12,7 @@ export default () =>
     .setDescription('')
     .setExecutor(async (c) => {
       const { blSub, bsMapSub } = await c.services.db.getSubscriptionsByGID(
-        c.session.g.id
+        c.session.channel.id
       )
       if (c.options.type === 'beatleader') {
         if (!blSub) {
@@ -21,7 +21,7 @@ export default () =>
         }
         const data = {
           subscribeId: blSub.id,
-          memberUid: c.session.u.id,
+          memberUid: c.session.user.id,
           joinedAt: new Date(),
         }
         await c.services.db.addSubscribeMember(data)
@@ -34,7 +34,7 @@ export default () =>
         }
         const data = {
           subscribeId: bsMapSub.id,
-          memberUid: c.session.u.id,
+          memberUid: c.session.user.id,
           joinedAt: new Date(),
         }
         await c.services.db.addSubscribeMember(data)

@@ -1,5 +1,6 @@
-import { renderSchema, s3ConfigSchema } from '@/infra'
 import {z} from 'zod/v4'
+import {renderSchema} from "@/common/render";
+import {s3ConfigSchema} from "@/common/s3";
 
 const cronSchema = z.object({
   enabled: z.boolean().optional().default(false),

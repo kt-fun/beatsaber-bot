@@ -1,18 +1,18 @@
-import { CmdContext, RelateAccount } from '@/interface'
+import { CmdContext, Account } from '@/interface'
 import {
   BLIDNotFoundError,
   SessionPromotionCancelError,
   SessionPromotionTimeoutError,
-} from '@/infra/errors'
+} from '@/services/errors'
 
-export const handleBeatLeaderIDBind = async <T, C>(c: CmdContext<T, C>) => {
+export const handleBeatLeaderIDBind = async (c: CmdContext) => {
   const player = await c.services.api.BeatLeader.getPlayerInfo(c.input)
   if (!player) {
     throw new BLIDNotFoundError({ accountId: c.input })
   }
 
   const now = new Date()
-  const { blAccount } = await c.services.db.getUserAccountsByUid(c.session.u.id)
+  const { blAccount } = await c.services.db.getUserAccountsByUid(c.session.user.id)
 
   const text =
     c.session.text('commands.bsbot.bind.ack-prompt', {
@@ -21,7 +21,7 @@ export const handleBeatLeaderIDBind = async <T, C>(c: CmdContext<T, C>) => {
     (blAccount
       ? ',' +
         c.session.text('commands.bsbot.bind.exist', {
-          id: blAccount.platformUid,
+          id: blAccount.accountId,
         })
       : '')
 
@@ -33,24 +33,16 @@ export const handleBeatLeaderIDBind = async <T, C>(c: CmdContext<T, C>) => {
       ? new SessionPromotionCancelError()
       : new SessionPromotionTimeoutError()
   }
-  // discord bot
-
-  // const binds = c.db.getAccountsByPlatformAndUid()
-  // const u = c.session.u
-  // 如果当前 u为...，已绑定就进行替换
-  const account: Partial<RelateAccount> = {
-    uid: c.session.u.id,
-    platform: 'beatleader',
-    platformUid: player.id.toString(),
-    platformUname: player.name,
-    otherPlatformInfo: {},
+  const account: Partial<Account> = {
+    userId: c.session.user.id,
+    providerId: 'beatleader',
+    accountId: player.id.toString(),
+    providerUsername: player.name,
+    metadata: {},
     lastModifiedAt: now,
     lastRefreshAt: now,
+    createdAt: now,
     type: 'id',
-    status: 'ok',
-  }
-  if (blAccount) {
-    account.id = blAccount.id
   }
   await c.services.db.addUserBindingInfo(account)
   await c.session.sendQuote(

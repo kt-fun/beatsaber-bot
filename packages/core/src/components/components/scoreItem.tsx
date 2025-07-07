@@ -1,6 +1,6 @@
-/** @jsxImportSource react */
+import React from 'react'
 import { BarChart, Key, Star, Wrench } from 'lucide-react'
-import { ScoreSaberItem } from '@/service/api/interfaces/scoresaber'
+import { ScoreSaberItem } from '@/services/api/interfaces/scoresaber'
 
 const diffConv = (diff: string) => {
   if (diff.includes('ExpertPlus')) {

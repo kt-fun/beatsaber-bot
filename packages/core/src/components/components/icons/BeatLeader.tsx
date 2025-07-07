@@ -1,5 +1,5 @@
-/** @jsxImportSource react */
 import { SVGProps } from 'react'
+import React from 'react'
 
 export default function BeatLeaderIcon(props: SVGProps<SVGSVGElement>) {
   return (

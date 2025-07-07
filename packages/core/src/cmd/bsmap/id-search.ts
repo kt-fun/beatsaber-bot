@@ -1,6 +1,6 @@
 
-import { InvalidMapIdError, MapIdNotFoundError } from '@/infra/errors'
-import {CommandBuilder} from "@/interface/cmd/builder";
+import { InvalidMapIdError, MapIdNotFoundError } from '@/services/errors'
+import {CommandBuilder} from "@/interface";
 
 const mapIdReg = /^[a-fA-F0-9]{1,6}$/
 

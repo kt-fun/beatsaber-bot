@@ -1,12 +1,9 @@
-import { CommandBuilder } from "@/interface/cmd/builder"
+import { CommandBuilder } from "@/interface"
 
 export default () =>
   new CommandBuilder()
     .setName('latest')
     .addAlias('bbnew')
-    .addAlias('blnew')
-    .addAlias('ssnew')
-    .addAlias('bsnew')
     .addAlias('/blnew')
     .addAlias('/ssnew')
     .addAlias('/bsnew')

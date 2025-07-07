@@ -5,8 +5,9 @@ import {
 } from '../utils/bl/beatleader'
 import getStatistic from '../utils/bl/stastic'
 import Chart from 'chart.js/auto'
-import { BSOR, Score } from '@/service/api/interfaces/beatleader'
+import { BSOR, Score } from '@/services/api/interfaces/beatleader'
 import { createCanvas } from '@napi-rs/canvas'
+import React from 'react'
 
 export function formatNumber(
   num: number,

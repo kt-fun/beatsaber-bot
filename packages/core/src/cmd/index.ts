@@ -12,12 +12,12 @@ import Bind from './bind'
 import Tmp from './deprecated/tmp'
 import {Command} from "@/interface";
 
-function applyCommand<CHANNEL>(...fns: (() => Command<CHANNEL>)[]) {
+function applyCommand(...fns: (() => Command)[]) {
   return fns.map((fn) => fn())
 }
 
-export const botCommands = <CHANNEL>() =>
-  applyCommand<CHANNEL>(
+export const botCommands = () =>
+  applyCommand(
     IdSearch,
     KeySearch,
     Latest,

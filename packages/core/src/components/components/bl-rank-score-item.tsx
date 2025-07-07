@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import Flags, { EarchIcon } from '@/components/components/flag'
+import React from 'react'
 import { formatDate, numberWithCommas } from '@/components/utils'
 
 interface ScoreItemProps {

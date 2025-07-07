@@ -1,15 +1,8 @@
 const scoresService = null
 const leaderboardService = null
 
-// scoreStatisticEnhancer(songScore)
 const getStatistic = (data: any, scoreId: number, statistic: any) => {
   try {
-    //fetch score stats
-    // stats =
-    // const statistic = leaderboard
-    // 	? await leaderboardService.fetchLeaderboardStats(leaderboard.leaderboardId)
-    // 	: await scoresService.fetchScoreStats(data.id);
-    //
     const beatSavior = {} as any
 
     const stats = statistic.accuracyTracker

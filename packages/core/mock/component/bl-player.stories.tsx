@@ -1,7 +1,9 @@
 // @ts-ignore
-import BLPlayerPage from '../../src/components/pages/bl-player'
+import BLPlayerPage from "../../src/components/pages/bl-player"
+
 import { beatleaderScores } from '../bl-score'
 import { blUser } from '../bl-user'
+
 
 export default {
   component: BLPlayerPage,

@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-beatsaber-bot",
   "description": "一个 用于 BeatSaber 的 koishi Bot 插件",
-  "version": "0.2.0-rc.17",
+  "version": "0.3.0-rc.13",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -68,16 +68,14 @@
     "beatsaber-bot-core": "workspace:*",
     "koishi": "^4.17.7",
     "koishi-plugin-cron": "^3.1.0",
-    "koishi-plugin-puppeteer": "^3.7.3"
+    "koishi-plugin-puppeteer": "^3.7.3",
+    "typeid-js": "^1.2.0"
   },
   "scripts": {
     "typecheck": "tsc",
     "compile": "tsc -p tsconfig.build.json  && tsc-alias",
     "copy-yml-resource": "node scripts/build.mjs",
     "clean": "rm -rf lib  tsconfig.tsbuildinfo",
-    "build": "pnpm run copy-yml-resource && pnpm run compile",
-    "dev": "ts-node dev/index.ts && tsc-alias --debug",
-    "bd": "pnpm run build & pnpm run dev",
-    "kdev": "koishi start dev/koishi.yml"
+    "build": "pnpm run copy-yml-resource && pnpm run compile"
   }
 }

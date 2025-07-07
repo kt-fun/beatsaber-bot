@@ -1,8 +1,8 @@
 import { handleScoreSaberBind } from './bind-scoresaber'
-import { Platform } from '@/interface'
+import { Platform } from '@/utils'
 import { handleBeatLeaderIDBind } from '@/cmd/bind/bind-id-beatleader'
 import { handleBeatSaverIDBind } from '@/cmd/bind/bind-id-beatsaver'
-import {CommandBuilder} from "@/interface/cmd/builder";
+import {CommandBuilder} from "@/interface";
 
 export default () =>
   new CommandBuilder()
