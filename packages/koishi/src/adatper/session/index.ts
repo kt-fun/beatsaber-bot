@@ -27,11 +27,12 @@ export class KoishiBotService
       this.s3 = new S3Service(config.s3)
     }
   }
-  getAgentSessionByChannelInfo(channel: Channel): KoishiSession {
-    const {agent, channelInfo} = this.agentHolder.getAgentByChannel(channel)
+  async getAgentSessionByChannelInfo(channel: Channel): Promise<KoishiSession> {
+    const {agent, channelInfo} = await this.agentHolder.getAgentByChannel(channel)
     if (agent) {
       return new KoishiSession(agent, channelInfo, this.i18n, this.s3)
     }
+
     return undefined
   }
 }

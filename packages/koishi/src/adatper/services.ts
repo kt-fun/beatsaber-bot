@@ -21,7 +21,6 @@ export const createServices = (ctx: Context, cfg: Config, logger: Logger) => {
   const i18n = new I18nService({
     'zh-CN': zhCN,
   })
-  // load local service
   return {
     api,
     render,

@@ -6,8 +6,8 @@ import { createServices } from "./services";
 import {AgentHolder} from "@/adatper/agent";
 
 
-export function loadCmd(ctx: Context, agentHolder: AgentHolder, config: Config) {
-  const registerCmd = registerFn(ctx, agentHolder, config)
+export function loadCmd(ctx: Context, config: Config) {
+  const registerCmd = registerFn(ctx, config)
   getBot(config).commands.map(registerCmd)
   ctx
     .command('bsbot <prompt:string>')
@@ -17,9 +17,10 @@ export function loadCmd(ctx: Context, agentHolder: AgentHolder, config: Config) 
     })
 }
 
-const registerFn = (ctx: Context, agentHolder: AgentHolder, config: Config) => {
+const registerFn = (ctx: Context, config: Config) => {
   const logger = ctx.logger('beats-bot.cmd')
   const services = createServices(ctx, config, logger)
+  const agentHolder = new AgentHolder(ctx)
   return (c: Command) => {
     let cmd = ctx.command(`bsbot.${c.name}`)
     cmd = c.aliases.reduce(
@@ -38,7 +39,7 @@ const registerFn = (ctx: Context, agentHolder: AgentHolder, config: Config) => {
 
     cmd.action(async ({ session, options }, input) => {
       const {user, channel} = await services.db.getUAndGBySessionInfo(session)
-      agentHolder.registerAgentAndChannel(session, channel)
+      await agentHolder.registerAgentAndChannel(session, channel)
       const exclude = [session.uid, session.selfId]
       const [rest, mentions] = await transformInput(session, services.db, input, exclude)
       const lang = session.locales[0]

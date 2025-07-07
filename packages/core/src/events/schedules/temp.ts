@@ -16,8 +16,7 @@ export const LBScoreMonitor = async (c: EventHandlerCtx<Services, Config>) => {
     }),
   ])
   for (const group of channels) {
-    // 获取一个带有 Agent 的 Service
-    const session = c.agentService.getAgentSessionByChannelInfo(group.channel)
+    const session = await c.agentService.getAgentSessionByChannelInfo(group.channel)
     if (!session) {
       continue
     }

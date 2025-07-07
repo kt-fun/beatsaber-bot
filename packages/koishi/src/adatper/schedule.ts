@@ -4,7 +4,8 @@ import { Config, getBot } from "beatsaber-bot-core";
 import { createServices } from "./services";
 import {AgentHolder} from "@/adatper/agent";
 
-export const loadSchedule = (ctx: Context, agentHolder: AgentHolder, config: Config) => {
+export const loadSchedule = (ctx: Context, config: Config) => {
+  const agentHolder = new AgentHolder(ctx)
   const botService = new KoishiBotService(ctx, agentHolder, config)
   const logger = ctx.logger('beatsaber-bot.schedule')
   const services = createServices(ctx, config, logger)

@@ -75,7 +75,7 @@ export class BeatSaverWSHandler<T> implements WSHandler {
     if (restSub.length === 0 && restGroupSubs) return
     const image = this.render.renderMap(bsmap)
     for (const item of restSub) {
-      const session = this.agentService.getAgentSessionByChannelInfo(item.channel)
+      const session = await this.agentService.getAgentSessionByChannelInfo(item.channel)
       if (!session) {
         continue
       }
@@ -87,7 +87,7 @@ export class BeatSaverWSHandler<T> implements WSHandler {
       await session.sendAudioByUrl(bsmap.versions[0].previewURL)
     }
     for (const item of restGroupSubs) {
-      const session = this.agentService.getAgentSessionByChannelInfo(item.channel)
+      const session = await this.agentService.getAgentSessionByChannelInfo(item.channel)
       if (!session) {
         continue
       }

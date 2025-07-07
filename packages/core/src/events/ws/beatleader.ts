@@ -56,7 +56,7 @@ export class BeatleaderWSHandler<T> implements WSHandler {
     if (restSub.length === 0) return
     const img = await this.render.renderScore(data.id.toString())
     for (const item of restSub) {
-      const session = this.agentService.getAgentSessionByChannelInfo(item.channel)
+      const session = await this.agentService.getAgentSessionByChannelInfo(item.channel)
       if (!session) {
         continue
       }

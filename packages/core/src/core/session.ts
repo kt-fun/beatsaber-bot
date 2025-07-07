@@ -25,17 +25,10 @@ export interface PassiveSession extends ISession {
 
 
 export interface AgentService {
-  getAgentSessionByChannelInfo(channel: Channel): PositiveSession
+  getAgentSessionByChannelInfo(channel: Channel): Promise<PositiveSession>
 }
 
 export interface PositiveSession extends ISession {
   channel: Channel
   agent: SessionAgent
 }
-// 例如定时任务。或者监控数据的产生的事件。
-
-// NotificationAgent
-//
-
-
-// 主动Session

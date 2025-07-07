@@ -17,6 +17,10 @@ declare module 'koishi' {
     BSUserPreference: Preference
     BSUser: User
     BSChannel: Channel
+    BSChannel2Agent: {
+      channelId: string
+      agents: any
+    }
   }
 }
 
@@ -137,6 +141,17 @@ export function InitDBModel(ctx: Context) {
     },
     {
       primary: ['id'],
+    }
+  )
+  //
+  ctx.model.extend(
+    'BSChannel2Agent',
+    {
+      channelId: 'string',
+      agents: 'json',
+    },
+    {
+      primary: ['channelId'],
     }
   )
 }
