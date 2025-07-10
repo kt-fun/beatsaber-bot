@@ -8,6 +8,8 @@ const cronSchema = z.object({
 }).optional().default({ enabled: false })
 
 export const configSchema = z.object({
+  promptTimeout: z.number().default(30000).optional(),
+  searchKeyMaxLength: z.number().default(15).optional(),
   s3: s3ConfigSchema.default({ enabled: false }).optional(),
   render: renderSchema,
   beatsaver: z.object({

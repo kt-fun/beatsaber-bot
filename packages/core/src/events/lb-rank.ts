@@ -1,8 +1,6 @@
-import { EventHandlerCtx } from "@/core";
-import { Config } from "@/config";
-import {Services} from "@/interface";
+import { EventContext } from "@/interface";
 
-export const LBScoreMonitor = async (c: EventHandlerCtx<Services, Config>) => {
+export const LBRank = async (c: EventContext) => {
   const channels = await c.services.db.getSubscriptionsByType('lb-rank')
   if (channels.length <= 0) {
     return

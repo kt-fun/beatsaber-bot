@@ -1,0 +1,14 @@
+{
+  "common": {
+    "hello": "你好，我是 bsbot",
+    "ping": "pong",
+    "render": {
+      "wait": "开始渲染啦，请耐心等待 {{sec}} s"
+    }
+  },
+  "ws": {
+    "subscribe": {
+      "update": "Hello {{username}}，你关注的谱师「{{mapperName}}」更新啦！✨"
+    }
+  }
+}

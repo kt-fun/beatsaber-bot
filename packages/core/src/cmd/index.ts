@@ -16,7 +16,7 @@ function applyCommand(...fns: (() => Command)[]) {
   return fns.map((fn) => fn())
 }
 
-export const botCommands = () =>
+export const getCommands = () =>
   applyCommand(
     IdSearch,
     KeySearch,

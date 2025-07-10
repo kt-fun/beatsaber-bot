@@ -35,6 +35,11 @@
       "types": "./dist/types/index.d.ts",
       "require": "./dist/cjs/services/*",
       "import": "./dist/esm/services/*"
+    },
+    "./locales/*": {
+      "types": "./dist/types/index.d.ts",
+      "require": "./dist/cjs/locales/*",
+      "import": "./dist/esm/locales/*"
     }
   },
   "keywords": [
@@ -46,9 +51,9 @@
     "access": "public"
   },
   "dependencies": {
-    "typeid-js": "1.2.0",
     "@aws-sdk/client-s3": "^3.840.0",
     "@ktfun/styled-qr-code-node": "^1.6.5",
+    "@napi-rs/canvas": "^0.1.73",
     "chart.js": "^4.5.0",
     "country-flag-icons": "^1.5.19",
     "dayjs": "^1.11.13",
@@ -58,14 +63,16 @@
     "puppeteer-core": "^24.11.2",
     "react": "^19",
     "react-dom": "^19",
-    "@napi-rs/canvas": "^0.1.73",
+    "typeid-js": "1.2.0",
     "zod": "^3.25.71"
   },
   "scripts": {
     "fix-path-alias": " tsc-alias --outDir dist/cjs && tsc-alias --outDir dist/esm",
-    "copy-yml-resource": "node scripts/build.mjs",
     "up": "tsup",
-    "build": "tsup && pnpm run copy-yml-resource && pnpm run fix-path-alias",
+    "build": "tsup && pnpm run fix-path-alias",
     "pub": "pnpm run build && pnpm publish"
+  },
+  "devDependencies": {
+    "globby": "^14.0.1"
   }
 }

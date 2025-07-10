@@ -1,37 +1,26 @@
-import {interpolate} from "./parser";
-import {interpolateString} from "./util";
 
-const defaultLang = "zh-CN";
+import { translate } from './translate'
+import { merge } from './util'
+import common from '../../locales/zh-CN/common.json'
+import commands from '../../locales/zh-CN/commands.json'
+const defaultLang = 'zh-CN'
 
-export const createTranslator = (translateObject: object) => {
-  return (path: string, params = {}, lang = defaultLang) => _translate(translateObject, path, params, lang)
-}
-const _translate = (
-  translateObject: object,
-  path: string,
-  params = {},
-  lang = defaultLang
-) => {
+export class I18nService {
+  private resources: Record<string, any> = {}
 
-  console.log("translate", path, params, lang)
-  const keys = path.split('.')
-  let result = translateObject[lang]
-  if(!result) {
-    return null
+  constructor() {
+    this.addResources(defaultLang, common)
+    this.addResources(defaultLang, commands)
   }
-  for (const key of keys) {
-    if (result[key] !== undefined) {
-      result = result[key]
-    } else {
-      return null
+
+  public addResources(locale: string, data: object) {
+    if (!this.resources[locale]) {
+      this.resources[locale] = {}
     }
+    merge(this.resources[locale], data)
   }
-  try {
-    if (typeof result === 'string') {
-      return interpolate(result, params)
-    }
-  } catch (e) {
-    return interpolateString(result, params)
+
+  public tran(path: string, params = {}, lang = defaultLang): string {
+    return translate(this.resources, path, params, lang)
   }
-  return null
 }

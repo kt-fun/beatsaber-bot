@@ -1,8 +1,11 @@
 import {DB} from "@/interface/db";
-import {APIService, I18nService, RenderService} from "@/services";
+import {APIService, RenderService} from "@/services";
 import {CommandBuilder as _CommandBuilder, CmdContext as _CmdContext, Command as _Command} from "@/core";
+import { EventHandlerCtx as _EventCtx } from "@/core/event";
 import {Config} from "@/config";
 import {S3Service} from "@/common/s3";
+import {I18nService} from "@/common/i18n";
+import type {LRUCache} from "lru-cache";
 export * from './db'
 
 export type Services = {
@@ -11,15 +14,13 @@ export type Services = {
   render: RenderService,
   i18n: I18nService,
   s3: S3Service
+  cache: LRUCache<string, any>
 }
 
-export class CommandBuilder<T, OPT = unknown> extends _CommandBuilder<Services, Config, OPT> {
-  // static create(name: string) {
-  //   return _CommandBuilder.create<Services<any>, Config, {}>(name)
-  // }
+export class CommandBuilder< OPT = unknown> extends _CommandBuilder<Services, Config, OPT> {
 }
 
 export type CmdContext<O = unknown> = _CmdContext<Services, Config, O>
-
+export type EventContext<DATA = unknown> = _EventCtx<Services, Config, DATA>
 export type Command<O = unknown> = _Command<Services, Config, O>
 export * from '@/core/session'

@@ -8,8 +8,8 @@ export default () =>
     .setDescription('search beatmap by keyword')
     .setExecutor(async (c) => {
       let key = c.input
-      if (key.length > 15) {
-        key = key.slice(0, 15)
+      if (key.length > c.config.searchKeyMaxLength) {
+        key = key.slice(0, c.config.searchKeyMaxLength)
         c.session.sendQuote(
           c.session.text('commands.bsbot.search.too-long-key', { key })
         )
