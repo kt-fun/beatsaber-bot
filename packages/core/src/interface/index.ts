@@ -10,11 +10,11 @@ export * from './db'
 
 export type Services = {
   db: DB,
-  api: APIService,
   render: RenderService,
+  api: APIService,
   i18n: I18nService,
   s3: S3Service
-  cache: LRUCache<string, any>
+  cache: LRUCache<{},{}>
 }
 
 export class CommandBuilder< OPT = unknown> extends _CommandBuilder<Services, Config, OPT> {

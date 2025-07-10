@@ -1,14 +1,15 @@
 import {Context, Session, } from "koishi";
-import { KoishiDB, } from "./db";
-import { KSession } from './session'
-import { Config, getBot, Command, User } from "beatsaber-bot-core";
-import { createServices } from "./services";
-import {AgentHolder} from "@/adatper/agent";
+import { KoishiDB, } from "../support/db";
+import { KSession } from '../support/session'
+import { Config, Command, User } from "beatsaber-bot-core";
+import { createServices } from "../support/services";
+import {AgentHolder} from "../support/agent";
+import {getCommands} from "beatsaber-bot-core";
 
 
 export function loadCmd(ctx: Context, config: Config) {
   const registerCmd = registerFn(ctx, config)
-  getBot(config).commands.map(registerCmd)
+  getCommands().map(registerCmd)
   ctx
     .command('bsbot <prompt:string>')
     .alias('bb')

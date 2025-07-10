@@ -5,13 +5,13 @@ import { EventHandlerRegistry } from "@/core/event-handler-registry";
 
 import {Config} from "@/config";
 import { EventContext } from "@/interface";
-type Ctx = Pick<EventContext, 'config'| 'logger' | 'services' | 'agentService'>
+type Ctx = Pick<EventContext, 'config' | 'services' | 'agentService'>
 
 export type ScheduleEventHandler = {
   type: 'schedule',
   handler: (ctx: EventContext) => Promise<void>
   handlerId: string
-  data?: string
+  cron?: string
   enabled?: boolean
 }
 
@@ -29,7 +29,7 @@ export const getEventHandlers = (config: Config, ctx: Ctx) => {
       type: 'schedule' as const,
       handlerId: 'lb-rank',
       handler: LBRank,
-      data: config.cron.temp?.cron,
+      cron: config.cron.temp?.cron,
       enabled: config.cron.temp?.enabled
     },
     {

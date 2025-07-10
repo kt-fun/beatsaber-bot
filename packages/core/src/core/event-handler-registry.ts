@@ -1,4 +1,5 @@
 import {EventHandlerCtx} from "./event";
+import {Logger} from "@/core/logger";
 
 
 type EventHandler<Service = unknown, Config = unknown, T = unknown> = {
@@ -10,11 +11,14 @@ type EventHandler<Service = unknown, Config = unknown, T = unknown> = {
 
 type Event<T> = {
   type: string,
-  handlerId?: string,
+  handlerId: string,
   data: T
+  ctx?: {
+    logger?: Logger,
+  }
 }
 
-type Ctx = Pick<EventHandlerCtx<unknown, unknown, unknown>, 'config'| 'logger' | 'services' | 'agentService'>
+type Ctx = Pick<EventHandlerCtx<unknown, unknown, unknown>, 'config' | 'services' | 'agentService'>
 
 export class EventHandlerRegistry {
   private handlers: EventHandler[] = []
@@ -33,12 +37,14 @@ export class EventHandlerRegistry {
   }
 
   handleEvent<T>(event: Event<T>) {
-    const handler = this.getHandlerById(event.type)
+    const handler = this.getHandlerById(event.handlerId)
     if(!handler) return
     return handler.handler({
       type: handler.type,
       data: event.data,
-      ...this.ctx
+      logger: event.ctx.logger,
+      ...this.ctx,
+      services: this.ctx.services,
     })
   }
 }
