@@ -1,5 +1,5 @@
-import { PassiveSession, User } from "beatsaber-bot-core";
-import {Options, TestSession} from "./session.js";
+import type { PassiveSession, User } from "@/index";
+import {Options, TestSession} from "./session";
 
 export class TestPassiveSession extends TestSession implements PassiveSession {
   index: number = 0

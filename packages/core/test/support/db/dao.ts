@@ -10,10 +10,10 @@ import {
 } from './schema.js';
 import {BetterSQLite3Database} from "drizzle-orm/better-sqlite3";
 import {eq, and, inArray, count, sql} from 'drizzle-orm';
-import type {DB, Subscription, SubWithGroupRes, SubDetailWithGroupRes, SubInfoRes} from "beatsaber-bot-core";
+import type {DB, Subscription, SubWithGroupRes, SubDetailWithGroupRes, SubInfoRes} from "@/index";
 
 // 定义 schema 类型，方便在类中使用
-type DrizzleSchema = typeof import('./schema.js');
+type DrizzleSchema = typeof import('./schema');
 type DrizzleDb = BetterSQLite3Database<DrizzleSchema>;
 
 // 定义一些来自您代码的、但未在此处定义的类型，以便代码能够通过类型检查

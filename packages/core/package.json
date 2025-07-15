@@ -72,11 +72,13 @@
     "fix-path-alias": " tsc-alias --outDir dist/cjs && tsc-alias --outDir dist/esm",
     "up": "tsup",
     "build": "tsup && pnpm run fix-path-alias",
-    "pub": "pnpm run build && pnpm publish"
+    "pub": "pnpm run build && pnpm publish",
+    "test": "vitest "
   },
   "devDependencies": {
     "js-yaml": "^4.1.0",
     "better-sqlite3": "^12.2.0",
+    "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.4",
     "@faker-js/faker": "^9.9.0",
     "globby": "^14.0.1",

@@ -1,7 +1,7 @@
-import {migrateDB} from "../support/db/init-db.js";
-import {getDB, loadDB} from "../support/db/db.js";
-import * as tables from '../support/db/schema.js'
-import { User, Channel, Account, Subscription, SubscriptionMember } from "beatsaber-bot-core";
+import {migrateDB} from "~/support/db/init-db";
+import {getDB, loadDB} from "~/support/db/db";
+import * as tables from '~/support/db/schema'
+import { User, Channel, Account, Subscription, SubscriptionMember } from "@/index";
 import {faker} from "@faker-js/faker";
 
 const now = new Date()

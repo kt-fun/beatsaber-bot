@@ -1,4 +1,4 @@
-import {Channel, PositiveSession } from "beatsaber-bot-core";
+import type { Channel, PositiveSession } from "@/index";
 import {TestPositiveSession} from "./positive-session.js";
 
 export class TestAgentService {

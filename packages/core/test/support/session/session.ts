@@ -1,4 +1,4 @@
-import {I18nService, User, Channel, S3Service, SessionAgent} from "beatsaber-bot-core";
+import {I18nService, User, Channel, S3Service, SessionAgent} from "@/index";
 import path from "node:path";
 import fs from "node:fs/promises";
 

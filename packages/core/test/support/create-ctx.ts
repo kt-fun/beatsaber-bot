@@ -1,10 +1,10 @@
-import {Channel, getBot, User, getCommands } from "beatsaber-bot-core"
-import { Config, Logger, RenderService, APIService } from "beatsaber-bot-core";
-import { createCommonService } from "beatsaber-bot-core";
-import {channels, seed, users} from "../mock/data.js";
-import {loadConfigFromFile} from "./config.js";
-import {TestAgentService} from "./session/agent.js";
-import {TestPassiveSession} from "./session/passive-session.js";
+import type { Channel, User, Config, Logger } from "@/index";
+import {  getBot, createCommonService, getCommands, RenderService, APIService } from "@/index";
+import {channels, seed, users} from "~/mock/data";
+import {loadConfigFromFile} from "./config";
+import {TestAgentService} from "./session/agent";
+import {TestPassiveSession} from "./session/passive-session";
+
 import path from "path";
 
 const mockImageRender = {

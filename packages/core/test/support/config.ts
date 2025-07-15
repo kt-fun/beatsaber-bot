@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
-import { configSchema } from "beatsaber-bot-core";
+import { configSchema } from "@/config";
 
 function isObject(item: any): item is Record<string, any> {
   return item && typeof item === 'object' && !Array.isArray(item);
