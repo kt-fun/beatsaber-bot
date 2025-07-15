@@ -65,9 +65,8 @@ export function InitDBModel(ctx: Context) {
         type: 'json',
         required: false,
       },
-      lastModifiedAt: 'timestamp',
       createdAt: 'timestamp',
-      lastRefreshAt: 'timestamp',
+      updatedAt: 'timestamp',
     },
     {
       primary: ['id'],

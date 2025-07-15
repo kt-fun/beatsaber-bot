@@ -10,7 +10,7 @@ type EventHandler<Service = unknown, Config = unknown, T = unknown> = {
 }
 
 type Event<T> = {
-  type: string,
+  type?: string,
   handlerId: string,
   data: T
   ctx?: {

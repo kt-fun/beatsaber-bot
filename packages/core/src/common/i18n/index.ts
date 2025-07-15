@@ -1,8 +1,8 @@
 
 import { translate } from './translate'
 import { merge } from './util'
-import common from '../../locales/zh-CN/common.json'
-import commands from '../../locales/zh-CN/commands.json'
+import common from '../../locales/zh-CN/common.json' with { type: 'json' }
+import commands from '../../locales/zh-CN/commands.json' with { type: 'json' }
 const defaultLang = 'zh-CN'
 
 export class I18nService {

@@ -16,7 +16,7 @@ export default () =>
     .addAlias('subbs', { options: { type: 'beatsaver' } })
     .addAlias('subbl', { options: { type: 'beatleader' } })
     .addAlias('submapper', { options: { type: 'bsmapper' } })
-    .addOption('type', 'type:string')
+    .addOption('t', 'type:string')
     .setDescription('clear an auth account relate info')
     .setExecutor(async (c) => {
       // check admin permission
@@ -24,12 +24,12 @@ export default () =>
       //   return alert(c)
       // }
 
-      if (c.options.type === 'beatsaver') {
+      if (c.options.t === 'beatsaver') {
         if (c.input) return idBeatsaverMapper(c)
         return beatsaver(c)
       }
 
-      if (c.options.type === 'beatleader') {
+      if (c.options.t === 'beatleader') {
         return beatleader(c)
       }
 

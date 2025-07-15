@@ -23,7 +23,8 @@ export type WSEventHandler = {
   enabled?: boolean
 }
 
-export const getEventHandlers = (config: Config, ctx: Ctx) => {
+export const getEventHandlers = (ctx: Ctx) => {
+  const config = ctx.config
   const handlers = [
     {
       type: 'schedule' as const,

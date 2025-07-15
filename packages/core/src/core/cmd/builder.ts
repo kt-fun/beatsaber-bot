@@ -1,5 +1,6 @@
 import type { CmdAlias, CmdContext, CmdExecutor, CmdOption, OptionType, Extend } from './type'
 import { BizError } from '../error'
+import {typeid} from "typeid-js";
 
 export class CommandBuilder<Service, Config, OPT extends {} = {}> {
   private name: string
@@ -39,6 +40,7 @@ export class CommandBuilder<Service, Config, OPT extends {} = {}> {
     const that = this
     const errorHandler = (executor: CmdExecutor<Service, Config, OPT>) => {
       return async (c: CmdContext<Service, Config, OPT>) => {
+        const traceId = typeid('trace').toString()
         try {
           await executor(c)
         } catch (e: any) {
@@ -49,8 +51,8 @@ export class CommandBuilder<Service, Config, OPT extends {} = {}> {
               `unexpectError occur during cmd 「${that.name}」executing`,
               e
             )
-            c.session.send(
-              'An unexpected error occurs, reporting it may help to fix it.'
+            await c.session.send(
+              c.session.text('command.error.unknown-error', { traceId }),
             )
           }
         }

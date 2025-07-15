@@ -73,7 +73,7 @@ export class KoishiDB implements DB {
     const rows = await this.db
       .join(
         ['BSSubscription', 'BSSubscriptionMember'],
-        (s, m) => $.and($.eq(s.id, m.subscribeId)),
+        (s, m) => $.and($.eq(s.id, m.subscriptionId)),
         [false, true]
       )
       .where((r) => {
@@ -134,7 +134,7 @@ export class KoishiDB implements DB {
     id: string
   ): Promise<void> {
     await this.db.remove('BSSubscriptionMember', {
-      subscribeId: subId,
+      subscriptionId: subId,
       memberId: id,
     })
   }
@@ -221,7 +221,7 @@ export class KoishiDB implements DB {
           $.and(
             $.eq(BSRelateAccount.userId, BSUser.id),
             $.eq(BSRelateAccount.userId, BSSubscriptionMember.memberId),
-            $.eq(BSSubscription.id, BSSubscriptionMember.subscribeId),
+            $.eq(BSSubscription.id, BSSubscriptionMember.subscriptionId),
             $.eq(BSChannel.id, BSSubscription.channelId)
           )
       )
@@ -293,7 +293,7 @@ export class KoishiDB implements DB {
           providerId: `koishi:${c.platform}`,
           accountId: c.uid,
           createdAt: now,
-          lastModifiedAt: now
+          updatedAt: now
         })
       }
       const [channel] = await tx.get('BSChannel', (r) =>

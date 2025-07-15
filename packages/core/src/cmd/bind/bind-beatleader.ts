@@ -38,8 +38,7 @@ export const handleBeatLeaderBind = async (c: CmdContext) => {
     metadata: {},
     accessToken: token.access_token,
     refreshToken: token.refresh_token,
-    lastModifiedAt: now,
-    lastRefreshAt: now,
+    updatedAt: now,
     createdAt: now,
     type: 'oauth',
   }

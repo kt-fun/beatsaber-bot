@@ -22,6 +22,6 @@ export default () =>
           }
         }),
       ])
-      c.session.sendImgBuffer(hit, 'image/png')
-      c.session.sendImgBuffer(score, 'image/png')
+      await c.session.sendImgBuffer(hit, 'image/png')
+      await c.session.sendImgBuffer(score, 'image/png')
     })

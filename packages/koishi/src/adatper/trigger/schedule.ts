@@ -15,7 +15,7 @@ export const loadSchedule = (ctx: Context, config: Config) => {
     services,
     agentService: botService
   }
-  const eventHandlers = getBot(config, baseCtx).eventHandlers
+  const eventHandlers = getBot(baseCtx).eventHandlers
     const tasks = eventHandlers.getHandlersByType<ScheduleEventHandler>('schedule')
     .filter((handler) => handler.enabled && handler.cron)
 

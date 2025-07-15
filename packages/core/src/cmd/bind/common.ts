@@ -49,8 +49,7 @@ export const handleIdBinding = async (
     accountId: player.id.toString(),
     providerUsername: player.name,
     metadata: {},
-    lastModifiedAt: now,
-    lastRefreshAt: now,
+    updatedAt: now,
     createdAt: now,
     type: 'id',
   }

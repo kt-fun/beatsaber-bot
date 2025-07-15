@@ -35,7 +35,7 @@ export default defineConfig((options) => {
     sourcemap: true,
     clean: true,
     outExtension: (ctx) => {
-      return { js: '.js' };
+      return { js: '.js', dts: '.d.ts' };
     },
     ...options,
   }
@@ -44,6 +44,7 @@ export default defineConfig((options) => {
     // types
     {
       ...commonOptions,
+      format: ['esm'],
       entry: ["src/index.ts"],
       outDir: './dist/types/',
       dts: {

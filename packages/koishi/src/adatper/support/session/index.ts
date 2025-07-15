@@ -1,7 +1,7 @@
 import { Bot, Context } from 'koishi'
 import { KoishiSession } from './schedule-session'
 import {Config, I18nService, AgentService, S3Service, Channel} from "beatsaber-bot-core";
-import {AgentHolder} from "@/adatper/agent";
+import {AgentHolder} from "../agent";
 declare module 'koishi' {
   interface Context {
     bots: Bot[]

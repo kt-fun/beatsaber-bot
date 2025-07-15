@@ -19,3 +19,4 @@ tsconfig.tsbuildinfo
 *.njsproj
 *.sln
 test-case.yml
+config.yml

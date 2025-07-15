@@ -8,19 +8,19 @@ export default () =>
     .addAlias('/joinbs', { options: { type: 'beatsaver' } })
     .addAlias('bljoin', { options: { type: 'beatleader' } })
     .addAlias('bsjoin', { options: { type: 'beatsaver' } })
-    .addOption('type', 'type:string')
+    .addOption('t', 'type:string')
     .setDescription('')
     .setExecutor(async (c) => {
       const { blSub, bsMapSub } = await c.services.db.getSubscriptionsByGID(
         c.session.channel.id
       )
-      if (c.options.type === 'beatleader') {
+      if (c.options.t === 'beatleader') {
         if (!blSub) {
           // create blSub?
           throw new SubscriptionNotExistError('beatleader-score')
         }
         const data = {
-          subscribeId: blSub.id,
+          subscriptionId: blSub.id,
           memberUid: c.session.user.id,
           joinedAt: new Date(),
         }
@@ -28,12 +28,12 @@ export default () =>
         await c.session.sendQuote(
           c.session.text('commands.bsbot.subscribe.join.success.beatleader')
         )
-      } else if (c.options.type === 'beatsaver') {
+      } else if (c.options.t === 'beatsaver') {
         if (!bsMapSub) {
           throw new SubscriptionNotExistError('beatsaver-map')
         }
         const data = {
-          subscribeId: bsMapSub.id,
+          subscriptionId: bsMapSub.id,
           memberUid: c.session.user.id,
           joinedAt: new Date(),
         }

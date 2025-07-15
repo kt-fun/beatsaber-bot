@@ -76,7 +76,7 @@ export function loadWS(ctx: Context, cfg: Config) {
     agentService: botService
   }
 
-  const eventHandlerRegistry = getBot(cfg, baseCtx).eventHandlers
+  const eventHandlerRegistry = getBot(baseCtx).eventHandlers
   const eventHandlers = eventHandlerRegistry.getHandlersByType<WSEventHandler>('websocket')
   const wss = []
   for(const handler of eventHandlers) {

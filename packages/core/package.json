@@ -10,6 +10,7 @@
     "name": "ktKongTong",
     "email": "kt@ktlab.io"
   },
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
@@ -67,12 +68,19 @@
     "zod": "^3.25.71"
   },
   "scripts": {
+    "db:gen": "drizzle-kit generate",
     "fix-path-alias": " tsc-alias --outDir dist/cjs && tsc-alias --outDir dist/esm",
     "up": "tsup",
     "build": "tsup && pnpm run fix-path-alias",
     "pub": "pnpm run build && pnpm publish"
   },
   "devDependencies": {
-    "globby": "^14.0.1"
+    "js-yaml": "^4.1.0",
+    "better-sqlite3": "^12.2.0",
+    "vitest": "^3.2.4",
+    "@faker-js/faker": "^9.9.0",
+    "globby": "^14.0.1",
+    "drizzle-kit": "^0.31.4",
+    "drizzle-orm": "^0.44.3"
   }
 }

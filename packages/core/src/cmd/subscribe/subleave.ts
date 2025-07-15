@@ -8,7 +8,7 @@ export default () =>
     .addAlias('/leavebs', { options: { type: 'beatsaver' } })
     .addAlias('leavebl', { options: { type: 'beatleader' } })
     .addAlias('leavebs', { options: { type: 'beatsaver' } })
-    .addOption('type', 'type:string')
+    .addOption('t', 'type:string')
     .setDescription('')
     .setExecutor(async (c) => {
       // getUserJoinedGroupMember
@@ -16,7 +16,7 @@ export default () =>
         c.session.channel.id,
         c.session.user.id
       )
-      if (c.options.type === 'beatleader') {
+      if (c.options.t === 'beatleader') {
         const blSub = subs.find((it) => it.subscription.type == 'beatleader-score')
         if (!blSub?.me) {
           return c.session.sendQuote(
@@ -32,7 +32,7 @@ export default () =>
         await c.session.sendQuote(
           c.session.text('commands.bsbot.subscribe.leave.success.beatleader')
         )
-      } else if (c.options.type === 'beatsaver') {
+      } else if (c.options.t === 'beatsaver') {
         const bsSub = subs.find((it) => it.subscription.type == 'beatsaver-map')
         if (!bsSub?.me) {
           await c.session.sendQuote(

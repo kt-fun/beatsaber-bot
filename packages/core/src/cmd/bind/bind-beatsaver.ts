@@ -31,8 +31,8 @@ export const handleBeatSaverBind = async (c: CmdContext) => {
     scope: 'identity,alerts',
     accessToken: token.access_token,
     refreshToken: token.refresh_token,
-    lastModifiedAt: now,
-    lastRefreshAt: now,
+    updatedAt: now,
+    createdAt: now,
     type: 'oauth',
   }
   await c.services.db.addUserBindingInfo(account)

@@ -13,13 +13,13 @@ export default () =>
     .addAlias('/unsubbs', { options: { type: 'beatsaver' } })
     .addAlias('unsubbl', { options: { type: 'beatleader' } })
     .addAlias('unsubbs', { options: { type: 'beatsaver' } })
-    .addOption('type', 'type:string')
+    .addOption('t', 'type:string')
     .setDescription('')
     .setExecutor(async (c) => {
       const { blSub, bsMapSub, bsAlertSub } = await c.services.db.getSubscriptionsByGID(
         c.session.channel.id
       )
-      if (c.options.type === 'beatleader') {
+      if (c.options.t === 'beatleader') {
         if (!blSub) {
           throw new SubscriptionNotExistError('beatleader-score')
         }
@@ -30,7 +30,7 @@ export default () =>
         )
       }
 
-      if (c.options.type === 'beatsaver') {
+      if (c.options.t === 'beatsaver') {
         if (c.input) {
           await unsubIDBSMapper(c)
           return
@@ -46,7 +46,7 @@ export default () =>
         )
       }
 
-      if (c.options.type === 'alert') {
+      if (c.options.t === 'alert') {
         if (!bsAlertSub) {
           throw new SubscriptionNotExistError('beatsaver-alert')
         }

@@ -45,8 +45,7 @@ export interface Account<T = any> {
   refreshTokenExpiresAt?: Date
   idToken?: string
   metadata?: T
-  lastModifiedAt: Date
-  lastRefreshAt: Date
+  updatedAt: Date
   createdAt: Date
 }
 
@@ -61,7 +60,7 @@ export interface Subscription {
 }
 
 export interface SubscriptionMember {
-  subscribeId: string
+  subscriptionId: string
   memberId: string
   subscribeData: any
   createdAt: Date

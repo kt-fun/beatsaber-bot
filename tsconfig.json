@@ -1,12 +1,4 @@
 {
   "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "baseUrl": "./packages",
-    "paths": {
-      "@beatsaber-bot/core": ["core/src"],
-      "@beatsaber-bot/koishi": ["koishi/src"],
-      "@beatsaber-bot/discord": ["discord/src"]
-    }
-  },
   "include": ["**/*", ".*.js"]
 }
