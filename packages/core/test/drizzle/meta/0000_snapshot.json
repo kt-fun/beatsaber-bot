@@ -1,22 +1,29 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "f99c03aa-e087-4fc3-84ff-36538ba25e34",
+  "id": "0aa7108c-d8ea-4951-8027-ae83100038c3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "BSRelateAccount": {
-      "name": "BSRelateAccount",
+    "account": {
+      "name": "account",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": true
+          "autoincrement": false
         },
-        "uid": {
-          "name": "uid",
-          "type": "integer",
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "provider_id": {
+          "name": "provider_id",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -28,67 +35,67 @@
           "notNull": true,
           "autoincrement": false
         },
-        "platform": {
-          "name": "platform",
+        "provider_name": {
+          "name": "provider_name",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "platformUname": {
-          "name": "platformUname",
+        "account_id": {
+          "name": "account_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "platformUid": {
-          "name": "platformUid",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "platformScope": {
-          "name": "platformScope",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "accessToken": {
-          "name": "accessToken",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "refreshToken": {
-          "name": "refreshToken",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "otherPlatformInfo": {
-          "name": "otherPlatformInfo",
+        "scope": {
+          "name": "scope",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "lastModifiedAt": {
-          "name": "lastModifiedAt",
-          "type": "integer",
+        "access_token": {
+          "name": "access_token",
+          "type": "text",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
-        "lastRefreshAt": {
-          "name": "lastRefreshAt",
+        "access_token_expires_at": {
+          "name": "access_token_expires_at",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "refresh_token": {
+          "name": "refresh_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "refresh_token_expires_at": {
+          "name": "refresh_token_expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "id_token": {
+          "name": "id_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "metadata": {
+          "name": "metadata",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "status": {
@@ -97,62 +104,17 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "BSRelateChannelInfo": {
-      "name": "BSRelateChannelInfo",
-      "columns": {
-        "id": {
-          "name": "id",
+        },
+        "updated_at": {
+          "name": "updated_at",
           "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "type": {
-          "name": "type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "platform": {
-          "name": "platform",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "selfId": {
-          "name": "selfId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "channelId": {
-          "name": "channelId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "uid": {
-          "name": "uid",
-          "type": "text",
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -169,20 +131,20 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": true,
           "notNull": true,
-          "autoincrement": true
+          "autoincrement": false
         },
-        "gid": {
-          "name": "gid",
-          "type": "integer",
+        "channel_id": {
+          "name": "channel_id",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "enable": {
-          "name": "enable",
+        "enabled": {
+          "name": "enabled",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
@@ -202,8 +164,15 @@
           "notNull": false,
           "autoincrement": false
         },
-        "time": {
-          "name": "time",
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
@@ -219,29 +188,36 @@
     "BSSubscribeMember": {
       "name": "BSSubscribeMember",
       "columns": {
-        "subscribeId": {
-          "name": "subscribeId",
-          "type": "integer",
+        "subscribe_id": {
+          "name": "subscribe_id",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "memberUid": {
-          "name": "memberUid",
-          "type": "integer",
+        "member_id": {
+          "name": "member_id",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "subscribeData": {
-          "name": "subscribeData",
+        "subscribe_data": {
+          "name": "subscribe_data",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "joinedAt": {
-          "name": "joinedAt",
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
@@ -251,12 +227,12 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {
-        "BSSubscribeMember_subscribeId_memberUid_pk": {
+        "BSSubscribeMember_subscribe_id_member_id_pk": {
           "columns": [
-            "subscribeId",
-            "memberUid"
+            "subscribe_id",
+            "member_id"
           ],
-          "name": "BSSubscribeMember_subscribeId_memberUid_pk"
+          "name": "BSSubscribeMember_subscribe_id_member_id_pk"
         }
       },
       "uniqueConstraints": {},
@@ -267,14 +243,14 @@
       "columns": {
         "uid": {
           "name": "uid",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "gid": {
           "name": "gid",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -298,6 +274,89 @@
           "name": "BSUserPreference_uid_gid_pk"
         }
       },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "channel": {
+      "name": "channel",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "channel_id": {
+          "name": "channel_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "provider_id": {
+          "name": "provider_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "user": {
+      "name": "user",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
     }

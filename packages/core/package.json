@@ -68,7 +68,7 @@
     "zod": "^3.25.71"
   },
   "scripts": {
-    "db:gen": "drizzle-kit generate",
+    "db:gen": "drizzle-kit generate --config test/drizzle.config.ts",
     "fix-path-alias": " tsc-alias --outDir dist/cjs && tsc-alias --outDir dist/esm",
     "up": "tsup",
     "build": "tsup && pnpm run fix-path-alias",
