@@ -73,7 +73,7 @@
     "up": "tsup",
     "build": "tsup && pnpm run fix-path-alias",
     "pub": "pnpm run build && pnpm publish",
-    "test": "vitest "
+    "test": "vitest --silent=false --watch=false"
   },
   "devDependencies": {
     "js-yaml": "^4.1.0",

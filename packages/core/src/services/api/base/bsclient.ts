@@ -83,7 +83,7 @@ export class BeatSaverClient {
 
   async refreshOAuthToken(rk: string) {
     return this.f.post<OAuthTokenResponse>(
-      'https://beatsaver.com/api/oauth2/token',
+      '/oauth2/token',
       {
         form: {
           client_id: this.opt.client_id,

@@ -5,7 +5,7 @@ export const account = sqliteTable('account', {
   userId: text('user_id').notNull(),
   providerId: text('provider_id').notNull(),
   type: text('type').notNull(),
-  providerName: text('provider_name').notNull(),
+  providerUsername: text('provider_name').notNull(),
   accountId: text('account_id').notNull(),
   scope: text('scope'),
   accessToken: text('access_token'),

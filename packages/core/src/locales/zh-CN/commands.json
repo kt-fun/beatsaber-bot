@@ -76,16 +76,6 @@
           "p": "查询的平台，ss 代表 scoresaber，默认为 beatleader"
         }
       },
-      "me": {
-        "description": "用于查询自己绑定用户对应的 BeatLeader/ScoreSaber 面板",
-        "usage": "输入 bbme，如果已经绑定了ScoreSaber Id（也就是 steam 的用户 Id），会查询该用户在对应平台的top 24 首 rank 谱面打分，并生成渲染图。",
-        "examples": "示例\nbsbot.me\nbbme\nbbme -p ss",
-        "options": {
-          "p": "查询的平台，ss 代表 scoresaber，默认为 beatleader"
-        },
-        "not-found": "Ops，似乎还没有绑定到 ScoreSaber 或 BeatLeader",
-        "score-not-found": "😯，没有找到用户「{{user}}」谱面「{{id}} ({{mode ? '{{mode}}' : '' }} {{diff ? '-{{diff}}' : '' }})」的BL打分数据"
-      },
       "bind": {
         "description": "绑定自己的 ScoreSaberId（也就是 steam 的用户 Id，仅公开信息，无需验证）",
         "usage": "输入 bbbind，后接 userId，按照提示即可绑定",
@@ -117,7 +107,9 @@
         "usage": "1. bbscore 加上 beatleader 的 scoreId，即可生成渲染图。\n2. bbscore 加上 Beatsaver 的 mapId，即可查询自己绑定的Bealeader账号关于该谱面的最高打分，并生成渲染图\n3. bbscore 加上 Beatsaver 的 mapId 并@某人，即可查询该用户绑定的Bealeader账号关于该谱面的最高打分，并生成渲染图",
         "examples": "示例\nbsbot.score 13887221\nbbscore 33b62\nbbscore 33b62@someone",
         "not-a-score-id": "似乎不是一个 score ID",
+        "not-found": "Ops，似乎还没有绑定到 ScoreSaber 或 BeatLeader",
         "not-bind": "你还没有绑定哦，使用 bind 指令进行绑定吧",
+        "score-not-found": "😯，没有找到用户「{{user}}」谱面「{{id}} ({{mode ? '{{mode}}' : '' }} {{diff ? '-{{diff}}' : '' }})」的BL打分数据",
         "who-not-bind": "你要查询的ta，还没有绑定哦"
       },
       "search": {

@@ -5,7 +5,7 @@ export class ScoreNotFoundError extends BizError {
   constructor(params?: any) {
     super('ScoreNotFoundError')
     this.name = 'ScoreNotFoundError'
-    this.id = 'commands.bsbot.me.score-not-found'
+    this.id = 'commands.bsbot.score.score-not-found'
     this.params = params
   }
 }
@@ -18,19 +18,21 @@ export class AccountBindingNotFoundError extends BizError {
     this.params = params
   }
 }
+
 export class UnknownUserIDError extends BizError {
   constructor(params?: any) {
     super('UnknownUserIDError')
     this.name = 'UnknownUserIDError'
-    this.id = 'commands.bsbot.me.not-found'
+    this.id = 'common.account.not-found'
     this.params = params
   }
 }
+
 export class InvalidMapIdError extends BizError {
   constructor(params?: any) {
     super('InvalidMapIdError')
     this.name = 'InvalidMapIdError'
-    this.id = 'commands.bsbot.id.error-map-id'
+    this.id = 'common.beatsaver.error-map-id'
     this.params = params
   }
 }
@@ -39,7 +41,7 @@ export class MapIdNotFoundError extends BizError {
   constructor(params?: any) {
     super('MapIdNotFoundError')
     this.name = 'MapIdNotFoundError'
-    this.id = 'commands.bsbot.id.not-found'
+    this.id = 'common.beatsaver.not-found'
     this.params = params
   }
 }

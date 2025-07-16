@@ -17,7 +17,7 @@ const getAccount = ({userId, accountId, providerId}) => {
   return {
     id: faker.string.uuid(),
     type: 'id',
-    providerName: faker.person.fullName(),
+    providerUsername: faker.person.fullName(),
     status: 'ok',
     accountId,
     providerId,
@@ -34,8 +34,10 @@ const accounts = [
   // bind both
   getAccount({userId: '1', accountId: '58338', providerId: 'beatsaver' }),
   getAccount({userId: '1', accountId: '1922350521131465', providerId: 'beatleader' }),
+  getAccount({userId: '1', accountId: '1922350521131465', providerId: 'scoresaber' }),
   // only bind beatsaver
   getAccount({userId: '2', accountId: '41378', providerId: 'beatsaver' }),
+  getAccount({userId: '2', accountId: '76561198988695829', providerId: 'scoresaber' }),
   // only beatleader
   getAccount({userId: '3', accountId: '76561198960449289', providerId: 'beatleader' }),
 ]

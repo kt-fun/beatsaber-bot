@@ -8,7 +8,7 @@ export const createFetch = (logger: Logger) => {
   return ofetch.extend({
     onRequest: (context) => {
       logger.debug(`[fetch -->] ${context.options.baseURL}${context.request}`)
-      logger.debug(`[fetch -->] ${JSON.stringify(context.options, null, 2)}`)
+      logger.debug(`[fetch -->] ${JSON.stringify(context.options, null)}`)
     },
     onResponse: (context) => {
       logger.debug(`[fetch <--] ${context.request} ${context.response.status}`)
@@ -17,7 +17,7 @@ export const createFetch = (logger: Logger) => {
           logger.debug(`[fetch <--] ${context.response._data}`)
           break
         case "json":
-          logger.debug(`[fetch -->] ${JSON.stringify(context.response._data, null, 2)}`)
+          logger.debug(`[fetch -->] ${JSON.stringify(context.response._data, null)}`)
           break
       }
     },

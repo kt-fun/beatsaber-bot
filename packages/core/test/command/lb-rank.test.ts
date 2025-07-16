@@ -11,14 +11,16 @@ const defaultSess = {
 }
 
 
-describe("command lb", async () => {
-  const p = 'test-lb'
-  afterAll(() => {
-    fs.rmdirSync(p, { recursive: true })
-  })
-  fs.mkdirSync(p, { recursive: true })
-  const { testCmd, testEvent } = await createCtx(p, defaultSess)
-  test("lightband rank should render image as expect", async () => {
+const p = 'test-lb'
+afterAll(() => {
+  fs.rmdirSync(p, { recursive: true })
+})
+fs.mkdirSync(p, { recursive: true })
+const { testCmd, testEvent } = await createCtx(p, defaultSess)
+
+
+describe("command lightband rank", async () => {
+  test("should render image", async () => {
     const res = await testCmd('lb')
     assert.include(res, '开始渲染砍击榜了，请耐心等待', '触发渲染启动消息1')
     assert.include(res, '开始渲染分数榜了，请耐心等待', '触发渲染启动消息2')
@@ -26,5 +28,4 @@ describe("command lb", async () => {
       expect.stringMatching(/^img-file:/)
     ]));
   }, 300000)
-
 })

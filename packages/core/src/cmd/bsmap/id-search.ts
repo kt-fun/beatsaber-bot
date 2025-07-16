@@ -1,6 +1,7 @@
 
 import { InvalidMapIdError, MapIdNotFoundError } from '@/services/errors'
 import {CommandBuilder} from "@/interface";
+import {NotFoundError} from "@/common/fetch/error";
 
 const mapIdReg = /^[a-fA-F0-9]{1,6}$/
 
@@ -20,10 +21,12 @@ export default () =>
         throw new InvalidMapIdError({ input: c.input })
       }
       const res = await c.services.api.BeatSaver.searchMapById(c.input)
-
-      if (!res) {
-        throw new MapIdNotFoundError({ input: c.input })
-      }
+        .catch(e => {
+          if(e instanceof NotFoundError) {
+            throw new MapIdNotFoundError({ mapId: c.input })
+          }
+          throw e
+        })
 
       const onRenderStart = () => {
         c.session.send(

@@ -16,9 +16,9 @@ const mockImageRender = {
   },
 }
 
-export const createServices = async (filepath: string, cfg: Config, logger: Logger) => {
+export const createServices = async (filepath: string, cfg: Config, logger: Logger, memoryDB: boolean = false) => {
   const api = new APIService(cfg, logger)
-  const db = await seed(path.join(filepath, 'sqlite.db'))
+  const db = await seed(memoryDB ? ':memory:' : path.join(filepath, 'sqlite.db'))
   const render = RenderService.create({
     ...cfg.render,
     logger,
@@ -55,17 +55,6 @@ const sess: Sess = {
   locale: 'zh-CN'
 }
 
-const createBot = async (filepath: string) => {
-  const config = loadConfigFromFile()
-  const services = await createServices(filepath, config, console)
-  const bot = getBot({
-    config,
-    services,
-    agentService: new TestAgentService(filepath),
-  })
-  return bot
-}
-
 
 export const createCtx = async (filepath: string, defaultSess: Sess = sess) => {
   const config = loadConfigFromFile()
@@ -75,9 +64,8 @@ export const createCtx = async (filepath: string, defaultSess: Sess = sess) => {
     render: mockImageRender
   }
 
-  const services = await createServices(filepath, config, console)
-
-
+  const services = await createServices(filepath, config, console, true)
+  services.i18n = undefined
   const cmds = getCommands()
 
   const testCmd = async (name: string, opts?: CmdTestOpts) => {

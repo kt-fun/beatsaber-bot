@@ -6,6 +6,20 @@
       "wait": "开始渲染啦，请耐心等待 {{sec}} s"
     }
   },
+
+  "beatsaver": {
+    "not-found": "没找到谱面 ID {{ id }}",
+    "user-not-found": "没找到 ID [{{ id }}] 的 Beatsaver 用户"
+  },
+  "beatleader": {
+    "score-not-found": "没找到谱面 {{ mapId }} 对应的打分",
+    "user-not-found": "没找到 ID [{{ id }}] 的 Beatleader 用户"
+  },
+  "scoresaber": {
+    "score-not-found": "没找到谱面 {{ mapId }} 对应的打分",
+    "user-not-found": "没找到 ID [{{ id }}] 的 Beatleader 用户"
+  },
+
   "ws": {
     "subscribe": {
       "update": "Hello {{username}}，你关注的谱师「{{mapperName}}」更新啦！✨"

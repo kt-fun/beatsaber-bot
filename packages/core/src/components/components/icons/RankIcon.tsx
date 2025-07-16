@@ -1,6 +1,6 @@
 import BeatLeaderIcon from './BeatLeader'
 import ScoreSaberIcon from './ScoreSaberIcon'
-
+import React from 'react'
 export default function RankIcon({
   blrank,
   ssrank,

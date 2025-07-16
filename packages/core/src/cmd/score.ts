@@ -41,8 +41,10 @@ export default () =>
       )
       if(!score) {
         throw new ScoreNotFoundError({
-          user: account.providerUsername, id: mapId,
-          diff: diffOption?.difficulty, mode: c.options.m,
+          user: account.providerUsername,
+          id: mapId,
+          diff: diffOption?.difficulty,
+          mode: c.options.m,
         })
       }
       const img = await c.services.render.renderScore(score.id?.toString())
