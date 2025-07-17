@@ -12,13 +12,13 @@ export default () =>
         c.services.render.renderUrl('https://aiobs.ktlab.io/tmp/lb/hitcnt', {
           selector: '#render-result',
           onRenderStart:() => {
-            c.session.sendQueued('开始渲染砍击榜了，请耐心等待')
+            c.session.sendQueued(c.session.text('commands.bsbot.lbrank.render.rank-start'))
           },
         }),
         c.services.render.renderUrl('https://aiobs.ktlab.io/tmp/lb/score', {
           selector: '#render-result',
           onRenderStart: () => {
-            c.session.sendQueued('开始渲染分数榜了，请耐心等待')
+            c.session.sendQueued(c.session.text('commands.bsbot.lbrank.render.score-start'))
           }
         }),
       ])

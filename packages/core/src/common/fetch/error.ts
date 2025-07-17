@@ -1,7 +1,7 @@
 export class RequestError extends Error {
-  constructor(message?: string) {
-    super(message)
-    this.name = 'RequestError'
+  constructor(error: Error) {
+    super()
+    this.cause = error
   }
 }
 

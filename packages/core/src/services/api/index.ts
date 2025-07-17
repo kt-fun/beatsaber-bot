@@ -1,7 +1,7 @@
 import {AIOSaberClient, BeatLeaderClient, BeatSaverClient, ScoreSaberClient} from "./base";
 import {Config} from "@/config";
 import { Logger } from "@/core";
-import {BLIDNotFoundError, MapIdNotFoundError, SSIDNotFoundError} from "../errors";
+import { BLAccountNotFoundError, SSAccountNotFoundError } from "../errors";
 import {BSMap, HashResponse} from "./interfaces/beatsaver";
 import {ScoreSaberItem} from "./interfaces/scoresaber";
 import {Leaderboard} from "./interfaces/beatleader";
@@ -41,7 +41,7 @@ export class APIService {
       this.BeatLeader.getPlayerPinnedScores(accountId),
     ])
     if (!(userInfo && playerScores)) {
-      throw new BLIDNotFoundError({ accountId })
+      throw new BLAccountNotFoundError({ accountId })
     }
     const filteredScores = playerScores.data.filter(
       (item) => !pinnedScores.some((pinned) => pinned.id === item.id)
@@ -61,9 +61,6 @@ export class APIService {
     option?: MapDiffOption
   ): Promise<Leaderboard | null> {
     const map = await this.BeatSaver.searchMapById(mapId)
-    if (!map) {
-      throw new MapIdNotFoundError()
-    }
     const hash = map.versions[0].hash
     let reqs = map.versions[0].diffs.map((it) => ({
       diff: it.difficulty,
@@ -131,6 +128,7 @@ export class APIService {
       bsorContent.arrayBuffer().then((res) => decode(res, resolve))
       setTimeout(() => reject('timeout exceed'), 5000)
     })
+
     const statistic = await fetch(
       `https://cdn.scorestats.beatleader.xyz/${scoreId}.json`
     ).then((res) => res.json())
@@ -150,7 +148,7 @@ export class APIService {
         .then((res) => res?.playerScores),
     ])
     if (!scores || !userInfo) {
-      throw new SSIDNotFoundError({ accountId: uid })
+      throw new SSAccountNotFoundError({ accountId: uid })
     }
     const hashes = scores.map((it) => it.leaderboard.songHash)
 

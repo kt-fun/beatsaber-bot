@@ -1,6 +1,6 @@
 import type { Channel, User, Config, Logger } from "@/index";
 import {  getBot, createCommonService, getCommands, RenderService, APIService } from "@/index";
-import {channels, seed, users} from "~/mock/data";
+import {channels, defaultMock, MockData, seed, users} from "./mock-data";
 import {loadConfigFromFile} from "./config";
 import {TestAgentService} from "./session/agent";
 import {TestPassiveSession} from "./session/passive-session";
@@ -16,9 +16,9 @@ const mockImageRender = {
   },
 }
 
-export const createServices = async (filepath: string, cfg: Config, logger: Logger, memoryDB: boolean = false) => {
+export const createServices = async (filepath: string, cfg: Config, logger: Logger, data: MockData, memoryDB: boolean = false) => {
   const api = new APIService(cfg, logger)
-  const db = await seed(memoryDB ? ':memory:' : path.join(filepath, 'sqlite.db'))
+  const db = await seed(memoryDB ? ':memory:' : path.join(filepath, 'sqlite.db'), data)
   const render = RenderService.create({
     ...cfg.render,
     logger,
@@ -33,7 +33,7 @@ export const createServices = async (filepath: string, cfg: Config, logger: Logg
   }
 }
 
-type Sess = {
+export type Sess = {
   user?: User,
   channel?: Channel,
   mentions?: User[]
@@ -48,15 +48,9 @@ type CmdTestOpts = {
 //   logger, session, options
 }
 
-const sess: Sess = {
-  user: users[0],
-  channel: channels[0],
-  mentions: [],
-  locale: 'zh-CN'
-}
 
 
-export const createCtx = async (filepath: string, defaultSess: Sess = sess) => {
+export const createCtx = async (filepath: string, mockData: MockData = defaultMock) => {
   const config = loadConfigFromFile()
   config.render = {
     ...config.render, mode: 'custom',
@@ -64,7 +58,7 @@ export const createCtx = async (filepath: string, defaultSess: Sess = sess) => {
     render: mockImageRender
   }
 
-  const services = await createServices(filepath, config, console, true)
+  const services = await createServices(filepath, config, console, mockData, true)
   services.i18n = undefined
   const cmds = getCommands()
 
@@ -75,10 +69,10 @@ export const createCtx = async (filepath: string, defaultSess: Sess = sess) => {
     const cmd = cmds.find(it => it.name === name)
     if(!cmd) return []
 
-    const user = opts?.sess?.user ?? defaultSess.user
-    const channel = opts?.sess?.channel ?? defaultSess.channel
-    const mentions = opts?.sess?.mentions ?? defaultSess.mentions
-    const locale = opts?.sess?.locale ?? defaultSess.locale
+    const user = opts?.sess?.user ?? mockData.sess.user
+    const channel = opts?.sess?.channel ?? mockData.sess.channel
+    const mentions = opts?.sess?.mentions ?? mockData.sess.mentions
+    const locale = opts?.sess?.locale ?? mockData.sess.locale
 
     const session = new TestPassiveSession(filepath, rest, {
       user,
@@ -113,6 +107,7 @@ export const createCtx = async (filepath: string, defaultSess: Sess = sess) => {
 
   return {
     testCmd,
-    testEvent
+    testEvent,
+    db: services.db
   }
 }

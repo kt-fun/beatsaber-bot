@@ -2,7 +2,7 @@ import { CommandBuilder } from "@/interface";
 import { Platform, convertDiff } from '@/utils'
 import {
   AccountBindingNotFoundError,
-  ScoreNotFoundError,
+  BLScoreNotFoundError,
 } from '@/services/errors'
 export default () =>
   new CommandBuilder()
@@ -19,11 +19,10 @@ export default () =>
         // preference = await c.userPreference.getUserPreference(uid)
       }
 
-      const { blAccount, ssAccount } = await c.services.db.getUserAccountsByUid(uid)
+      const { blAccount } = await c.services.db.getUserAccountsByUid(uid)
       let account = Platform.BL && blAccount
-      account ||= Platform.SS && ssAccount
       if (!account) {
-        throw new AccountBindingNotFoundError()
+        throw new AccountBindingNotFoundError({ platform: Platform.BL, userId: uid })
       }
 
       let diffOption
@@ -40,9 +39,9 @@ export default () =>
         diffOption
       )
       if(!score) {
-        throw new ScoreNotFoundError({
-          user: account.providerUsername,
-          id: mapId,
+        throw new BLScoreNotFoundError({
+          username: account.providerUsername,
+          mapId: mapId,
           diff: diffOption?.difficulty,
           mode: c.options.m,
         })

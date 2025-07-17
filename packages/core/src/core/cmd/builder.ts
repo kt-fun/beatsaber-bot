@@ -9,9 +9,6 @@ export class CommandBuilder<Service, Config, OPT extends {} = {}> {
   private aliases: CmdAlias[] = []
 
   constructor() {}
-  // static create<Service, Config, OPT extends {} = {}>(name: string) {
-  //   return new CommandBuilder<Service, Config, OPT> ().setName(name)
-  // }
 
   addOption<N extends string, D extends string>(name: N, description: D) {
     this.options.push({
@@ -45,6 +42,7 @@ export class CommandBuilder<Service, Config, OPT extends {} = {}> {
           await executor(c)
         } catch (e: any) {
           if (e instanceof BizError) {
+            // @ts-ignore
             await c.session.send(c.session.text(e.id, e.params))
           } else {
             c.logger.error(

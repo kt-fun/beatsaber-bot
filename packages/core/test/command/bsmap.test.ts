@@ -1,21 +1,14 @@
-import {channels, users} from "../mock/data.js";
 import {afterAll, assert, describe, expect, test} from "vitest";
 import fs from "fs";
-import {createCtx} from "../support/create-ctx.js";
-
-const defaultSess = {
-  user: users[0],
-  channel: channels[0],
-  mentions: [],
-  locale: 'zh-CN'
-}
+import {createCtx} from "~/support/create-ctx";
+import {BSMapNotFoundError, InvalidParamsError} from "@/services/errors";
 
 const p = 'test-bsmap'
 afterAll(() => {
   fs.rmdirSync(p, { recursive: true })
 })
 fs.mkdirSync(p, { recursive: true })
-const { testCmd, testEvent } = await createCtx(p, defaultSess)
+const { testCmd, testEvent } = await createCtx(p)
 
 describe("bsmap latest", async () => {
   test("should return 3 maps", async () => {
@@ -51,7 +44,7 @@ describe("bsmap latest", async () => {
       }
     })
     expect(res.length).toEqual(1);
-    expect(res[0]).toEqual("commands.params.invalid-params");
+    expect(res[0]).toEqual(InvalidParamsError.id);
   }, 300000)
 })
 
@@ -81,23 +74,23 @@ describe("bsmap keyword search", async () => {
 describe("bsmap id search", async () => {
   test("return empty", async () => {
     const res: string[] = await testCmd('id')
-    expect(res.length).toEqual(0);
+    expect(res[0]).toEqual(InvalidParamsError.id);
   }, 300000)
 
   test("should return 1 map", async () => {
     const res: string[] = await testCmd('id', {
       inputs: ['3a667'],
     })
-    expect(res[0]).toEqual("common.beatsaver.not-found");
+    expect(res[0]).toEqual(BSMapNotFoundError.id);
   }, 300000)
   test("should return error", async () => {
     const res1: string[] = await testCmd('id', {
       inputs: ['t1'],
     })
-    expect(res1[0]).toEqual("common.beatsaver.error-map-id");
+    expect(res1[0]).toEqual(InvalidParamsError.id);
     const res2: string[] = await testCmd('id', {
       inputs: ['3a66z'],
     })
-    expect(res2[0]).toEqual("common.beatsaver.error-map-id");
+    expect(res2[0]).toEqual(InvalidParamsError.id);
   }, 300000)
 })

@@ -1,22 +1,16 @@
 // 未启用 i18n， render service mock
 import {afterAll, describe, expect, test} from "vitest";
 import fs from "fs";
-import {createCtx} from "../support/create-ctx.js";
-import {channels, users} from "../mock/data.js";
-
-const defaultSess = {
-  user: users[0],
-  channel: channels[0],
-  mentions: [],
-  locale: 'zh-CN'
-}
+import {createCtx} from "~/support/create-ctx";
+import {channels, users} from "~/support/mock-data";
+import {AccountBindingNotFoundError, BLAccountNotFoundError, SSAccountNotFoundError} from "@/services/errors";
 
 const p = 'test-rank'
 afterAll(() => {
   fs.rmdirSync(p, { recursive: true })
 })
 fs.mkdirSync(p, { recursive: true })
-const { testCmd, testEvent } = await createCtx(p, defaultSess)
+const { testCmd, testEvent } = await createCtx(p)
 
 
 
@@ -41,23 +35,19 @@ describe("render by id", async () => {
   }, 300000)
 
   // todo fix 404
-  test("should throw unknown error", async () => {
-    const res = await testCmd('rank', {inputs: ['-1']})
-    expect(res).toEqual(expect.arrayContaining([
-      'command.error.unknown-error'
-    ]));
+  test("should throw bl account not found error", async () => {
+    const [res] = await testCmd('rank', {inputs: ['-1']})
+    expect(res).toEqual(BLAccountNotFoundError.id);
   }, 300000)
 
-  test("should throw unknown error", async () => {
-    const res = await testCmd('rank', {
+  test("should throw ss account not found error", async () => {
+    const [res] = await testCmd('rank', {
       inputs: ['-1'],
       options: {
         p: 'ss'
       }
     })
-    expect(res).toEqual(expect.arrayContaining([
-      'command.error.unknown-error'
-    ]));
+    expect(res).toEqual(SSAccountNotFoundError.id);
   }, 300000)
 
 
@@ -91,7 +81,7 @@ describe("render by user", async () => {
       sess: { user: users[1] },
       options: { p: 'bl' }
     })
-    expect(res2).toEqual(expect.arrayContaining(["common.account.not-found"]))
+    expect(res2).toEqual(expect.arrayContaining([AccountBindingNotFoundError.id]))
     const res3 = await testCmd('rank', {
       sess: { user: users[1] },
       options: { p: 'ss' }
@@ -104,12 +94,12 @@ describe("render by user", async () => {
     const res1 = await testCmd('rank', {
       sess: { user: users[3] }
     })
-    expect(res1).toEqual(expect.arrayContaining(["common.account.not-found"]))
+    expect(res1).toEqual(expect.arrayContaining([AccountBindingNotFoundError.id]))
     const res2 = await testCmd('rank', {
       sess: { user: users[3] },
       options: { p: 'ss' }
     })
-    expect(res1).toEqual(expect.arrayContaining(["common.account.not-found"]))
+    expect(res2).toEqual(expect.arrayContaining([AccountBindingNotFoundError.id]))
   }, 300000)
 })
 
@@ -136,13 +126,13 @@ describe("render by mention", async () => {
 
 
   // 用户 4 没有绑定任何平台
-  test("should not render image", async () => {
+  test("should throw account bind not found error", async () => {
     const res = await testCmd('rank', {
       sess: {
         user: users[0],
         mentions: [users[3]]
       }
     })
-    expect(res).toEqual(expect.arrayContaining(["common.account.not-found"]))
+    expect(res).toEqual(expect.arrayContaining([AccountBindingNotFoundError.id]))
   }, 300000)
 })

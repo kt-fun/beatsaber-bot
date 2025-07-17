@@ -1,11 +1,13 @@
 import { CmdContext, Account } from '@/interface'
 import {
+  AccountNotFoundError,
   SessionPromotionCancelError,
   SessionPromotionTimeoutError,
 } from '@/services/errors'
-
+import {typeid} from "typeid-js";
 export interface PlatformBindingServices {
-  fetchUser(id: string): Promise<{ id: string; name: string } | null>
+  inputChecker?: (input: string) => void,
+  fetchUser(id: string): Promise<{ id: string; name: string }>
   getExistingAccount(userId: string): Promise<Account | null>
   platformName: string
   providerId: 'beatleader' | 'beatsaver' | 'scoresaber'
@@ -15,11 +17,8 @@ export const handleIdBinding = async (
   c: CmdContext,
   services: PlatformBindingServices
 ) => {
+  services.inputChecker?.(c.input)
   const player = await services.fetchUser(c.input)
-  if (!player) {
-    throw new Error(`commands.bsbot.${services.platformName}.account.not-found`)
-  }
-
   const now = new Date()
   const existingAccount = await services.getExistingAccount(c.session.user.id)
 
@@ -36,14 +35,15 @@ export const handleIdBinding = async (
 
   await c.session.sendQuote(text)
 
-  const prompt = await c.session.prompt(c.config.promptTimeout)
-  if (!prompt || (prompt.toLowerCase() !== 'y' && prompt.toLowerCase() !== 'yes')) {
+  const prompt = (await c.session.prompt(c.config.promptTimeout))?.toLowerCase()
+  if (!['yes', 'y'].includes(prompt)) {
     throw prompt
       ? new SessionPromotionCancelError()
       : new SessionPromotionTimeoutError()
   }
 
   const account: Partial<Account> = {
+    id: existingAccount?.id ?? typeid().toString(),
     userId: c.session.user.id,
     providerId: services.providerId,
     accountId: player.id.toString(),

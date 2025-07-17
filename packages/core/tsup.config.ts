@@ -25,8 +25,10 @@ export default defineConfig((options) => {
       '!./src/**/*.d.ts',
       '!./src/**/*.test.[jt]s',
       '!./src/**/*.spec.[jt]s',
+      '!./src/**/*.mock.[jt]s',
       '!./src/**/*.test.[jt]sx',
-      '!./src/**/*.spec.[jt]sx'
+      '!./src/**/*.spec.[jt]sx',
+      '!./src/**/*.mock.[jt]sx'
     ],
     platform: 'node',
     target: 'es6',

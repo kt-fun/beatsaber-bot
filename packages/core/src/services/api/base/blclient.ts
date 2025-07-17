@@ -8,6 +8,8 @@ import {
   Leaderboard,
   Score,
 } from '../interfaces/beatleader'
+import {BLAccountNotFoundError, SSAccountNotFoundError} from "@/services/errors";
+import { NotFoundError } from "@/common/fetch/error";
 
 type ClientOptions = {
   client_id?: string
@@ -53,16 +55,29 @@ export class BeatLeaderClient {
   }
 
   async getPlayerInfo(accountId: string) {
-    return this.f.get<BeatLeaderUser>(`/player/${accountId}`)
+    return this.f.get<BeatLeaderUser>(`/player/${accountId}`).catch(e => {
+      if(e instanceof NotFoundError) throw new BLAccountNotFoundError({ accountId: accountId })
+      throw e
+    })
   }
 
   async getPlayerScores(accountId: string) {
     return this.f.get<BeadLeaderScoresResponse>(
       `/player/${accountId}/scores?count=24&sortBy=pp`
-    )
+    ).catch(e => {
+      if(e instanceof NotFoundError) {
+        throw new BLAccountNotFoundError({ accountId })
+      }
+      throw e
+    })
   }
   async getPlayerPinnedScores(accountId: string) {
-    return this.f.get<Score[]>(`/player/${accountId}/pinnedScores`)
+    return this.f.get<Score[]>(`/player/${accountId}/pinnedScores`).catch(e => {
+      if(e instanceof NotFoundError) {
+        throw new BLAccountNotFoundError({ accountId })
+      }
+      throw e
+    })
   }
 
   async getBeatScore(scoreId: string) {

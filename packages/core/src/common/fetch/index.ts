@@ -1,6 +1,6 @@
 import { Fetch } from './ofetch'
 import { Logger } from '@/core'
-import { NotFoundError } from './error'
+import {NotFoundError, RequestError} from './error'
 
 const ofetch = new Fetch()
 
@@ -26,6 +26,7 @@ export const createFetch = (logger: Logger) => {
       if (response.status === 404) {
         throw new NotFoundError()
       }
+      throw new RequestError(error)
     },
     ignoreResponseError: false,
   })

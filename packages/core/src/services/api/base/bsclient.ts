@@ -8,7 +8,8 @@ import {
   BSUserResponse,
   HashReqResponse,
 } from '../interfaces/beatsaver'
-import {NotFoundError} from "@/common/fetch/error";
+import { NotFoundError } from "@/common/fetch/error";
+import {BSAccountNotFoundError, BSMapNotFoundError, RequestError} from "@/services/errors";
 
 type ClientOptions = {
   logger?: Logger,
@@ -34,11 +35,17 @@ export class BeatSaverClient {
           ) {
             throw new NotFoundError()
           }
+          throw new RequestError(context.error)
         },
       })
   }
   async getBSMapperById(userId: string) {
-    return this.f.get<BSUserResponse>(`/users/id/${userId}`)
+    return this.f.get<BSUserResponse>(`/users/id/${userId}`).catch(e => {
+      if (e instanceof NotFoundError) {
+        throw new BSAccountNotFoundError({ accountId: userId })
+      }
+      throw e
+    })
   }
 
   async getLatestMaps(pageSize: number = 5) {
@@ -67,7 +74,12 @@ export class BeatSaverClient {
   }
 
   async searchMapById(id: string) {
-    return this.f.get<BSMap>(`/maps/id/${id}`)
+    return this.f.get<BSMap>(`/maps/id/${id}`).catch(e => {
+      if(e instanceof NotFoundError) {
+        throw new BSMapNotFoundError({ mapId: id })
+      }
+      throw e
+    })
   }
   async getTokenInfo(ak: string) {
     return this.f.get<OAuthTokenInfoResponse>(`/oauth2/identity`, {

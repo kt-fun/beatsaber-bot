@@ -10,7 +10,14 @@ import {
 } from './schema.js';
 import {BetterSQLite3Database} from "drizzle-orm/better-sqlite3";
 import {eq, and, inArray, count, sql} from 'drizzle-orm';
-import type {DB, Subscription, SubWithGroupRes, SubDetailWithGroupRes, SubInfoRes} from "@/index";
+import type {
+  DB,
+  Subscription,
+  SubWithGroupRes,
+  SubDetailWithGroupRes,
+  SubInfoRes,
+  AddSubscriptionMember
+} from "@/index";
 
 // 定义 schema 类型，方便在类中使用
 type DrizzleSchema = typeof import('./schema');
@@ -29,8 +36,14 @@ export class DrizzleDB implements DB {
     this.db = db;
   }
 
+
   getIDSubscriptionByChannelIDAndType(gid: string, type: string): Promise<Subscription[]> {
-        throw new Error('Method not implemented.');
+    return this.db.select()
+      .from(bsSubscribe)
+      .where(and(
+        eq(bsSubscribe.type, type),
+        eq(bsSubscribe.channelId, gid),
+      ))
   }
 
   getIDSubscriptionByGID(gid: string): Promise<Subscription[]> {
@@ -120,6 +133,31 @@ export class DrizzleDB implements DB {
     }));
   }
 
+  async getSubscriptionMemberByUserChannelAndType(userId: string, channelId: string, type: string): Promise<SubInfoRes | null> {
+    const isMember = sql<number>`SUM(CASE WHEN ${bsSubscribeMember.memberId} = ${userId} THEN 1 ELSE 0 END) > 0`.as('me');
+
+    const rows = await this.db
+      .select({
+        subscription: bsSubscribe,
+        memberCount: count(bsSubscribeMember.memberId),
+        me: isMember,
+      })
+      .from(bsSubscribe)
+      .leftJoin(bsSubscribeMember, eq(bsSubscribe.id, bsSubscribeMember.subscriptionId))
+      .where(and(eq(bsSubscribe.type, type), eq(bsSubscribe.channelId, channelId)))
+      .groupBy(bsSubscribe.id)
+      .limit(1);
+    return rows.map(row => ({
+      ...row,
+      me: !!row.me
+    }))[0] ?? null;
+  }
+  async getSubscriptionByID(id: string): Promise<Subscription | null> {
+    const [res] = await this.db.select()
+      .from(bsSubscribe)
+      .where(eq(bsSubscribe.id, id)).limit(1);
+    return res ?? null
+  }
   /**
    * 根据 GID 获取订阅
    */
@@ -129,8 +167,17 @@ export class DrizzleDB implements DB {
       .where(eq(bsSubscribe.channelId, gid));
     const blSub = res.find((it) => it.type === 'beatleader-score');
     const bsMapSub = res.find((it) => it.type === 'beatsaver-map');
-    const bsAlertSub = res.find((it) => it.type === 'beatsaver-alert');
-    return { blSub, bsMapSub, bsAlertSub };
+    return { blSub, bsMapSub };
+  }
+
+  async getChannelSubscriptionByChannelIDAndType(channelId: string, type: string): Promise<Subscription | null> {
+    const res = await this.db.select()
+      .from(bsSubscribe)
+      .where(and(
+        eq(bsSubscribe.channelId, channelId),
+        eq(bsSubscribe.type, type),
+      )).limit(1);
+    return res[0] ?? null
   }
 
   /**
@@ -148,9 +195,13 @@ export class DrizzleDB implements DB {
   /**
    * 添加订阅成员
    */
-  async addSubscribeMember(data: Partial<SubscribeMember>): Promise<void> {
+  async addSubscribeMember(data: AddSubscriptionMember): Promise<void> {
+    const now = new Date()
+    data.createdAt = data.createdAt ?? now
+    data.updatedAt = data.updatedAt ?? now
+    data.subscribeData = {}
     await this.db.insert(bsSubscribeMember)
-      .values(data as SubscribeMember)
+      .values(data as any)
       .onConflictDoNothing(); // 或者 onConflictDoUpdate，取决于业务逻辑
   }
 
@@ -186,7 +237,7 @@ export class DrizzleDB implements DB {
       .where(and(
         eq(bsSubscribe.channelId, gid),
         eq(bsSubscribe.type, type)
-      ));
+      )).limit(1);
   }
 
   /**

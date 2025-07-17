@@ -75,15 +75,12 @@ export class RenderService implements IRenderService {
     const bg = (await renderOpts?.userPreference?.get<string>(preferenceKey.blScoreImg.key))
       ?? 'https://www.loliapi.com/acg/pc/'
     try {
-      const { score, statistic, bsor, bsMap } =
-        await this.api.getScoreAndBSMapByScoreId(scoreId)
-
-      const { aroundScores, regionTopScores, difficulties } =
-        await this.api.getAroundScoreAndRegionScoreByRankAndPage(
+      const { score, statistic, bsor, bsMap } = await this.api.getScoreAndBSMapByScoreId(scoreId)
+      const { aroundScores, regionTopScores, difficulties } = await this.api.getAroundScoreAndRegionScoreByRankAndPage(
           score.leaderboardId,
           score.rank,
           score.player.country
-        )
+      )
       return this.imageRender.html2img(
         getHtml(BLRankScoreComp(score, aroundScores, regionTopScores, difficulties, bsMap, statistic, bsor, bg)),
         {selector: '#render-result', ...renderOpts}

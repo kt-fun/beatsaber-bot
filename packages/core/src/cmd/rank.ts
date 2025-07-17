@@ -1,6 +1,6 @@
 import {CommandBuilder} from "@/interface";
 import { parsePlatform, Platform } from '@/utils'
-import {UnknownUserIDError} from "@/services/errors";
+import { AccountBindingNotFoundError } from "@/services/errors";
 
 export default () =>
   new CommandBuilder()
@@ -37,7 +37,7 @@ export default () =>
       }
 
       if (!accountId && !c.input) {
-        throw new UnknownUserIDError()
+        throw new AccountBindingNotFoundError({ platform: rankPlatform, userId: uid })
       }
 
       const img = await c.services.render.renderRank(accountId, rankPlatform)

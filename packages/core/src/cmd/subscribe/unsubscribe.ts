@@ -1,102 +1,66 @@
 
 import {
-  BSMapperSubscriptionNotExistError,
+  InvalidParamsError, MissingParamsError,
   SubscriptionNotExistError,
 } from '@/services/errors'
 import {CmdContext, CommandBuilder} from "@/interface";
+import {groupTypes, idTypes, supportTypes} from "./types";
+
+
 
 export default () =>
   new CommandBuilder()
     .setName('unsubscribe')
     .addAlias('bbunsub')
-    .addAlias('/unsubbl', { options: { type: 'beatleader' } })
-    .addAlias('/unsubbs', { options: { type: 'beatsaver' } })
-    .addAlias('unsubbl', { options: { type: 'beatleader' } })
-    .addAlias('unsubbs', { options: { type: 'beatsaver' } })
+    .addAlias('/unsubbl', { options: { type: 'blscore' } })
+    .addAlias('/unsubbs', { options: { type: 'bsmap' } })
+    .addAlias('unsubbl', { options: { type: 'blscore' } })
+    .addAlias('unsubbs', { options: { type: 'bsmap' } })
     .addOption('t', 'type:string')
-    .setDescription('')
+    .setDescription('remove subscription')
     .setExecutor(async (c) => {
-      const { blSub, bsMapSub, bsAlertSub } = await c.services.db.getSubscriptionsByGID(
-        c.session.channel.id
-      )
-      if (c.options.t === 'beatleader') {
-        if (!blSub) {
-          throw new SubscriptionNotExistError('beatleader-score')
-        }
-        const data = { ...blSub, enable: false }
-        await c.services.db.upsertSubscription(data)
-        await c.session.sendQuote(
-          c.session.text('commands.bsbot.unsubscribe.success.beatleader')
-        )
-      }
-
-      if (c.options.t === 'beatsaver') {
-        if (c.input) {
-          await unsubIDBSMapper(c)
-          return
-        }
-
-        if (!bsMapSub) {
-          throw new SubscriptionNotExistError('beatsaver-map')
-        }
-        const data = { ...bsMapSub, enable: false }
-        await c.services.db.upsertSubscription(data)
-        c.session.sendQuote(
-          c.session.text('commands.bsbot.unsubscribe.success.beatsaver')
-        )
-      }
-
-      if (c.options.t === 'alert') {
-        if (!bsAlertSub) {
-          throw new SubscriptionNotExistError('beatsaver-alert')
-        }
-        const data = { ...bsAlertSub, enable: false }
-        await c.services.db.upsertSubscription(data)
-        await c.session.sendQuote(
-          c.session.text('commands.bsbot.unsubscribe.success.alert')
-        )
-      }
-    })
-
-const unsubIDBSMapper = async (c: CmdContext) => {
-  const input = c.input
-  if (input) {
-    const res = await c.services.db.getIDSubscriptionByChannelIDAndType(
-      c.session.channel.id,
-      'id-beatsaver-map'
-    )
-    const it = res.find((it) => it.data?.mapperId?.toString() === input)
-    if (!it) {
-      throw new BSMapperSubscriptionNotExistError({ id: input })
-    }
-
-    await c.services.db.removeIDSubscriptionByID(it.id)
-    c.session.sendQuote(
-      c.session.text('commands.bsbot.unsubscribe.success.beatsaver-mapper', {
-        name: it?.data?.mapperName,
+      const t = c.options.t
+      if(!supportTypes.includes(t)) throw new InvalidParamsError({
+        name: "type",
+        expect: supportTypes.toString(),
+        actual: t
       })
-    )
-    return
+      if(!groupTypes.includes(t)) {
+        return unsubscribeId(c)
+      }
+      const subscription = await c.services.db
+        .getChannelSubscriptionByChannelIDAndType(c.session.channel.id, t)
+      if(!subscription) throw new SubscriptionNotExistError({ type: c.options.t, channelId: c.session.channel.id })
+      const data = { ...subscription, enabled: false }
+      await c.services.db.upsertSubscription(data)
+      await c.session.sendQuote(c.session.text(`commands.bsbot.unsubscribe.success.${t}`))
+  })
+
+
+const getIdByType = (c: CmdContext<{t?: string}>) => {
+  const t = c.options.t
+  switch (t) {
+    case 'bsmap':
+    case 'blscore':
+      if(!c.input) throw new MissingParamsError({ name: "accountId", example: "58338" })
+      return `${t}::${c.session.channel.id}::${c.input}`
+    case 'lbrank': return `${t}::${c.session.channel.id}`
   }
+  throw new InvalidParamsError({
+    name: "type",
+    expect: idTypes.toString(),
+    actual: t
+  })
 }
 
-const unsubIDBLScore = async (c: CmdContext) => {
-  const input = c.input
-  if (input) {
-    const res = await c.services.db.getIDSubscriptionByChannelIDAndType(
-      c.session.channel.id,
-      'id-beatleader-score'
-    )
-    const it = res.find((it) => it.data?.playerId?.toString() === input)
-    if (!it) {
-      throw new SubscriptionNotExistError(`id-beatleader-score(${input})`)
-    }
-    await c.services.db.removeIDSubscriptionByID(it.id)
-    c.session.sendQuote(
-      c.session.text('commands.bsbot.unsubscribe.success.beatleader-score', {
-        name: it?.data?.playerId,
-      })
-    )
-    return
+const unsubscribeId = async (c: CmdContext<{t?: string}>) => {
+  const id = getIdByType(c)
+  const subscription = await c.services.db.getSubscriptionByID(id)
+  if (!subscription) {
+    throw new SubscriptionNotExistError({ type: c.options.t, channelId: c.session.channel.id, id: id })
   }
+  await c.services.db.removeIDSubscriptionByID(id)
+  await c.session.sendQuote(
+    c.session.text(`commands.bsbot.unsubscribe.success.${c.options.t}`, subscription.data)
+  )
 }

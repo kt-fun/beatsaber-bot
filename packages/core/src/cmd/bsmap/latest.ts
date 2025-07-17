@@ -1,6 +1,7 @@
 import { CommandBuilder } from "@/interface"
-import {NotFoundError} from "@/common/fetch/error";
-import {MapIdNotFoundError} from "@/services/errors";
+import {InvalidParamsError} from "@/services/errors";
+
+const sizeRegex = /^[1-5]$/
 
 export default () =>
   new CommandBuilder()
@@ -12,15 +13,17 @@ export default () =>
     .addOption('s', 'size:number')
     .setDescription('get latest 3 beatmap')
     .setExecutor(async (c) => {
-      const s = c.options.s ? parseInt(String(c.options.s)) : 3
-      if(Number.isNaN(s)) {
-        await c.session.send(c.session.text('commands.params.invalid-params'))
-        return
+      let s = c.options.s ? parseInt(String(c.options.s)) : 3
+      if(!sizeRegex.test(String(s)) || Number.isNaN(s)) {
+        throw new InvalidParamsError({
+          name: 'size',
+          expect: '/^[1-5]$/',
+          actual: String(c.options.s)
+        })
       }
       let size = s ?? 3
       if(size > 3 || size <= 0) { size = 3 }
       const res = await c.services.api.BeatSaver.getLatestMaps(size)
-
       const text = c.session.text('commands.bsbot.latest.info')
       await c.session.sendQuote(text)
       const msgs = res.map((item) => ({

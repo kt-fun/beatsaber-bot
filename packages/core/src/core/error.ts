@@ -1,6 +1,6 @@
-export class BizError extends Error {
-  id: string
+export abstract class BizError extends Error {
+  static id: string
   code: string
-  layer?: string
   params?: any
+  id: string
 }

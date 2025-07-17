@@ -1,20 +1,15 @@
 import {describe, expect, assert, test, afterAll} from "vitest";
-import {createCtx} from "../support/create-ctx.js";
-import {channels, users} from "../mock/data.js";
+import {createCtx} from "~/support/create-ctx";
+import {channels, users} from "~/support/mock-data";
 import fs from "fs";
+import {AccountBindingNotFoundError, BLScoreNotFoundError} from "@/services/errors";
 
-const defaultSess = {
-  user: users[0],
-  channel: channels[0],
-  mentions: [],
-  locale: 'zh-CN'
-}
 const p = 'test-score'
 afterAll(() => {
   fs.rmdirSync(p, { recursive: true })
 })
 fs.mkdirSync(p, { recursive: true })
-const { testCmd, testEvent } = await createCtx(p, defaultSess)
+const { testCmd, testEvent } = await createCtx(p)
 // only beatleader
 describe("render score(map id) by user", async () => {
 
@@ -38,7 +33,7 @@ describe("render score(map id) by user", async () => {
       inputs: ['4899e'],
     })
     expect(res).toEqual(expect.arrayContaining([
-      "commands.bsbot.score.score-not-found"
+      BLScoreNotFoundError.id
     ]));
   }, 300000)
 
@@ -51,7 +46,7 @@ describe("render score(map id) by user", async () => {
       inputs: ['4899e'],
     })
     expect(res).toEqual(expect.arrayContaining([
-      "commands.bsbot.score.not-bind"
+      AccountBindingNotFoundError.id
     ]));
   }, 300000)
 })
@@ -81,7 +76,7 @@ describe("render score(map id) by mention", async () => {
       inputs: ['4899e'],
     })
     expect(res).toEqual(expect.arrayContaining([
-      "commands.bsbot.score.score-not-found"
+      BLScoreNotFoundError.id
     ]));
   }, 300000)
 
@@ -94,7 +89,7 @@ describe("render score(map id) by mention", async () => {
       inputs: ['4899e'],
     })
     expect(res).toEqual(expect.arrayContaining([
-      "commands.bsbot.score.not-bind"
+      AccountBindingNotFoundError.id
     ]));
   }, 300000)
 })

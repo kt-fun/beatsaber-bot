@@ -1,9 +1,13 @@
-import { handleScoreSaberBind } from './bind-scoresaber'
-import { Platform } from '@/utils'
+import { handleScoreSaberBind } from './bind-id-scoresaber'
+import {availablePlatforms, parsePlatform, Platform} from '@/utils'
 import { handleBeatLeaderIDBind } from '@/cmd/bind/bind-id-beatleader'
 import { handleBeatSaverIDBind } from '@/cmd/bind/bind-id-beatsaver'
 import {CommandBuilder} from "@/interface";
 
+
+// 目前的绑定支持是很简单的通过 ID 进行绑定，没有任何验证机制
+// 因此未对多个用户绑定同一个 ID 多情况进行限制。
+// 一个用户目前一个平台只能绑定一个 id
 export default () =>
   new CommandBuilder()
     .setName('bind')
@@ -18,24 +22,18 @@ export default () =>
     .addAlias('ssbind', { options: { p: 'ss' } })
     .addAlias('blbind', { options: { p: 'bl' } })
     .addAlias('bsbind', { options: { p: 'bs' } })
-    .setDescription('clear an auth account relate info')
+    .setDescription('bind beatsaver account(beatsaver, beatleader, scoresaber)')
     .setExecutor(async (c) => {
-      if (!c.options.p) {
-        c.options.p = 'ss'
-      }
-      let platform: Platform = Platform.SS
-      switch (c.options.p) {
-        case 'bs':
-          platform = Platform.BS
-          break
-        case 'bl':
-          platform = Platform.BL
-          break
-        case 'ss':
-          break
-        default:
-          c.session.sendQuote(`${c.options.p} 这还不是一个可以绑定的平台`)
-          return
+      let platform: Platform
+      if (!c.options.p || availablePlatforms.includes(c.options.p)) {
+        platform = parsePlatform(c.options.p, Platform.BL)
+      } else {
+        await c.session.sendQuote(c.session.text('commands.bsbot.bind.unsupported-platform', {
+          params: {
+            platform: c.options.p
+          }
+        }))
+        return
       }
       switch (platform) {
         case Platform.SS:

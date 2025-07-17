@@ -14,7 +14,6 @@ export const account = sqliteTable('account', {
   refreshTokenExpiresAt: integer('refresh_token_expires_at', {mode: 'timestamp'}),
   idToken: text('id_token'),
   metadata: text('metadata', { mode: 'json' }),
-  status: text('status').notNull(),
   updatedAt: integer('updated_at', { mode: 'timestamp_ms' }).notNull(),
   createdAt: integer('created_at', { mode: 'timestamp_ms' }).notNull(),
 });

@@ -4,10 +4,7 @@ import KeySearch from './bsmap/key-search'
 import Latest from './bsmap/latest'
 import Rank from './rank'
 import Score from './score'
-import Subscribe from './subscribe'
-import Subjoin from './subscribe/subjoin'
-import Subleave from './subscribe/subleave'
-import Unsubscribe from './subscribe/unsubscribe'
+import {subscribeCommands} from './subscribe'
 import Bind from './bind'
 import Tmp from './deprecated/tmp'
 import {Command} from "@/interface";
@@ -24,12 +21,6 @@ export const getCommands = () =>
     Rank,
     Score,
     Bind,
-    Subscribe,
-    Subjoin,
-    Subleave,
-    Unsubscribe,
+    ...subscribeCommands,
     Tmp,
-    // Config
   )
-
-//transport

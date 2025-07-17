@@ -3,6 +3,7 @@ import {getDB, loadDB} from "~/support/db/db";
 import * as tables from '~/support/db/schema'
 import { User, Channel, Account, Subscription, SubscriptionMember } from "@/index";
 import {faker} from "@faker-js/faker";
+import {Sess} from "~/support/create-ctx";
 
 const now = new Date()
 const time = {createdAt: now, updatedAt: now}
@@ -18,7 +19,6 @@ const getAccount = ({userId, accountId, providerId}) => {
     id: faker.string.uuid(),
     type: 'id',
     providerUsername: faker.person.fullName(),
-    status: 'ok',
     accountId,
     providerId,
     userId,
@@ -46,33 +46,58 @@ export const channels = [
   {id: '1', channelId: 'onebot:2', providerId: 'koishi:onebot', ...time},
   {id: '2', channelId: 'onebot:1', providerId: 'koishi:onebot', ...time},
   {id: '3', channelId: 'onebot:7', providerId: 'koishi:onebot', ...time},
+  {id: '4', channelId: 'onebot:10', providerId: 'koishi:onebot', ...time},
+  {id: '5', channelId: 'onebot:11', providerId: 'koishi:onebot', ...time},
 ]
 
 export const subscriptions: Subscription[] = [
-  // 定时任务
-  { id: '1', type: 'lb-rank', enabled: true, channelId: '1', data: null, ...time },
-  { id: '2', type: 'lb-rank', enabled: false, channelId: '2', data: null, ...time },
-  { id: '3', type: 'lb-rank', enabled: true, channelId: '3', data: null, ...time },
 
+  // 定时任务
+  { id: 'lbrank::1', type: 'lbrank', enabled: true, channelId: '1', data: null, ...time },
+  { id: 'lbrank::2', type: 'lbrank', enabled: false, channelId: '2', data: null, ...time },
+  { id: 'lbrank::3', type: 'lbrank', enabled: true, channelId: '3', data: null, ...time },
   // 直接订阅某个不相关的人。
-  { id: '4', type: 'batsaver-map-channel', enabled: false, channelId: '3', data: { mapperId: '58338' }, ...time },
-  { id: '5', type: 'beatleader-score-channel', enabled: false, channelId: '3', data: { playerId: '76561198960449289' }, ...time },
-  { id: '6', type: 'batsaver-map', enabled: false, channelId: '3', data: null, ...time },
-  { id: '7', type: 'beatleader-score', enabled: false, channelId: '3', data: null, ...time },
+  { id: 'bsmap::3::58338', type: 'bsmap', enabled: false, channelId: '3', data: { mapperId: '58338' }, ...time },
+  { id: 'blscore::3::76561198960449289', type: 'blscore', enabled: false, channelId: '3', data: { playerId: '76561198960449289' }, ...time },
+  { id: '6', type: 'bsmap-group', enabled: false, channelId: '3', data: null, ...time },
+  { id: '7', type: 'blscore-group', enabled: false, channelId: '3', data: null, ...time },
+
 ]
-// 事件处理缓存。
 
 export const subscriptionMembers: SubscriptionMember[] = [
-  {memberId: '1', subscriptionId: '5', subscribeData: { mapperId: '58338' }, ...time},
+  {memberId: '1', subscriptionId: '6', subscribeData: { mapperId: '58338' }, ...time},
 ]
 
-export async function seed(path: string) {
+export const defaultSess: Sess = {
+  user: users[0],
+  channel: channels[0],
+  mentions: [],
+  locale: 'zh-CN'
+}
+export const defaultMock = {
+  users,
+  channels,
+  accounts,
+  subscriptions,
+  subscriptionMembers,
+  sess: defaultSess
+}
+
+export type MockData = {
+  users: User[],
+  channels: Channel[]
+  accounts: Account[],
+  subscriptions: Subscription[],
+  subscriptionMembers: SubscriptionMember[]
+  sess: Sess
+}
+export async function seed(path: string, data: MockData) {
   const db = loadDB(path);
   migrateDB(db)
-  await db.insert(tables.user).values(users)
-  await db.insert(tables.account).values(accounts)
-  await db.insert(tables.channel).values(channels)
-  await db.insert(tables.bsSubscribe).values(subscriptions)
-  await db.insert(tables.bsSubscribeMember).values(subscriptionMembers)
+  await db.insert(tables.user).values(data.users)
+  await db.insert(tables.account).values(data.accounts as any)
+  await db.insert(tables.channel).values(data.channels as any)
+  await db.insert(tables.bsSubscribe).values(data.subscriptions)
+  await db.insert(tables.bsSubscribeMember).values(data.subscriptionMembers)
   return getDB(db)
 }

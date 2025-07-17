@@ -1,7 +1,6 @@
 
-import { InvalidMapIdError, MapIdNotFoundError } from '@/services/errors'
+import { InvalidParamsError } from '@/services/errors'
 import {CommandBuilder} from "@/interface";
-import {NotFoundError} from "@/common/fetch/error";
 
 const mapIdReg = /^[a-fA-F0-9]{1,6}$/
 
@@ -12,21 +11,12 @@ export default () =>
     .addAlias('bbid')
     .addAlias('/bbid')
     .addAlias('!bsr')
-    .setDescription('clear an auth account relate info')
+    .setDescription('search map info by id')
     .setExecutor(async (c) => {
-      if (!c.input || (c.input && c.input.length < 1)) {
-        return
-      }
       if (!mapIdReg.test(c.input)) {
-        throw new InvalidMapIdError({ input: c.input })
+        throw new InvalidParamsError({ name: "mapId", expect: 'abefd, 3a667,...', actual: c.input })
       }
       const res = await c.services.api.BeatSaver.searchMapById(c.input)
-        .catch(e => {
-          if(e instanceof NotFoundError) {
-            throw new MapIdNotFoundError({ mapId: c.input })
-          }
-          throw e
-        })
 
       const onRenderStart = () => {
         c.session.send(
@@ -35,6 +25,7 @@ export default () =>
           })
         )
       }
+
       const image = await c.services.render.renderMap(res, {
         onRenderStart
       })

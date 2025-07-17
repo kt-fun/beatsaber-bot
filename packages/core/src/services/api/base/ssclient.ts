@@ -5,7 +5,8 @@ import {
 import { ScoresaberLeaderboardResp } from '../interfaces/scoresaber/leaderboard'
 import { createFetch, Fetch } from '@/common/fetch'
 import { Logger } from '@/core'
-import {NotFoundError} from "@/common/fetch/error";
+import {NotFoundError, RequestError} from "@/common/fetch/error";
+import { SSAccountNotFoundError } from "@/services/errors";
 export class ScoreSaberClient {
   f: Fetch
   constructor(logger: Logger) {
@@ -13,17 +14,24 @@ export class ScoreSaberClient {
       baseURL: 'https://scoresaber.com',
       ignoreResponseError: false,
       onResponseError: (context) => {
+        // 比如 userId 输入为 普通字符串，会导致 500 error，而不是 400 bad request
         if (
           context.response.status === 500 ||
           context.response.status === 404
         ) {
           throw new NotFoundError()
         }
+        throw new RequestError(context.error)
       },
     })
   }
   async getScoreUserById(userId: string) {
-    return this.f.get<ScoreSaberUser>(`/api/player/${userId}/full`)
+    return this.f.get<ScoreSaberUser>(`/api/player/${userId}/full`).catch(e => {
+      if(e instanceof NotFoundError) {
+        throw new SSAccountNotFoundError({ accountId: userId })
+      }
+      throw e
+    })
   }
 
   async getScoreItemsById(userId: string, page: number, pageSize: number = 8) {
@@ -33,6 +41,11 @@ export class ScoreSaberClient {
         page: page,
         limit: pageSize,
       },
+    }).catch(e => {
+      if(e instanceof NotFoundError) {
+        throw new SSAccountNotFoundError({ accountId: userId })
+      }
+      throw e
     })
   }
   async getScoreItemsByMapId(
