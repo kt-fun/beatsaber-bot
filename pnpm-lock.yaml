@@ -220,6 +220,9 @@ importers:
       koishi-plugin-silk:
         specifier: 1.3.1
         version: 1.3.1(koishi@4.17.7(@cordisjs/plugin-http@0.6.3(cordis@3.16.2))(cordis@3.16.2))
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.0(jiti@2.4.2)(postcss@8.5.6)(tsx@4.16.2)(typescript@5.8.3)(yaml@2.4.5)
 
 packages:
 

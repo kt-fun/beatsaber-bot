@@ -3,7 +3,7 @@ import {InvalidParamsError} from "@/services/errors";
 
 const sizeRegex = /^[1-5]$/
 
-export default () =>
+export const Latest =
   new CommandBuilder()
     .setName('latest')
     .addAlias('bbnew')

@@ -1,15 +1,17 @@
+import React from 'react'
 import { getHtml } from '@/components'
 import { PuppeteerError, TimeoutError } from 'puppeteer-core'
 import { Platform } from '@/utils'
 import { BLPlayerComp, BLRankScoreComp, BSMapComp, SSPlayerComp } from '@/components/pages'
 import {preferenceKey} from "../preference";
 import {ImageRenderError, RequestError} from "@/services/errors";
-import createQrcode from "@/components/utils/qrcode";
+import { createQrcode } from "@/components/utils/qrcode";
 import {APIService} from "../api";
 import { BSMap } from "../api/interfaces/beatsaver";
 import { type CreateImageRenderOption, getImageRender, ImageRender } from "@/common/render";
 import {UserPreferenceStore} from "../preference";
 import {PuppeteerOptions} from "@/common/render";
+import BSMapShare from "@/components/pages/bs-map";
 export type RenderOption = RenderOptions & PuppeteerOptions
 
 type RenderOptions = {
@@ -107,9 +109,8 @@ export class RenderService implements IRenderService {
   ) {
     const previewQrUrl = await createQrcode(`https://allpoland.github.io/ArcViewer/?id=${bsMap.id}`)
     const bsMapQrUrl = await createQrcode(`https://beatsaver.com/maps/${bsMap.id}`)
-    return this.imageRender.html2img(
-      getHtml(BSMapComp(bsMap, bsMapQrUrl, previewQrUrl)), {selector: '#render-result', ...renderOption}
-    )
+    const html = getHtml(<BSMapShare bsMap={bsMap} bsMapQrUrl={bsMapQrUrl} previewQrUrl={previewQrUrl}/>)
+    return this.imageRender.html2img(html, {selector: '#render-result', ...renderOption})
   }
 
   async renderUrl(url: string, renderOption?: RenderOption) {

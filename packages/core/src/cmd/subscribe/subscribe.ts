@@ -5,8 +5,7 @@ import {subscribeId} from "./id";
 import {subscribeGroup} from "./group";
 import {showSubscriptions} from "@/cmd/subscribe/info";
 
-export default () =>
-  new CommandBuilder()
+export const Subscribe = new CommandBuilder()
     .setName('subscribe')
     .addAlias('bbsub')
     .addAlias('/sub-bl', { options: { type: 'blscore' } })

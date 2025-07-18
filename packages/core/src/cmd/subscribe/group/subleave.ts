@@ -2,7 +2,7 @@ import {CommandBuilder} from "@/interface";
 import {InvalidParamsError, SubscriptionNotExistError} from "@/services/errors";
 import {groupTypes} from "../types";
 
-export default () =>
+export const Subleave =
   new CommandBuilder()
     .setName('leave-subscription-group')
     .addAlias('bbleave')

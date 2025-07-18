@@ -4,7 +4,7 @@ import {
   AccountBindingNotFoundError,
   BLScoreNotFoundError,
 } from '@/services/errors'
-export default () =>
+export const Score =
   new CommandBuilder()
     .setName('score')
     .addOption('d', 'difficulty:string')

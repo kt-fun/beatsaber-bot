@@ -3,6 +3,7 @@ import { BizError } from '../error'
 import {typeid} from "typeid-js";
 import { RequestError as BizRequestError } from "@/services/errors";
 import {RequestError} from "@/common/fetch/error";
+import {FetchError} from "ofetch";
 
 export class CommandBuilder<Service, Config, OPT extends {} = {}> {
   private name: string
@@ -45,7 +46,11 @@ export class CommandBuilder<Service, Config, OPT extends {} = {}> {
         } catch (e: any) {
           if (e instanceof BizError) {
             await c.session.send(c.session.text(e.id, e.params))
-          } else if (e instanceof BizRequestError || e instanceof RequestError) {
+          } else if (e instanceof BizRequestError || e instanceof RequestError || e instanceof FetchError) {
+            c.logger.error(
+              `request error occur during cmd 「${that.name}」executing, `,
+              e
+            )
             await c.session.send(c.session.text("common.error.unknown-request-error"))
           }
           else {

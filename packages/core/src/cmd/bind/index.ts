@@ -8,8 +8,7 @@ import {CommandBuilder} from "@/interface";
 // 目前的绑定支持是很简单的通过 ID 进行绑定，没有任何验证机制
 // 因此未对多个用户绑定同一个 ID 多情况进行限制。
 // 一个用户目前一个平台只能绑定一个 id
-export default () =>
-  new CommandBuilder()
+export const Bind = new CommandBuilder()
     .setName('bind')
     .addOption('p', 'platform:string')
     .addAlias('bbbind')

@@ -13,7 +13,7 @@ const { testCmd, testEvent } = await createCtx(p)
 describe("command lightband rank", async () => {
   test("should render image", async () => {
     const res = await testCmd('lb')
-    assert.include(res, 'commands.bsbot.lbrank.render.rank-start', '触发渲染启动消息1')
+    assert.include(res, 'commands.bsbot.lbrank.render.hitcnt-start', '触发渲染启动消息1')
     assert.include(res, 'commands.bsbot.lbrank.render.score-start', '触发渲染启动消息2')
     expect(res).toEqual(expect.arrayContaining([
       expect.stringMatching(/^img-file:/)

@@ -1,9 +1,10 @@
 {
   "name": "koishi-plugin-beatsaber-bot",
   "description": "一个 用于 BeatSaber 的 koishi Bot 插件",
-  "version": "0.3.0-rc.22",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "version": "0.3.0-rc.34",
+  "module": "./dist/esm/index.js",
+  "main": "./dist/cjs/index.cjs",
+  "types": "./dist/types/index.d.ts",
   "files": [
     "dist"
   ],
@@ -62,7 +63,8 @@
     "koishi-plugin-downloads": "0.1.3",
     "koishi-plugin-ffmpeg": "1.1.0",
     "koishi-plugin-puppeteer": "^3.9.0",
-    "koishi-plugin-silk": "1.3.1"
+    "koishi-plugin-silk": "1.3.1",
+    "tsup": "^8.5.0"
   },
   "peerDependencies": {
     "beatsaber-bot-core": "workspace:*",
@@ -73,7 +75,8 @@
   },
   "scripts": {
     "typecheck": "tsc",
-    "build": "tsc -p tsconfig.build.json  && tsc-alias",
+    "fix-path-alias": " tsc-alias --outDir dist/cjs --resolve-full-extension=.cjs && tsc-alias --outDir dist/esm --resolve-full-extension=.js",
+    "build": "tsup && pnpm run fix-path-alias",
     "clean": "rm -rf lib  tsconfig.tsbuildinfo"
   }
 }

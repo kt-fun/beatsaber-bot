@@ -2,8 +2,7 @@ import {CommandBuilder} from "@/interface";
 import { parsePlatform, Platform } from '@/utils'
 import { AccountBindingNotFoundError } from "@/services/errors";
 
-export default () =>
-  new CommandBuilder()
+export const Rank = new CommandBuilder()
     .setName('rank')
     .addOption('p', 'platform:string')
     .setExecutor(async (c) => {

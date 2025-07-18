@@ -1,6 +1,6 @@
 import { QRCodeCanvas } from '@ktfun/styled-qr-code-node'
 
-export default async function createQrcode(
+export async function createQrcode(
   url: string,
   width: number = 300,
   height: number = 300

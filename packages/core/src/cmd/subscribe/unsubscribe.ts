@@ -8,8 +8,7 @@ import {groupTypes, idTypes, supportTypes} from "./types";
 
 
 
-export default () =>
-  new CommandBuilder()
+export const Unsubscribe = new CommandBuilder()
     .setName('unsubscribe')
     .addAlias('bbunsub')
     .addAlias('/unsubbl', { options: { type: 'blscore' } })

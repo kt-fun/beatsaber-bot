@@ -1,7 +1,7 @@
 {
   "name": "beatsaber-bot-core",
   "description": "Beatsaber bot",
-  "version": "0.3.0-rc.21",
+  "version": "0.3.0-rc.34",
   "files": [
     "dist"
   ],
@@ -14,22 +14,22 @@
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
-      "require": "./dist/cjs/index.js",
+      "require": "./dist/cjs/index.cjs",
       "import": "./dist/esm/index.js"
     },
     "./interface": {
       "types": "./dist/types/index.d.ts",
-      "require": "./dist/cjs/interface/index.js",
+      "require": "./dist/cjs/interface/index.cjs",
       "import": "./dist/esm/interface/index.js"
     },
     "./interface/*": {
       "types": "./dist/types/index.d.ts",
-      "require": "./dist/cjs/interface/**/*.js",
+      "require": "./dist/cjs/interface/**/*.cjs",
       "import": "./dist/esm/interface/**/*.js"
     },
     "./services": {
       "types": "./dist/types/index.d.ts",
-      "require": "./dist/cjs/services/*.js",
+      "require": "./dist/cjs/services/*.cjs",
       "import": "./dist/esm/services/*.js"
     },
     "./services/*": {
@@ -68,9 +68,10 @@
     "zod": "^3.25.71"
   },
   "scripts": {
+    "ci:publish-dev": "pnpm publish --tag dev --no-git-checks",
     "db:gen": "drizzle-kit generate --config test/drizzle.config.ts",
     "db:mi": "drizzle-kit migrate --config test/drizzle.config.ts",
-    "fix-path-alias": " tsc-alias --outDir dist/cjs && tsc-alias --outDir dist/esm",
+    "fix-path-alias": " tsc-alias --outDir dist/cjs --resolve-full-extension=.cjs && tsc-alias --outDir dist/esm --resolve-full-extension=.js",
     "up": "tsup",
     "tsc": "tsc",
     "build": "tsup && pnpm run fix-path-alias",

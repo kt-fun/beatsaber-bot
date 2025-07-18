@@ -21,4 +21,4 @@ export const convertDiff = (diff: string | null) => {
 }
 
 export * from './platform'
-export * from './bsorDecoder.js'
+export * from './bsorDecoder'

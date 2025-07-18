@@ -35,8 +35,4 @@ export const Config = Schema.object({
       cron: Schema.string().default('0 0 * * *'),
     }),
   }),
-
-}).i18n({
-  'zh-CN': require('./locales/zh-CN')._config,
-  'en-US': require('./locales/en-US')._config,
 })

@@ -1,21 +1,4 @@
 import { defineConfig, Options } from 'tsup'
-import { globby } from 'globby'
-import path from 'path'
-import fs from 'fs'
-
-const copyJsonAssets = async () => {
-  const jsonFiles = await globby(['src/**/*.json'], { absolute: false });
-  const outDirs = ['dist/cjs', 'dist/esm'];
-
-  for (const file of jsonFiles) {
-    for (const outDir of outDirs) {
-      const destPath = path.join(outDir, file.substring('src/'.length));
-      await fs.promises.mkdir(path.dirname(destPath), { recursive: true });
-      await fs.promises.copyFile(file, destPath);
-    }
-  }
-  console.log('JSON assets copied.');
-};
 
 export default defineConfig((options) => {
   const commonOptions: Partial<Options> = {
@@ -34,7 +17,7 @@ export default defineConfig((options) => {
     target: 'es6',
     splitting: false,
     bundle: false, // Keep this false to avoid inlining
-    sourcemap: false,
+    sourcemap: true,
     clean: true,
     ...options,
   }
@@ -61,9 +44,6 @@ export default defineConfig((options) => {
         return { js: '.js', dts: '.d.ts' };
       },
       dts: false,
-      async onSuccess() {
-        await copyJsonAssets();
-      }
     },
     {
       ...commonOptions,

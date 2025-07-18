@@ -2,15 +2,6 @@ import {CmdContext, CommandBuilder} from "@/interface";
 import { NoneSubscriptionError } from '@/services/errors'
 import {groupTypes} from "@/cmd/subscribe/types";
 
-export default () =>
-  new CommandBuilder()
-    .setName('subscribe-info')
-    .addAlias('bbsubinfo')
-    .addAlias('/subinfo')
-    .setDescription('show subscriptions')
-    .setExecutor(showSubscriptions)
-
-
 export const showSubscriptions = async (c: CmdContext) => {
   const rows = await c.services.db.getSubscriptionInfoByUserAndChannelID(
     c.session.user.id,
@@ -41,3 +32,11 @@ export const showSubscriptions = async (c: CmdContext) => {
   }
   await c.session.sendQuote(text)
 }
+
+export const Info = new CommandBuilder()
+    .setName('subscribe-info')
+    .addAlias('bbsubinfo')
+    .addAlias('/subinfo')
+    .setDescription('show subscriptions')
+    .setExecutor(showSubscriptions)
+

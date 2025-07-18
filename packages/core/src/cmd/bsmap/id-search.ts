@@ -4,8 +4,7 @@ import {CommandBuilder} from "@/interface";
 
 const mapIdReg = /^[a-fA-F0-9]{1,6}$/
 
-export default () =>
-  new CommandBuilder()
+export const IdSearch = new CommandBuilder()
     .setName('id')
     .addAlias('/id')
     .addAlias('bbid')

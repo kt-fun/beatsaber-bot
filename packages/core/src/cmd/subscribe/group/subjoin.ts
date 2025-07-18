@@ -4,8 +4,7 @@ import {groupTypes} from "../types";
 
 
 
-export default () =>
-  new CommandBuilder()
+export const Subjoin = new CommandBuilder()
     .setName('join-subscription-group')
     .addAlias('bbjoin')
     .addAlias('/joinbl', { options: { type: 'blscore-group' } })

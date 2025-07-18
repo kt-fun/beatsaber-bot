@@ -5,21 +5,19 @@
     "outDir": "dist",
     "jsx": "react-jsx",
     "jsxImportSource": "@satorijs/element",
-    "sourceMap": true,
-    "module": "NodeNext",
     "types": [
       "node",
       "react"
     ],
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
-    "moduleResolution": "nodenext"
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   },
   "include": ["src/**/*"],
-  "exclude": ["**/*.spec.ts"],
-  //  for koishi build tool: prevent yakomo-tsc copy source js to output file
-  "atsc": {
-    "loaders": [".yaml",".yml",".js"]
-  }
+  "exclude": ["**/*.spec.ts"]
 }

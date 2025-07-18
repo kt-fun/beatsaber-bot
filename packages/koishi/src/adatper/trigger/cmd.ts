@@ -4,7 +4,7 @@ import { KSession } from '../support/session'
 import { Config, Command, User } from "beatsaber-bot-core";
 import { createServices } from "../support/services";
 import {AgentHolder} from "../support/agent";
-import {getCommands} from "beatsaber-bot-core";
+import { getCommands } from "beatsaber-bot-core";
 
 
 export function loadCmd(ctx: Context, config: Config) {

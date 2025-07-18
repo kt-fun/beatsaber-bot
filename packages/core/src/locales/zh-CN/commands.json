@@ -3,7 +3,7 @@
     "bsbot": {
       "lbrank": {
         "render": {
-          "beat-start": "开始渲染方块榜，请耐心等待",
+          "hitcnt-start": "开始渲染方块榜，请耐心等待",
           "score-start": "开始渲染打分榜，请耐心等待"
         }
       },

@@ -1,6 +1,5 @@
 import {CommandBuilder} from "@/interface";
-export default () =>
-  new CommandBuilder()
+export const KeySearch = new CommandBuilder()
     .setName('search') // <key:text>
     .addAlias('bbsou')
     .addAlias('bbsearch')
