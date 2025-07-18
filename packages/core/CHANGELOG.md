@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.3.0-rc.21
+
+### Patch Changes
+
+- refactor(core): subscription db
+
 ## 0.2.0-rc.14
 
 ### Patch Changes
