@@ -29,7 +29,7 @@ export default () =>
         return unsubscribeId(c)
       }
       const subscription = await c.services.db
-        .getChannelSubscriptionByChannelIDAndType(c.session.channel.id, t)
+        .getGroupSubscriptionByChannelIDAndType(c.session.channel.id, t)
       if(!subscription) throw new SubscriptionNotExistError({ type: c.options.t, channelId: c.session.channel.id })
       const data = { ...subscription, enabled: false }
       await c.services.db.upsertSubscription(data)
@@ -59,7 +59,7 @@ const unsubscribeId = async (c: CmdContext<{t?: string}>) => {
   if (!subscription) {
     throw new SubscriptionNotExistError({ type: c.options.t, channelId: c.session.channel.id, id: id })
   }
-  await c.services.db.removeIDSubscriptionByID(id)
+  await c.services.db.removeSubscriptionByID(id)
   await c.session.sendQuote(
     c.session.text(`commands.bsbot.unsubscribe.success.${c.options.t}`, subscription.data)
   )

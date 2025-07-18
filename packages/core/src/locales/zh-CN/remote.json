@@ -1,0 +1,59 @@
+{
+  "remote": {
+    "platform": {
+      "resource": {
+        "id": {
+          "not-found": "没有在 {{platform}} 上找到 id 为 [{{ resourceId }}] 的 {{ resourceType }} 资源"
+        }
+      },
+      "account": {
+        "id": {
+          "not-found": "没有在 {{platform}} 上找到 id 为 [{{ accountId }}] 的账户"
+        }
+      }
+    },
+    "beatsaver": {
+      "account": {
+        "id": {
+          "not-found": "没找到 ID 为 [{{ accountId }}] 的 Beatsaver 用户"
+        }
+      },
+      "bsmap": {
+        "id": {
+          "not-found": "没找到谱面 ID [{{ mapId }}]"
+        }
+      }
+    },
+
+    "beatleader": {
+      "account": {
+        "id": {
+          "not-found": "没找到 ID 为 [{{ accountId }}] 的 Beatleader 用户"
+        }
+      },
+      "score": {
+        "id": {
+          "not-found": "没找到ID 为 [{{ scoreId }}] 的打分数据"
+        },
+        "map-user-id": {
+          "not-found": "😯，没有找到用户「{{user}}」谱面「{{mapId}} ({{mode ? '{{mode}}' : '' }} {{diff ? '-{{diff}}' : '' }})」的BL打分数据"
+        }
+      }
+    },
+
+    "scoresaber": {
+      "account": {
+        "id": {
+          "not-found": "没找到 ID 为 [{{ accountId }}] 的 Scoresaber 用户"
+        }
+      }
+    },
+    "network": {
+      "request": {
+        "error": "出现了网络错误，重试也许有效🤔",
+        "reach-retry-limit": "网络重试到达上限，让 bot 先歇一下吧🥹"
+      }
+    }
+  }
+
+}

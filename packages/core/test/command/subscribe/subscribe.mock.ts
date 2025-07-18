@@ -49,16 +49,16 @@ export const channels = [
 export const subscriptions: Subscription[] = [
 
   // 定时任务
-  { id: 'lbrank::1', type: 'lbrank', enabled: true, channelId: '1', data: null, ...time },
-  { id: 'lbrank::2', type: 'lbrank', enabled: false, channelId: '2', data: null, ...time },
-  { id: 'lbrank::3', type: 'lbrank', enabled: true, channelId: '3', data: null, ...time },
+  { id: 'lbrank::1', type: 'lbrank', eventType:'schedule', enabled: true, channelId: '1', data: null, ...time },
+  { id: 'lbrank::2', type: 'lbrank', eventType:'schedule', enabled: false, channelId: '2', data: null, ...time },
+  { id: 'lbrank::3', type: 'lbrank', eventType:'schedule', enabled: true, channelId: '3', data: null, ...time },
   // 直接订阅某个不相关的人。
-  { id: 'bsmap::1::58338', type: 'bsmap', enabled: false, channelId: '1', data: { mapperId: '58338' }, ...time },
-  { id: 'blscore::1::76561198960449289', type: 'blscore', enabled: false, channelId: '1', data: { playerId: '76561198960449289' }, ...time },
-  { id: '6', type: 'bsmap-group', enabled: true, channelId: '1', data: null, ...time },
-  { id: '7', type: 'blscore-group', enabled: false, channelId: '1', data: null, ...time },
-  { id: '8', type: 'bsmap-group', enabled: false, channelId: '3', data: null, ...time },
-  { id: '9', type: 'blscore-group', enabled: false, channelId: '3', data: null, ...time },
+  { id: 'bsmap::1::58338', type: 'bsmap', eventType:'bsmap-update', enabled: false, channelId: '1', data: { mapperId: '58338' }, ...time },
+  { id: 'blscore::1::76561198960449289', type: 'blscore', eventType:'blscore-update', enabled: false, channelId: '1', data: { playerId: '76561198960449289' }, ...time },
+  { id: '6', type: 'bsmap-group', eventType:'bsmap-update', enabled: true, channelId: '1', data: null, ...time },
+  { id: '7', type: 'blscore-group', eventType:'blscore-update', enabled: false, channelId: '1', data: null, ...time },
+  { id: '8', type: 'bsmap-group', eventType:'bsmap-update', enabled: false, channelId: '3', data: null, ...time },
+  { id: '9', type: 'blscore-group', eventType:'blscore-update', enabled: false, channelId: '3', data: null, ...time },
 
 ]
 

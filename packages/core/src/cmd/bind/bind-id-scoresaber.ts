@@ -15,8 +15,8 @@ export const handleScoreSaberBind = async (c: CmdContext) => {
     },
     fetchUser: (id) => c.services.api.ScoreSaber.getScoreUserById(id),
     getExistingAccount: async (userId) => {
-      const { ssAccount } = await c.services.db.getUserAccountsByUid(userId)
-      return ssAccount
+      return c.services.db.getUserAccountsByUserIdAndType(userId, ['scoresaber'] as const)
+        .then(res => res.scoresaber)
     },
     platformName: 'scoresaber',
     providerId: 'scoresaber',

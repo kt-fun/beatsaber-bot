@@ -29,9 +29,7 @@ export default () =>
         platform = parsePlatform(c.options.p, Platform.BL)
       } else {
         await c.session.sendQuote(c.session.text('commands.bsbot.bind.unsupported-platform', {
-          params: {
-            platform: c.options.p
-          }
+          platform: c.options.p
         }))
         return
       }

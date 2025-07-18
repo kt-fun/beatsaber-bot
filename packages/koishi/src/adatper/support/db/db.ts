@@ -1,12 +1,12 @@
 import {
   Account,
+  AddSubscriptionMember,
   Channel,
   DB,
-  SubDetailWithGroupRes,
+  EventTarget,
+  mergeEventTargets,
   SubInfoRes,
   Subscription,
-  SubscriptionMember,
-  SubWithGroupRes,
   User
 } from 'beatsaber-bot-core'
 import {$, Context, Database, Tables} from 'koishi'
@@ -21,6 +21,8 @@ export class KoishiDB implements DB {
     this.db = ctx.database
   }
 
+
+  // preference
   async storeUserPreference<V = any>(
     uid: string,
     // gid: number | undefined,
@@ -45,10 +47,26 @@ export class KoishiDB implements DB {
     )
     return res?.[0]?.data ?? {}
   }
-  async getUserAccountsByUid(uid: string) {
+  // accounts
+
+  async getUserAccountsByUserIdAndType<T extends readonly string[] = string[]>(id: string, types: T): Promise<Record<T[number], Account>> {
     const accounts = await this.db.get('BSRelateAccount', (row) => {
       return $.and(
-        $.eq(row.userId, uid),
+        $.eq(row.userId, id),
+        // todo use array in
+        $.or(...types.map(it => $.eq(row.providerId, it)))
+      )
+    })
+    const res = types.reduce((acc, cur) => {
+      acc[cur] = accounts.find(it => it.providerId === cur)
+      return acc
+    }, {} as Record<T[number], Account>)
+    return res
+  }
+  async getUserAccountsByUserId(id: string): Promise<Account[]> {
+    const accounts = await this.db.get('BSRelateAccount', (row) => {
+      return $.and(
+        $.eq(row.userId, id),
         $.or(
           $.eq(row.providerId, 'scoresaber'),
           $.eq(row.providerId, 'beatleader'),
@@ -56,72 +74,13 @@ export class KoishiDB implements DB {
         )
       )
     })
-    const blAccount = accounts.find((it) => it.providerId == 'beatleader')
-    const ssAccount = accounts.find((it) => it.providerId == 'scoresaber')
-    const bsAccount = accounts.find((it) => it.providerId == 'beatsaver')
-    return {
-      blAccount: blAccount,
-      ssAccount,
-      bsAccount,
-    }
+    return accounts
   }
-
-  async getSubscriptionInfoByUGID(
-    gid: string,
-    uid: string
-  ): Promise<SubInfoRes[]> {
-    const rows = await this.db
-      .join(
-        ['BSSubscription', 'BSSubscriptionMember'],
-        (s, m) => $.and($.eq(s.id, m.subscriptionId)),
-        [false, true]
-      )
-      .where((r) => {
-        return $.eq(r.BSSubscription.channelId, gid)
-      })
-      .groupBy(['BSSubscription.id'], {
-        subscription: (row) => row.BSSubscription,
-        memberCount: (row) => $.count(row.BSSubscriptionMember.memberId),
-        me: (row) => $.in(uid, $.array(row.BSSubscriptionMember.memberId)),
-      })
-      .execute()
-    return rows
-  }
-
-  async getSubscriptionsByGID(gid: string): Promise<Record<string, Subscription>> {
-    const res = await this.db.get('BSSubscription', {
-      channelId: gid,
-    })
-    const blSub = res.find((it) => it.type == 'beatleader-score')
-    const bsMapSub = res.find((it) => it.type == 'beatsaver-map')
-    const bsAlertSub = res.find((it) => it.type == 'beatsaver-alert')
-    return {
-      blSub,
-      bsMapSub,
-      bsAlertSub,
-    }
-  }
-  async upsertSubscription(data: Partial<Subscription>): Promise<void> {
-    await this.db.upsert('BSSubscription', [data])
-  }
-  async addSubscribeMember(data: Partial<SubscriptionMember>): Promise<void> {
-    await this.db.upsert('BSSubscriptionMember', [data])
-  }
-
-  async addUserBindingInfo(account: Partial<Account>): Promise<void> {
+  async addUserAccount(account: Partial<Account>): Promise<void> {
     const [target] = await this.db.select('BSRelateAccount', (row) => $.and(
       $.eq(row.accountId, account.accountId),
       $.eq(row.providerId, account.providerId),
     )).execute()
-    // account has been bind by other user
-    if(target && target.userId !== account.userId) {
-      throw new Error(`account ${account.providerId}:${account.accountId} has been bind by other user ${target.userId}`)
-    }
-    // account has been bind by this user
-    if(target) {
-      return
-    }
-    // not bound, create
     await this.db.create('BSRelateAccount', {
       id: typeid().toString(),
       ...account,
@@ -129,69 +88,104 @@ export class KoishiDB implements DB {
   }
 
 
-  async removeFromSubGroupBySubAndUid(
-    subId: string,
-    id: string
-  ): Promise<void> {
+  // subscription member
+  async addSubscriptionMember(data: AddSubscriptionMember): Promise<void> {
+    await this.db.upsert('BSSubscriptionMember', [data])
+  }
+
+  async removeSubscriptionMemberBySubIdAndMemberId(subId: string, id: string): Promise<void> {
     await this.db.remove('BSSubscriptionMember', {
       subscriptionId: subId,
       memberId: id,
     })
   }
 
-  async getIDSubscriptionByGID(gid: string) {
+
+  // get subscription
+  async getSubscriptionByID(id: string): Promise<Subscription | null> {
     const res = await this.db
       .select('BSSubscription')
-      .where((q) =>
-        $.and(
+      .where((q) => $.eq(q.id, id))
+      .execute()
+    return res[0] ?? null
+  }
+
+  async getGroupSubscriptionByChannelIDAndType(channelId: string, type: string): Promise<Subscription | null> {
+    const res = await this.db
+      .select('BSSubscription')
+      .where((q) => $.and(
+        $.eq(q.channelId, channelId),
+        $.eq(q.type, type)
+      ))
+      .execute()
+    return res[0] ?? null
+  }
+
+  async getSubscriptionByChannelIDAndType(gid: string, type: string): Promise<Subscription[]> {
+    const res = await this.db
+      .select('BSSubscription')
+      .where((q) => $.and(
           $.eq(q.channelId, gid),
-          $.or(
-            $.eq(q.type, 'id-beatsaver-map'),
-            $.eq(q.type, 'id-beatleader-score')
-          )
-        )
-      )
+          $.eq(q.type, type),
+      ))
       .execute()
     return res
   }
 
-  async removeIDSubscriptionByID(id: string): Promise<void> {
+
+  // get subscription info
+  async getSubscriptionInfoByUserAndChannelID(userId: string, channelId: string): Promise<SubInfoRes[]> {
+    const rows = await this.db
+      .join(
+        ['BSSubscription', 'BSSubscriptionMember'],
+        (s, m) => $.and($.eq(s.id, m.subscriptionId)),
+        [false, true]
+      )
+      .where((r) => {
+        return $.eq(r.BSSubscription.channelId, channelId)
+      })
+      .groupBy(['BSSubscription.id'], {
+        subscription: (row) => row.BSSubscription,
+        memberCount: (row) => $.count(row.BSSubscriptionMember.memberId),
+        me: (row) => $.in(userId, $.array(row.BSSubscriptionMember.memberId)),
+      })
+      .execute()
+    return rows
+  }
+
+  async getSubscriptionMemberByUserChannelAndType(userId: string, channelId: string, type: string): Promise<SubInfoRes | null> {
+    const rows = await this.db
+      .join(
+        ['BSSubscription', 'BSSubscriptionMember'],
+        (s, m) => $.and($.eq(s.id, m.subscriptionId)),
+        [false, true]
+      )
+      .where((r) => {
+        return $.and(
+          $.eq(r.BSSubscription.channelId, channelId),
+          $.eq(r.BSSubscription.type, type)
+        )
+      })
+      .groupBy(['BSSubscription.id'], {
+        subscription: (row) => row.BSSubscription,
+        memberCount: (row) => $.count(row.BSSubscriptionMember.memberId),
+        me: (row) => $.in(userId, $.array(row.BSSubscriptionMember.memberId)),
+      })
+      .execute()
+    return rows[0] ?? null
+  }
+
+
+  // insert subscription
+  async upsertSubscription(data: Partial<Subscription>): Promise<void> {
+    await this.db.upsert('BSSubscription', [data])
+  }
+  // remove subscription
+  async removeSubscriptionByID(id: string): Promise<void> {
     await this.db.remove('BSSubscription', { id })
   }
-  async getIDSubscriptionByType(
-    type: string
-  ): Promise<SubWithGroupRes[]> {
-    const res = await this.db
-      .join(
-        {
-          subscription: this.db
-            .select('BSSubscription')
-            .where((r) => $.eq(r.type, type)),
-          channel: this.db.select('BSChannel'),
-        },
-        ({ subscription, channel }) =>
-          $.and($.eq(subscription.channelId, channel.id))
-      )
-      .execute()
-    return res.map(it => ({
-      subscription: it.subscription,
-      channel: it.channel
-    }))
-  }
-  async getIDSubscriptionByChannelIDAndType(
-    gid: string,
-    type: string
-  ): Promise<Subscription[]> {
-    const res = await this.db
-      .select('BSSubscription')
-      .where((q) => $.and($.eq(q.channelId, gid), $.eq(q.type, type)))
-      .execute()
-    return res
-  }
-  async getAllSubscriptionByUIDAndPlatform(
-    id: string,
-    platform: string
-  ): Promise<SubDetailWithGroupRes[]> {
+
+  private async getEventTargetsByPlatformAccount(platform: string, id: string, type: string, eventType: string): Promise<EventTarget[]> {
     const subs = await this.db
       .join(
         {
@@ -207,56 +201,109 @@ export class KoishiDB implements DB {
           BSSubscriptionMember: this.db.select('BSSubscriptionMember'),
           BSSubscription: this.db
             .select('BSSubscription')
-            .where((r) => $.eq(r.enabled, true)),
+            .where((r) => $.and(
+              $.eq(r.enabled, true),
+              $.eq(r.type, type),
+              $.eq(r.eventType, eventType),
+            )),
           BSChannel: this.db
             .select('BSChannel'),
+          BSChannelAccount: this.db.select('BSRelateAccount')
         },
         ({
-          BSRelateAccount,
-          BSUser,
-          BSSubscriptionMember,
-          BSSubscription,
-          BSChannel,
-        }) =>
+           BSRelateAccount,
+           BSUser,
+           BSSubscriptionMember,
+           BSSubscription,
+           BSChannel,
+          BSChannelAccount
+         }) =>
           $.and(
             $.eq(BSRelateAccount.userId, BSUser.id),
             $.eq(BSRelateAccount.userId, BSSubscriptionMember.memberId),
             $.eq(BSSubscription.id, BSSubscriptionMember.subscriptionId),
-            $.eq(BSChannel.id, BSSubscription.channelId)
+            $.eq(BSChannel.id, BSSubscription.channelId),
+            $.eq(BSChannel.providerId, BSChannelAccount.providerId),
+            $.eq(BSUser.id, BSChannelAccount.userId),
           )
       )
       .execute()
-    return subs.map((sub) => ({
+    const rows = subs.map((sub) => ({
       account: sub.BSRelateAccount,
       user: sub.BSUser,
       subscriptionMember: sub.BSSubscriptionMember,
       subscription: sub.BSSubscription,
       channel: sub.BSChannel,
+      channelAccount: sub.BSChannelAccount
     }))
+    const maps = rows.reduce((acc, cur) => {
+      let m = acc.get(cur.channel.id)
+      if(!m) {
+        m = { channel: cur.channel, users: [], subscriptions: []}
+      }
+      if(cur.user) m.users.push({...cur.user, account: cur.account, channelAccount: cur.channelAccount })
+      m.subscriptions.push(cur.subscription)
+      acc.set(cur.channel.id, m)
+      return acc
+    }, new Map<string, EventTarget>())
+    return Array.from(maps.values())
   }
 
-  async getSubscriptionsByType(type: string) {
+  private async getCommonEventTargets(eventType: string, type: string,entityKey: string, entityId: string): Promise<EventTarget[]> {
+    //todo verify json query method in dsl
     const subs = await this.db
-      .join(
-        {
-          BSSubscription: this.db
-            .select('BSSubscription')
-            .where((r) => $.and($.eq(r.enabled, true), $.eq(r.type, type))),
-          BSChannel: this.db
-            .select('BSChannel')
-        },
-        ({ BSSubscription, BSChannel }) =>
-          $.and($.eq(BSChannel.id, BSSubscription.channelId))
-      )
+      .select('BSSubscription')
+      .join('BSChannel', this.db.select('BSChannel'), (s, c) => {
+        return $.eq(s.channelId, c.id)
+      }).where(r => $.and(
+        $.eq(r.enabled, true),
+        $.eq(r.type, type),
+        $.eq(r.eventType, eventType),
+      ))
       .execute()
-    const res = subs.map((sub) => ({
-      // account: sub.BSRelateAccount,
-      subscription: sub.BSSubscription,
-      channel: sub.BSChannel,
-    }))
-    return res
+
+    return subs
+      .filter(it => it.data?.[entityKey] === entityId)
+      .map(it => {
+      const {BSChannel, ...sub} = it
+      return {
+        subscriptions: [sub],
+        channel: BSChannel,
+        users: []
+      }
+    })
+  }
+  async getBLScoreEventTargets(playerId: string): Promise<EventTarget[]> {
+    const part1 = await this.getCommonEventTargets('blscore-update', 'blscore', 'playerId', playerId)
+    const part2 = await this.getEventTargetsByPlatformAccount('beatleader', playerId, 'blscore-group', 'blscore-update')
+    return mergeEventTargets(part1, part2)
+  }
+  async getBSMapEventTargets(mapperId: string): Promise<EventTarget[]> {
+    const part1 = await this.getCommonEventTargets('bsmap-update', 'bsmap', 'mapperId', mapperId)
+    const part2 = await this.getEventTargetsByPlatformAccount('beatsaver', mapperId, 'bsmap-group', 'bsmap-update')
+    return mergeEventTargets(part1, part2)
   }
 
+  async getScheduleEventTargets(type: string): Promise<EventTarget[]> {
+    const subs = await this.db
+      .select('BSSubscription')
+      .join('BSChannel', this.db.select('BSChannel'), (s, c) => {
+        return $.eq(s.channelId, c.id)
+      }).where(r => $.and(
+        $.eq(r.enabled, true),
+        $.eq(r.type, type),
+        $.eq(r.eventType, 'schedule'),
+      ))
+      .execute()
+    return subs.map(it => {
+      const {BSChannel, ...sub} = it
+      return {
+        subscriptions: [sub],
+        channel: BSChannel,
+        users: []
+      }
+    })
+  }
 
   async getUAndGBySessionInfo(
     c: ChannelInfo

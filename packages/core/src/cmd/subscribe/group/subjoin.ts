@@ -22,12 +22,12 @@ export default () =>
         actual: t
       })
       const subscription = await c.services.db
-        .getChannelSubscriptionByChannelIDAndType(c.session.channel.id, t)
+        .getGroupSubscriptionByChannelIDAndType(c.session.channel.id, t)
       if (!subscription) throw new SubscriptionNotExistError({ type: t, channelId: c.session.channel.id })
       const data = {
         subscriptionId: subscription?.id,
         memberId: c.session.user.id,
       }
-      await c.services.db.addSubscribeMember(data)
+      await c.services.db.addSubscriptionMember(data)
       await c.session.sendQuote(c.session.text(`commands.bsbot.join-subscription-group.success.${t}`))
     })

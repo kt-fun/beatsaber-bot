@@ -1,8 +1,8 @@
 import { EventContext } from "@/interface";
 
 export const LBRank = async (c: EventContext) => {
-  const channels = await c.services.db.getSubscriptionsByType('lb-rank')
-  if (channels.length <= 0) {
+  const eventTargets = await c.services.db.getScheduleEventTargets('lbrank')
+  if (eventTargets.length <= 0) {
     return
   }
   const [hitbuf, scorebuf] = await Promise.all([
@@ -13,8 +13,8 @@ export const LBRank = async (c: EventContext) => {
       selector: '#render-result',
     }),
   ])
-  for (const group of channels) {
-    const session = await c.agentService.getAgentSessionByChannelInfo(group.channel)
+  for (const target of eventTargets) {
+    const session = await c.agentService.getAgentSessionByChannelInfo(target.channel)
     if (!session) {
       continue
     }

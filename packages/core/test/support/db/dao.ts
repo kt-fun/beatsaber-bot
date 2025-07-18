@@ -1,34 +1,21 @@
-
 // 假设您的 schema 文件名为 'schema.ts'
-import {
-  account,
-  bsSubscribeMember,
-  bsSubscribe,
-  user,
-  channel,
-  bsUserPreference
-} from './schema.js';
+import {account, bsSubscribe, bsSubscribeMember, bsUserPreference, channel, user} from './schema.js';
 import {BetterSQLite3Database} from "drizzle-orm/better-sqlite3";
-import {eq, and, inArray, count, sql} from 'drizzle-orm';
-import type {
+import {aliasedTable, and, count, eq, inArray, or, SQL, sql} from 'drizzle-orm';
+import {
+  Account,
+  AddSubscriptionMember,
   DB,
-  Subscription,
-  SubWithGroupRes,
-  SubDetailWithGroupRes,
+  EventTarget,
+  mergeEventTargets,
   SubInfoRes,
-  AddSubscriptionMember
+  Subscription,
+  SubWithGroupRes
 } from "@/index";
-
-// 定义 schema 类型，方便在类中使用
 type DrizzleSchema = typeof import('./schema');
 type DrizzleDb = BetterSQLite3Database<DrizzleSchema>;
-
-// 定义一些来自您代码的、但未在此处定义的类型，以便代码能够通过类型检查
-// 您需要将它们替换为实际的定义
-type ChannelInfo = { platform: string; uid: string; selfId: string; channelId: string; };
-type SubscribeMember = typeof bsSubscribeMember.$inferSelect;
 type RelateAccount = typeof account.$inferSelect;
-// b.ts
+
 export class DrizzleDB implements DB {
   private db: DrizzleDb;
 
@@ -36,8 +23,7 @@ export class DrizzleDB implements DB {
     this.db = db;
   }
 
-
-  getIDSubscriptionByChannelIDAndType(gid: string, type: string): Promise<Subscription[]> {
+  getSubscriptionByChannelIDAndType(gid: string, type: string): Promise<Subscription[]> {
     return this.db.select()
       .from(bsSubscribe)
       .where(and(
@@ -46,14 +32,11 @@ export class DrizzleDB implements DB {
       ))
   }
 
-  getIDSubscriptionByGID(gid: string): Promise<Subscription[]> {
+  getSubscriptionByChannelID(gid: string): Promise<Subscription[]> {
     return this.db.select()
       .from(bsSubscribe)
       .where(eq(bsSubscribe.channelId, gid));
     }
-  getIDSubscriptionByType(type: string): Promise<SubWithGroupRes[]> {
-      throw new Error('Method not implemented.');
-  }
 
   /**
    * 更新或插入用户偏好设置
@@ -90,19 +73,24 @@ export class DrizzleDB implements DB {
   /**
    * 根据 UID 获取用户绑定的平台账户
    */
-  async getUserAccountsByUid(uid: string) {
-    console.log(`Getting user accounts for: ${uid}`);
+  async getUserAccountsByUserId(uid: string) {
+    return this.db.select()
+      .from(account)
+      .where(eq(account.userId, uid));
+  }
+
+  async getUserAccountsByUserIdAndType<T extends readonly string[]>(id: string, types: T): Promise<Record<T[number], Account>> {
     const accounts = await this.db.select()
       .from(account)
       .where(and(
-        eq(account.userId, uid),
-        inArray(account.providerId, ['scoresaber', 'beatleader', 'beatsaver'])
+        eq(account.userId, id),
+        inArray(account.providerId, types)
       ));
-    const blAccount = accounts.find((it) => it.providerId === 'beatleader');
-    const ssAccount = accounts.find((it) => it.providerId === 'scoresaber');
-    const bsAccount = accounts.find((it) => it.providerId === 'beatsaver');
-
-    return { blAccount, ssAccount, bsAccount };
+    const res = types.reduce((acc, cur) => {
+      acc[cur] = accounts.find(it => it.providerId === cur)
+      return acc
+    }, {} as Record<T[number], Account>)
+    return res
   }
 
   /**
@@ -110,12 +98,8 @@ export class DrizzleDB implements DB {
    * 注意: 原查询中的 me: (row) => $.in(uid, $.array(...)) 不是标准SQL。
    * 这里使用条件聚合来模拟，结果中的 me 将是 boolean 类型。
    */
-  async getSubscriptionInfoByUGID(
-    gid: string,
-    uid: string
-  ): Promise<SubInfoRes[]> {
-    const isMember = sql<number>`SUM(CASE WHEN ${bsSubscribeMember.memberId} = ${uid} THEN 1 ELSE 0 END) > 0`.as('me');
-
+  async getSubscriptionInfoByUserAndChannelID(userId: string, channelId: string): Promise<SubInfoRes[]> {
+    const isMember = sql<number>`SUM(CASE WHEN ${bsSubscribeMember.memberId} = ${userId} THEN 1 ELSE 0 END) > 0`.as('me');
     const rows = await this.db
       .select({
         subscription: bsSubscribe,
@@ -124,9 +108,8 @@ export class DrizzleDB implements DB {
       })
       .from(bsSubscribe)
       .leftJoin(bsSubscribeMember, eq(bsSubscribe.id, bsSubscribeMember.subscriptionId))
-      .where(eq(bsSubscribe.channelId, gid))
+      .where(eq(bsSubscribe.channelId, channelId))
       .groupBy(bsSubscribe.id);
-
     return rows.map(row => ({
       ...row,
       me: !!row.me
@@ -158,19 +141,8 @@ export class DrizzleDB implements DB {
       .where(eq(bsSubscribe.id, id)).limit(1);
     return res ?? null
   }
-  /**
-   * 根据 GID 获取订阅
-   */
-  async getSubscriptionsByGID(gid: string): Promise<Record<string, Subscription>> {
-    const res = await this.db.select()
-      .from(bsSubscribe)
-      .where(eq(bsSubscribe.channelId, gid));
-    const blSub = res.find((it) => it.type === 'beatleader-score');
-    const bsMapSub = res.find((it) => it.type === 'beatsaver-map');
-    return { blSub, bsMapSub };
-  }
 
-  async getChannelSubscriptionByChannelIDAndType(channelId: string, type: string): Promise<Subscription | null> {
+  async getGroupSubscriptionByChannelIDAndType(channelId: string, type: string): Promise<Subscription | null> {
     const res = await this.db.select()
       .from(bsSubscribe)
       .where(and(
@@ -195,7 +167,7 @@ export class DrizzleDB implements DB {
   /**
    * 添加订阅成员
    */
-  async addSubscribeMember(data: AddSubscriptionMember): Promise<void> {
+  async addSubscriptionMember(data: AddSubscriptionMember): Promise<void> {
     const now = new Date()
     data.createdAt = data.createdAt ?? now
     data.updatedAt = data.updatedAt ?? now
@@ -208,7 +180,7 @@ export class DrizzleDB implements DB {
   /**
    * 添加用户绑定信息
    */
-  async addUserBindingInfo(acc: Partial<RelateAccount>): Promise<void> {
+  async addUserAccount(acc: Partial<RelateAccount>): Promise<void> {
     await this.db.insert(account)
       .values(acc as RelateAccount)
       .onConflictDoUpdate({
@@ -220,7 +192,7 @@ export class DrizzleDB implements DB {
   /**
    * 移除订阅成员
    */
-  async removeFromSubGroupBySubAndUid(subId: string, id: string): Promise<void> {
+  async removeSubscriptionMemberBySubIdAndMemberId(subId: string, id: string): Promise<void> {
     await this.db.delete(bsSubscribeMember)
       .where(and(
         eq(bsSubscribeMember.subscriptionId, subId),
@@ -243,57 +215,132 @@ export class DrizzleDB implements DB {
   /**
    * 根据 ID 移除订阅
    */
-  async removeIDSubscriptionByID(id: string): Promise<void> {
+  async removeSubscriptionByID(id: string): Promise<void> {
     await this.db.delete(bsSubscribe).where(eq(bsSubscribe.id, id));
+    await this.db.delete(bsSubscribeMember).where(eq(bsSubscribeMember.subscriptionId, id));
   }
 
   /**
-   * 根据平台和平台UID获取所有相关订阅的详细信息
+   * 根据 GID 获取订阅
    */
-  async getAllSubscriptionByUIDAndPlatform(id: string, platform: string): Promise<SubDetailWithGroupRes[]> {
-
-    // account: Account
-    // user: User
-    // channel: Channel
-    // subscriptionMember: SubscriptionMember
-    // subscription: Subscription
-    const rows = await this.db.select({
-      account: account,
-      user: user,
-      channel: channel,
-      subscriptionMember: bsSubscribeMember,
-      subscription: bsSubscribe,
-    })
-      .from(account)
-      .innerJoin(user, eq(account.userId, user.id))
-      .innerJoin(bsSubscribeMember, eq(account.userId, bsSubscribeMember.memberId))
-      .innerJoin(bsSubscribe, and(
-        eq(bsSubscribeMember.subscriptionId, bsSubscribe.id),
-        eq(bsSubscribe.enabled, true)
-      ))
-      .innerJoin(channel, eq(bsSubscribe.channelId, channel.id))
-      .where(and(
-        eq(account.providerId, platform),
-        eq(account.accountId, id)
-      ));
-
-    return rows;
-  }
-
-  /**
-   * 根据类型获取所有启用的订阅
-   */
-  async getSubscriptionsByType(type: string): Promise<SubWithGroupRes[]> {
-    const rows = await this.db.select({
-      subscription: bsSubscribe,
-      channel: channel
-    })
+  async getSubscriptionsByChannelID(gid: string): Promise<Subscription[]> {
+    const res = await this.db.select()
       .from(bsSubscribe)
-      .innerJoin(channel, eq(bsSubscribe.channelId, channel.id))
-      .where(and(
-        eq(bsSubscribe.enabled, true),
-        eq(bsSubscribe.type, type)
-      ));
-    return rows
+      .where(eq(bsSubscribe.channelId, gid));
+    return res
   }
+
+  async getScheduleEventTargets(type: string): Promise<EventTarget[]> {
+
+    const rows = await this.db.select({
+      channel: channel,
+      subscription: bsSubscribe,
+    })
+      .from(channel)
+      .innerJoin(bsSubscribe, and(
+        eq(bsSubscribe.enabled, true),
+        eq(bsSubscribe.channelId, channel.id),
+        eq(bsSubscribe.eventType, 'schedule'),
+        eq(bsSubscribe.type, type),
+      ))
+    return rows.map(it => ({
+      channel: it.channel,
+      users: [],
+      subscriptions: [it.subscription]
+    }))
+  }
+
+
+  async getBLScoreEventTargets(playerId: string): Promise<EventTarget[]> {
+    const providerId = 'beatleader'
+    const commonQuery = [
+      eq(bsSubscribe.enabled, true),
+      eq(channel.id, bsSubscribe.channelId),
+      eq(bsSubscribe.eventType, 'blscore-update'),
+    ]
+    const part1 = await this.getCommonEventTargets(and(
+        ...commonQuery,
+      eq(bsSubscribe.type, 'blscore'),
+      eq(sql`json_extract(${bsSubscribe.data}, '$.playerId')`, playerId)
+    ))
+    const part2 = await this.getEventTargetsByAccount(providerId, playerId, and(
+      ...commonQuery,
+      eq(bsSubscribe.type, 'blscore-group')
+    ))
+    return mergeEventTargets(part1, part2)
+  }
+
+  async getBSMapEventTargets(mapperId: string): Promise<EventTarget[]> {
+    const providerId = 'beatsaver'
+    const commonQuery = [
+      eq(bsSubscribe.enabled, true),
+      eq(channel.id, bsSubscribe.channelId),
+      eq(bsSubscribe.eventType, 'bsmap-update'),
+    ]
+    const part1 = await this.getCommonEventTargets(and(
+      ...commonQuery,
+      eq(bsSubscribe.type, 'bsmap'),
+      eq(sql`json_extract(${bsSubscribe.data}, '$.mapperId')`, mapperId)
+    ))
+    const part2 = await this.getEventTargetsByAccount(providerId, mapperId, and(
+      ...commonQuery,
+      eq(bsSubscribe.type, 'bsmap-group')
+    ))
+    return mergeEventTargets(part1, part2)
+  }
+
+  private async getCommonEventTargets(q: SQL<unknown>): Promise<EventTarget[]> {
+    const rows = await this.db.select({
+      channel: channel,
+      subscription: bsSubscribe,
+    })
+      .from(channel)
+      .innerJoin(bsSubscribe, and(
+        eq(bsSubscribe.enabled, true),
+        eq(bsSubscribe.channelId, channel.id),
+        q
+      ))
+    return rows.map(it => ({
+      channel: it.channel,
+      users: [],
+      subscriptions: [it.subscription]
+    }))
+  }
+  private async getEventTargetsByAccount(providerId: string, accountId: string, subscriptionQuery: SQL<unknown>): Promise<EventTarget[]> {
+    const channelAccount = aliasedTable(account, 'channel_account')
+    const sqls = this.db.select({
+        channel: channel,
+        subscriptionMember: bsSubscribeMember,
+        subscription: bsSubscribe,
+        account: account,
+        user: user,
+        channelAccount: channelAccount
+      })
+      .from(channel)
+      .innerJoin(bsSubscribe, subscriptionQuery)
+      .innerJoin(bsSubscribeMember, eq(bsSubscribe.id, bsSubscribeMember.subscriptionId))
+      .innerJoin(account, and(
+        eq(bsSubscribeMember.memberId, account.userId),
+        eq(account.providerId, providerId),
+        eq(account.accountId, accountId)
+      ))
+      .innerJoin(user, eq(account.userId, user.id))
+      .innerJoin(channelAccount, and(
+        eq(channelAccount.userId, user.id),
+        eq(channelAccount.providerId, channel.providerId),
+      ))
+    const rows = await sqls
+    const maps = rows.reduce((acc, cur) => {
+      let m = acc.get(cur.channel.id)
+      if(!m) {
+        m = { channel: cur.channel, users: [], subscriptions: []}
+      }
+      if(cur.user) m.users.push({...cur.user, account: cur.account, channelAccount: cur.channelAccount })
+      m.subscriptions.push(cur.subscription)
+      acc.set(cur.channel.id, m)
+      return acc
+    }, new Map<string, EventTarget>())
+    return Array.from(maps.values())
+  }
+  // event-type
 }

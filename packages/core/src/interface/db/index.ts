@@ -1,7 +1,6 @@
 import type {
   Account,
   Subscription,
-  SubscriptionMember,
 } from './models'
 import {Channel, User} from "@/core";
 
@@ -17,21 +16,7 @@ export type {
 export interface SubInfoRes {
   subscription: Subscription
   memberCount: number
-  me: any
-}
-
-export interface SubInfoRes {
-  subscription: Subscription
-  memberCount: number
-  me: any
-}
-
-export interface SubDetailWithGroupRes {
-  account: Account
-  user: User
-  channel: Channel
-  subscriptionMember: SubscriptionMember
-  subscription: Subscription
+  me: boolean
 }
 
 export interface SubWithGroupRes {
@@ -46,27 +31,71 @@ export type AddSubscriptionMember = {
   createdAt?: Date
   updatedAt?: Date
 }
-export interface DB {
+
+
+export type EventTarget = {
+  channel: Channel,
+  // user 在 channel 对应平台的 account
+  users: (User& {account?: Account, channelAccount: Account})[],
+  subscriptions: Subscription[]
+}
+
+
+interface SubscriptionRepository {
+}
+
+
+export interface DB extends SubscriptionRepository {
   // preference
   storeUserPreference<V = any>(uid: string, value: V): Promise<boolean>
   getUserPreference<V = any>(uid: string): Promise<V>
-  // user account
-  getUserAccountsByUid(id: string): Promise<Record<string, Account>>
-  addUserBindingInfo(account: Partial<Account>): Promise<void>
-  // subscription
-  upsertSubscription(data: Partial<Subscription>): Promise<void>
-  getSubscriptionInfoByUGID(gid: string, uid: string): Promise<SubInfoRes[]>
-  getSubscriptionMemberByUserChannelAndType(userId: string, channelId: string, type: string): Promise<SubInfoRes | null>
-  getSubscriptionByID(id: string): Promise<Subscription | null>
-  getSubscriptionsByGID(gid: string): Promise<Record<string, Subscription>>
 
-  getChannelSubscriptionByChannelIDAndType(channelId: string, type: string): Promise<Subscription | null>
-  getIDSubscriptionByGID(gid: string): Promise<Subscription[]>
-  getIDSubscriptionByType(type: string): Promise<SubWithGroupRes[]>
-  removeIDSubscriptionByID(id: string): Promise<void>
-  getIDSubscriptionByChannelIDAndType(gid: string, type: string): Promise<Subscription[]>
-  getAllSubscriptionByUIDAndPlatform(id: string, type: string): Promise<SubDetailWithGroupRes[]>
-  getSubscriptionsByType(type: string): Promise<SubWithGroupRes[]>
-  addSubscribeMember(data: AddSubscriptionMember): Promise<void>
-  removeFromSubGroupBySubAndUid(subId: string, id: string): Promise<void>
+  // user account
+  getUserAccountsByUserIdAndType<T extends readonly string[] = string[]>(id: string, types: T): Promise<Record<T[number], Account>>
+  getUserAccountsByUserId(id: string): Promise<Account[]>
+  addUserAccount(account: Partial<Account>): Promise<void>
+
+
+  // event targets
+  getBLScoreEventTargets(playerId: string): Promise<EventTarget[]>
+  getBSMapEventTargets(mapperId: string): Promise<EventTarget[]>
+  getScheduleEventTargets(eventType: string): Promise<EventTarget[]>
+
+//   subscription
+  // 对于 group 级别的 subscription，一个 channel 只有一个
+  getSubscriptionByID(id: string): Promise<Subscription | null>
+  getGroupSubscriptionByChannelIDAndType(channelId: string, type: string): Promise<Subscription | null>
+  getSubscriptionByChannelIDAndType(channelId: string, type: string): Promise<Subscription[]>
+
+  getSubscriptionInfoByUserAndChannelID(userId: string, channelId: string): Promise<SubInfoRes[]>
+  getSubscriptionMemberByUserChannelAndType(userId: string, channelId: string, type: string): Promise<SubInfoRes | null>
+
+  // insert
+  upsertSubscription(data: Partial<Subscription>): Promise<void>
+
+  // remove
+  removeSubscriptionByID(id: string): Promise<void>
+
+  // subscription member
+  removeSubscriptionMemberBySubIdAndMemberId(subId: string, id: string): Promise<void>
+  addSubscriptionMember(data: AddSubscriptionMember): Promise<void>
+}
+
+export function mergeEventTargets(part1: EventTarget[], part2: EventTarget[]) {
+  const targets = part1.concat(part2)
+  const maps = targets.reduce((acc, cur) => {
+    let m = acc.get(cur.channel.id)
+    if(!m) {
+      m = { channel: cur.channel, users: [], subscriptions: []}
+    }
+    if(cur.users.length > 0) {
+      m.users = m.users.concat(cur.users)
+    }
+    if(cur.subscriptions.length > 0) {
+      m.subscriptions = m.subscriptions.concat(cur.subscriptions)
+    }
+    acc.set(cur.channel.id, m)
+    return acc
+  }, new Map<string, EventTarget>())
+  return Array.from(maps.values())
 }

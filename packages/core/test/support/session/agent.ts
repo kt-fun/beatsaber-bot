@@ -8,10 +8,11 @@ export class TestAgentService {
   constructor(private readonly filepath: string) {
   }
   getAgentSessionByChannelInfo(channel: Channel): Promise<PositiveSession> {
-    const positive = new TestPositiveSession(this.filepath, {
-      channel, lang: 'zh-CN'
-    })
-    this.session = positive
-    return Promise.resolve(positive)
+    if (!this.session) {
+      this.session = new TestPositiveSession(this.filepath, {
+        channel, lang: 'zh-CN'
+      })
+    }
+    return Promise.resolve(this.session)
   }
 }

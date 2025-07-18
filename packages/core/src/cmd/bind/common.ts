@@ -1,10 +1,6 @@
 import { CmdContext, Account } from '@/interface'
-import {
-  AccountNotFoundError,
-  SessionPromotionCancelError,
-  SessionPromotionTimeoutError,
-} from '@/services/errors'
 import {typeid} from "typeid-js";
+import {SessionPromotionCancelError, SessionPromotionTimeoutError} from "@/services/errors";
 export interface PlatformBindingServices {
   inputChecker?: (input: string) => void,
   fetchUser(id: string): Promise<{ id: string; name: string }>
@@ -54,7 +50,7 @@ export const handleIdBinding = async (
     type: 'id',
   }
 
-  await c.services.db.addUserBindingInfo(account)
+  await c.services.db.addUserAccount(account)
   await c.session.sendQuote(
     c.session.text(`commands.bsbot.bind.${services.platformName}.success`, {
       name: player.name,

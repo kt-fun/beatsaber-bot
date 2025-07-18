@@ -73,9 +73,7 @@
   },
   "scripts": {
     "typecheck": "tsc",
-    "compile": "tsc -p tsconfig.build.json  && tsc-alias",
-    "copy-yml-resource": "node scripts/build.mjs",
-    "clean": "rm -rf lib  tsconfig.tsbuildinfo",
-    "build": "pnpm run copy-yml-resource && pnpm run compile"
+    "build": "tsc -p tsconfig.build.json  && tsc-alias",
+    "clean": "rm -rf lib  tsconfig.tsbuildinfo"
   }
 }

@@ -37,6 +37,7 @@ export const bsSubscribe = sqliteTable('BSSubscribe', {
   channelId: text('channel_id').notNull(),
   enabled: integer('enabled', { mode: 'boolean' }).notNull(),
   type: text('type').notNull(),
+  eventType: text('event_type').notNull(),
   data: text('data', { mode: 'json' }),
   createdAt: integer('created_at', {mode: 'timestamp_ms' }).notNull(),
   updatedAt: integer('updated_at', {mode: 'timestamp_ms' }).notNull(),

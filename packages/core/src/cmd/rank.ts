@@ -12,7 +12,8 @@ export default () =>
       if (c.session.mentions && c.session.mentions.length > 0) {
         uid = c.session.mentions[0].id
       }
-      const { blAccount, ssAccount } = await c.services.db.getUserAccountsByUid(uid)
+      const { beatleader:blAccount, scoresaber:ssAccount } = await c.services
+        .db.getUserAccountsByUserIdAndType(uid, ['beatleader', 'scoresaber'] as const)
       let accountId: string = c.input
       if(!accountId) {
         switch (rankPlatform) {

@@ -29,7 +29,7 @@ export interface Agent2Channel {
   channelId: string;
 }
 
-export interface Account<T = any> {
+export interface Account<T = unknown> {
   id: string
   userId: string
   providerId: string
@@ -53,6 +53,7 @@ export interface Subscription {
   id: string
   channelId: string
   type: string
+  eventType: string
   enabled: boolean
   data: any
   createdAt: Date

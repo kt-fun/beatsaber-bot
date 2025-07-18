@@ -1,0 +1,10 @@
+{
+  "events": {
+    "bsmap": {
+      "update": "谱师「{{mapperName}}」更新啦✨！{{ mapId }}({{ mapName }})"
+    },
+    "blscore": {
+      "update": "Hey {{username}}，你关注的谱师「{{mapperName}}」更新啦！✨"
+    }
+  }
+}

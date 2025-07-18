@@ -55,9 +55,8 @@ const getWS = (ctx: Context, handler: WSEventHandler, registry: EventHandlerRegi
       return
     }
     return registry.handleEvent({
-      type: 'websocket',
-      handlerId: handler.handlerId,
-      data: data,
+      eventType: handler.handlerId,
+      payload: data,
     })
   })
   return ws

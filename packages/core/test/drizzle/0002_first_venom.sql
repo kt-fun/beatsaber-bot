@@ -1,0 +1,1 @@
+ALTER TABLE `BSSubscribe` ADD `event_type` text NOT NULL;

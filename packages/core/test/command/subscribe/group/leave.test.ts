@@ -23,7 +23,7 @@ describe("leave group subscription", async () => {
       sess: { channel, user },
       options: { t: type }
     })
-    const newSubscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const newSubscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     expect(newSubscriptions.length).toEqual(0)
     expect(res).toEqual(InvalidParamsError.id)
   }, 300000)
@@ -32,13 +32,13 @@ describe("leave group subscription", async () => {
     const user = users[0]
     const channel = channels[4]
     const type = 'bsmap-group'
-    const subscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const subscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     expect(subscriptions.length).toEqual(0)
     const [res] = await testCmd('leave-subscription-group', {
       sess: { channel, user },
       options: { t: type }
     })
-    const newSubscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const newSubscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     expect(newSubscriptions.length).toEqual(0)
     expect(res).toEqual(SubscriptionNotExistError.id)
   }, 300000)
@@ -47,7 +47,7 @@ describe("leave group subscription", async () => {
     const user = users[1]
     const channel = channels[0]
     const type = 'bsmap-group'
-    const subscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const subscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     const member = await db.getSubscriptionMemberByUserChannelAndType(user.id, channel.id, type)
     expect(subscriptions.length).toEqual(1)
     expect(member.me).toEqual(false)
@@ -64,7 +64,7 @@ describe("leave group subscription", async () => {
     const user = users[0]
     const channel = channels[0]
     const type = 'bsmap-group'
-    const subscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const subscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     const member = await db.getSubscriptionMemberByUserChannelAndType(user.id, channel.id, type)
     expect(member.me).toEqual(true)
     expect(subscriptions.length).toEqual(1)
@@ -81,7 +81,7 @@ describe("leave group subscription", async () => {
     const user = users[0]
     const channel = channels[0]
     const type = 'blscore-group'
-    const subscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const subscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     const member = await db.getSubscriptionMemberByUserChannelAndType(user.id, channel.id, type)
     expect(member.me).toEqual(true)
     expect(subscriptions.length).toEqual(1)

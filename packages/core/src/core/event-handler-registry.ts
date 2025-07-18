@@ -9,10 +9,9 @@ type EventHandler<Service = unknown, Config = unknown, T = unknown> = {
   enabled?: boolean
 }
 
-type Event<T> = {
-  type?: string,
-  handlerId: string,
-  data: T
+export type Event<T> = {
+  eventType: string,
+  payload: T
   ctx?: {
     logger?: Logger,
   }
@@ -37,12 +36,12 @@ export class EventHandlerRegistry {
   }
 
   handleEvent<T>(event: Event<T>) {
-    const handler = this.getHandlerById(event.handlerId)
+    const handler = this.getHandlerById(event.eventType)
     if(!handler) return
     return handler.handler({
       type: handler.type,
-      data: event.data,
-      logger: event.ctx.logger,
+      data: event.payload,
+      logger: event.ctx?.logger,
       ...this.ctx,
       services: this.ctx.services,
     })

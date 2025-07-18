@@ -39,7 +39,6 @@ export class AgentHolder {
     }
     let bot
     for(const agent of agents) {
-      // koishi status 1 = Status.ONLINE
       bot = this.ctx.bots.find(b => b.sid === agent.agentId && b.status === 1)
       if(bot) {
         break

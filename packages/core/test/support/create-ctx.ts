@@ -6,6 +6,7 @@ import {TestAgentService} from "./session/agent";
 import {TestPassiveSession} from "./session/passive-session";
 
 import path from "path";
+import {Event} from "@/core/event-handler-registry";
 
 const mockImageRender = {
   html2img: (html: string, opt: any) => {
@@ -94,7 +95,7 @@ export const createCtx = async (filepath: string, mockData: MockData = defaultMo
     return session.output
   }
 
-  const testEvent = async (event) => {
+  const testEvent = async (event: Event<unknown>) => {
     const agent = new TestAgentService(filepath)
     const bot = getBot({
       config,

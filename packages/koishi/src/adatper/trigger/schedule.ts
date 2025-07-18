@@ -22,9 +22,8 @@ export const loadSchedule = (ctx: Context, config: Config) => {
   for (const task of tasks) {
     logger.info(`schedule ${task.handlerId} init, ${task.cron}`)
     ctx.cron(task.cron, () => eventHandlers.handleEvent({
-      type: 'schedule',
-      handlerId: 'lb-rank',
-      data: '',
+      eventType: 'lbrank',
+      payload: '',
     }))
   }
 }

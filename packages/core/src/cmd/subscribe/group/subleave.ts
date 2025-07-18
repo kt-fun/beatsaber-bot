@@ -32,7 +32,7 @@ export default () =>
           )
         )
       }
-      await c.services.db.removeFromSubGroupBySubAndUid(
+      await c.services.db.removeSubscriptionMemberBySubIdAndMemberId(
         subscription.subscription.id,
         c.session.user.id
       )

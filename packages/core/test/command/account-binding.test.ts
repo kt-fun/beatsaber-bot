@@ -80,7 +80,7 @@ describe("bind beatsaver account", async () => {
 
   test("fisrt bind", async () => {
     const user = users[3]
-    const { bsAccount: beforeAccount } = await db.getUserAccountsByUid(user.id)
+    const { beatsaver: beforeAccount } = await db.getUserAccountsByUserIdAndType(user.id, ['beatsaver'] as const)
     expect(beforeAccount === null || beforeAccount === undefined).toBe(true);
     const res = await testCmd('bind', {
       sess: { user },
@@ -93,7 +93,7 @@ describe("bind beatsaver account", async () => {
     expect(res.length).toEqual(2);
     expect(ackPrompt).toEqual(expect.stringMatching(/^commands\.bsbot\.bind\.ack-prompt/));
     expect(msg).toEqual(expect.stringMatching(/^commands\.bsbot\.bind\.(scoresaber|beatleader|beatsaver)\.success/));
-    const { bsAccount: afterAccount } = await db.getUserAccountsByUid(user.id)
+    const { beatsaver: afterAccount } = await db.getUserAccountsByUserIdAndType(user.id, ['beatsaver'] as const)
     expect(afterAccount).toMatchObject({
       userId: user.id,
       providerId: 'beatsaver',
@@ -104,7 +104,8 @@ describe("bind beatsaver account", async () => {
 
   test("replace previous binding", async () => {
     const user = users[0]
-    const { bsAccount: beforeAccount } = await db.getUserAccountsByUid(user.id)
+
+    const { beatsaver: beforeAccount } = await db.getUserAccountsByUserIdAndType(user.id, ['beatsaver'] as const)
     expect(beforeAccount).toMatchObject({
       userId: user.id,
       providerId: 'beatsaver',
@@ -121,7 +122,7 @@ describe("bind beatsaver account", async () => {
     expect(res.length).toEqual(2);
     expect(ackPrompt).toEqual(expect.stringMatching(/^commands\.bsbot\.bind\.ack-prompt/));
     expect(msg).toEqual(expect.stringMatching(/^commands\.bsbot\.bind\.(scoresaber|beatleader|beatsaver)\.success/));
-    const { bsAccount: afterAccount } = await db.getUserAccountsByUid(user.id)
+    const { beatsaver: afterAccount } = await db.getUserAccountsByUserIdAndType(user.id, ['beatsaver'] as const)
     expect(afterAccount).toMatchObject({
       userId: user.id,
       providerId: 'beatsaver',
@@ -143,7 +144,7 @@ describe("bind beatleader account", async () => {
     expect(res.length).toEqual(2);
     expect(ackPrompt).toEqual(expect.stringMatching(/^commands\.bsbot\.bind\.ack-prompt/));
     expect(msg).toEqual(expect.stringMatching(/^commands\.bsbot\.bind\.(scoresaber|beatleader|beatsaver)\.success/));
-    const { blAccount: afterAccount } = await db.getUserAccountsByUid(user.id)
+    const { beatleader: afterAccount } = await db.getUserAccountsByUserIdAndType(user.id, ['beatleader'] as const)
     expect(afterAccount).toMatchObject({
       userId: user.id,
       providerId: 'beatleader',
@@ -191,7 +192,7 @@ describe("bind scoresaber account", async () => {
     expect(res.length).toEqual(2);
     expect(ackPrompt).toEqual(expect.stringMatching(/^commands\.bsbot\.bind\.ack-prompt/));
     expect(msg).toEqual(expect.stringMatching(/^commands\.bsbot\.bind\.(scoresaber|beatleader|beatsaver)\.success/));
-    const { ssAccount: afterAccount } = await db.getUserAccountsByUid(user.id)
+    const { scoresaber: afterAccount } = await db.getUserAccountsByUserIdAndType(user.id, ['scoresaber'] as const)
     expect(afterAccount).toMatchObject({
       userId: user.id,
       providerId: 'scoresaber',

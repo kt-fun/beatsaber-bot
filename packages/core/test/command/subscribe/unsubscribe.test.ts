@@ -74,14 +74,14 @@ const testRemoveSubscription = async (
   channel: Channel,
   inputs: string[]
 ) => {
-  const subscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+  const subscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
   expect(subscriptions.length).toEqual(1)
   const [res] = await testCmd('unsubscribe', {
     sess: {channel},
     options: { t: type },
     inputs
   })
-  const newSubscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+  const newSubscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
   expect(newSubscriptions.length).toEqual(0)
   expect(res).toEqual(`commands.bsbot.unsubscribe.success.${type}`)
 }

@@ -1,4 +1,6 @@
 import {CmdContext} from "@/interface";
+import {getEventTypeBySubscriptionType} from "@/cmd/subscribe/types";
+
 
 export const subById = async (c: CmdContext, id: string, type: string, extraData: any) => {
   let it = await c.services.db.getSubscriptionByID(id)
@@ -12,12 +14,13 @@ export const subById = async (c: CmdContext, id: string, type: string, extraData
       channelId: c.session.channel.id,
       type: type,
       enabled: true,
+      eventType: getEventTypeBySubscriptionType(type),
       data: extraData,
       createdAt: now,
       updatedAt: now
     }
   }
   await c.services.db.upsertSubscription(it)
-  await c.session.sendQuote(c.session.text(`commands.bsbot.subscription.success.${type}`, extraData))
+  await c.session.sendQuote(c.session.text(`commands.bsbot.subscribe.success.${type}`, extraData))
 }
 

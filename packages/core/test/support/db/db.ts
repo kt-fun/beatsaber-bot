@@ -3,7 +3,6 @@ import Database from 'better-sqlite3';
 import * as tables from './schema'
 import {DrizzleDB} from "./dao";
 export const loadDB = (path: string = 'sqlite.db') => {
-
   const db = new Database(path);
   return drizzle(db, {schema: tables})
 }

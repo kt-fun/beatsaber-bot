@@ -19,27 +19,27 @@ describe("subscription group", async () => {
   test("add bsmap group subscription", async () => {
     const channel = channels[3]
     const type = 'bsmap-group'
-    const subscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const subscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     expect(subscriptions.length).toEqual(0)
     const [res] = await testCmd('subscribe', {
       sess: {channel},
       options: { t: type }
     })
-    const newSubscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const newSubscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     expect(newSubscriptions.length).toEqual(1)
-    expect(res).toEqual(`commands.bsbot.subscription-group.success.${type}`)
+    expect(res).toEqual(`commands.bsbot.subscribe.success.${type}`)
   }, 300000)
 
   test("add exist bsmap group subscription", async () => {
     const channel = channels[2]
     const type = 'bsmap-group'
-    const subscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const subscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     expect(subscriptions.length).toEqual(1)
     const [res] = await testCmd('subscribe', {
       sess: {channel},
       options: { t: type },
     })
-    const newSubscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const newSubscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     expect(newSubscriptions.length).toEqual(1)
     const {enabled, updatedAt, ...oldSubscription } = subscriptions[0]
     const { updatedAt: newUpdatedAt, ...newSubscription } = newSubscriptions[0]
@@ -47,20 +47,20 @@ describe("subscription group", async () => {
       ...oldSubscription,
       enabled: true,
     })
-    expect(res).toEqual(`commands.bsbot.subscription-group.success.${type}`)
+    expect(res).toEqual(`commands.bsbot.subscribe.success.${type}`)
   }, 300000)
 
   test("add bsmap group subscription, ignore invalid input", async () => {
     const channel = channels[2]
     const type = 'bsmap-group'
-    const subscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const subscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     expect(subscriptions.length).toEqual(1)
     const [res] = await testCmd('subscribe', {
       sess: {channel},
       options: { t: type },
       inputs: ['dsadfa']
     })
-    const newSubscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const newSubscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     expect(newSubscriptions.length).toEqual(1)
     const {enabled, updatedAt, ...oldSubscription } = subscriptions[0]
     const { updatedAt: newUpdatedAt, ...newSubscription } = newSubscriptions[0]
@@ -68,20 +68,20 @@ describe("subscription group", async () => {
       ...oldSubscription,
       enabled: true,
     })
-    expect(res).toEqual(`commands.bsbot.subscription-group.success.${type}`)
+    expect(res).toEqual(`commands.bsbot.subscribe.success.${type}`)
   }, 300000)
 
   test("add blscore group subscription", async () => {
     const type = 'blscore-group'
     const channel = channels[3]
-    const subscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const subscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     expect(subscriptions.length).toEqual(0)
     const [res] = await testCmd('subscribe', {
       sess: {channel},
       options: { t: type }
     })
-    const newSubscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const newSubscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     expect(newSubscriptions.length).toEqual(1)
-    expect(res).toEqual(`commands.bsbot.subscription-group.success.${type}`)
+    expect(res).toEqual(`commands.bsbot.subscribe.success.${type}`)
   }, 300000)
 })

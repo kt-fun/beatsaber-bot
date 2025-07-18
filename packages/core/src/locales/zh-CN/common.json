@@ -1,28 +1,36 @@
 {
   "common": {
+    "error": {
+      "unknown-error":"出现非预期错误，报告可能有助于尽早修复。{{ traceId }}",
+      "unknown-request-error":"出现预料外的网络错误，重试也许有效🤔",
+      "not-implemented": "😳被发现了，{{ feature }}这个功能还没实现..."
+    },
     "hello": "你好，我是 bsbot",
     "ping": "pong",
     "render": {
-      "wait": "开始渲染啦，请耐心等待 {{sec}} s"
-    }
-  },
-
-  "beatsaver": {
-    "not-found": "没找到谱面 ID {{ id }}",
-    "user-not-found": "没找到 ID [{{ id }}] 的 Beatsaver 用户"
-  },
-  "beatleader": {
-    "score-not-found": "没找到谱面 {{ mapId }} 对应的打分",
-    "user-not-found": "没找到 ID [{{ id }}] 的 Beatleader 用户"
-  },
-  "scoresaber": {
-    "score-not-found": "没找到谱面 {{ mapId }} 对应的打分",
-    "user-not-found": "没找到 ID [{{ id }}] 的 Beatleader 用户"
-  },
-
-  "ws": {
-    "subscribe": {
-      "update": "Hello {{username}}，你关注的谱师「{{mapperName}}」更新啦！✨"
+      "wait": "开始渲染啦，请耐心等待 {{sec}} s",
+      "error":"图片渲染超时/出错...稍后重试也许有效🤔"
+    },
+    "session": {
+      "promotion": {
+        "timeout": "已超时",
+        "cancel": "已取消"
+      }
+    },
+    "account": {
+      "binding": {
+        "not-found": "没有找到用户{{ userId }}在 {{ platform }} 账户"
+      }
+    },
+    "subscription": {
+      "not-found": "当前群组/频道未启用 {{ type }} 订阅",
+      "none": "当前群聊/频道没有任何事件订阅。",
+      "info": {
+        "header": "当前群聊/频道 BeatSaber 订阅如下：",
+        "group-body-item": "订阅类型「{{type}}」{{enabled ? '' : '（已禁用）' }}",
+        "body-item": "订阅类型「{{type}}」{{enabled ? '' : '（已禁用）' }}, 共 {{cnt}} 名参与成员",
+        "body-item-include-you": "(包括你)"
+      }
     }
   }
 }

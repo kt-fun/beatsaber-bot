@@ -22,13 +22,13 @@ describe("remove group subscription", async () => {
   test("remove bsmap group subscription", async () => {
     const channel = channels[0]
     const type = 'bsmap-group'
-    const subscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const subscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     expect(subscriptions.length).toEqual(1)
     const [res] = await testCmd('unsubscribe', {
       sess: {channel},
       options: { t: type }
     })
-    const newSubscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const newSubscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     expect(newSubscriptions.length).toEqual(1)
     const { updatedAt: newUpdatedAt, ...newSubscription } = newSubscriptions[0]
     expect(newSubscription?.enabled).toEqual(false)
@@ -38,13 +38,13 @@ describe("remove group subscription", async () => {
   test("remve not-exist bsmap group subscription", async () => {
     const channel = channels[4]
     const type = 'bsmap-group'
-    const subscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const subscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     expect(subscriptions.length).toEqual(0)
     const [res] = await testCmd('unsubscribe', {
       sess: {channel},
       options: { t: type },
     })
-    const newSubscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const newSubscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     expect(newSubscriptions.length).toEqual(0)
     expect(res).toEqual(SubscriptionNotExistError.id)
   }, 300000)
@@ -52,13 +52,13 @@ describe("remove group subscription", async () => {
   test("remove blscore group subscription", async () => {
     const type = 'blscore-group'
     const channel = channels[0]
-    const subscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const subscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     expect(subscriptions.length).toEqual(1)
     const [res] = await testCmd('unsubscribe', {
       sess: {channel},
       options: { t: type },
     })
-    const newSubscriptions = await db.getIDSubscriptionByChannelIDAndType(channel.id, type)
+    const newSubscriptions = await db.getSubscriptionByChannelIDAndType(channel.id, type)
     expect(newSubscriptions.length).toEqual(1)
     expect(res).toEqual(`commands.bsbot.unsubscribe.success.${type}`)
   }, 300000)

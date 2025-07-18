@@ -16,8 +16,8 @@ export const handleBeatSaverIDBind = async (c: CmdContext) => {
     fetchUser: (id) => c.services.api.BeatSaver.getBSMapperById(id)
       .then(res => ({id: String(res.id), name: res.name})),
     getExistingAccount: async (userId) => {
-      const { bsAccount } = await c.services.db.getUserAccountsByUid(userId)
-      return bsAccount
+      return c.services.db.getUserAccountsByUserIdAndType(userId, ['beatsaver'] as const)
+        .then(res => res.beatsaver)
     },
     platformName: 'beatsaver',
     providerId: 'beatsaver',

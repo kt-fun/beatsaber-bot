@@ -1,7 +1,7 @@
 import {BizError} from "@/core";
 
 export class InvalidParamsError extends BizError {
-  static id = 'error.input.invalid-params'
+  static id = 'input.error.invalid-params'
   id = InvalidParamsError.id
   constructor(params: { name: string, expect?: string, actual: string }) {
     super()
@@ -10,7 +10,7 @@ export class InvalidParamsError extends BizError {
 }
 
 export class MissingParamsError extends BizError {
-  static id = 'error.input.missing-params'
+  static id = 'input.error.missing-params'
   id = MissingParamsError.id
   constructor(params: { name: string, example?: string }) {
     super()

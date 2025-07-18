@@ -15,8 +15,8 @@ export const handleBeatLeaderIDBind = async (c: CmdContext) => {
     },
     fetchUser: (id) => c.services.api.BeatLeader.getPlayerInfo(id),
     getExistingAccount: async (userId) => {
-      const { blAccount } = await c.services.db.getUserAccountsByUid(userId)
-      return blAccount
+      const res = await c.services.db.getUserAccountsByUserIdAndType(userId, ['beatsaver'] as const)
+      return res.beatsaver
     },
     platformName: 'beatleader',
     providerId: 'beatleader',

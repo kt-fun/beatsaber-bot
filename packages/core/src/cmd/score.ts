@@ -19,8 +19,8 @@ export default () =>
         // preference = await c.userPreference.getUserPreference(uid)
       }
 
-      const { blAccount } = await c.services.db.getUserAccountsByUid(uid)
-      let account = Platform.BL && blAccount
+      const res = await c.services.db.getUserAccountsByUserIdAndType(uid, ['beatleader'] as const)
+      let account = Platform.BL && res.beatleader
       if (!account) {
         throw new AccountBindingNotFoundError({ platform: Platform.BL, userId: uid })
       }

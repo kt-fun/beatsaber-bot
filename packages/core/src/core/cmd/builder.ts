@@ -1,6 +1,8 @@
 import type { CmdAlias, CmdContext, CmdExecutor, CmdOption, OptionType, Extend } from './type'
 import { BizError } from '../error'
 import {typeid} from "typeid-js";
+import { RequestError as BizRequestError } from "@/services/errors";
+import {RequestError} from "@/common/fetch/error";
 
 export class CommandBuilder<Service, Config, OPT extends {} = {}> {
   private name: string
@@ -42,15 +44,17 @@ export class CommandBuilder<Service, Config, OPT extends {} = {}> {
           await executor(c)
         } catch (e: any) {
           if (e instanceof BizError) {
-            // @ts-ignore
             await c.session.send(c.session.text(e.id, e.params))
-          } else {
+          } else if (e instanceof BizRequestError || e instanceof RequestError) {
+            await c.session.send(c.session.text("common.error.unknown-request-error"))
+          }
+          else {
             c.logger.error(
               `unexpectError occur during cmd 「${that.name}」executing`,
               e
             )
             await c.session.send(
-              c.session.text('command.error.unknown-error', { traceId }),
+              c.session.text('common.error.unknown-error', { traceId }),
             )
           }
         }

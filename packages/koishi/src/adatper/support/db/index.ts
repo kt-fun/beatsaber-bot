@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Context } from 'koishi'
 
 import {
@@ -50,11 +51,11 @@ export function InitDBModel(ctx: Context) {
         required: false,
       },
       accessTokenExpiresAt: {
-        type: 'timestamp',
+        type: 'date',
         required: false,
       },
       refreshTokenExpiresAt: {
-        type: 'timestamp',
+        type: 'date',
         required: false,
       },
       idToken: {
@@ -65,8 +66,8 @@ export function InitDBModel(ctx: Context) {
         type: 'json',
         required: false,
       },
-      createdAt: 'timestamp',
-      updatedAt: 'timestamp',
+      createdAt: 'date',
+      updatedAt: 'date',
     },
     {
       primary: ['id'],
@@ -79,7 +80,6 @@ export function InitDBModel(ctx: Context) {
       subscriptionId: 'string',
       memberId: 'string',
       subscriptionData: 'json',
-      joinedAt: 'date',
       createdAt: 'date',
       updatedAt: 'date',
     },
@@ -95,7 +95,13 @@ export function InitDBModel(ctx: Context) {
       channelId: 'string',
       enabled: 'boolean',
       type: 'string',
+      eventType: {
+        type: 'string',
+        required: false
+      },
       data: 'json',
+      createdAt: 'date',
+      updatedAt: 'date'
     },
     {
       primary: ['id'],
@@ -142,7 +148,7 @@ export function InitDBModel(ctx: Context) {
       primary: ['id'],
     }
   )
-  //
+
   ctx.model.extend(
     'BSChannel2Agent',
     {

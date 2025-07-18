@@ -28,20 +28,20 @@ export const getEventHandlers = (ctx: Ctx) => {
   const handlers = [
     {
       type: 'schedule' as const,
-      handlerId: 'lb-rank',
+      handlerId: 'lbrank',
       handler: LBRank,
       cron: config.cron.temp?.cron,
       enabled: config.cron.temp?.enabled
     },
     {
       type: 'websocket' as const,
-      handlerId: 'ws-beatleader-score',
+      handlerId: 'blscore-update',
       handler: BeatleaderScore,
       url: 'wss://sockets.api.beatleader.xyz/scores'
     },
     {
       type: 'websocket' as const,
-      handlerId: 'ws-beatsaver-map',
+      handlerId: 'bsmap-update',
       handler: BeatsaverMap,
       url: 'wss://ws.beatsaver.com/maps'
     },
