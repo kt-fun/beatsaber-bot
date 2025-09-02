@@ -19,12 +19,8 @@ export default function ScoreBadge({
           className
         )}
       >
-        <span className="border-r-0.5 font-semibold m-auto text-center rounded-l-lg w-8">
-          {name}
-        </span>
-        <span className="bg-transparent m-auto text-ellipsis line-clamp-1">
-          {count}
-        </span>
+        <span className="border-r-0.5 font-semibold m-auto text-center rounded-l-lg w-8">{name}</span>
+        <span className="bg-transparent m-auto text-ellipsis line-clamp-1">{count}</span>
       </div>
     </>
   )

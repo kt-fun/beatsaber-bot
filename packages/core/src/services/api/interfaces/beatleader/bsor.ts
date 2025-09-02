@@ -112,12 +112,10 @@ export interface CutPoint {
   x: number
   y: number
   z: number
-  [property: string]: any
 }
 
 export interface SaberDir {
   x: number
   y: number
   z: number
-  [property: string]: any
 }

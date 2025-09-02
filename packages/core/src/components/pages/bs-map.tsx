@@ -14,7 +14,7 @@ import dayjs from 'dayjs'
 import { diffConv, formatNumber, formatTime, getTag } from '../utils'
 import { getMods } from '../utils/getMods'
 import Progressbar from '../components/progressbar'
-import { CharacteristicIcon } from '../components/characteristic'
+import { CharacteristicIcon } from '../components/icons/characteristic'
 import { BSMap } from '@/services/api/interfaces/beatsaver'
 
 interface BSMapProps {
@@ -57,12 +57,7 @@ export default function BSMapShare({
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="author flex space-x-4 items-center ">
-                    <img
-                      src={bsMap.uploader.avatar}
-                      className="rounded-full w-8 h-8"
-                      loading={'eager'}
-                      alt={'bsmap mapper avatar'}
-                    />
+                    1<img src={bsMap.uploader.avatar} className="rounded-full w-8 h-8" loading={'eager'} alt={'bsmap mapper avatar'}/>
                     <span className="text-xl">{bsMap.uploader.name}</span>
                   </div>
                 </div>

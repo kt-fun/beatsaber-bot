@@ -15,11 +15,7 @@ export const BSMapComp = (
   previewQrUrl: string
 ) => {
   return (
-    <BSMapShare
-      bsMap={bsMap}
-      bsMapQrUrl={bsMapQrUrl}
-      previewQrUrl={previewQrUrl}
-    />
+    <BSMapShare bsMap={bsMap} bsMapQrUrl={bsMapQrUrl} previewQrUrl={previewQrUrl}/>
   )
 }
 export const SSPlayerComp = (

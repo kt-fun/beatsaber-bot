@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 import { diffConv, formatDuration, formatTime } from '../utils'
 import Progressbar from '../components/progressbar'
-import ScoreGraph from '../components/scoregraph'
+import ScoreGraph from '../components/charts/scoregraph'
 import { BSOR, Score } from '@/services/api/interfaces/beatleader'
 import { BSMap } from '@/services/api/interfaces/beatsaver'
 

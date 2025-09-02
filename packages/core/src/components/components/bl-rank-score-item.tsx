@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import Flags, { EarchIcon } from '@/components/components/flag'
+import Flags, { EarchIcon } from './icons/flag'
 import React from 'react'
 import { formatDate, numberWithCommas } from '@/components/utils'
 
@@ -18,17 +18,12 @@ interface ScoreItemProps {
 }
 export function BlRankScoreItem(props: ScoreItemProps) {
   return (
-    <div
-      className={`${props.self ? 'gradient-border' : ''} bs-bg-gradient shadow-xl rounded-lg -skew-x-12 w-80 h-20 text-white font-bold flex flex-col p-1 z-10 relative max-w-[300px]`}
-    >
+    <div className={`${props.self ? 'gradient-border' : ''} bs-bg-gradient shadow-xl rounded-lg -skew-x-12 w-80 h-20 text-white font-bold flex flex-col p-1 z-10 relative max-w-[300px]`}>
       <div className="skew-x-12 relative">
         <div className="flex items-center translate-x-2 justify-between">
           <div className="flex gap-2">
             <div className={'w-12 h-12 relative'}>
-              <img
-                src={props.avatar}
-                className="shadow-lg w-12 h-12 rounded-full object-cover"
-              />
+              <img src={props.avatar} className="shadow-lg w-12 h-12 rounded-full object-cover"/>
               <div className={'w-3 h-3 absolute bottom-0 right-3'}>
                 <Flags flagNationCode={props.countryCode} />
               </div>

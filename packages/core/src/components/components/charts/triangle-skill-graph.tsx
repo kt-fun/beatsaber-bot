@@ -18,7 +18,7 @@ const getPoint = (
   }
 }
 
-export default function SkillGraph({
+export default function TriangleSkillGraph({
   factorA = 0.4,
   factorB = 0.2,
   factorC = 0.2,

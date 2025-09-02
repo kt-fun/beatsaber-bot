@@ -8,14 +8,14 @@ import {
   Calendar,
   HeartPulse,
 } from 'lucide-react'
-import ScoreGraph from '../components/scoregraph'
-import { BSOR, Score } from '@/services/api/interfaces/beatleader'
-import { BSMap } from '@/services/api/interfaces/beatsaver'
+import ScoreGraph from '../components/charts/scoregraph'
+import type { BSOR, Score } from '@/services/api/interfaces/beatleader'
+import type { BSMap } from '@/services/api/interfaces/beatsaver'
 import {
   BlRankScoreItem,
   ScoreItemSkeleton,
 } from '@/components/components/bl-rank-score-item'
-import { RankDifficulty } from '@/components/components/RankDifficulty'
+import { RankDifficulty } from '@/components/components/rank-difficulty'
 import { Avatar } from '@/components/components/base/avatar'
 import { formatDuration, formatTime } from '@/components/utils'
 import Progressbar from '@/components/components/progressbar'

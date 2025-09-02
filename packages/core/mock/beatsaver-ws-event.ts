@@ -1,4 +1,4 @@
-import {BeatSaverWSEvent} from "../src/services/api/interfaces/beatsaver";
+import {BeatSaverWSEvent} from "@/services/api/interfaces/beatsaver";
 
 export const MockBeatsaverWsEvent: BeatSaverWSEvent = {
   type: 'MAP_UPDATE',

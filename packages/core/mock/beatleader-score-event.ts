@@ -1,4 +1,4 @@
-import {BeatLeaderWSEvent} from "../src/services/api/interfaces/beatleader";
+import {BeatLeaderWSEvent} from "@/services/api/interfaces/beatleader";
 
 
 export const beatleaderScoreEvent: BeatLeaderWSEvent = {

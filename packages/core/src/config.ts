@@ -1,4 +1,4 @@
-import {z} from 'zod/v4'
+import {z} from 'zod'
 import {renderSchema} from "@/common/render";
 import {s3ConfigSchema} from "@/common/s3";
 

@@ -1,9 +1,9 @@
-import { processAccGraphs, processUnderswings } from '../utils/bl/bsorReplayAcc'
+import { processAccGraphs, processUnderswings } from './bl/bsorReplayAcc'
 import {
   createDistanceWeightFunction,
   createMinMaxCounter,
-} from '../utils/bl/beatleader'
-import getStatistic from '../utils/bl/stastic'
+} from './bl/beatleader'
+import getStatistic from './bl/stastic'
 import Chart from 'chart.js/auto'
 import { BSOR, Score } from '@/services/api/interfaces/beatleader'
 import { createCanvas } from '@napi-rs/canvas'
@@ -349,9 +349,11 @@ export default function ScoreGraph({
   const underswingsData = processUnderswings(bsor)
   setupChart(canvas, replayAccGraphs, underswingsData, beatSavior)
   const dataURL = canvas.toDataURL('image/png')
+
   return (
     <>
       <div>
+
         <img src={dataURL} width={width} height={height} />
       </div>
     </>

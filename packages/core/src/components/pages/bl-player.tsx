@@ -1,11 +1,11 @@
 import React from 'react'
-import getPart from '../utils/bl/getPart'
+import getPart from '../components/charts/bl/getPart'
 import ScoreBadge from '../components/socre-badge'
-import SkillGraph from '../components/skill-graph'
-import BeatLeaderItem from '../components/bl-score-item'
-import Flags, { EarchIcon } from '../components/flag'
+import SkillGraph from '../components/charts/triangle-skill-graph'
+import Flags, { EarchIcon } from '../components/icons/flag'
 import { twJoin } from '../utils/tw-join'
-import { getHeadsetForHMD } from '../utils/bl/blheadset'
+import { getHeadsetForHMD } from '../components/charts/bl/blheadset'
+import ScoreItem, {getScorePropsByBLScore} from "@/components/components/score-item";
 
 interface BLPlayerInfoProps {
   beatleaderItems: any
@@ -15,16 +15,12 @@ interface BLPlayerInfoProps {
 }
 
 export default function BLPlayerPage({
-  beatleaderItems: items,
+  beatleaderItems,
   user,
   params,
   bg,
 }: BLPlayerInfoProps) {
   const part = getPart(user)
-  const beatleaderItems = items.map((it) => ({
-    ...it,
-    pinned: it.metadata?.pinnedContexts !== undefined,
-  }))
   return (
     <>
       <div
@@ -93,7 +89,6 @@ export default function BLPlayerPage({
               {user.badges.length > 0 && (
                 <div className="grid grid-cols-3 gap-2 justify-self-center align-items-cener justify-items-center mb-auto mt-2">
                   {user.badges.map((badge) => (
-                    <>
                       <img
                         alt={badge.description}
                         key={badge.id}
@@ -101,8 +96,7 @@ export default function BLPlayerPage({
                         width={'70px'}
                         height={'20px'}
                         className="self-center w-[70px] h-5"
-                      ></img>
-                    </>
+                      />
                   ))}
                 </div>
               )}
@@ -116,7 +110,6 @@ export default function BLPlayerPage({
               </div>
               {/* more badages */}
             </div>
-
             <div className="ml-auto mr-4  flex justify-center items-center">
               <SkillGraph
                 factorA={part.accPpPart}
@@ -126,18 +119,10 @@ export default function BLPlayerPage({
             </div>
           </div>
           <div className={'grid grid-cols-4 gap-2'}>
-            {beatleaderItems.map((item, idx) => (
-              <BeatLeaderItem item={item} key={idx} />
-            ))}
+            {beatleaderItems.map((item, idx) => <ScoreItem {...getScorePropsByBLScore(item)} key={idx} />)}
           </div>
         </div>
-        <img
-          src={bg}
-          className={
-            'inset-0 mx-auto w-full rounded-lg absolute h-full object-center'
-          }
-          loading={'eager'}
-        />
+        <img src={bg} className={ 'inset-0 mx-auto w-full rounded-lg absolute h-full object-center' } loading={'eager'}/>
       </div>
     </>
   )

@@ -1,7 +1,7 @@
 import React from 'react'
-import Flags, { EarchIcon } from '../components/flag'
+import Flags, { EarchIcon } from '../components/icons/flag'
 import { twJoin } from '../utils/tw-join'
-import ScoreItem from '../components/ss-score-item'
+import ScoreItem, {getScorePropsBySSScore} from '../components/score-item'
 import { ScoreSaberItem, ScoreSaberUser } from '@/services/api/interfaces/scoresaber'
 
 interface SSPlayerProps {
@@ -68,19 +68,10 @@ export default function SSPlayerPage({
             </div>
           </div>
           <div className={'grid grid-cols-4 gap-2'}>
-            {leaderItems.map((item, idx) => (
-              <ScoreItem scoreItem={item} key={idx} />
-            ))}
+            { leaderItems.map((item, idx) => (<ScoreItem {...getScorePropsBySSScore(item)} key={idx} />)) }
           </div>
         </div>
-
-        <img
-          src={bg}
-          className={
-            'inset-0 mx-auto w-full rounded-lg absolute h-full object-center'
-          }
-          loading={'eager'}
-        />
+        <img src={bg} className={ 'inset-0 mx-auto w-full rounded-lg absolute h-full object-center' } loading={'eager'}/>
       </div>
     </>
   )

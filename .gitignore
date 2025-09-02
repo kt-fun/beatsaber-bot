@@ -20,3 +20,6 @@ tsconfig.tsbuildinfo
 *.sln
 test-case.yml
 config.yml
+
+*storybook.log
+storybook-static
