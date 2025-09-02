@@ -1,5 +1,11 @@
 # beatsaber-bot-core
 
+## 0.3.0-rc.35
+
+### Patch Changes
+
+- refactor(core): change file structure
+
 ## 0.3.0-rc.21
 
 ### Patch Changes

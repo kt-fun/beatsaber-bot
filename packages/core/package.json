@@ -1,7 +1,7 @@
 {
   "name": "beatsaber-bot-core",
   "description": "Beatsaber bot",
-  "version": "0.3.0-rc.34",
+  "version": "0.3.0-rc.35",
   "files": [
     "dist"
   ],
