@@ -1,0 +1,38 @@
+name: Build and Push bsbot-embed-qq
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push with Docker Bake
+        uses: docker/bake-action@v4
+        with:
+          # Point to the correct bake file
+          files: ./docker/bsbot-embed-qq-koishi/docker-bake.hcl
+          # Push only on main branch or release events
+          push: ${{ github.event_name != 'pull_request' }}
+          # Override the TAG variable in the bake file with the Git ref name (e.g., 'main' or 'v1.2.3')
+          set: TAG=${{ github.ref_name }}
