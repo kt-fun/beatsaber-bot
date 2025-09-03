@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # State files directory
-STATE_DIR="/tmp/bot_status"
+STATE_DIR="/app/status"
 # File to store the timestamp of when the bot first went offline
 OFFLINE_SINCE_FILE="$STATE_DIR/offline_since"
 # File to store the timestamp of the last notification

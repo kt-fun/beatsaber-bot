@@ -1,7 +1,7 @@
 name: Build and Push bsbot-embed-qq
 
 on:
-  workflow_call:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -28,11 +28,10 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push with Docker Bake
-        uses: docker/bake-action@v4
+        uses: docker/bake-action@v6
         with:
           # Point to the correct bake file
           files: ./docker/bsbot-embed-qq-koishi/docker-bake.hcl
           # Push only on main branch or release events
           push: ${{ github.event_name != 'pull_request' }}
-          # Override the TAG variable in the bake file with the Git ref name (e.g., 'main' or 'v1.2.3')
-          set: TAG=${{ github.ref_name }}
+
