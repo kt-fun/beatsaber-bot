@@ -3,7 +3,7 @@ ARG NAPCAT_VERSION
 ARG TARGETPLATFORM
 ARG TARGETARCH
 
-ENV LINUX_QQ_DOWNLOAD_URL="https://dldir1v6.qq.com/qqfile/qq/QQNT/c773cdf7/linuxqq_3.2.19-39038_${TARGETARCH}.deb"
+ENV LINUX_QQ_DOWNLOAD_URL="https://dldir1.qq.com/qqfile/qq/QQNT/ec800879/linuxqq_3.2.20-40990_${TARGETARCH}.deb"
 RUN echo "TARGETARCH=$TARGETARCH"
 ENV KOISHI_BOILERPLATE_URL="https://github.com/koishijs/boilerplate/releases/download/v1.15.0/boilerplate-v1.15.0-linux-${TARGETARCH}-node20.zip"
 ENV NAPCAT_VERSION=$NAPCAT_VERSION
