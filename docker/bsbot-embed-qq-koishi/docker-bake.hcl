@@ -22,7 +22,7 @@ target "beatsaber-bot-qq" {
   dockerfile = "Dockerfile"
   platforms  = ["linux/amd64", "linux/arm64"]
   args = {
-    NAPCAT_VERSION = "v4.8.105"
+    NAPCAT_VERSION = "v4.9.79"
   }
   tags = ["${REGISTRY}/${USERNAME}/${REPO}:${TAG}"]
 }
